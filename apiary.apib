@@ -2,46 +2,16 @@ FORMAT: 1A
 HOST: http://www.google.com
 
 # SBIR-EZ
-Notes API is a *short texts saving* service similar to its physical paper presence on your table.
+The [Small Business Innovation Research Program (SBIR)](http://en.wikipedia.org/wiki/Small_Business_Innovation_Research) is a U. S. Government program administered
+by the Small Business Administration (SBA) to spur technological innovation in the small business sector, meet federal government needs and commercialize federally
+funded investments. However, feedback from small business is that the SBIR program can be confusing and take a very long time before providing funding. SBIR-EZ is
+a platform-as-a-service offering to allow companies to explore and apply for SBIR programs while leaving the business rules and user interface to be customized for
+individual organizations to maximize utility to their users.
 
-# Group Notes
-Notes related resources of the **Notes API**
+## Key Resources
+* **Topics**: Put out by an agency 
+* **Users**: May be a small business or government user
+* **Applications**: Topic application packages submitted by small business.
+* **Awards**: Several financial awards may be provided per topic but a company may receive only one award per topic. A company may be awarded many topics.
 
-## Notes Collection [/notes]
-### List all Notes [GET]
-+ Response 200 (application/json)
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
-
-### Create a Note [POST]
-+ Request (application/json)
-
-        { "title": "Buy cheese and bread for breakfast." }
-
-+ Response 201 (application/json)
-
-        { "id": 3, "title": "Buy cheese and bread for breakfast." }
-
-## Note [/notes/{id}]
-A single Note object with all its details
-
-+ Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Note to perform action with. Has example value.
-
-### Retrieve a Note [GET]
-+ Response 200 (application/json)
-
-    + Header
-
-            X-My-Header: The Value
-
-    + Body
-
-            { "id": 2, "title": "Pick-up posters from post-office" }
-
-### Remove a Note [DELETE]
-+ Response 204
