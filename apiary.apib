@@ -1,17 +1,33 @@
 FORMAT: 1A
-HOST: http://www.google.com
+HOST: http://api.data.gov
 
 # SBIR-EZ
-The [Small Business Innovation Research Program (SBIR)](http://en.wikipedia.org/wiki/Small_Business_Innovation_Research) is a U. S. Government program administered
+The U. S. Government's [Small Business Innovation Research (SBIR) Program](http://en.wikipedia.org/wiki/Small_Business_Innovation_Research) is administered
 by the Small Business Administration (SBA) to spur technological innovation in the small business sector, meet federal government needs and commercialize federally
-funded investments. However, feedback from small business is that the SBIR program can be confusing and take a very long time before providing funding. SBIR-EZ is
-a platform-as-a-service offering to allow companies to explore and apply for SBIR programs while leaving the business rules and user interface to be customized for
+funded investments. However, navigating the SBIR program can be confusing and take a very long time before providing funding. SBIR-EZ Hypermedia API allows companies
+to explore and apply for SBIR programs while leaving the business rules and user interface to be customized for
 individual organizations to maximize utility to their users.
 
 ## Key Resources
-* **Topics**: Put out by an agency 
-* **Users**: May be a small business or government user
+* **Topics**: Requests put out by agencies to which small businesses reply
+* **Users**: A system user; ay be a small business or government user
 * **Applications**: Topic application packages submitted by small business.
 * **Awards**: Several financial awards may be provided per topic but a company may receive only one award per topic. A company may be awarded many topics.
 
-
+## Details
+* **Entry Point:** https://api.data.gov
+* **Required Header:** include ```SBIR-EZ-API-VERSION: 0``` as its own header line. This helps us ensure that what you get today is what you'll get tomorrow.
+* **Response Media Types Supported:** [application/hal+json](http://stateless.co/hal_specification.html) (default)
+* **Request Media Types Supported:** application/json (default), application/x-www-form-urlencoded, multipart/form-data
+* **CRUD:** Use HTTP methods as follows:
+    + **Create:** POST to a rel representing a collection ("applications") with either json or name-value paris in the body and corresponding Content-Type header
+    + **Read:** GET to a single rel for an individual item ("application") or to a collection of items to retrieve a list ("applications")
+    + **Update:** PUT and PATCH are both supported for updates. PUT has to include the entire document (links and timestamps are ignored). For PATCH,
+    can just include one or more properties. Set the appropriate header type.
+    + **Delete:** DELETE to remove a resource, where allowed.
+* **Sort Order:** You can adjust the sort order of a colleciton response by appending ?order=<field1>,<field2>asc,<field3>desc
+* **Pagination:** Although we have pre-built pagination links via the rels “first”, “prev”, “next”, and “last”, you can also control the number of items per page
+with (? or &)limit=<limit>&offset=<offset> (the default limit is 20 and the max limit is currently 300).
+* **Partial Resources:** If you only need a small portion of a resource (e.g. agency and description), specify fields by appending (? or &)fields=<field1>,<field2> to your href
+* **Rels:** The following registered rels are used by our system: self, first, prev, next, and last. All other rels (in accordance with the [Web Linking RFC](http://tools.ietf.org/html/rfc5988))
+are full URIs
