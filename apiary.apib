@@ -32,18 +32,68 @@ with (? or &)limit=<limit>&offset=<offset> (the default limit is 20 and the max 
 * **Rels:** The following registered rels are used by our system: self, first, prev, next, and last. All other rels (in accordance with the [Web Linking RFC](http://tools.ietf.org/html/rfc5988))
 are full URIs
 
-# Cart [/cart]
-Resource representing the shopping cart of topics.
-
-# Profile [/profile]
-The authenticated user's profile
-
 # Group Topics
 
-# Topics [/topics/{id}]
+## GET /topics
+Resource representing a collection of topics
++ Parameters
+    + q (optional, string, `foo`) A free-text string
+    + agency (optional, string)
+        
+        Agency to return.
+
+        > ```DOD``` = Dept. of Defense
+        >
+        > ```HHS``` = Dept. of Health and Human Services
+        >
+        > ```NASA``` = National Aeronautics and Space Administration
+        >
+        > ```NSF``` = National Science Foundation
+        >
+        > ```DOE``` = Dept. of Energy
+        >
+        > ```USDA``` = United States Dept. of Agriculture
+        >
+        > ```EPA``` = Environmental Protection Agency
+        >
+        > ```DOC``` = Dept. of Commerce
+        >
+        > ```ED``` = Dept. of Education
+        >
+        > ```DOT``` = Dept. of Transportation
+        >
+        > ```DHS``` = Dept. of Homeland Security
+        
+        + Values
+            + `DOD`
+            + `HHS`
+            + `NASA`
+            + `NSF`
+            + `DOE`
+            + `USDA`
+            + `EPA`
+            + `DOC`
+            + `ED`
+            + `DOT`
+            + `DHS`
+    
+    + status (optional) 
+    
+        Presence of this parameter returns only solicitation that are open *or* will open some time in the future for industry response.
+     
+## GET /topics/{id}
 Resource representing a topic being put out by an agency (solicitation)
 
 # Group Awards
 
-# Awards [/awards/{id}]
+## GET /awards
+Resource representing a collection of awards
+
+## GET /awards/{id}
 Resource representing an award to a company of a topic by an agency.
+
+## GET /cart
+Resource representing the shopping cart of topics.
+
+## GET /profile
+The authenticated user's profile
