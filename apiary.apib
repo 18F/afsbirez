@@ -34,53 +34,15 @@ are full URIs
 
 # Group Topics
 
-## GET /topics
+# Topics Collection [/topics?{q}]
 Resource representing a collection of topics
 + Parameters
-    + q (optional, string, `foo`) A free-text string
-    + agency (optional, string)
-        
-        Agency to return.
+    + q (optional, string) ... A free-text string
+    
+## List topics [GET]
+Retrieves the solicitations.
 
-        > ```DOD``` = Dept. of Defense
-        >
-        > ```HHS``` = Dept. of Health and Human Services
-        >
-        > ```NASA``` = National Aeronautics and Space Administration
-        >
-        > ```NSF``` = National Science Foundation
-        >
-        > ```DOE``` = Dept. of Energy
-        >
-        > ```USDA``` = United States Dept. of Agriculture
-        >
-        > ```EPA``` = Environmental Protection Agency
-        >
-        > ```DOC``` = Dept. of Commerce
-        >
-        > ```ED``` = Dept. of Education
-        >
-        > ```DOT``` = Dept. of Transportation
-        >
-        > ```DHS``` = Dept. of Homeland Security
-        
-        + Values
-            + `DOD`
-            + `HHS`
-            + `NASA`
-            + `NSF`
-            + `DOE`
-            + `USDA`
-            + `EPA`
-            + `DOC`
-            + `ED`
-            + `DOT`
-            + `DHS`
-    
-    + status (optional) 
-    
-        Presence of this parameter returns only solicitation that are open *or* will open some time in the future for industry response.
-     
+
 ## GET /topics/{id}
 Resource representing a topic being put out by an agency (solicitation)
 
