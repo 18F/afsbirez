@@ -35,10 +35,15 @@ are full URIs
 # Group Topics
 The solicitations put out by the Air Force for small businesses to respond to. This resource is *READ-ONLY*.
 
-## GET /topics?{q}
+## GET /topics?{q,order}
 Returns a collection of topics matching specified criteria
 + Parameters
     + q (optional, string) ... A free-text strings
+    + order=`asc` (optional, text) ... Sort order of collection response
+
+        + Values
+            + `asc`
+            + `desc`
 + Response 200
 
         {
@@ -58,10 +63,16 @@ Resource representing a topic being put out by an agency (solicitation)
 # Group Awards
 Topics awarded to small businesses. This resource is *READ-ONLY*.
 
-## GET /awards?{q}
+## GET /awards?{q,order}
 Resource representing a collection of awards
 + Parameter
     + q (optional, text) ... Free-text search
+    + order=`asc` (optional, text) ... Sort order of collection response
+
+        + Values
+            + `asc`
+            + `desc`
+    
 + Response 200
 
         {
@@ -87,17 +98,49 @@ The authenticated user's profile
 Resource representing a collection of applications to topics
 
     
-## GET /applications?{q}
+## GET /applications?{q,order}
 Returns a collection of applications matching specified criteria
 + Parameters
     + q (optional, string) ... A free-text strings
+    + order=`asc` (optional, text) ... Sort order of collection response
+
+        + Values
+            + `asc`
+            + `desc`
 + Response 200
 
         {
         "TO":"DO"
         }
 
-## PUT /applications/{id}
+# Resource [/applications/{id}]
+
+## Get an application [GET]
+Gets an application by id
++ Parameters
+    + id (required, nuber) ... The unique id
++ Response 200
+
+        {
+        "TO":"DO"
+        }
+        
+## Create an application [POST]
+Updates a topic application using patch partial representation
++ Parameters
+    + id (required, number) ... the unique identifier for the application
++ Request
+
+        {
+        "TO":"DO"
+        }
++ Response 200
+
+        {
+        "TO":"DO"
+        }        
+
+## Update an application [PUT]
 Updates a topic
 + Parameters
     + id (required, number) ... the unique identifier for the application
@@ -112,7 +155,22 @@ Updates a topic
         "TO":"DO"
         }
 
-## PATCH /applications/{id}
+## Partial update an application [PATCH]
+Updates a topic application using patch partial representation
++ Parameters
+    + id (required, number) ... the unique identifier for the application
++ Request
+
+        {
+        "TO":"DO"
+        }
++ Response 200
+
+        {
+        "TO":"DO"
+        }
+        
+## Delete an application [DELETE]
 Updates a topic application using patch partial representation
 + Parameters
     + id (required, number) ... the unique identifier for the application
