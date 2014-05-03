@@ -33,29 +33,96 @@ with (? or &)limit=<limit>&offset=<offset> (the default limit is 20 and the max 
 are full URIs
 
 # Group Topics
+The solicitations put out by the Air Force for small businesses to respond to. This resource is *READ-ONLY*.
 
-# Topics Collection [/topics?{q}]
-Resource representing a collection of topics
+## GET /topics?{q}
+Returns a collection of topics matching specified criteria
 + Parameters
-    + q (optional, string) ... A free-text string
-    
-## List topics [GET]
-Retrieves the solicitations.
+    + q (optional, string) ... A free-text strings
++ Response 200
 
+        {
+        "TO":"DO"
+        }
 
 ## GET /topics/{id}
 Resource representing a topic being put out by an agency (solicitation)
++ Parameter
+    + id (required, number) ... the unique identifier of the topic
++ Response 200
+    
+        {
+        "TO":"DO"
+        }
 
 # Group Awards
+Topics awarded to small businesses. This resource is *READ-ONLY*.
 
-## GET /awards
+## GET /awards?{q}
 Resource representing a collection of awards
++ Parameter
+    + q (optional, text) ... Free-text search
++ Response 200
+
+        {
+        "TO":"DO"
+        }
 
 ## GET /awards/{id}
 Resource representing an award to a company of a topic by an agency.
++ Parameter
+    + id (required, number) ... The unique identifier of the award
++ Response 200
 
-## GET /cart
-Resource representing the shopping cart of topics.
+        {
+        "TO":"DO"
+        }
 
-## GET /profile
+# Resource Profile [/profile]
 The authenticated user's profile
+
+# Group Applications
+
+# Application Collection [/applications]
+Resource representing a collection of applications to topics
+
+    
+## GET /applications?{q}
+Returns a collection of applications matching specified criteria
++ Parameters
+    + q (optional, string) ... A free-text strings
++ Response 200
+
+        {
+        "TO":"DO"
+        }
+
+## PUT /applications/{id}
+Updates a topic
++ Parameters
+    + id (required, number) ... the unique identifier for the application
++ Request
+
+        {
+        "TO":"DO"
+        }
++ Response 200
+
+        {
+        "TO":"DO"
+        }
+
+## PATCH /applications/{id}
+Updates a topic application using patch partial representation
++ Parameters
+    + id (required, number) ... the unique identifier for the application
++ Request
+
+        {
+        "TO":"DO"
+        }
++ Response 200
+
+        {
+        "TO":"DO"
+        }
