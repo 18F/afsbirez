@@ -171,10 +171,83 @@ A collection of awarded contracts
             + `asc`
             + `desc`
     
-+ Response 200
++ Response 200 (application/hal+json)
 
         {
-        "TO":"DO"
+          "_links": {
+            "self": {
+              "href": "/awards"
+            },
+            "curies": [
+              {
+                "name": "ea",
+                "href": "http://sbirez.gsa.gov/rels/{rel}",
+                "templated": true
+              }
+            ],
+            "next": {
+              "href": "/awards?start=21"
+            },
+            "ea:find": {
+              "href": "/awards{?id}",
+              "templated": true
+            }
+          },
+          "_embedded": {
+            "ea:award": [
+              {
+                "_links": {
+                  "self": {
+                    "href": "/awards/410031"
+                  }
+                },
+                "id": 410031,
+                "title": "Tailoring Titanium Microstructures for Reduced Oxygen Ingress during High Temperature Applications using a Novel Microstructure-Informatics Approach",
+                "link": "http://www.sbir.gov/sbirsearch/detail/410031",
+                "abstract": "ABSTRACT:  High temperature applications of titanium alloys are limited by their affinity to oxygen...",
+                "agency": "USAF",
+                "program": "SBIR",
+                "phase": 2,
+                "year": 2013,
+                "company": "MRL Materials Resources LLC",
+                "ri": ""
+              },
+              {
+                "_links": {
+                  "self": {
+                    "href": "/awards/410007"
+                  }
+                },
+                "id": 410007,
+                "title": "Autonomous On-Board Control of Satellites for Space Superiority",
+                "link": "http://www.sbir.gov/sbirsearch/detail/410007",
+                "abstract": "ABSTRACT:  Future spacecraft could benefit from onboard planning and scheduling autonomy to effectively fulfill their missions...",
+                "agency": "USAF",
+                "program": "SBIR",
+                "phase": 2,
+                "year": 2013,
+                "company": "Orbit Logic Incorporated",
+                "ri": ""
+              },
+              {
+                "_links": {
+                  "self": {
+                    "href": "/awards/409047"
+                  }
+                },
+                "id": 409047,
+                "title": "Naturalistic Neurocognitive Assessment Using Mobile Gaming Platforms",
+                "link": "http://www.sbir.gov/sbirsearch/detail/409047",
+                "abstract": "The neurocognitive health of U.S. service members plays a vital role in the defense of the United States...",
+                "agency": "ARMY",
+                "program": "STTR",
+                "phase": 1,
+                "year": 2013,
+                "company": "Vista Partners LLC",
+                "ri": "Institute for Creative Technologies"
+              }
+            ]
+          }
         }
 
 ## GET /awards/{id}
@@ -184,21 +257,21 @@ An individual awarded contract.
 + Response 200 (application/hal+json)
 
         {
-        "_links": {
-          "self": {
-            "href": "/topics/361465"
-          }
-        },
-        "id": 361465,
-        "title": "NINDS SBIR Technology Transfer",
-        "link": "http://www.sbir.gov/node/361465",
-        "description": "Some description",
-        "agency": "HHS",
-        "release_date": 20110922,
-        "open_date": "20111105",
-        "close_date": "20140908",
-        "days_to_close": 31,
-        "status": "Open/Future"
+            "_links": {
+              "self": {
+                "href": "/awards/409047"
+              }
+            },
+            "id": 409047,
+            "title": "Naturalistic Neurocognitive Assessment Using Mobile Gaming Platforms",
+            "link": "http://www.sbir.gov/sbirsearch/detail/409047",
+            "abstract": "The neurocognitive health of U.S. service members plays a vital role in the defense of the United States...",
+            "agency": "ARMY",
+            "program": "STTR",
+            "phase": 1,
+            "year": 2013,
+            "company": "Vista Partners LLC",
+            "ri": "Institute for Creative Technologies"
         }
         
 # Profile CRUD [/profile]
@@ -206,20 +279,26 @@ Your profile.
 
 ## Get your profile [GET]
 Get your profile
-+ Response 200
++ Response 200 (application/hal+json)
 
         {
-        "TO":"DO"
+          "_links": {
+            "self": {
+              "href": "/profile/409047"
+            }
+          },
+          "id": "409047",
+          "username": "testuser"
         }
         
 ## Update your profile [PUT]
 Updates a topic application using patch partial representation
-+ Request
++ Request (application/json)
 
         {
-        "TO":"DO"
+        "id":"409047"
         }
-+ Response 200
++ Response 200 (application/hal+json)
 
         {
         "TO":"DO"
