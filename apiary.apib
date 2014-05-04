@@ -53,7 +53,80 @@ Returns a collection of topics matching specified criteria
 + Response 200
 
         {
-        "TO":"DO"
+          "_links": {
+            "self": {
+              "href": "/topics"
+            },
+            "curies": [
+              {
+                "name": "ea",
+                "href": "http://sbirez.gsa.gov/rels/{rel}",
+                "templated": true
+              }
+            ],
+            "next": {
+              "href": "/topics?start=21"
+            },
+            "ea:find": {
+              "href": "/topics{?id}",
+              "templated": true
+            }
+          },
+          "_embedded": {
+            "ea:topic": [
+              {
+                "_links": {
+                  "self": {
+                    "href": "/topics/361509"
+                  }
+                },
+                "id": 361509,
+                "title": "New Technology for Proteomics and Glycomics",
+                "link": "http://www.sbir.gov/node/361509",
+                "description": "Some description",
+                "agency": "HHS",
+                "release_date": 20110519,
+                "open_date": "20110705",
+                "close_date": "20140508",
+                "days_to_close": 16,
+                "status": "Open/Future"
+              },
+              {
+                "_links": {
+                  "self": {
+                    "href": "/topics/361511"
+                  }
+                },
+                "id": 361511,
+                "title": "New Technology for Proteomics and Glycomics",
+                "link": "http://www.sbir.gov/node/361511",
+                "description": "some description",
+                "agency": "HHS",
+                "release_date": 20110519,
+                "open_date": "20110705",
+                "close_date": "20140508",
+                "days_to_close": 16,
+                "status": "Open/Future"
+              },
+              {
+                "_links": {
+                  "self": {
+                    "href": "/topics/361465"
+                  }
+                },
+                "id": 361465,
+                "title": "NINDS SBIR Technology Transfer",
+                "link": "http://www.sbir.gov/node/361465",
+                "description": "Some description",
+                "agency": "HHS",
+                "release_date": 20110922,
+                "open_date": "20111105",
+                "close_date": "20140908",
+                "days_to_close": 31,
+                "status": "Open/Future"
+              }
+            ]
+          }
         }
 
 ## GET /topics/{id}
