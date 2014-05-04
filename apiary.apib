@@ -35,11 +35,17 @@ are full URIs
 # Group Topics
 The solicitations put out by the Air Force for small businesses to respond to. This resource is *READ-ONLY*.
 
-## GET /topics?{q,order}
+## GET /topics?{closed,q,start,limit,order}
 Returns a collection of topics matching specified criteria
 + Parameters
-    + q (optional, string) ... A free-text strings
-    + order=`asc` (optional, text) ... Sort order of collection response
+    + closed = `false` (optional, string) ... True if closed topics should be included in the results, false otherwise.
+        +Values
+            + `true`
+            + `false`
+    + q (optional, string) ... A free-text string
+    + start=`1` (optional, number) ... Starting index
+    + limit=`20` (optional, number) ... Number of items to return. ***Maximum value is 200***
+    + order=`asc` (optional, text) ... The order of collection response
 
         + Values
             + `asc`
@@ -51,7 +57,7 @@ Returns a collection of topics matching specified criteria
         }
 
 ## GET /topics/{id}
-Resource representing a topic being put out by an agency (solicitation)
+Find a topic put out by an agency (solicitation)
 + Parameter
     + id (required, number) ... the unique identifier of the topic
 + Response 200
@@ -61,12 +67,14 @@ Resource representing a topic being put out by an agency (solicitation)
         }
 
 # Group Awards
-Topics awarded to small businesses. This resource is *READ-ONLY*.
+SBIR Phase I and II contracts awarded to small businesses. This resource is *READ-ONLY*.
 
-## GET /awards?{q,order}
-Resource representing a collection of awards
+## GET /awards?{q,start,limit,order}
+A collection of awarded contracts
 + Parameter
     + q (optional, text) ... Free-text search
+    + start=`1` (optional, number) ... Starting index
+    + limit=`20` (optional, number) ... Number of items to return. ***Maximum value is 200***
     + order=`asc` (optional, text) ... Sort order of collection response
 
         + Values
@@ -80,7 +88,7 @@ Resource representing a collection of awards
         }
 
 ## GET /awards/{id}
-Resource representing an award to a company of a topic by an agency.
+An individual awarded contract.
 + Parameter
     + id (required, number) ... The unique identifier of the award
 + Response 200
@@ -89,19 +97,56 @@ Resource representing an award to a company of a topic by an agency.
         "TO":"DO"
         }
 
-# Resource Profile [/profile]
-The authenticated user's profile
+# Profile CRUD [/profile]
+Your profile.
+
+## Get your profile [GET]
+Get your profile
++ Response 200
+
+        {
+        "TO":"DO"
+        }
+        
+## Update your profile [PUT]
+Updates a topic application using patch partial representation
++ Request
+
+        {
+        "TO":"DO"
+        }
++ Response 200
+
+        {
+        "TO":"DO"
+        }        
+
+## Partial update your profile [PATCH]
+Partially updates your profile using patch
++ Request
+
+        {
+        "TO":"DO"
+        }
++ Response 200
+
+        {
+        "TO":"DO"
+        }
 
 # Group Applications
+Your SBIR applications.
 
 # Application Collection [/applications]
 Resource representing a collection of applications to topics
 
     
-## GET /applications?{q,order}
+## GET /applications?{q,start,limit,order}
 Returns a collection of applications matching specified criteria
 + Parameters
     + q (optional, string) ... A free-text strings
+    + start=`1` (optional, number) ... Starting index
+    + limit=`20` (optional, number) ... Number of items to return. ***Maximum value is 200***
     + order=`asc` (optional, text) ... Sort order of collection response
 
         + Values
@@ -113,7 +158,7 @@ Returns a collection of applications matching specified criteria
         "TO":"DO"
         }
 
-# Resource [/applications/{id}]
+# Application CRUD [/applications/{id}]
 
 ## Get an application [GET]
 Gets an application by id
