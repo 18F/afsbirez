@@ -50,7 +50,7 @@ Returns a collection of topics matching specified criteria
         + Values
             + `asc`
             + `desc`
-+ Response 200
++ Response 200 (application/hal+json)
 
         {
           "_links": {
@@ -133,11 +133,25 @@ Returns a collection of topics matching specified criteria
 Find a topic put out by an agency (solicitation)
 + Parameter
     + id (required, number) ... the unique identifier of the topic
-+ Response 200
++ Response 200 (application/hal+json)
     
-        {
-        "TO":"DO"
-        }
+          {
+            "_links": {
+              "self": {
+                "href": "/topics/361465"
+              }
+            },
+            "id": 361465,
+            "title": "NINDS SBIR Technology Transfer",
+            "link": "http://www.sbir.gov/node/361465",
+            "description": "Some description",
+            "agency": "HHS",
+            "release_date": 20110922,
+            "open_date": "20111105",
+            "close_date": "20140908",
+            "days_to_close": 31,
+            "status": "Open/Future"
+          }
 
 # Group Awards
 SBIR Phase I and II contracts awarded to small businesses. This resource is *READ-ONLY*.
