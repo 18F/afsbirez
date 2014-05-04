@@ -135,31 +135,34 @@ Find a topic put out by an agency (solicitation)
     + id (required, number) ... the unique identifier of the topic
 + Response 200 (application/hal+json)
     
-          {
-            "_links": {
-              "self": {
-                "href": "/topics/361465"
-              }
-            },
-            "id": 361465,
-            "title": "NINDS SBIR Technology Transfer",
-            "link": "http://www.sbir.gov/node/361465",
-            "description": "Some description",
-            "agency": "HHS",
-            "release_date": 20110922,
-            "open_date": "20111105",
-            "close_date": "20140908",
-            "days_to_close": 31,
-            "status": "Open/Future"
+        {
+        "_links": {
+          "self": {
+            "href": "/topics/361465"
           }
+        },
+        "id": 361465,
+        "title": "NINDS SBIR Technology Transfer",
+        "link": "http://www.sbir.gov/node/361465",
+        "description": "Some description",
+        "agency": "HHS",
+        "release_date": 20110922,
+        "open_date": "20111105",
+        "close_date": "20140908",
+        "days_to_close": 31,
+        "status": "Open/Future"
+        }
 
 # Group Awards
 SBIR Phase I and II contracts awarded to small businesses. This resource is *READ-ONLY*.
 
-## GET /awards?{q,start,limit,order}
+## GET /awards?{q,company,ri,year,start,limit,order}
 A collection of awarded contracts
 + Parameter
-    + q (optional, text) ... Free-text search
+    + q (optional, text) ... Free-text search of the topic description
+    + company (optional, text) ... Free-text search of the company name
+    + ri (optional, text) ... Free-text search of the research institution name
+    + year (optional, number) ... The year YYYY that the award occurred
     + start=`1` (optional, number) ... Starting index
     + limit=`20` (optional, number) ... Number of items to return. ***Maximum value is 200***
     + order=`asc` (optional, text) ... Sort order of collection response
@@ -178,12 +181,26 @@ A collection of awarded contracts
 An individual awarded contract.
 + Parameter
     + id (required, number) ... The unique identifier of the award
-+ Response 200
++ Response 200 (application/hal+json)
 
         {
-        "TO":"DO"
+        "_links": {
+          "self": {
+            "href": "/topics/361465"
+          }
+        },
+        "id": 361465,
+        "title": "NINDS SBIR Technology Transfer",
+        "link": "http://www.sbir.gov/node/361465",
+        "description": "Some description",
+        "agency": "HHS",
+        "release_date": 20110922,
+        "open_date": "20111105",
+        "close_date": "20140908",
+        "days_to_close": 31,
+        "status": "Open/Future"
         }
-
+        
 # Profile CRUD [/profile]
 Your profile.
 
