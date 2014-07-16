@@ -4,7 +4,8 @@ angular.module('sbirezApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute'
+  'ngRoute',
+  'formly'
 ])
   .config(function ($routeProvider, $locationProvider) {
     $routeProvider
