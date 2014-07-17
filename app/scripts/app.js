@@ -5,7 +5,7 @@ angular.module('sbirezApp', [
   'ngResource',
   'ngSanitize',
   'ngRoute',
-  'formly'
+  'schemaForm'
 ])
   .config(function ($routeProvider, $locationProvider) {
     $routeProvider

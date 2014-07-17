@@ -11,7 +11,7 @@
     "angular-cookies": ">=1.2.*",
     "angular-sanitize": ">=1.2.*",
     "angular-route": ">=1.2.*",
-    "angular-formly": ">=0.0.12"
+    "angular-schema-form":"*"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",

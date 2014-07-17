@@ -4,8 +4,8 @@ angular.module('sbirezApp')
   .controller('FormCtrl', function ($scope, $http) {
     $scope.formData = {}
     $scope.formId = {};
-
-    $scope.formFields = null;
+    $scope.formSchema = null;
+    $scope.formFields = ["*", {"type":"submit", "title": "Submit"}];
 
     $http.get('/api/forms').success(function(list) {
       $scope.formList = list;
@@ -13,7 +13,7 @@ angular.module('sbirezApp')
 
     $scope.setForm = function(id) {
       $http.get('/api/forms/' + id).success(function(fields) {
-        $scope.formFields = fields;
+        $scope.formSchema = fields;
         $scope.formId = id;
       });
     };

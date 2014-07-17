@@ -1,7 +1,7 @@
 <div ng-controller="FormCtrl as formCtrl">
-  <div ng-hide="formFields[0] === undefined">
-    <formly-form result="formData" fields="formFields" options="formOptions" ng-submit="onSubmit()">
-    </formly-form>
+  <div> 
+    <form sf-model="formData" sf-form="formFields" sf-schema="formSchema" ng-submit="onSubmit()">
+    </form>
   </div>
 
   <div class="row marketing">
