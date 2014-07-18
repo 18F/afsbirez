@@ -13,6 +13,7 @@ individual organizations to maximize utility to their users.
 * **Users**: A system user; ay be a small business or government user
 * **Applications**: Topic application packages submitted by small business.
 * **Awards**: Several financial awards may be provided per topic but a company may receive only one award per topic. A company may be awarded many topics.
+* **Forms**: Interactive forms required for proposal submission.
 
 ## Details
 * **Entry Point:** https://api.data.gov
@@ -405,3 +406,54 @@ Updates a topic application using patch partial representation
         {
         "TO":"DO"
         }
+
+# Group Forms
+Your forms.
+
+# Form Collection [/forms]
+Resource representing a collection of forms
+
+    
+## GET /forms?{q,start,limit,order}
+Returns a collection of forms matching specified criteria
++ Parameters
+    + q (optional, string) ... A free-text strings
+    + start=`1` (optional, number) ... Starting index
+    + limit=`20` (optional, number) ... Number of items to return. ***Maximum value is 200***
+    + order=`asc` (optional, text) ... Sort order of collection response
+
+        + Values
+            + `asc`
+            + `desc`
++ Response 200
+
+        {
+        "TO":"DO"
+        }
+
+# Form CRUD [/forms/{id}]
+
+## Get a form [GET]
+Gets an application by id
++ Parameters
+    + id (required, nuber) ... The unique id
++ Response 200
+
+        {
+        "TO":"DO"
+        }
+        
+## Create a form [POST]
+Creates a filled form
++ Parameters
+    + id (required, number) ... the unique identifier for the form
++ Request
+
+        {
+        "TO":"DO"
+        }
++ Response 200
+
+        {
+        "TO":"DO"
+        } 
