@@ -1,5 +1,6 @@
 <form class="form-horizontal" role="form">
     <div class="form-group">
+        <div ng-show="errorMsg" class="bg-danger"><p>{{errorMsg}}</p></div>
         <label for="inputUsername" class="col-sm-4 control-label">Username</label>
         <div class="col-sm-4">
             <input type="text" class="form-control" id="inputUsername" placeholder="Username" ng-model="login.email">

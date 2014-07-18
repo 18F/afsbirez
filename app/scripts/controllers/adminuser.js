@@ -12,7 +12,7 @@ angular.module('sbirezApp')
             $location.path('/');
           }).error(function(status, data) {
             console.log(status);
-            console.log(data);
+            $scope.errorMsg = status.message;
           });
         }
       };

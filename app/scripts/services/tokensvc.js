@@ -23,13 +23,11 @@ angular.module('sbirezApp').factory('TokenInterceptor', function ($q, $window, $
     },
 
     responseError: function(rejection) {
-      console.log('responseError' + rejection);
       if (rejection !== null && rejection.status === 401 && ($window.sessionStorage.token || AuthenticationService.isAuthenticated)) {
         delete $window.sessionStorage.token;
         AuthenticationService.isAuthenticated = false;
         $location.path('/login');
       }
-
       return $q.reject(rejection);
     }
   };
