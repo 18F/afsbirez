@@ -2,10 +2,10 @@
 
 angular.module('sbirezApp')
   .controller('FormCtrl', function ($scope, $http) {
-    $scope.formData = {}
+    $scope.formData = {};
     $scope.formId = {};
     $scope.formSchema = null;
-    $scope.formFields = ["*", {"type":"submit", "title": "Submit"}];
+    $scope.formFields = ['*', {'type':'submit', 'title': 'Submit'}];
 
     $http.get('/api/forms').success(function(list) {
       $scope.formList = list;
@@ -25,7 +25,6 @@ angular.module('sbirezApp')
 
     $scope.onSubmit = function() {
       console.log('form submitted:', $scope.formData);
-      $http.post('/api/forms/' + $scope.formId, $scope.formData).success(console.log('saved')); 
+      $http.post('/api/forms/' + $scope.formId, $scope.formData).success(console.log('saved'));
     };
-
   });
