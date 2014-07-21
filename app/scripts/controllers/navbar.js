@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('NavbarCtrl', function ($scope, $location, $window) {
+  .controller('NavbarCtrl', function ($scope, $location, $window, AuthenticationService) {
     $scope.menu = [{
       'title': 'Home',
       'link': '/'
     }];
 
     console.log('token: ' + $window.sessionStorage.token);
-    if ($window.sessionStorage.token !== undefined) {
+    if ($window.sessionStorage.token !== undefined && AuthenticationService.isLogged) {
       $scope.menu.push({'title': 'Logout', 'link':'/logout'});
     }
     else {

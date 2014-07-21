@@ -5,7 +5,8 @@ angular.module('sbirezApp', [
   'ngResource',
   'ngSanitize',
   'ngRoute',
-  'schemaForm'
+  'schemaForm',
+  'angularFileUpload'
 ])
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider

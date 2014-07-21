@@ -11,7 +11,7 @@ angular.module('sbirezApp')
             console.log($window.sessionStorage.token);
             $location.path('/');
           }).error(function(status, data) {
-            console.log(status);
+            console.log(status + data);
             $scope.errorMsg = status.message;
           });
         }

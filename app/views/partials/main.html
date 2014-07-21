@@ -1,5 +1,8 @@
 <div ng-include="'partials/navbar'"></div>
-<div ng-include="'partials/form'"></div>
+<div ng-if="isLoggedIn">
+  <div ng-include="'partials/document'"></div>
+  <div ng-include="'partials/form'"></div>
+</div>
 <div class="footer">
-  <p>♥ from the Yeoman team</p>
+  <p>♥ from 18F</p>
 </div>
