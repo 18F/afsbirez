@@ -4,7 +4,9 @@ angular.module('sbirezApp')
   .controller('DocumentCtrl', function ($scope, $http, $upload) {
 
     $scope.progress = [];
+    $scope.docList = [];
     $http.get('/api/documents').success(function(list) {
+      console.log(list);
       $scope.docList = list;
     });
 
