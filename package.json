@@ -10,7 +10,7 @@
     "express": "~4.0.0",
     "express-jwt": "~0.3.1",
     "express-session": "~1.0.2",
-    "jsonwebtoken": "^0.4.1",
+    "jsonwebtoken": "~0.4.1",
     "lodash": "~2.4.1",
     "method-override": "~1.0.0",
     "morgan": "~1.0.0",
