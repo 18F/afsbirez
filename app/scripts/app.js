@@ -23,6 +23,11 @@ angular.module('sbirezApp', [
         controller: 'AdminUserCtrl',
         access: { requiredAuthentication: true }
       })
+      .when('/proposal/:proposalId', {
+        templateUrl: 'partials/proposal',
+        controller: 'ProposalCtrl',
+        access: { requiredAuthentication: true }
+      })
       .otherwise({
         redirectTo: '/'
       });
@@ -30,5 +35,12 @@ angular.module('sbirezApp', [
     $httpProvider.interceptors.push('TokenInterceptor');
 
     $locationProvider.html5Mode(true);
-  });
+  })
 
+.run(function($rootScope, $location, $window, AuthenticationService) {
+  $rootScope.$on('$routeChangeStart', function(event, nextRoute) {
+    if (nextRoute !== null && nextRoute.access !== null && nextRoute.access.requiredAuthentication && !AuthenticationService.isAuthenticated && !$window.sessionStorage.token) {
+      $location.path('/login');
+    }
+  });
+});

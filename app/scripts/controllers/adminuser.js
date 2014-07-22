@@ -21,8 +21,8 @@ angular.module('sbirezApp')
         if (AuthenticationService.isLogged || $window.sessionStorage.token) {
           AuthenticationService.isLogged = false;
           delete $window.sessionStorage.token;
-          $location.path('/');
         }
+        $location.path('/');
       };
     }
 ]);
