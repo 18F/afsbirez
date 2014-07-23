@@ -14,8 +14,9 @@
   </div>
   <div class="row">
     <div ng-repeat="doc in docList">
-        <h4>{{doc.name}}</h4>
-        <p>{{doc.uploaded}}</p>
+        <h4><a href="" target="_blank" download="doc.name" ng-click="downloadDoc(doc.id)">{{doc.name}}</a> {{doc.uploaded | date:'yyyy-MM-dd HH:mm:ss Z' }}</h4>
+        <p>{{doc.description}}</p>
+        <p ng-repeat="keyword in doc.keywords">{{keyword}}</p>
     </div>
   </div>
 </div>

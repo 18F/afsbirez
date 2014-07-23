@@ -39,7 +39,7 @@ angular.module('sbirezApp', [
 
 .run(function($rootScope, $location, $window, AuthenticationService) {
   $rootScope.$on('$routeChangeStart', function(event, nextRoute) {
-    if (nextRoute !== null && nextRoute.access !== null && nextRoute.access.requiredAuthentication && !AuthenticationService.isAuthenticated && !$window.sessionStorage.token) {
+    if (nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredAuthentication && !AuthenticationService.isAuthenticated && !$window.sessionStorage.token) {
       $location.path('/login');
     }
   });

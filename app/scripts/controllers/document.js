@@ -10,6 +10,18 @@ angular.module('sbirezApp')
       $scope.docList = list;
     });
 
+    $scope.downloadDoc = function(docId) {
+      $http.get('/api/documents/' + docId).success(function(data) {
+        var element = angular.element('<a/>');
+        element.attr({
+          href: 'data:attachment/pdf;charset=utf-8,' + encodeURI(data),
+          target: '_blank',
+          download:'test.pdf'
+        })[0].click();
+        console.log(data);
+      });
+    };
+
     var progressUpdate = function(evt, index) {
       console.log('Index: ' + index + ' Evt: ' + evt);
       $scope.progress[index] = Math.min(100,  parseInt(100.0 * evt.loaded /evt.total));
