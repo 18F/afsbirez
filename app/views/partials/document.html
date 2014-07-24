@@ -1,4 +1,4 @@
-<div ng-controller="DocumentCtrl">
+<div ng-controller="DocumentCtrl as docCtrl">
   <h2>Documents</h2>
   <input type="file" ng-file-select="onFileSelect($files)" multiple>
   <div ng-file-drop="onFileSelect($files)" class="drop-box" ng-file-drag-over-class="dragover" ng-show="dropSupported">drop files here</div>
@@ -14,7 +14,7 @@
   </div>
   <div class="row">
     <div ng-repeat="doc in docList">
-        <h4><a href="" target="_blank" download="doc.name" ng-click="downloadDoc(doc.id)">{{doc.name}}</a> {{doc.uploaded | date:'yyyy-MM-dd HH:mm:ss Z' }}</h4>
+        <h4><a ng-href="api/documents/{{doc.id}}?jwt={{jwt}}" target="_blank">{{doc.name}}</a> {{doc.uploaded | date:'yyyy-MM-dd HH:mm:ss Z' }}</h4>
         <p>{{doc.description}}</p>
         <p ng-repeat="keyword in doc.keywords">{{keyword}}</p>
     </div>

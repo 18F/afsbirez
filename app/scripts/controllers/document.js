@@ -1,26 +1,15 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('DocumentCtrl', function ($scope, $http, $upload) {
+  .controller('DocumentCtrl', function ($scope, $http, $upload, $window) {
 
+    $scope.jwt = $window.sessionStorage.token; 
     $scope.progress = [];
     $scope.docList = [];
     $http.get('/api/documents').success(function(list) {
       console.log(list);
-      $scope.docList = list;
+      $scope.docList = list.files;
     });
-
-    $scope.downloadDoc = function(docId) {
-      $http.get('/api/documents/' + docId).success(function(data) {
-        var element = angular.element('<a/>');
-        element.attr({
-          href: 'data:attachment/pdf;charset=utf-8,' + encodeURI(data),
-          target: '_blank',
-          download:'test.pdf'
-        })[0].click();
-        console.log(data);
-      });
-    };
 
     var progressUpdate = function(evt, index) {
       console.log('Index: ' + index + ' Evt: ' + evt);
