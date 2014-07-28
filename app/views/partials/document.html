@@ -1,3 +1,4 @@
+<div header></div>
 <div ng-controller="DocumentCtrl">
   <h2>{{data.name}}</h2>
   <a ng-href="api/documents/{{data.id}}?file&jwt={{jwt}}" target="_blank">Download</a>  
@@ -25,3 +26,4 @@
     <button type="button" class="btn btn-warning" ng-click="remove()">Remove</button>
   </form>
 </div>
+<div footer></div>
