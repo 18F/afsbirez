@@ -12,15 +12,20 @@ angular.module('sbirezApp')
     });
 
     var progressUpdate = function(evt, index) {
-      console.log('Index: ' + index + ' Evt: ' + evt);
-      $scope.progress[index] = Math.min(100,  parseInt(100.0 * evt.loaded /evt.total));
+      if (evt !== null && evt !== undefined) {
+        console.log('Index: ' + index + ' Evt: ' + evt);
+        $scope.progress[index] = Math.min(100,  parseInt(100.0 * evt.loaded /evt.total));
+      }
     };
 
-    var uploadSuccess = function(data, status) {
+    $scope.uploadSuccess = function(data, status) {
       console.log('data: ' + data);
       console.log('status: ' + status);
       //console.log('headers: ' + headers);
       //console.log('config: ' + config);
+      $http.get('/api/documents').success(function(list) {
+        $scope.docList = list.files;
+      });
     };
 
     $scope.onFileSelect = function($files) {
@@ -47,9 +52,20 @@ angular.module('sbirezApp')
         $scope.upload = $upload.upload({
           url: '/api/documents',
           //data: {myObj: $scope.docModelObj},
-          file: file
-        }).progress(progressUpdate(evt, j))
-          .success(uploadSuccess(data, status));
+          file: file,
+        })
+          //.progress(progressUpdate(evt, j))
+          .progress(function(evt) {
+            console.log('loaded:' + Math.min(100, parseInt(100.0 * evt.loaded / evt.total)));
+            $scope.progress[j] = Math.min(100,  parseInt(100.0 * evt.loaded /evt.total));
+          })
+          //.success(uploadSuccess(data, status));
+          .success(function(data, status, headers, config) {
+            console.log(data);
+            $http.get('/api/documents').success(function(list) {
+              $scope.docList = list.files;
+            });
+          });
       }
     };
   });

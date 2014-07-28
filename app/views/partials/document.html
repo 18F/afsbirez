@@ -1,14 +1,27 @@
 <div ng-controller="DocumentCtrl">
   <h2>{{data.name}}</h2>
   <a ng-href="api/documents/{{data.id}}?file&jwt={{jwt}}" target="_blank">Download</a>  
-  <p>{{data.uploaded | date:'yyyy-MM-dd HH:mm:ss Z' }}</p>
-  <p>{{data.description}}</p>
-  <h2>Proposals</h2>
-  <p ng-repeat="proposal in data.proposals"><a href="proposal/{{proposal.id}}">{{proposal.name</a>}}i</a></p>
-  <h2>Keywords</h2>
-  <p ng-repeat="keyword in data.keywords">{{keyword}}</p>
-  <h2>Changelog</h2>
-  <p ng-repeat="change in data.changelog">{{change}}</p>
-  <button ng-click="remove()">Remove</button>
-  <button ng-click="save()">Save</button>
+  <form ng-submit="save()">
+    <p>Uploaded: {{data.uploaded | date:'dd-MM-yyyy HH:mm:ss Z' }}</p>
+    <textarea ng-model="data.description" class="form-control" placeholder="Please add a description of the file."></textarea>
+    <h2>Attached to Proposals</h2>
+    <ul>
+      <li ng-repeat="proposal in data.proposals">
+        <a href="proposal/{{proposal.id}}">{{proposal.name}}</a>
+      </li>
+    </ul>
+    <h2>Keywords</h2>
+    <ul>
+      <li ng-repeat="keyword in data.keywords">
+        {{keyword}}
+        <button type="button" class="btn btn-info btn-xs" ng-click="removeKeyword(keyword)">Remove</button>
+      </li>
+    </ul>
+    <input type="text" placeholder="Add a new keyword" ng-model="newKeyword">
+    <button type="button" class="btn btn-info btn-xs" ng-click="addKeyword()">Add</button>
+    <h2>Changelog</h2>
+    <p ng-repeat="change in data.changelog">{{change.message}}, {{change.dateChanged}}</p>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="button" class="btn btn-warning" ng-click="remove()">Remove</button>
+  </form>
 </div>

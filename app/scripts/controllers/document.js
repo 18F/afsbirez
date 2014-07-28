@@ -2,32 +2,52 @@
 
 angular.module('sbirezApp')
   .controller('DocumentCtrl', function ($scope, $http, $routeParams, $window) {
-    console.log('DocumentCtrl ' + $routeParams.documentId);
+    $scope.newKeyword = '';
     $scope.documentId = $routeParams.documentId;
     $scope.jwt = $window.sessionStorage.token;
     $http.get('api/documents/' + $routeParams.documentId).success(function(data) {
-      // doc description should contain
-      // name
-      // size
-      // upload date
-      // description
-      // keyword list
-      // proposal list
-      // changelog
       $scope.data = data;
       console.log(data);
     });
 
-  $scope.save = function() {
-    console.log('here');
-    var data = {
-      "id": $scope.documentId,
-      "name": $scope.data.name,
-      "uploaded": $scope.data.uploaded,
-      "keywords": ["resume", "part123"],
-      "proposals": ["123", "234"]
-    };          
-    $http.post('api/documents/' + $scope.documentId, data).success(function(data) {
-    });
-  };
+    $scope.save = function() {
+      console.log($scope.data);
+      $scope.data.changelog.push({"message": "Properties changed.", "dateChanged": new Date().getTime()});
+      $http.post('api/documents/' + $scope.documentId, $scope.data).success(function() {
+        console.log('metadata saved');
+      });
+    };
+
+    $scope.remove = function() {
+      console.log('Removing file');
+      $http.delete('api/documents/' + $scope.documentId).success(function() {
+        console.log('file removed...need to redirect.');
+      });
+    };
+
+    $scope.removeKeyword = function(keyword) {
+      for (var i = $scope.data.keywords.length - 1; i >= 0; i--) {
+        if ($scope.data.keywords[i] === keyword) {
+          console.log('removing ' + keyword);
+          $scope.data.keywords.splice(i, 1);
+        }
+      }
+    };
+
+    $scope.addKeyword = function() {
+      console.log('addKeyword: ' + $scope.newKeyword);
+      var found = false;
+      for (var i = $scope.data.keywords.length - 1; i >= 0; i--) {
+        if ($scope.data.keywords[i] === $scope.newKeyword) {
+          found = true;
+          break;
+        }
+      }
+
+      if (found === false) {
+        $scope.data.keywords.push($scope.newKeyword);
+      }
+
+      $scope.newKeyword = '';
+    };
   });
