@@ -3,5 +3,8 @@ node_js:
   - '0.8'
   - '0.10'
 before_script:
+  - 'npm install npm -g'
   - 'npm install -g bower grunt-cli'
+  - 'gem install sass'
+  - 'gem install compass'
   - 'bower install'
