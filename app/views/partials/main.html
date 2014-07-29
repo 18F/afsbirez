@@ -1,4 +1,12 @@
 <div header></div>
+<div ng-if="!isLoggedIn">
+  <h2>SBIR-EZ</h2>
+  <p>Welcome to SBIR-EZ. This site will help your small business find opportunities to work with the U.S. government.</p>
+  <p>Enter a search term:</p>
+  <input type="text" size="100" placeholder='For example, type "software" or "development"'>
+  <button type="button" class="btn btn-primary">Search</button>
+  <br />
+</div>
 <div ng-if="isLoggedIn">
   <div ng-include="'partials/proposalList'"></div>
   <div ng-include="'partials/documentList'"></div>
