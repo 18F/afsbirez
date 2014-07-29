@@ -13,6 +13,8 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(app) styles/vendor.css -->
     <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,app}) styles/main.css -->
@@ -43,6 +45,8 @@
     <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
 
+    <script src="bower_components/ng-file-upload/angular-file-upload-shim.js"></script>
+
     <!-- build:js(app) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -51,13 +55,30 @@
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/tv4/tv4.js"></script>
+    <script src="bower_components/pickadate/lib/picker.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-schema-form/dist/schema-form.min.js"></script>
+    <script src="bower_components/angular-schema-form/dist/bootstrap-decorator.min.js"></script>
+    <script src="bower_components/angular-schema-form/dist/bootstrap-datepicker.min.js"></script>
+    <script src="bower_components/ng-file-upload/angular-file-upload.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
+        <script src="scripts/directives/header.js"></script>
+        <script src="scripts/directives/footer.js"></script>
         <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/navbar.js"></script>
+        <script src="scripts/controllers/form.js"></script>
+        <script src="scripts/controllers/documentList.js"></script>
+        <script src="scripts/controllers/document.js"></script>
+        <script src="scripts/controllers/proposalList.js"></script>
+        <script src="scripts/controllers/proposal.js"></script>
+        <script src="scripts/controllers/adminuser.js"></script>
+        <script src="scripts/services/authsvc.js"></script>
+        <script src="scripts/services/usersvc.js"></script>
+        <script src="scripts/services/tokensvc.js"></script>
         <!-- endbuild -->
 </body>
 </html>

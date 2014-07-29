@@ -1,0 +1,14 @@
+<div ng-controller="FormCtrl as formCtrl">
+  <h2>Forms</h2>
+  <div> 
+    <form sf-model="formData" sf-form="formFields" sf-schema="formSchema" ng-submit="onSubmit()">
+    </form>
+  </div>
+
+  <div class="row">
+    <div ng-repeat="form in formList">
+        <h4><a href="" ng-click="setForm(form.id)">{{form.name}}</a></h4>
+        <p>{{form.description}}</p>
+    </div>
+  </div>
+</div>

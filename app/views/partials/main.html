@@ -1,21 +1,15 @@
-<div ng-include="'partials/navbar'"></div>
-
-<div class="jumbotron">
-  <h1>'Allo, 'Allo!</h1>
-  <p class="lead">
-    <img src="images/yeoman.png" alt="I'm Yeoman"><br>
-    Always a pleasure scaffolding your apps.
-  </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#">Splendid!</a></p>
+<div header></div>
+<div ng-if="!isLoggedIn">
+  <h2>SBIR-EZ</h2>
+  <p>Welcome to SBIR-EZ. This site will help your small business find opportunities to work with the U.S. government.</p>
+  <p>Enter a search term:</p>
+  <input type="text" size="100" placeholder='For example, type "software" or "development"'>
+  <button type="button" class="btn btn-primary">Search</button>
+  <br />
 </div>
-
-<div class="row marketing">
-  <div ng-repeat="thing in awesomeThings">
-      <h4>{{thing.name}}</h4>
-      <p>{{thing.info}}</p>
-  </div>
+<div ng-if="isLoggedIn">
+  <div ng-include="'partials/proposalList'"></div>
+  <div ng-include="'partials/documentList'"></div>
+  <div ng-include="'partials/form'"></div>
 </div>
-
-<div class="footer">
-  <p>♥ from the Yeoman team</p>
-</div>
+<div footer></div>
