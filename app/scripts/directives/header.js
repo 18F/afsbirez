@@ -11,7 +11,10 @@ angular.module('sbirezApp').directive('header', function() {
       }];
 
       if ($window.sessionStorage.token !== undefined && AuthenticationService.isLogged) {
-        $scope.menu.push({'title': 'Logout', 'link':'/logout'});
+        $scope.menu.push({
+          'title': $window.sessionStorage.username + ' (Logout)',
+          'link':'/logout'
+        });
       }
       else {
         $scope.menu.push({'title': 'Login', 'link':'/login'});
