@@ -18,8 +18,5 @@
     "angular-mocks": ">=1.2.*",
     "angular-scenario": ">=1.2.*"
   },
-  "testPath": "test/client/spec",
-  "resolutions": {
-    "bootstrap": "~3.2.0"
-  }
+  "testPath": "test/client/spec"
 }
