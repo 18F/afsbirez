@@ -12,7 +12,7 @@ angular.module('sbirezApp')
 
     $scope.save = function() {
       console.log($scope.data);
-      $scope.data.changelog.push({"message": "Properties changed.", "dateChanged": new Date().getTime()});
+      $scope.data.changelog.push({'message': 'Properties changed.', 'dateChanged': new Date().getTime()});
       $http.post('api/documents/' + $scope.documentId, $scope.data).success(function() {
         console.log('metadata saved');
       });

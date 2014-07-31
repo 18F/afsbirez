@@ -2,7 +2,6 @@
 
 angular.module('sbirezApp')
   .controller('DocumentListCtrl', function ($scope, $http, $upload, $window) {
-    console.log('DocumentListCtrl');
     $scope.jwt = $window.sessionStorage.token;
     $scope.progress = [];
     $scope.docList = [];
@@ -10,13 +9,6 @@ angular.module('sbirezApp')
       console.log(list);
       $scope.docList = list.files;
     });
-
-    var progressUpdate = function(evt, index) {
-      if (evt !== null && evt !== undefined) {
-        console.log('Index: ' + index + ' Evt: ' + evt);
-        $scope.progress[index] = Math.min(100,  parseInt(100.0 * evt.loaded /evt.total));
-      }
-    };
 
     $scope.uploadSuccess = function(data, status) {
       console.log('data: ' + data);
@@ -43,8 +35,6 @@ angular.module('sbirezApp')
       $scope.upload = [];
       $scope.uploadResult = [];
 
-      var evt, data, status;
-
       for (var j = 0; j < $files.length; j++) {
         var file = $scope.selectedFiles[j];
         $scope.progress[j] = -1;
@@ -54,13 +44,11 @@ angular.module('sbirezApp')
           //data: {myObj: $scope.docModelObj},
           file: file,
         })
-          //.progress(progressUpdate(evt, j))
           .progress(function(evt) {
             console.log('loaded:' + Math.min(100, parseInt(100.0 * evt.loaded / evt.total)));
             $scope.progress[j] = Math.min(100,  parseInt(100.0 * evt.loaded /evt.total));
           })
-          //.success(uploadSuccess(data, status));
-          .success(function(data, status, headers, config) {
+          .success(function(data/*, status, headers, config*/) {
             console.log(data);
             $http.get('/api/documents').success(function(list) {
               $scope.docList = list.files;

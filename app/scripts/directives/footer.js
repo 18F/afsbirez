@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('sbirezApp').directive('footer', function() {
   return {
     restrict: 'A',
@@ -6,5 +8,5 @@ angular.module('sbirezApp').directive('footer', function() {
     controller: ['$scope', '$filter', function ($scope, $filter) {
 
     }]
-  }
+  };
 });

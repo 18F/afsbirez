@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('sbirezApp').directive('header', function() {
   return {
     restrict: 'A',
@@ -24,5 +26,5 @@ angular.module('sbirezApp').directive('header', function() {
         return route === $location.path();
       };
     }]
-  }
+  };
 });
