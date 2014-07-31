@@ -13,8 +13,23 @@ var token;
 var file1, file2, file3;
 var db;
 
-exports.openDatabase = function() {
-  db = new sqlite3.Database('data_store/database', function(err) {
+exports.openDatabase = function(done) {
+  fs.exists('data_store/database', function(exists) {
+    db = new sqlite3.Database('data_store/database', function(err) {
+      if (err !== null)
+        console.log('error' + err);
+      if (!exists) {
+        db.serialize(function() {
+          db.run("CREATE TABLE files (id INTEGER PRIMARY KEY, userid INT, metadata TEXT, filepath TEXT)");
+          db.run("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, password TEXT)");
+          db.run("INSERT INTO users (name, password) VALUES('test', '123')");
+          done();
+        });
+      }
+      else {
+        done();
+      }
+    });
   });
 }
 

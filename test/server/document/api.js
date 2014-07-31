@@ -20,8 +20,12 @@ var should = require('should'),
 //    .delete(auth.decoder, documents.delete);
 
 describe('GET /api/documents', function() {
+
   before(function(done) {
-    support.openDatabase();
+    support.openDatabase(done);
+  });
+  
+  before(function(done) {
     support.createUsers(done);
   });
   
@@ -84,7 +88,10 @@ describe('GET /api/documents', function() {
 
 describe('POST /api/documents', function() {
   before(function(done) {
-    support.openDatabase();
+    support.openDatabase(done);
+  });
+  
+  before(function(done) {
     support.createUsers(done);
   });
   
@@ -142,7 +149,10 @@ describe('POST /api/documents', function() {
 
 describe('GET /api/documents/id', function() {
   before(function(done) {
-    support.openDatabase();
+    support.openDatabase(done);
+  });
+  
+  before(function(done) {
     support.createUsers(done);
   });
   
@@ -181,7 +191,10 @@ describe('GET /api/documents/id', function() {
 // PUT is not yet implemented
 describe('PUT /api/documents/id', function() {
   before(function(done) {
-    support.openDatabase();
+    support.openDatabase(done);
+  });
+  
+  before(function(done) {
     support.createUsers(done);
   });
   
@@ -219,7 +232,10 @@ describe('PUT /api/documents/id', function() {
 //    .post(auth.decoder, documents.update)
 describe('POST /api/documents/id', function() {
   before(function(done) {
-    support.openDatabase();
+    support.openDatabase(done);
+  });
+  
+  before(function(done) {
     support.createUsers(done);
   });
   
@@ -278,7 +294,10 @@ describe('POST /api/documents/id', function() {
 //    .delete(auth.decoder, documents.delete);
 describe('DELETE /api/documents/id', function() {
   before(function(done) {
-    support.openDatabase();
+    support.openDatabase(done);
+  });
+  
+  before(function(done) {
     support.createUsers(done);
   });
   

@@ -7,12 +7,16 @@ var should = require('should'),
     jwt = require('jsonwebtoken'),
     config = require('../../../lib/config/config'),
     support = require('../support');
+
 //  app.route('/auth')
 //    .post(auth.signin);
 
 describe('POST /auth', function() {
   before(function(done) {
-    support.openDatabase();
+    support.openDatabase(done);
+  });
+
+  before(function(done) {
     support.createUsers(done);
   });
   
