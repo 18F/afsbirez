@@ -56,7 +56,7 @@ describe('Controller: AdminUserCtrl', function () {
     spyOn($location, 'path');
     scope.logOut();
     scope.$root.$digest();
-    expect(window.sessionStorage.token).toBeUndefined();
+    expect(window.sessionStorage.token).toBe('');
     expect($location.path).toHaveBeenCalledWith('/');
   });
 

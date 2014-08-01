@@ -20,7 +20,7 @@ angular.module('sbirezApp')
       $scope.logOut = function logout() {
         if (AuthenticationService.isLogged || $window.sessionStorage.token) {
           AuthenticationService.isLogged = false;
-          delete $window.sessionStorage.token;
+          $window.sessionStorage.token = '';
         }
         $location.path('/');
       };
