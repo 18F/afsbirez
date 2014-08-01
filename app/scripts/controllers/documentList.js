@@ -38,7 +38,6 @@ angular.module('sbirezApp')
       for (var j = 0; j < $files.length; j++) {
         var file = $scope.selectedFiles[j];
         $scope.progress[j] = -1;
-        console.log(file.name);
         $scope.upload = $upload.upload({
           url: '/api/documents',
           //data: {myObj: $scope.docModelObj},

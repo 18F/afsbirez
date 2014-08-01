@@ -5,16 +5,13 @@ angular.module('sbirezApp')
     function AdminUserCtrl($scope, $location, $window, UserService, AuthenticationService) {
       $scope.logIn = function logIn(username, password) {
         if (username !== undefined && password !== undefined) {
-          UserService.logIn(username, password).success(function(data) {
+          UserService.logIn(username, password).then(function(data) {
             AuthenticationService.isLogged = true;
-            console.log(data);
             $window.sessionStorage.token = data.token;
             $window.sessionStorage.username = data.username;
             $window.sessionStorage.userid = data.id;
-            console.log('name ' + data.username + ' id ' + data.id);
             $location.path('/');
-          }).error(function(status, data) {
-            console.log(status + data);
+          },function(status, data) {
             $scope.errorMsg = status.message;
           });
         }

@@ -7,10 +7,11 @@ describe('Controller: DocumentListCtrl', function () {
 
   var DocListCtrl,
     scope,
+    upload,
     $httpBackend;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function (_$httpBackend_, $controller, $rootScope) {
+  beforeEach(inject(function (_$httpBackend_, $controller, $rootScope, $upload) {
     $httpBackend = _$httpBackend_;
     $httpBackend.expectGET('/api/documents')
       .respond({'files':[
@@ -19,6 +20,15 @@ describe('Controller: DocumentListCtrl', function () {
         {'name':'file3','id':3}
       ]});
     scope = $rootScope.$new();
+    upload = $upload;
+
+    upload.progress = function() {};
+    upload.success = function() {};
+
+    spyOn($upload,'upload').andCallThrough(function(){
+      console.log('FAKE UPLOAD');
+    });
+
     DocListCtrl = $controller('DocumentListCtrl', {
       $scope: scope
     });
@@ -28,5 +38,20 @@ describe('Controller: DocumentListCtrl', function () {
     expect(scope.docList.length).toBe(0);
     $httpBackend.flush();
     expect(scope.docList.length).toBe(3);
+  });
+  
+  it('should call upload when a file is uploaded', function () {
+    $httpBackend.flush();
+    expect(scope.docList.length).toBe(3);
+    var files = [
+      {'$$hashKey':'013',
+       'lastModifiedDate': new Date().getTime(),
+       'name': 'dd6c6dca9589c24581e97d7bdd159401.pdf',
+       'size': 6171,
+       'type': ''
+      }
+    ];
+    scope.onFileSelect(files);
+    expect(upload.upload).toHaveBeenCalled();
   });
 });
