@@ -2,11 +2,11 @@
 
 var should = require('should'),
     app = require('../../server'),
+    config = require('../../lib/config/config'),
     request = require('supertest'),
     sqlite3 = require('sqlite3').verbose(),
     jwt = require('jsonwebtoken'),
-    fs = require('fs'),
-    config = require('../../lib/config/config');
+    fs = require('fs');
 
 var user1, user2;
 var token;
@@ -14,8 +14,8 @@ var file1, file2, file3;
 var db;
 
 exports.openDatabase = function(done) {
-  fs.exists('data_store/database', function(exists) {
-    db = new sqlite3.Database('data_store/database', function(err) {
+  fs.exists(config.databaseFile, function(exists) {
+    db = new sqlite3.Database(config.databaseFile, function(err) {
       if (err !== null)
         console.log('error' + err);
       if (!exists) {
