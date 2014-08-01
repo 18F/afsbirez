@@ -6,6 +6,7 @@ var should = require('should'),
     request = require('supertest'),
     sqlite3 = require('sqlite3').verbose(),
     jwt = require('jsonwebtoken'),
+    database = require('../../lib/config/database'),
     fs = require('fs');
 
 var user1, user2;
@@ -14,23 +15,8 @@ var file1, file2, file3;
 var db;
 
 exports.openDatabase = function(done) {
-  fs.exists(config.databaseFile, function(exists) {
-    db = new sqlite3.Database(config.databaseFile, function(err) {
-      if (err !== null)
-        console.log('error' + err);
-      if (!exists) {
-        db.serialize(function() {
-          db.run("CREATE TABLE files (id INTEGER PRIMARY KEY, userid INT, metadata TEXT, filepath TEXT)");
-          db.run("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, password TEXT)");
-          db.run("INSERT INTO users (name, password) VALUES('test', '123')");
-          done();
-        });
-      }
-      else {
-        done();
-      }
-    });
-  });
+  db = database.createDatabase();
+  done();
 }
 
 exports.createUsers = function(done) {
