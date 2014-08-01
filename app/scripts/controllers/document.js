@@ -5,7 +5,7 @@ angular.module('sbirezApp')
     $scope.newKeyword = '';
     $scope.documentId = $routeParams.documentId;
     $scope.jwt = $window.sessionStorage.token;
-    $http.get('api/documents/' + $routeParams.documentId).success(function(data) {
+    $http.get('api/documents/' + $scope.documentId).success(function(data) {
       $scope.data = data;
       console.log(data);
     });
