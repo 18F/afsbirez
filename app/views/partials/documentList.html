@@ -1,16 +1,5 @@
 <div ng-controller="DocumentListCtrl as docListCtrl">
   <h2>Documents</h2>
-  <input type="file" ng-file-select="onFileSelect($files)" multiple>
-  <div ng-file-drop="onFileSelect($files)" class="drop-box" ng-file-drag-over-class="dragover" ng-show="dropSupported">drop files here</div>
-  <div ng-file-drop-available="dropSupported=true" ng-show="!dropSupported">HTML5 Drop File is not supported!</div>
-  <div ng-show="selectedFiles != null">
-    <div class="sel-file" ng-repeat="f in selectedFiles">
-      {{($index + 1) + '.' }}
-      <span class="progress" ng-show="progress[$index] >= 0">
-        <div style="width:{{progress[$index]}}%">{{progress[$index]}}%</div>
-      </span>
-    </div>
-  </div>
   <div class="list-group">
     <a class="list-group-item" ng-href="document/{{doc.id}}" ng-repeat="doc in docList">
       <h4 class="list-group-item-heading">

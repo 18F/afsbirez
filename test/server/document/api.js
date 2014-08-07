@@ -100,27 +100,19 @@ describe('POST /api/documents', function() {
     support.removeUsers(done);
   });
 
-/*
-// Supertest and multer don't seem to play nicely - I never see the file attached to the request.
-  it('should respond with success, if given correct auth header and file', function(done) {
-    var filename = 'server.js';
-    var data = fs.readFileSync(filename);
 
+  it('should respond with success, if given correct auth header and JSON metadata', function(done) {
     request(app)
       .post('/api/documents')
-//      .set('Content-Type', 'text/plain')
-//      .set('Content-Disposition', 'attachment; filename='+filename)
-//      .set('Content-Length', data.length)
-//      .send(data)
-//      .attach('files', 'sbir142.pdf')
       .set('Authorization', 'Bearer ' + support.token)
-      .expect(200)
+      .send({"name": "fileABC", "id": support.file1, "description":"New description"})
+      .expect(201)
       .end(function(err, res) {
         if (err) return done(err);
         done();
       });
   });
-*/ 
+ 
   it('should respond with unauthorized, if given an incorrect auth header', function(done) {
     request(app)
       .post('/api/documents')
@@ -132,10 +124,11 @@ describe('POST /api/documents', function() {
       });
   });
   
-  it('should respond with an error, if given correct auth header and but invalid file', function(done) {
+  it('should respond with an error, if given correct auth header and but invalid metadata', function(done) {
     request(app)
       .post('/api/documents')
       .set('Authorization', 'Bearer ' + support.token)
+      .send('{"name": "fileABC", "id": support.file1, "description":}}}}""/"New description}}}fasdfadfafdafdfdfafs....."}')
       .expect(400)
       .end(function(err, res) {
         console.log('err: ' + err);
@@ -177,10 +170,10 @@ describe('GET /api/documents/id', function() {
     request(app)
       .get('/api/documents/1234233')
       .set('Authorization', 'Bearer ' + support.token)
-      .expect(400)
+      .expect(404)
       .end(function(err, res) {
         if (err) return done(err);
-        res.body.should.have.property('status', 400);
+        res.body.should.have.property('status', 404);
         done();
       });
   });
@@ -269,10 +262,10 @@ describe('POST /api/documents/id', function() {
       .post('/api/documents/1234233')
       .set('Authorization', 'Bearer ' + support.token)
       .send({"name": "fileABC", "id": support.file1, "description":"New description"})
-      .expect(400)
+      .expect(404)
       .end(function(err, res) {
         if (err) return done(err);
-        res.body.should.have.property('status', 400);
+        res.body.should.have.property('status', 404);
         done();
       });
   });
@@ -317,7 +310,7 @@ describe('DELETE /api/documents/id', function() {
         request(app)
           .get('/api/documents/' + support.file1)
           .set('Authorization', 'Bearer ' + support.token)
-          .expect(400)
+          .expect(404)
           .end(function(err, res) {
             if (err) return done(err);
             done();
@@ -329,10 +322,10 @@ describe('DELETE /api/documents/id', function() {
     request(app)
       .del('/api/documents/1234233')
       .set('Authorization', 'Bearer ' + support.token)
-      .expect(400)
+      .expect(404)
       .end(function(err, res) {
         if (err) return done(err);
-        res.body.should.have.property('status', 400);
+        res.body.should.have.property('status', 404);
         done();
       });
   });
