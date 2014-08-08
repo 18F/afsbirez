@@ -26,18 +26,30 @@ exports.createUsers = function(done) {
     db.run('INSERT INTO users (name, password) VALUES ("test_2", "test")', function(err) {
       exports.user2 = this.lastID;
       db.run('INSERT INTO files (userid, metadata, filepath) VALUES (?1, ?2, ?3)',
-        [exports.user1, JSON.stringify({"name":"file1"}), 'filepath'], 
+        [exports.user1, JSON.stringify({"name":"file1", "keywords":['test', 'resume'], "description":"Software project"}), 'filepath'], 
         function(err) {
           exports.file1 = this.lastID;
           db.run('INSERT INTO files (userid, metadata, filepath) VALUES (?1, ?2, ?3)', 
-            [exports.user1, JSON.stringify({"name":"file2"}), 'filepath'], 
+            [exports.user1, JSON.stringify({"name":"file2", "keywords":['resume']}), 'filepath'], 
             function(err) {
               exports.file2 = this.lastID;
               db.run('INSERT INTO files (userid, metadata, filepath) VALUES (?1, ?2, ?3)', 
-                [exports.user2, JSON.stringify({"name":"file3"}), 'filepath'], 
+                [exports.user2, JSON.stringify({"name":"file3", "proposals":[{"name":"prop1"}, {"name":"prop2"}]}), 'filepath'], 
                 function(err) {
                   exports.file3 = this.lastID;
-                  done();
+                  db.run('INSERT INTO files (userid, metadata, filepath) VALUES (?1, ?2, ?3)',
+                    [exports.user1, JSON.stringify({"name":"file4", "description":"", "proposals":[{"name":"prop1"}]}), 'filepath'],
+                    function(err) {
+                      db.run('INSERT INTO files (userid, metadata, filepath) VALUES (?1, ?2, ?3)',
+                        [exports.user1, JSON.stringify({"name":"file5", "proposals":[{"name":"prop1"}, {"name":"prop2"}]}), 'filepath'],
+                        function(err) {  
+                          db.run('INSERT INTO files (userid, metadata, filepath) VALUES (?1, ?2, ?3)',
+                            [exports.user1, JSON.stringify({"name":"file6", "proposals":[{"name":"prop2"}]}), 'filepath'],
+                            function(err) {
+                              done();
+                            });
+                        });
+                    });
                 });
             });
         });
