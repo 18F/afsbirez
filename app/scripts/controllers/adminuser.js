@@ -7,9 +7,9 @@ angular.module('sbirezApp')
         if (username !== undefined && password !== undefined) {
           UserService.logIn(username, password).then(function(data) {
             AuthenticationService.isLogged = true;
-            $window.sessionStorage.token = data.token;
-            $window.sessionStorage.username = data.username;
-            $window.sessionStorage.userid = data.id;
+            $window.sessionStorage.token = data.data.token;
+            $window.sessionStorage.username = data.data.username;
+            $window.sessionStorage.userid = data.data.id;
             $location.path('/');
           },function(status, data) {
             $scope.errorMsg = status.message;

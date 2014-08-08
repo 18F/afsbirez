@@ -23,6 +23,10 @@ angular.module('sbirezApp', [
         controller: 'AdminUserCtrl',
         access: { requiredAuthentication: true }
       })
+      .when('/contact', {
+        templateUrl: 'partials/contact',
+        controller: 'ContactCtrl'
+      })
       .when('/proposal/:proposalId', {
         templateUrl: 'partials/proposal',
         controller: 'ProposalCtrl',
