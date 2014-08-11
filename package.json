@@ -13,6 +13,7 @@
     "lodash": "~2.4.1",
     "method-override": "~1.0.0",
     "morgan": "~1.0.0",
+    "orm" : "https://github.com/kennydude/node-orm2/tarball/master",
     "multer": "^0.1.3",
     "sqlite3": "^2.2.4",
     "static-favicon": "~1.0.1"
