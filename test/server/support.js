@@ -15,8 +15,8 @@ var file1, file2, file3;
 var db;
 
 exports.openDatabase = function(done) {
-  db = database.createDatabase();
-  done();
+  db = database.createDatabase(done);
+  // done();
 }
 
 exports.createUsers = function(done) {

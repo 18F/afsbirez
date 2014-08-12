@@ -12,6 +12,9 @@ var should = require('should'),
 //    .post(auth.signin);
 
 describe('POST /auth', function() {
+    
+  this.timeout(6000);
+  
   before(function(done) {
     support.openDatabase(done);
   });

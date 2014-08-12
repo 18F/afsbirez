@@ -20,14 +20,16 @@ var should = require('should'),
 //    .delete(auth.decoder, documents.delete);
 
 describe('GET /api/documents', function() {
+    
+  this.timeout(6000);
 
   before(function(done) {
     support.openDatabase(done);
   });
   
-  before(function(done) {
-    support.createUsers(done);
-  });
+  // before(function(done) {
+  //   support.createUsers(done);
+  // });
   
   // remove database entries after test
   after(function(done) {
