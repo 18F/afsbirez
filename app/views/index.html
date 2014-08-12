@@ -18,7 +18,10 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,app}) styles/main.css -->
+    <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog.min.css" />
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/ngdialog-theme-login.css">
+    <link rel="stylesheet" href="styles/ngdialog-theme-logout.css">
     <!-- endbuild -->
   </head>
   <body ng-app="sbirezApp">
@@ -66,6 +69,7 @@
     <script src="bower_components/angular-schema-form/dist/bootstrap-decorator.min.js"></script>
     <script src="bower_components/angular-schema-form/dist/bootstrap-datepicker.min.js"></script>
     <script src="bower_components/ng-file-upload/angular-file-upload.js"></script>
+    <script src="bower_components/ngDialog/js/ngDialog.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -75,6 +79,7 @@
         <script src="scripts/directives/footer.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/form.js"></script>
+        <script src="scripts/controllers/contact.js"></script>
         <script src="scripts/controllers/documentList.js"></script>
         <script src="scripts/controllers/document.js"></script>
         <script src="scripts/controllers/proposalList.js"></script>

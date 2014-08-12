@@ -15,11 +15,13 @@ describe('Controller: AdminUserCtrl', function () {
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$httpBackend_, _$q_, _$location_, $controller, $rootScope, $window, _UserService_) {
+    console.log('BEFORE ANYTHING, I AM CALLED');
     $httpBackend = _$httpBackend_;
     UserService = _UserService_;
     scope = $rootScope.$new();
     window = $window;
     $q = _$q_;
+    console.log('asfasfafasdfa' + $q);
     $location = _$location_;
     AdminUserCtrl = $controller('AdminUserCtrl', {
       $scope: scope
@@ -28,6 +30,7 @@ describe('Controller: AdminUserCtrl', function () {
 
   it('should set the token to window storage on successful signin and direct back to the application', function () {
     var data = {'token':'ABC', 'username':'test', 'id':1};
+    console.log('here' + $q);
     var mockDeferred = $q.defer();
     spyOn(UserService, 'logIn').andReturn(mockDeferred.promise);
     spyOn($location, 'path');

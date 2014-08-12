@@ -1,20 +1,38 @@
-<form class="form-horizontal" role="form">
-  <div class="form-group">
-    <div ng-show="errorMsg" class="bg-danger"><p>{{errorMsg}}</p></div>
-    <label for="inputUsername" class="col-sm-4 control-label">Username</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" id="inputUsername" placeholder="Username" ng-model="login.email">
-    </div>
+<div>
+  <h3>Create an account to save your result for later</h3>
+</div>
+<div class="row">
+  <div class="col-md-6 signup-form">
+    <form role="form">
+      <div class="form-group">
+        <label for="inputNewName" class="control-label">Name:</label>
+        <input type="text" class="form-control" id="inputNewName" placeholder="Enter your name" ng-model="signup.name">
+      </div>
+      <div class="form-group">
+        <label for="inputNewEmail" class="control-label">Email address:</label>
+        <input type="text" class="form-control" id="inputNewEmail" placeholder="Enter your email address" ng-model="signup.email">
+      </div>
+      <div class="form-group">
+        <label for="inputConfirmEmail" class="control-label">Confirm your email address:</label>
+        <input type="text" class="form-control" id="inputConfirmEmail" placeholder="Re-type your email address">
+      </div>
+      <button type="button" class="btn btn-default" ng-click="signUp(signup.name, signup.email)">Create account</button>
+    </form>
   </div>
-  <div class="form-group">
-    <label for="inputPassword" class="col-sm-4 control-label">Password</label>
-    <div class="col-sm-4">
-      <input type="password" class="form-control" id="inputPassword" placeholder="Password" ng-model="login.password">
-    </div>
+  <div class="col-md-6 login-form">
+    <form role="form">
+      Already have an account? Login here:
+      <div ng-show="errorMsg" class="bg-danger"><p>{{errorMsg}}</p></div>
+      <div class="form-group">
+        <label for="inputUsername" class="control-label">Email address:</label>
+        <input type="text" class="form-control" id="inputUsername" placeholder="Enter your email address" ng-model="login.email">
+      </div>
+      <div class="form-group">
+        <label for="inputPassword" class="control-label">Password:</label>
+        <input type="password" class="form-control" id="inputPassword" placeholder="Enter your password" ng-model="login.password">
+      </div>
+      <button type="button" class="btn btn-default" ng-click="logIn(login.email, login.password)">Login</button>
+      <div class="help-block"><a href="#">Trouble logging in?</a> | <a href="#">Forgot password?</a></div>
+    </form>
   </div>
-  <div class="form-group">
-    <div class="col-sm-offset-4 col-sm-10">
-      <button type="submit" class="btn btn-default" ng-click="logIn(login.email, login.password)">Log In</button>
-    </div>
-  </div>
-</form>
+</div>

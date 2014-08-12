@@ -5,7 +5,7 @@ angular.module('sbirezApp').directive('footer', function() {
     restrict: 'A',
     replace: true,
     templateUrl: 'views/partials/footer.html',
-    controller: ['$scope', '$filter', function ($scope, $filter) {
+    controller: [function () {
 
     }]
   };
