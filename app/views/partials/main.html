@@ -4,7 +4,9 @@
   <div ng-include="'partials/search'"></div>
 </div>
 <div ng-if="isLoggedIn">
-  <div ng-include="'partials/proposalList'"></div>
-  <div ng-include="'partials/documentList'"></div>
-  <div ng-include="'partials/form'"></div>
+  <ul class="nav nav-tabs">
+    <li ng-class="tabClass(tab)" ng-repeat="tab in tabs" tab="tab"><a ui-sref="{{tab.sref}}">{{tab.label}}</a></li>
+  </ul>
+  <div ui-view="tabContent"></div>
+</div>
 </div>

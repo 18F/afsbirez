@@ -1,0 +1,61 @@
+<div ng-controller="SearchCtrl">
+  <p>Enter a search term:</p>
+  <div class="row">
+    <div class="col-md-7">
+      <div class="input-group">
+        <input type="text" class="form-control">
+        <span class="input-group-btn">
+          <button class="btn btn-default" ng-click="search()" type="button">Search</button>
+        </span>
+      </div>
+    </div>
+    <div ng-hide="simpleMode" class="col-md-3">
+      <button class="btn btn-default" type="button">Advanced Search Options</button>
+    </div>
+    <div ng-hide="simpleMode" class="col-md-2">
+      <button class="btn btn-default pull-right" type="button">Start Over</button>
+    </div>
+  </div>
+  <br/>
+  <div class="row">
+    <div class="col-md-2">
+      <div ng-show="results.topics && results.topics.length > 0"
+        <p>{{results.topics.length}} Results</p>
+      </div>
+    </div>
+    <div ng-hide="simpleMode" class="col-md-3 col-md-offset-7">
+      <p class="text-right"><em><a href="#">Save this search >>></a></em></p>
+    </div>
+  </div>
+  <div ng-hide="simpleMode" class="row">
+    <div class="col-md-6">
+      <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-default btn-sm active">
+          <input type="radio">All Opportunities
+        </label>
+        <label class="btn btn-default btn-sm">
+          <input type="radio">Open Opportunities
+        </label>
+        <label class="btn btn-default btn-sm">
+          <input type="radio">Pre-Releases
+        </label>
+      </div>
+    </div>
+    <div class="col-md-2 col-md-offset-1">
+      <select class="form-control">
+        <option>Newest first</option>
+        <option>Closing soon first</option>
+      </select>
+    </div>
+  </div>
+  <br/>
+  <div ng-repeat="topic in results.topics" class="row">
+    <div class="col-md-9">
+      <h4>{{topic.title}}</h4>
+      <p>{{topic.description}} <a href="#">MORE >>></a></p>
+    </div>
+  </div>
+  <div ng-show="results.topics && results.topics.length > 0" class="col-md-9">
+    <p>Page <strong>1</strong> 2 3 4</p>
+  </div>
+</div>

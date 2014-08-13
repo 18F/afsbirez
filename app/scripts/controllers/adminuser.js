@@ -10,8 +10,12 @@ angular.module('sbirezApp')
             $window.sessionStorage.username = data.data.username;
             $window.sessionStorage.userid = data.data.id;
             AuthenticationService.setAuthenticated(true);
-            $scope.closeThisDialog();
-            //$location.path('/');
+            if ($scope.closeThisDialog !== undefined) {
+              $scope.closeThisDialog();
+            }
+            else {
+              $location.path('/');
+            }
           },function(status) {
             console.log(status);
             $scope.errorMsg = status.data.message;
@@ -30,7 +34,9 @@ angular.module('sbirezApp')
           $window.sessionStorage.username = null;
           $window.sessionStorage.userid = null;
           AuthenticationService.setAuthenticated(false);
-          $scope.closeThisDialog();
+          if ($scope.closeThisDialog !== undefined) {
+            $scope.closeThisDialog();
+          }
         }
         $location.path('/');
       };
