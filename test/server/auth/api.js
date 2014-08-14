@@ -14,9 +14,6 @@ var should = require('should'),
 //    .post(auth.signin);
 
 describe('POST /auth', function() {
-    
-  this.timeout(60000);
-  console.log("*** beginning auth tests");
   
   before(function(done) {
     database.createDatabase(done, support.populate);

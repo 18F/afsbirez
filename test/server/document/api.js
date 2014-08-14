@@ -23,20 +23,12 @@ var should = require('should'),
 //    .delete(auth.decoder, documents.delete);
 
 describe('GET /api/documents', function() {
-    
-  this.timeout(60000);
-
-  console.log("*** beginning doc tests");
 
   before(function(done) {
     database.createDatabase(done, support.populate);
-    console.log("*** called to createDatabase");
   });
   
-  console.log("*** beginning doc tests - 2");
-
   it('should respond with JSON array of documents, if given correct auth header', function(done) {
-    console.log("*** first of doc tests");
     console.log('TOKEN: ' + support.token);
     request(app)
       .get('/api/documents')
