@@ -13,6 +13,8 @@ module.exports = {
     done()
   },
   down: function(migration, DataTypes, done) {
-    migration.dropAllTables().complete(done);
+    migration.dropTable('file');
+    migration.dropTable('user');
+    done(); 
+    }
   }
-}
