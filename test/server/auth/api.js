@@ -4,7 +4,6 @@ require("coffee-script/register");
 var should = require('should'),
     app = require('../../../server'),
     request = require('supertest'),
-    sqlite3 = require('sqlite3').verbose(),
     jwt = require('jsonwebtoken'),
     config = require('../../../lib/config/config'),
     support = require('../support'),
