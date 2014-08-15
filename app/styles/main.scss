@@ -23,11 +23,6 @@ body {
     padding-right: 15px;
 }
 
-/* Custom page header */
-.header {
-    border-bottom: 1px solid #e5e5e5;
-}
-
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
     margin-top: 0;
@@ -78,4 +73,9 @@ body {
 
 .drop-box.dragover {
   border: 5px dashed blue;
+}
+
+.nav > li > a {
+  padding-top:3px;
+  padding-bottom:3px;
 }

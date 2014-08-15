@@ -24,8 +24,9 @@ angular.module('sbirezApp').factory('TokenInterceptor', function ($q, $window, $
 
     responseError: function(rejection) {
       if (rejection !== null && rejection.status === 401 && ($window.sessionStorage.token || AuthenticationService.isAuthenticated)) {
-        delete $window.sessionStorage.token;
-        AuthenticationService.isAuthenticated = false;
+        $window.sessionStorage.token = '';
+        AuthenticationService.setAuthenticated(false);
+        console.log('rejected auth');
         $location.path('/');
       }
       return $q.reject(rejection);

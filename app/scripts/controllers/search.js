@@ -7,6 +7,8 @@ angular.module('sbirezApp')
 
     $scope.simpleMode = true;
 
+    console.log('Search Ctrl');
+
     var dummyData = {'topics':
       [{
         'id':1,

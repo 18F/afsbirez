@@ -1,31 +1,19 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('MainCtrl', function ($scope, $http, $state, $window, AuthenticationService) {
+  .controller('MainCtrl', function ($scope, $http, $location, $state, $window, AuthenticationService) {
     $scope.auth = AuthenticationService;
     $scope.isLoggedIn = $scope.auth.getAuthenticated() && ($window.sessionStorage.token !== null && $window.sessionStorage.token !== undefined);
+
+    console.log('Main Ctrl');
 
     AuthenticationService.registerObserverCallback(function() {
       $scope.isLoggedIn = AuthenticationService.isAuthenticated && ($window.sessionStorage.token !== null && $window.sessionStorage.token !== undefined && $window.sessionStorage.token !== '');
     });
 
-    $scope.tabs = [
-      { label : 'Activity', sref : 'home.activity' },
-      { label : 'Notifications', sref : 'home.notifications' },
-      { label : 'Account', sref : 'home.account' }
-    ];
-
-    $scope.selectedTab = $scope.tabs[0];
-
-    if (!$state.includes($scope.selectedTab.sref)) {
-      $state.go($scope.selectedTab.sref);
+    if ($scope.isLoggedIn && $state.includes('home')) {
+      console.log('All state go!');
+      console.log($state);
+      $location.path('/app/proposals');
     }
-
-    $scope.tabClass = function(tab) {
-      if ($state.includes(tab.sref)) {
-        return 'active'
-      } else {
-        return '';
-      }
-    };
   });
