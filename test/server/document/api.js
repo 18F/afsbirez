@@ -3,11 +3,11 @@
 var should = require('should'),
     app = require('../../../server'),
     request = require('supertest'),
-    sqlite3 = require('sqlite3').verbose(),
     jwt = require('jsonwebtoken'),
     fs = require('fs'),
     config = require('../../../lib/config/config'),
-    support = require('../support');
+    support = require('../support'),
+    database = require('../../../lib/config/database');
 
 //  app.route('/api/documents')
 //    .get(auth.decoder, documents.getList)
@@ -22,18 +22,9 @@ var should = require('should'),
 describe('GET /api/documents', function() {
 
   before(function(done) {
-    support.openDatabase(done);
+    database.createDatabase(done, support.populate);
   });
   
-  before(function(done) {
-    support.createUsers(done);
-  });
- 
-  // remove database entries after test
-  after(function(done) {
-    support.removeUsers(done);
-  });
-
   it('should respond with JSON array of documents, if given correct auth header', function(done) {
     request(app)
       .get('/api/documents')
@@ -203,18 +194,8 @@ describe('GET /api/documents', function() {
 
 describe('POST /api/documents', function() {
   before(function(done) {
-    support.openDatabase(done);
+    database.createDatabase(done, support.populate);
   });
-  
-  before(function(done) {
-    support.createUsers(done);
-  });
-  
-  // remove database entries after test
-  after(function(done) {
-    support.removeUsers(done);
-  });
-
 
   it('should respond with success, if given correct auth header and JSON metadata', function(done) {
     request(app)
@@ -257,16 +238,7 @@ describe('POST /api/documents', function() {
 
 describe('GET /api/documents/id', function() {
   before(function(done) {
-    support.openDatabase(done);
-  });
-  
-  before(function(done) {
-    support.createUsers(done);
-  });
-  
-  // remove database entries after test
-  after(function(done) {
-    support.removeUsers(done);
+    database.createDatabase(done, support.populate);
   });
 
   it('should respond with success and data, if given correct auth header and file exists', function(done) {
@@ -298,16 +270,7 @@ describe('GET /api/documents/id', function() {
 // PUT is not yet implemented
 describe.skip('PUT /api/documents/id', function() {
   before(function(done) {
-    support.openDatabase(done);
-  });
-  
-  before(function(done) {
-    support.createUsers(done);
-  });
-  
-  // remove database entries after test
-  after(function(done) {
-    support.removeUsers(done);
+    database.createDatabase(done, support.populate);
   });
 
   it('should respond with success, if given correct auth header and file exists', function(done) {
@@ -338,16 +301,7 @@ describe.skip('PUT /api/documents/id', function() {
 //    .post(auth.decoder, documents.update)
 describe('POST /api/documents/id', function() {
   before(function(done) {
-    support.openDatabase(done);
-  });
-  
-  before(function(done) {
-    support.createUsers(done);
-  });
-  
-  // remove database entries after test
-  after(function(done) {
-    support.removeUsers(done);
+    database.createDatabase(done, support.populate);
   });
 
   it('should respond with success, if given correct auth header, file exists, and json is valid', function(done) {
@@ -400,16 +354,7 @@ describe('POST /api/documents/id', function() {
 //    .delete(auth.decoder, documents.delete);
 describe('DELETE /api/documents/id', function() {
   before(function(done) {
-    support.openDatabase(done);
-  });
-  
-  before(function(done) {
-    support.createUsers(done);
-  });
-  
-  // remove database entries after test
-  after(function(done) {
-    support.removeUsers(done);
+    database.createDatabase(done, support.populate);
   });
 
   it('should respond with success, if given correct auth header and file exists', function(done) {
