@@ -32,7 +32,7 @@ describe('POST /auth', function() {
           .expect(200)
           .end(function(err, res) {
             if (err) return done(err);
-            res.body.should.have.property('files').with.lengthOf(2);
+            res.body.should.have.property('files').with.lengthOf(5);
             res.body.files.should.be.instanceOf.Array;      
             done();
           });
