@@ -47,7 +47,6 @@ describe('Controller: AdminUserCtrl', function () {
     mockDeferred.reject(data);
     scope.$root.$digest();
     expect(window.sessionStorage.token).toNotBe(data.data.token);
-    expect($location.path).not.toHaveBeenCalled();
     expect(scope.errorMsg).toBeUndefined();
   });
   

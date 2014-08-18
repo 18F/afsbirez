@@ -26,7 +26,8 @@ describe('Controller: ProposalCtrl', function () {
 
   beforeEach(function(){
     mockDependency = {};
-    mockDependency.documentId = 1;
+    mockDependency.params = {};
+    mockDependency.params.id = 1;
     
     inject(function (_$httpBackend_, $controller, $rootScope) {
       $httpBackend = _$httpBackend_;
@@ -34,13 +35,15 @@ describe('Controller: ProposalCtrl', function () {
       $routeParams = mockDependency;
       PropCtrl = $controller('ProposalCtrl', {
         $scope: scope,
-        $routeParams: mockDependency
+        $state: mockDependency
       });
     });
   });
 
   it('should attach a proposal to the scope', function () {
     expect(scope.data).toBeUndefined();
+    $httpBackend.whenGET('partials/main.html').respond({});
+    $httpBackend.whenGET('partials/search.html').respond({});
     $httpBackend.expectGET('api/proposals/1').respond(data);
     $httpBackend.flush();
     expect(scope.data).toBeDefined();

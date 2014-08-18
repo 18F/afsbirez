@@ -30,6 +30,8 @@ describe('Controller: DocumentCtrl', function () {
     
     inject(function (_$httpBackend_, $controller, $rootScope) {
       $httpBackend = _$httpBackend_;
+      $httpBackend.whenGET('partials/main.html').respond({});
+      $httpBackend.whenGET('partials/search.html').respond({});
       scope = $rootScope.$new();
       $routeParams = mockDependency;
       DocCtrl = $controller('DocumentCtrl', {
