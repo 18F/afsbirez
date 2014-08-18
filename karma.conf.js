@@ -19,6 +19,8 @@ module.exports = function(config) {
       'app/bower_components/angular-route/angular-route.js',
       'app/bower_components/angular-schema-form/dist/schema-form.min.js',
       'app/bower_components/ng-file-upload/angular-file-upload.js',
+      'app/bower_components/ngDialog/js/ngDialog.min.js',
+      'app/bower_components/angular-ui-router/release/angular-ui-router.js',
       'app/scripts/*.js',
       'app/scripts/**/*.js',
       'test/client/spec/**/*.js'
@@ -47,11 +49,11 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    browsers: ['Firefox'],
+    browsers: ['Chrome'],
 
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: false
+    singleRun: true 
   });
 };
