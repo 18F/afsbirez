@@ -1,30 +1,23 @@
 'use strict';
+require("coffee-script/register");
 
 var should = require('should'),
     app = require('../../../server'),
     request = require('supertest'),
-    sqlite3 = require('sqlite3').verbose(),
     jwt = require('jsonwebtoken'),
     config = require('../../../lib/config/config'),
-    support = require('../support');
+    support = require('../support'),
+    database = require('../../../lib/config/database');  
 
 //  app.route('/auth')
 //    .post(auth.signin);
 
 describe('POST /auth', function() {
-  before(function(done) {
-    support.openDatabase(done);
-  });
-
-  before(function(done) {
-    support.createUsers(done);
-  });
   
-  // remove database entries after test
-  after(function(done) {
-    support.removeUsers(done);
+  before(function(done) {
+    database.createDatabase(done, support.populate);
   });
-
+ 
   it('should respond with success, if given correct user name and password', function(done) {
     request(app)
       .post('/auth')
@@ -39,7 +32,7 @@ describe('POST /auth', function() {
           .expect(200)
           .end(function(err, res) {
             if (err) return done(err);
-            res.body.should.have.property('files').with.lengthOf(2);
+            res.body.should.have.property('files').with.lengthOf(5);
             res.body.files.should.be.instanceOf.Array;      
             done();
           });

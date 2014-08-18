@@ -10,3 +10,4 @@ before_script:
   - 'gem install sass'
   - 'gem install compass'
   - 'bower install'
+  - psql -c 'create database afsbirez_test;' -U postgres
