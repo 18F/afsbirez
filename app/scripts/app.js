@@ -91,6 +91,37 @@ angular.module('sbirezApp', [
         },
         access: { requiredAuthentication: true }
       })
+      .state('app.activity.documents', {
+        url: '/documents',
+        abstract: true,
+        views: {
+          'activityContent': {
+            templateUrl: 'partials/document.html',
+            controller: 'DocumentListCtrl'
+          }
+        },
+        access: { requiredAuthentication: true }
+      })
+      .state('app.activity.documents.list', {
+        url: '',
+        views: {
+          '': {
+            templateUrl: 'partials/documentList.html',
+            controller: 'DocumentListCtrl'
+          }
+        },
+        access: { requiredAuthentication: true }
+      })
+      .state('app.activity.documents.detail', {
+        url: '/:id',
+        views: {
+          '': {
+            templateUrl: 'partials/document.details.html',
+            controller: 'DocumentCtrl'
+          }
+        },
+        access: { requiredAuthentication: true }
+      })
       .state('app.activity.savedOpps', {
         url: '/savedOpps',
         views: {
