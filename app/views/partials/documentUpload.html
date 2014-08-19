@@ -1,4 +1,4 @@
-<div ng-controller="DocumentUploadCtrl as docUploadCtrl">
+<div>
   <input type="file" ng-file-select="onFileSelect($files)" multiple>
   <div ng-file-drop="onFileSelect($files)" class="drop-box" ng-file-drag-over-class="dragover" ng-show="dropSupported">drop files here</div>
   <div ng-file-drop-available="dropSupported=true" ng-show="!dropSupported">HTML5 Drop File is not supported!</div>

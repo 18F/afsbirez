@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('AccountOrganizationCtrl', function ($scope, $http, $routeParams, $window) {
+  .controller('AccountOrganizationCtrl', function ($scope, $http, $state) {
     console.log('Account Organization Ctrl');
-    $scope.newKeyword = '';
-    $scope.documentId = $routeParams.documentId;
-    $scope.jwt = $window.sessionStorage.token;
+    $scope.orgId = $state.params.id;
+
+    $http.get('api/organizations/' + $scope.orgId).success(function(data) {
+      $scope.organization = data.organization;
+    });
   });

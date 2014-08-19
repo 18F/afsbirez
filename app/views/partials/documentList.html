@@ -1,15 +1,13 @@
 <div>
-  <div ng-controller="DocumentListCtrl as docListCtrl">
-    <h2>Documents</h2>
-    <div class="list-group">
-      <a class="list-group-item" ng-href="document/{{doc.id}}" ng-repeat="doc in docList">
-        <h4 class="list-group-item-heading">
-          {{doc.name}} {{doc.uploaded | date:'dd/MM/yyyy HH:mm:ss Z' }}
-        </h4>
-        <p class="list-group-item-text">{{doc.description}}</p>
-        <span class="label label-default" ng-repeat="keyword in doc.keywords">{{keyword}}</span>
-      </a>
-    </div>
+  <h2>Documents</h2>
+  <div class="list-group">
+    <a class="list-group-item" ng-href="document/{{doc.id}}" ng-repeat="doc in docList">
+      <h4 class="list-group-item-heading">
+        {{doc.name}} {{doc.uploaded | date:'dd/MM/yyyy HH:mm:ss Z' }}
+      </h4>
+      <p class="list-group-item-text">{{doc.description}}</p>
+      <span class="label label-default" ng-repeat="keyword in doc.keywords">{{keyword}}</span>
+    </a>
   </div>
   <div ng-include src="'partials/documentUpload'"></div>
 </div>
