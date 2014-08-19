@@ -13,7 +13,7 @@ count_instances = (trees) ->
     if tree.children?
       count += count_instances tree.children
       for child in tree.children
-        child["#{tree.class_name}Id"] = tree.id
+        child["#{tree.class_name}_id"] = tree.id
   return count
 
 persist_trees = (trees, call_me_when_done) ->

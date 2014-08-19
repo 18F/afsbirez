@@ -4,22 +4,22 @@ module.exports = {
             id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
             name: {type: DataTypes.STRING, allowNull: false},
             password: DataTypes.STRING,
-            createdAt: DataTypes.DATE,
-            updatedAt: DataTypes.DATE
+            createdAt: {type: DataTypes.DATE, allowNull: false},
+            updatedAt: {type: DataTypes.DATE, allowNull: false}
         }, { quoteIdentifiers: false } );
         migration.createTable('files', {
             id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
             metadata: DataTypes.STRING,
             filepath: {type: DataTypes.STRING, allowNull: false},
-            userId: {
+            user_id: {
                 type: DataTypes.INTEGER,
                 references: "users",
                 referenceKey: "id",
                 onUpdate: "CASCADE",
                 onDelete: "RESTRICT"
             },
-            createdAt: DataTypes.DATE,
-            updatedAt: DataTypes.DATE
+            createdAt: {type: DataTypes.DATE, allowNull: false},
+            updatedAt: {type: DataTypes.DATE, allowNull: false}
         }, { quoteIdentifiers: false } );
         done()
     },
