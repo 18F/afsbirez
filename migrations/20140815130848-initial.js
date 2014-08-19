@@ -4,8 +4,8 @@ module.exports = {
             id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
             name: {type: DataTypes.STRING, allowNull: false},
             password: DataTypes.STRING,
-            createdAt: {type: DataTypes.DATE, allowNull: false},
-            updatedAt: {type: DataTypes.DATE, allowNull: false}
+            created_at: {type: DataTypes.DATE, allowNull: false},
+            updated_at: {type: DataTypes.DATE, allowNull: false}
         }, { quoteIdentifiers: false } );
         migration.createTable('files', {
             id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
@@ -18,8 +18,8 @@ module.exports = {
                 onUpdate: "CASCADE",
                 onDelete: "RESTRICT"
             },
-            createdAt: {type: DataTypes.DATE, allowNull: false},
-            updatedAt: {type: DataTypes.DATE, allowNull: false}
+            created_at: {type: DataTypes.DATE, allowNull: false},
+            updated_at: {type: DataTypes.DATE, allowNull: false}
         }, { quoteIdentifiers: false } );
         done()
     },
