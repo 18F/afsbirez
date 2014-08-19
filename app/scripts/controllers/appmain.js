@@ -12,22 +12,22 @@ angular.module('sbirezApp')
     });
 
     $scope.tabs = [
-      { label : 'Activity', sref : 'app.activity.proposals.list' },
-      { label : 'Notifications', sref : 'app.notifications' },
-      { label : 'Account', sref : 'app.account' }
+      { label : 'Activity', sref : 'app.activity.proposals.list', tag: 'activity' },
+      { label : 'Notifications', sref : 'app.notifications', tag: 'notification' },
+      { label : 'Account', sref : 'app.account.user', tag: 'account' }
     ];
 
     $scope.selectedTab = $scope.tabs[0];
     console.log($scope.selectedTab.label);
 
-    if ($scope.isLoggedIn && !$state.includes($scope.selectedTab.sref)) {
-      console.log('All state go!');
-      console.log($state);
-//      $state.go($scope.selectedTab.sref);
-    }
+//    if ($scope.isLoggedIn && !$state.includes($scope.selectedTab.sref)) {
+//      console.log('All state go!');
+//      console.log($state);
+////      $state.go($scope.selectedTab.sref);
+//    }
 
     $scope.tabClass = function(tab) {
-      if ($state.includes(tab.sref)) {
+      if ($state.current.name.indexOf(tab.tag) !== -1) {
         return 'active';
       } else {
         return '';

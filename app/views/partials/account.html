@@ -1,3 +1,7 @@
-<section class="post">
-  <p>Account!</p>
-</section>
+<div class="row">
+  <ul class="nav nav-pills nav-stacked sidebar col-md-2">
+    <li><a ui-sref="app.account.user">User</a></li>
+    <li><a ui-sref="app.account.organization">Organization</a></li>
+  </ul>
+  <div class="col-md-10" ui-view="accountContent"></div>
+</div>

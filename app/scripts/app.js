@@ -154,10 +154,31 @@ angular.module('sbirezApp', [
       })
       .state('app.account', {
         url: '/account',
+        abstract: 'true',
         views: {
           'tabContent': {
             templateUrl: 'partials/account.html',
             controller: 'AccountCtrl'
+          }
+        },
+        access: { requiredAuthentication: true }
+      })
+      .state('app.account.user', {
+        url: '',
+        views: {
+          'accountContent': {
+            templateUrl: 'partials/accountUser.html',
+            controller: 'AccountUserCtrl'
+          }
+        },
+        access: { requiredAuthentication: true }
+      })
+      .state('app.account.organization', {
+        url: '/organization',
+        views: {
+          'accountContent': {
+            templateUrl: 'partials/accountOrganization.html',
+            controller: 'AccountOrganizationCtrl'
           }
         },
         access: { requiredAuthentication: true }
@@ -195,13 +216,27 @@ angular.module('sbirezApp', [
   })
 
 .run(function($rootScope, $location, $state, $window, AuthenticationService) {
-  $rootScope.$on('$stateChangeStart', function(event, nextRoute) {
-    console.log(nextRoute);
-    if (nextRoute !== null && nextRoute.access !== undefined && nextRoute.access.requiredAuthentication && !AuthenticationService.isAuthenticated && !$window.sessionStorage.token) {
+//$rootScope.$on('$stateChangeError',function(event, toState, toParams, fromState, fromParams){
+//  console.log('$stateChangeError - fired when an error occurs during transition.');
+//  console.log(arguments);
+//});
+//$rootScope.$on('$stateChangeSuccess',function(event, toState, toParams, fromState, fromParams){
+//  console.log('$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.');
+//});
+//$rootScope.$on('$viewContentLoaded',function(event){
+//  console.log('$viewContentLoaded - fired after dom rendered',event);
+//});
+//$rootScope.$on('$stateNotFound',function(event, unfoundState, fromState, fromParams){
+//  console.log('$stateNotFound '+unfoundState.to+'  - fired when a state cannot be found by its name.');
+//  console.log(unfoundState, fromState, fromParams);
+//});
+$rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams){
+//  $rootScope.$on('$stateChangeStart', function(event, nextRoute) {
+//  console.log('$stateChangeStart to '+toState.to+'- fired when the transition begins. toState,toParams : \n',toState, toParams);
+    if (toState !== null && toState.access !== undefined && toState.access.requiredAuthentication && !AuthenticationService.isAuthenticated && !$window.sessionStorage.token) {
       console.log('auth failed, ' + nextRoute);
       console.log(nextRoute);
       event.preventDefault();
-      //$location.path('/search');
       $state.go('home.search');
     }
   });
