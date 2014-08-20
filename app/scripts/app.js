@@ -96,8 +96,7 @@ angular.module('sbirezApp', [
         abstract: true,
         views: {
           'activityContent': {
-            templateUrl: 'partials/document.html',
-            controller: 'DocumentListCtrl'
+            templateUrl: 'partials/document.html'
           }
         },
         access: { requiredAuthentication: true }
@@ -116,7 +115,7 @@ angular.module('sbirezApp', [
         url: '/:id',
         views: {
           '': {
-            templateUrl: 'partials/document.details.html',
+            templateUrl: 'partials/documentDetails.html',
             controller: 'DocumentCtrl'
           }
         },

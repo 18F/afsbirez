@@ -1,4 +1,4 @@
-<div>
+<div ng-controller="DocumentUploadCtrl">
   <input type="file" ng-file-select="onFileSelect($files)" multiple>
   <div ng-file-drop="onFileSelect($files)" class="drop-box" ng-file-drag-over-class="dragover" ng-show="dropSupported">drop files here</div>
   <div ng-file-drop-available="dropSupported=true" ng-show="!dropSupported">HTML5 Drop File is not supported!</div>
@@ -11,14 +11,5 @@
         <div style="width:{{progress[$index]}}%">{{progress[$index]}}%</div>
       </span>
     </div>
-  </div>
-  <div class="list-group">
-    <a class="list-group-item" ng-href="document/{{doc.id}}" ng-repeat="doc in docList">
-      <h4 class="list-group-item-heading">
-        {{doc.name}} {{doc.uploaded | date:'dd/MM/yyyy HH:mm:ss Z' }}
-      </h4>
-      <p class="list-group-item-text">{{doc.description}}</p>
-      <span class="label label-default" ng-repeat="keyword in doc.keywords">{{keyword}}</span>
-    </a>
   </div>
 </div>

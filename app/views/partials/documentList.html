@@ -1,7 +1,7 @@
 <div>
   <h2>Documents</h2>
   <div class="list-group">
-    <a class="list-group-item" ng-href="document/{{doc.id}}" ng-repeat="doc in docList">
+    <a class="list-group-item" ui-sref="app.activity.documents.detail({id: {{doc.id}}})" ng-repeat="doc in docList">
       <h4 class="list-group-item-heading">
         {{doc.name}} {{doc.uploaded | date:'dd/MM/yyyy HH:mm:ss Z' }}
       </h4>

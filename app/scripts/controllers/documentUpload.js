@@ -37,6 +37,7 @@ angular.module('sbirezApp')
         var file = $scope.selectedFiles[j];
         $scope.progress[j] = -1;
       }
+      console.log($scope.selectedFiles);
     };
 
     $scope.start = function(index, id) {

@@ -1,13 +1,15 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('DocumentCtrl', function ($scope, $http, $routeParams, $window) {
+  .controller('DocumentCtrl', function ($scope, $http, $state, $window) {
     $scope.newKeyword = '';
-    $scope.documentId = $routeParams.documentId;
+    $scope.documentId = $state.params.id;
     $scope.jwt = $window.sessionStorage.token;
+    $scope.errorMsg = '';
+    $scope.updated = false;
+
     $http.get('api/documents/' + $scope.documentId).success(function(data) {
       $scope.data = data;
-      console.log(data);
     });
 
     $scope.save = function() {
@@ -15,6 +17,11 @@ angular.module('sbirezApp')
       $scope.data.changelog.push({'message': 'Properties changed.', 'dateChanged': new Date().getTime()});
       $http.post('api/documents/' + $scope.documentId, $scope.data).success(function() {
         console.log('metadata saved');
+        $scope.updated = true;
+      }).error(function(message) {
+        $scope.errorMsg = message.message;
+        console.log(message);
+        $scope.updated = false;
       });
     };
 

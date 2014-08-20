@@ -1,7 +1,9 @@
-<div ng-controller="DocumentCtrl">
+<div>
   <h2>{{data.name}}</h2>
   <a ng-href="api/documents/{{data.id}}?file&jwt={{jwt}}" target="_blank">Download</a>  
   <form ng-submit="save()">
+    <p ng-show="errorMsg != ''" class="bg-danger">{{errorMsg}}</p>
+    <p ng-show="updated" class="bg-success">Document successfully updated.</p>
     <p>Uploaded: {{data.uploaded | date:'dd-MM-yyyy HH:mm:ss Z' }}</p>
     <textarea ng-model="data.description" class="form-control" placeholder="Please add a description of the file."></textarea>
     <h2>Attached to Proposals</h2>
