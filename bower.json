@@ -11,12 +11,14 @@
     "angular-cookies": ">=1.2.*",
     "angular-sanitize": ">=1.2.*",
     "angular-route": ">=1.2.*",
-    "angular-schema-form": "*",
+    "angular-schema-form": "~0.6.*",
     "ng-file-upload": "~1.5.1"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",
-    "angular-scenario": ">=1.2.*"
+    "angular-scenario": ">=1.2.*",
+    "jasmine": "~2.0.1",
+    "karma": "~0.2.2"
   },
   "testPath": "test/client/spec"
 }

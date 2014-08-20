@@ -27,26 +27,26 @@ describe('Controller: AdminUserCtrl', function () {
   }));
 
   it('should set the token to window storage on successful signin and direct back to the application', function () {
-    var data = {'token':'ABC', 'username':'test', 'id':1};
+    var data ={'data': {'token':'ABC', 'username':'test', 'id':1}};
     var mockDeferred = $q.defer();
     spyOn(UserService, 'logIn').andReturn(mockDeferred.promise);
     spyOn($location, 'path');
-    scope.logIn(data.username, '123');
+    scope.logIn(data.data.username, '123');
     mockDeferred.resolve(data);
     scope.$root.$digest();
-    expect(window.sessionStorage.token).toBe(data.token);
+    expect(window.sessionStorage.token).toBe(data.data.token);
     expect($location.path).toHaveBeenCalledWith('/');
   });
   
   it('should not redirect and it should return an error', function () {
-    var data = {'token':'XYZ', 'username':'test', 'id':1};
+    var data = {'data': {'token':'XYZ', 'username':'test', 'id':1}};
     var mockDeferred = $q.defer();
     spyOn(UserService, 'logIn').andReturn(mockDeferred.promise);
     spyOn($location, 'path');
     scope.logIn(data.username, '123');
     mockDeferred.reject(data);
     scope.$root.$digest();
-    expect(window.sessionStorage.token).toNotBe(data.token);
+    expect(window.sessionStorage.token).toNotBe(data.data.token);
     expect($location.path).not.toHaveBeenCalled();
     expect(scope.errorMsg).toBeUndefined();
   });

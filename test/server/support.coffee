@@ -55,12 +55,27 @@ module.exports.populate = (call_me_when_done) ->
         children: [
             cls:        database.db.File
             class_name: "File"
-            metadata:   JSON.stringify {"name": "file1"}
+            metadata:   JSON.stringify {"name": "file1", "keywords":["test", "resume"], "description":"Software project"}
             filepath:   "filepath"
            ,
             cls:        database.db.File
             class_name: "file"
-            metadata: JSON.stringify({"name": "file2"})
+            metadata: JSON.stringify({"name": "file2", "keywords":["resume"]})
+            filepath: "filepath"
+           ,
+            cls:        database.db.File
+            class_name: "file"
+            metadata: JSON.stringify({"name": "file4", "description":"", "proposals":[{"name":"prop1"}]})
+            filepath: "filepath"
+           ,
+            cls:        database.db.File
+            class_name: "file"
+            metadata: JSON.stringify({"name": "file5", "proposals":[{"name":"prop1"}, {"name":"prop2"}]})
+            filepath: "filepath"
+           ,
+            cls:        database.db.File
+            class_name: "file"
+            metadata: JSON.stringify({"name": "file6", "proposals":[{"name":"prop2"}]})
             filepath: "filepath"
             ]
        ,
@@ -72,7 +87,7 @@ module.exports.populate = (call_me_when_done) ->
         children: [
             cls:        database.db.File
             class_name: "file"
-            metadata:   JSON.stringify({"name": "file3"})
+            metadata:   JSON.stringify({"name": "file3", "proposals":[{"name":"prop1"}, {"name":"prop2"}]})
             filepath:   "filepath"
             ]
         ]
@@ -80,5 +95,4 @@ module.exports.populate = (call_me_when_done) ->
     module.exports.file1 = data[0].id
     module.instances_to_create = count_instances data
     persist_trees data, call_me_when_done
-
 
