@@ -9,7 +9,7 @@ count_instances = (forest) ->
     if tree.children?
       count += count_instances tree.children
       for child in tree.children
-        child["#{tree.class_name}Id"] = tree.id
+        child["#{tree.class_name}_id"] = tree.id
   return count
 
 module.exports.persist_forest = (call_me_when_done, forest, is_top=true) ->
