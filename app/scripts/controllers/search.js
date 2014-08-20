@@ -5,32 +5,36 @@ angular.module('sbirezApp')
     $scope.jwt = $window.sessionStorage.token;
     $scope.results = {};
 
+    var FBOPEN_URI = 'http://api.data.gov/gsa/fbopen-dev/v0/opps';
+    var FBOPEN_KEY = 'DEMO_KEY';
+    var FBOPEN_SBIR = '(SBIR OR "small business innovation research" OR STTR OR "small business technology transfer")';
+    var SOLICITATIONS_PER_PAGE = 2;
     $scope.simpleMode = true;
+    $scope.searchTerm = '';
 
     console.log('Search Ctrl');
 
-    var dummyData = {'topics':
-      [{
-        'id':1,
-        'topicId':'A14-083',
-        'title':'Scalable Design Method for Reconfigurable Canard Actuation Systems',
-        'description':'A variety of technical challenges are encountered during the development of gun-launched guided projectiles. The projectile is subjected to extremely high external forces due to the shock and vibration encountered during the gun launch in significantly different frequency regimes on mechanical and electrical components.'
-      },
-      {
-        'id':2,
-        'topicId':'A14-084',
-        'title':'Hybrid Projectile Components Miniaturization',
-        'description':'The US Army is aggressively pursuing guided gun-fired munitions and projectiles that provide a real-time video feed and control to the User. Currently, commercially available components on the developmental guided 40mm munition with a camera system are heavy, expensive, bulky, and not sufficiently resilient to withstand the G force produced when the munition is fired.'
-      },
-      {
-        'id':3,
-        'topicId':'A14-091',
-        'title':'Nuclear Magnetic Resonance Instrumentation for Geotechnical, Geospatial and Geophysical Investigations',
-        'description':'The US Army requires field survey instruments to determine moisture content in the top 2 meters of the subsurface. Such moisture measurements are required for: modeling and detecting various targets in the top 2 meters of the subsurface; military construction, including assessment of building sites, airfields and roads; and mobility assessments, including battlefield assessment of the ability of terrain to support various mechanized operations.'
-      }]};
+    $scope.search = function(page) {
+      var combinedSearch = FBOPEN_SBIR;
 
-    $scope.search = function() {
-      $scope.simpleMode = false;
-      $scope.results = dummyData;
+      if (page === undefined) {
+        page = 0;
+      }
+
+      if ($scope.searchTerm !== '') {
+        combinedSearch += ' AND ' + $scope.searchTerm;
+      }
+
+      var config = {};
+      config.params = [];
+      config.params.q = combinedSearch;
+      config.params.api_key = FBOPEN_KEY;
+      config.params.limit = SOLICITATIONS_PER_PAGE;
+      config.params.start = SOLICITATIONS_PER_PAGE * page;
+      $http.get(FBOPEN_URI, config).success(function(data) {
+        $scope.results = data;
+        $scope.simpleMode = false;
+        console.log(data);
+      });
     };
   });

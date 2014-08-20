@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-md-7">
       <div class="input-group">
-        <input type="text" class="form-control">
+        <input type="text" ng-model="searchTerm" class="form-control">
         <span class="input-group-btn">
           <button class="btn btn-default" ng-click="search()" type="button">Search</button>
         </span>
@@ -19,8 +19,8 @@
   <br/>
   <div class="row">
     <div class="col-md-2">
-      <div ng-show="results.topics && results.topics.length > 0"
-        <p>{{results.topics.length}} Results</p>
+      <div ng-show="results.docs && results.docs.numFound > 0"
+        <p>{{results.docs.numFound}} Results</p>
       </div>
     </div>
     <div ng-hide="simpleMode" class="col-md-3 col-md-offset-7">
@@ -49,13 +49,14 @@
     </div>
   </div>
   <br/>
-  <div ng-repeat="topic in results.topics" class="row">
+  <div ng-repeat="topic in results.docs" class="row">
     <div class="col-md-9">
-      <h4>{{topic.title}}</h4>
-      <p>{{topic.description}} <a href="#">MORE >>></a></p>
+      <h4><a href="{{topic.listing_url}}">{{topic.title}}</a></h4>
+      <p>{{topic.description|truncate:500}}<span ng-if="topic.description.length > 500"><a href="{{topic.listing_url}}">MORE >>></span></p>
+      <button class="btn btn-default btn-sm pull-right" type="button">Save for later</button>
     </div>
   </div>
-  <div ng-show="results.topics && results.topics.length > 0" class="col-md-9">
+  <div ng-show="results.docs && results.docs.numFound > 0" class="col-md-9">
     <p>Page <strong>1</strong> 2 3 4</p>
   </div>
 </div>
