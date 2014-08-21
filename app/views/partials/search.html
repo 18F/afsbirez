@@ -52,11 +52,13 @@
   <div ng-repeat="topic in results.docs" class="row">
     <div class="col-md-9">
       <h4><a href="{{topic.listing_url}}">{{topic.title}}</a></h4>
-      <p>{{topic.description|truncate:500}}<span ng-if="topic.description.length > 500"><a href="{{topic.listing_url}}">MORE >>></span></p>
+      <p>{{topic.description|truncate:500}}<span ng-if="topic.description.length > 500"><a href="{{topic.listing_url}}">MORE >>></a></span></p>
       <button class="btn btn-default btn-sm pull-right" type="button">Save for later</button>
     </div>
   </div>
-  <div ng-show="results.docs && results.docs.numFound > 0" class="col-md-9">
-    <p>Page <strong>1</strong> 2 3 4</p>
+  <div class="row">
+    <div ng-if="results && itemCount > 0" class="col-md-9">
+      <pagination ng-attr-current-page="{{currentPage}}" ng-attr-item-count="{{itemCount}}" ng-attr-items-per-page="{{itemsPerPage}}" ng-attr-method="search" />
+    </div>
   </div>
 </div>
