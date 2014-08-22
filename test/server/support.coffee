@@ -43,8 +43,12 @@ module.exports.populate = (call_me_when_done) ->
       "INSERT INTO organizationsusers (organization_id, user_id, created_at, updated_at) VALUES (2, 3, current_timestamp, current_timestamp)"
     ]
 
+    n_run = 0
     run_one_qry = (qry, callback) ->
-      database.db.sequelize.query(qry).success( (result) -> console.log result )
-    async.each queries, run_one_qry, call_me_when_done
-
+      database.db.sequelize.query(qry, null, {raw: true, logging: false}).success( (result) -> null )
+      callback()
+    finalize = (err) ->
+      console.log "all queries have finished"
+      call_me_when_done()
+    async.eachSeries queries, run_one_qry, finalize
     module.exports.file1 = 1
