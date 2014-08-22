@@ -5,19 +5,19 @@ angular.module('sbirezApp').directive('header', function() {
     restrict: 'A',
     replace: true,
     templateUrl: 'views/partials/header.html',
-    controller: ['$scope', '$filter', '$window', '$location', 'ngDialog', 'AuthenticationService',
-      function ($scope, $filter, $window, $location, ngDialog, AuthenticationService) {
+    controller: ['$scope', '$filter', '$window', '$location', 'AuthenticationService', 'DialogService',
+      function ($scope, $filter, $window, $location, AuthenticationService, DialogService) {
         $scope.menu = [{
           'title': 'Home',
           'link': '/'
         }];
 
         $scope.openLogin = function() {
-          ngDialog.open({'template':'partials/login.html', 'className':'ngdialog-theme-login', 'controller':'AdminUserCtrl'});
+          DialogService.openLogin();
         };
 
         $scope.openLogout = function() {
-          ngDialog.open({'template':'partials/logout.html', 'className':'ngdialog-theme-logout', 'controller':'AdminUserCtrl'});
+          DialogService.openLogout();
         };
 
         if ($window.sessionStorage.token !== undefined && $window.sessionStorage.token !== null && $window.sessionStorage.token !== '' &&
