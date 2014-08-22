@@ -16,6 +16,10 @@ describe('Controller: AdminUserCtrl', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$httpBackend_, _$q_, _$location_, $controller, $rootScope, $window, _UserService_) {
     $httpBackend = _$httpBackend_;
+    $httpBackend.whenGET('partials/appmain.html').respond({});
+    $httpBackend.whenGET('partials/activity.html').respond({});
+    $httpBackend.whenGET('partials/proposal.html').respond({});
+    $httpBackend.whenGET('partials/proposalList.html').respond({});
     UserService = _UserService_;
     scope = $rootScope.$new();
     window = $window;

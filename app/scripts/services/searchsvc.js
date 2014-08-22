@@ -7,7 +7,7 @@ angular.module('sbirezApp').factory('SavedSearchService', function($http, $windo
         var intention = {};
         intention.name = 'app.activity.savedSearches';
         intention.data = {};
-        intention.data.query = query; 
+        intention.data.query = query;
         DialogService.openLogin(intention);
       }
     }

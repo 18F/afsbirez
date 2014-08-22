@@ -229,7 +229,7 @@ angular.module('sbirezApp', [
 //  console.log('$stateNotFound '+unfoundState.to+'  - fired when a state cannot be found by its name.');
 //  console.log(unfoundState, fromState, fromParams);
 //});
-  $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams){
+  $rootScope.$on('$stateChangeStart',function(event, toState /*, toParams, fromState, fromParams*/){
 //  $rootScope.$on('$stateChangeStart', function(event, nextRoute) {
 //  console.log('$stateChangeStart to '+toState.to+'- fired when the transition begins. toState,toParams : \n',toState, toParams);
     if (toState !== null && toState.access !== undefined && toState.access.requiredAuthentication && !AuthenticationService.isAuthenticated && !$window.sessionStorage.token) {

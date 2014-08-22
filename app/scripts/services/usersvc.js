@@ -36,7 +36,7 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
     },
    
     updateUserDetails: function(id, user) {
-      $http.post('/api/users/' + id, user).success(function(data) {
+      $http.post('/api/users/' + id, user).success(function() {
       });
     }
   };

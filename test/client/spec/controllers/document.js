@@ -7,7 +7,7 @@ describe('Controller: DocumentCtrl', function () {
 
   var DocCtrl,
     scope,
-    $routeParams,
+    $state,
     mockDependency,
     $httpBackend,
     data;
@@ -26,17 +26,18 @@ describe('Controller: DocumentCtrl', function () {
 
   beforeEach(function(){
     mockDependency = {};
-    mockDependency.documentId = 1;
+    mockDependency.params = {};
+    mockDependency.params.id = 1;
     
     inject(function (_$httpBackend_, $controller, $rootScope) {
       $httpBackend = _$httpBackend_;
       $httpBackend.whenGET('partials/main.html').respond({});
       $httpBackend.whenGET('partials/search.html').respond({});
       scope = $rootScope.$new();
-      $routeParams = mockDependency;
+      $state = mockDependency;
       DocCtrl = $controller('DocumentCtrl', {
         $scope: scope,
-        $routeParams: mockDependency
+        $state: mockDependency
       });
     });
   });

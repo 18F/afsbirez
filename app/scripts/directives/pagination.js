@@ -11,10 +11,10 @@ angular.module('sbirezApp').directive('pagination', ['$compile', function($compi
       'currentPage': '@'
     },
     link: function (scope, element, attrs) {
-      attrs.$observe('itemCount', function(value) {
+      attrs.$observe('itemCount', function() {
         updatePagination();
       });
-      attrs.$observe('currentPage', function(value) {
+      attrs.$observe('currentPage', function() {
         updatePagination();
       });
 
@@ -33,10 +33,10 @@ angular.module('sbirezApp').directive('pagination', ['$compile', function($compi
 
         // add the left arrow, enabled if not at the first page
         if (page !== currentPage) {
-          retVal += '<li><a href="#" ng-click="$parent.' + attrs.method + '(\'prev\')">&laquo;</a></li>'
+          retVal += '<li><a href="#" ng-click="$parent.' + attrs.method + '(\'prev\')">&laquo;</a></li>';
         }
         else {
-          retVal += '<li class="disabled"><a href="#">&laquo;</a></li>'
+          retVal += '<li class="disabled"><a href="#">&laquo;</a></li>';
         }
 
         // add the individual page callouts
@@ -47,16 +47,16 @@ angular.module('sbirezApp').directive('pagination', ['$compile', function($compi
 
         // add the right arrow, enabled if not at the last page
         if (page - 1 !== currentPage) {
-          retVal += '<li><a href="#" ng-click="$parent.' + attrs.method + '(\'next\')">&raquo;</a></li>'
+          retVal += '<li><a href="#" ng-click="$parent.' + attrs.method + '(\'next\')">&raquo;</a></li>';
         }
         else {
-          retVal += '<li class="disabled"><a href="#">&raquo;</a></li>'
+          retVal += '<li class="disabled"><a href="#">&raquo;</a></li>';
         }
 
         retVal += '</ul>';
         element.html(retVal);
         $compile(element.contents())(scope);
-      };
+      }
 
       updatePagination();
     }

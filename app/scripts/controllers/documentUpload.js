@@ -34,7 +34,6 @@ angular.module('sbirezApp')
       $scope.upload = [];
 
       for (var j = 0; j < $scope.selectedFiles.length; j++) {
-        var file = $scope.selectedFiles[j];
         $scope.progress[j] = -1;
       }
       console.log($scope.selectedFiles);

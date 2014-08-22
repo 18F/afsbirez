@@ -14,7 +14,7 @@ angular.module('sbirezApp')
               $scope.closeThisDialog();
               //$state.go('home.activity');
             }
-            if ($scope.ngDialogData !== undefined && $scope.ngDialogData !== null) { 
+            if ($scope.ngDialogData !== undefined && $scope.ngDialogData !== null) {
               $state.go($scope.ngDialogData.name, $scope.ngDialogData);
             }
             else {
