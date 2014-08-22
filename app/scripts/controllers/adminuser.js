@@ -1,11 +1,10 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('AdminUserCtrl', ['$scope', '$state', '$location', '$window', 'UserService', 'AuthenticationService',
-    function AdminUserCtrl($scope, $state, $location, $window, UserService, AuthenticationService) {
+  .controller('AdminUserCtrl', ['$scope', '$state', '$location', '$rootScope', '$window', 'UserService', 'AuthenticationService',
+    function AdminUserCtrl($scope, $state, $location, $rootScope, $window, UserService, AuthenticationService) {
       $scope.logIn = function logIn(username, password) {
         if (username !== undefined && password !== undefined) {
-          console.log('LogIn');
           UserService.logIn(username, password).then(function(data) {
             $window.sessionStorage.token = data.data.token;
             $window.sessionStorage.username = data.data.username;
@@ -15,7 +14,12 @@ angular.module('sbirezApp')
               $scope.closeThisDialog();
               //$state.go('home.activity');
             }
-            $location.path('/app/proposals');
+            if ($scope.ngDialogData !== undefined && $scope.ngDialogData !== null) { 
+              $state.go($scope.ngDialogData.name, $scope.ngDialogData);
+            }
+            else {
+              $state.go('app.activity.proposals.list');
+            }
           },function(status) {
             console.log(status);
             $scope.errorMsg = status.data.message;

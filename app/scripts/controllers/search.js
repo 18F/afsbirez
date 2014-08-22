@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('SearchCtrl', function ($scope, $http, $window) {
+  .controller('SearchCtrl', function ($scope, $http, $window, SavedOpportunityService, SavedSearchService) {
     $scope.jwt = $window.sessionStorage.token;
     $scope.results = {};
 
@@ -17,6 +17,14 @@ angular.module('sbirezApp')
     $scope.currentPage = 0;
     $scope.itemCount = 0;
     console.log('Search Ctrl');
+
+    $scope.saveOpportunity = function(opportunityId) {
+      SavedOpportunityService.save(opportunityId);
+    };
+
+    $scope.saveSearch = function() {
+      SavedSearchService.save($scope.searchTerm);
+    };
 
     $scope.search = function(page) {
       var combinedSearch = FBOPEN_SBIR;
