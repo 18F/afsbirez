@@ -5,40 +5,6 @@ jwt = require 'jsonwebtoken'
 
 module.exports.token = jwt.sign {id: 2}, config.authkey, { expiresInMinutes: 20 }
 
-module.instances_to_create = null
-
-count_instances = (trees) ->
-  count = trees.length
-  for tree in trees
-    if tree.children?
-      count += count_instances tree.children
-      for child in tree.children
-        child["#{tree.class_name}_id"] = tree.id
-  return count
-
-persist_trees = (trees, call_me_when_done) ->
-  console.log "N of trees is #{trees.length}"
-  for tree in trees
-    console.log "object creation: #{tree.class_name} #{tree.name or tree.filepath}"
-    tree.cls.create(tree).complete(
-      (err, created) ->
-        if err?
-          console.log "error creating instance: #{err}"
-        else
-          console.log "instance #{created.id} created successfully"
-          module.instances_to_create -= 1
-          console.log "#{module.instances_to_create} instances left to create"
-          if not module.instances_to_create
-            console.log "all test data created"
-            call_me_when_done()
-      )
-    if tree.children?
-      console.log "*** call persist_trees for #{tree.children.length} children"
-      persist_trees tree.children, call_me_when_done
-    else
-      console.log "*** no children"
-
-
 module.exports.populate = (call_me_when_done) ->
     queries = [
       "INSERT INTO organizations (id, name, duns, ein, created_at, updated_at) VALUES (1, 'FooCorp', '123456', '987654', current_timestamp, current_timestamp)"
