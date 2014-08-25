@@ -33,23 +33,22 @@ describe('POST /auth', function() {
           .set('Authorization', 'Bearer ' + res.body.token)
           .expect(200)
           .end(function(err, res) {
-            console.log("ERR:", err);
             if (err) return done(err);
-            res.body.should.have.property('files').with.lengthOf(5);
+            res.body.should.have.property('files').with.lengthOf(6);
             res.body.files.should.be.instanceOf.Array;
             done();
           });
       });
   });
 
-  // it('should respond with unauthorized, if given incorrect user name and password', function(done) {
-  //   request(app)
-  //     .post('/auth')
-  //     .send({"username": "test_1" , "password": "adfasdtest"})
-  //     .expect(401)
-  //     .end(function(err, res) {
-  //       if (err) return done(err);
-  //       done();
-  //     });
-  // });
+  it('should respond with unauthorized, if given incorrect user name and password', function(done) {
+    request(app)
+      .post('/auth')
+      .send({"username": "test_1" , "password": "adfasdtest"})
+      .expect(401)
+      .end(function(err, res) {
+        if (err) return done(err);
+        done();
+      });
+  });
 });
