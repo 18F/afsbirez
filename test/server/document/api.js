@@ -9,22 +9,22 @@ var should = require('should'),
     support = require('../support'),
     database = require('../../../lib/config/database');
 
-//  app.route('/api/documents')
-//    .get(auth.decoder, documents.getList)
-//    .post(auth.decoder, documents.add);
-
-//  app.route('/api/documents/:id')
-//    .get(auth.decoder, documents.getSingle)
-//    .put(auth.decoder, documents.replace)
-//    .post(auth.decoder, documents.update)
-//    .delete(auth.decoder, documents.delete);
+ // app.route('/api/documents')
+ //   .get(auth.decoder, documents.getList)
+ //   .post(auth.decoder, documents.add);
+ //
+ // app.route('/api/documents/:id')
+ //   .get(auth.decoder, documents.getSingle)
+ //   .put(auth.decoder, documents.replace)
+ //   .post(auth.decoder, documents.update)
+ //   .delete(auth.decoder, documents.delete);
 
 describe('GET /api/documents', function() {
 
   before(function(done) {
     database.createDatabase(done, support.populate);
   });
-  
+
   it('should respond with JSON array of documents, if given correct auth header', function(done) {
     request(app)
       .get('/api/documents')
@@ -33,8 +33,8 @@ describe('GET /api/documents', function() {
       .expect('Content-Type', /json/)
       .end(function(err, res) {
         if (err) return done(err);
-        res.body.should.have.property('files').with.lengthOf(5);
-        res.body.files.should.be.instanceOf.Array;
+        res.body.should.have.property('documents').with.lengthOf(6);
+        res.body.documents.should.be.instanceOf.Array;
         done();
      });
   });
@@ -47,7 +47,7 @@ describe('GET /api/documents', function() {
       .expect('Content-Type', /json/)
       .end(function(err, res) {
         if (err) return done(err);
-        res.body.should.have.property('files').with.lengthOf(1);
+        res.body.should.have.property('documents').with.lengthOf(1);
         done();
      });
   });
@@ -60,9 +60,9 @@ describe('GET /api/documents', function() {
       .expect('Content-Type', /json/)
       .end(function(err, res) {
         if (err) return done(err);
-        res.body.should.have.property('files').with.lengthOf(1);
-        res.body.files[0].keywords[0].should.be.exactly('test');
-        res.body.files.should.be.instanceOf.Array;
+        res.body.should.have.property('documents').with.lengthOf(1);
+        res.body.documents[0].keywords[0].should.be.exactly('test');
+        res.body.documents.should.be.instanceOf.Array;
         done();
      });
   });
@@ -75,8 +75,8 @@ describe('GET /api/documents', function() {
       .expect('Content-Type', /json/)
       .end(function(err, res) {
         if (err) return done(err);
-        res.body.should.have.property('files').with.lengthOf(0);
-        res.body.files.should.be.instanceOf.Array;
+        res.body.should.have.property('documents').with.lengthOf(0);
+        res.body.documents.should.be.instanceOf.Array;
         done();
      });
   });
@@ -89,9 +89,9 @@ describe('GET /api/documents', function() {
       .expect('Content-Type', /json/)
       .end(function(err, res) {
         if (err) return done(err);
-        res.body.should.have.property('files').with.lengthOf(2);
-        res.body.files[0].proposals[0].name.should.be.exactly('prop1');
-        res.body.files.should.be.instanceOf.Array;
+        res.body.should.have.property('documents').with.lengthOf(3);
+        res.body.documents[0].proposals[0].name.should.be.exactly('prop1');
+        res.body.documents.should.be.instanceOf.Array;
         done();
      });
   });
@@ -104,23 +104,23 @@ describe('GET /api/documents', function() {
       .expect('Content-Type', /json/)
       .end(function(err, res) {
         if (err) return done(err);
-        res.body.should.have.property('files').with.lengthOf(3);
-        res.body.files.should.be.instanceOf.Array;
+        res.body.should.have.property('documents').with.lengthOf(3);
+        res.body.documents.should.be.instanceOf.Array;
         done();
      });
   });
 
   it('should respond with JSON array of documents starting with the requested offset', function(done) {
     request(app)
-      .get('/api/documents?start=3')
+      .get('/api/documents?start=4')
       .set('Authorization', 'Bearer ' + support.token)
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function(err, res) {
         if (err) return done(err);
-        res.body.should.have.property('files').with.lengthOf(3);
-        res.body.files[0].name.should.be.exactly('file4');
-        res.body.files.should.be.instanceOf.Array;
+        res.body.should.have.property('documents').with.lengthOf(3);
+        res.body.documents[0].name.should.be.exactly('file4');
+        res.body.documents.should.be.instanceOf.Array;
         done();
      });
   });
@@ -133,9 +133,9 @@ describe('GET /api/documents', function() {
       .expect('Content-Type', /json/)
       .end(function(err, res) {
         if (err) return done(err);
-        res.body.should.have.property('files').with.lengthOf(2);
-        res.body.files[0].name.should.be.exactly('file2');
-        res.body.files.should.be.instanceOf.Array;
+        res.body.should.have.property('documents').with.lengthOf(2);
+        res.body.documents[0].name.should.be.exactly('file2');
+        res.body.documents.should.be.instanceOf.Array;
         done();
      });
   });
@@ -148,9 +148,9 @@ describe('GET /api/documents', function() {
       .expect('Content-Type', /json/)
       .end(function(err, res) {
         if (err) return done(err);
-        res.body.should.have.property('files').with.lengthOf(5);
-        res.body.files[0].name.should.be.exactly('file6');
-        res.body.files.should.be.instanceOf.Array;
+        res.body.should.have.property('documents').with.lengthOf(6);
+        res.body.documents[0].name.should.be.exactly('file6');
+        res.body.documents.should.be.instanceOf.Array;
         done();
      });
   });
@@ -162,8 +162,8 @@ describe('GET /api/documents', function() {
       .expect('Content-Type', /json/)
       .end(function(err, res) {
         if (err) return done(err);
-        res.body.should.have.property('files').with.lengthOf(5);
-        res.body.files.should.be.instanceOf.Array;
+        res.body.should.have.property('documents').with.lengthOf(6);
+        res.body.documents.should.be.instanceOf.Array;
         done();
       });
   });
@@ -178,7 +178,7 @@ describe('GET /api/documents', function() {
         done();
       });
   });
-  
+
   it('should respond respond with unauthorized if invalid auth header', function(done) {
     request(app)
       .get('/api/documents')
@@ -193,6 +193,7 @@ describe('GET /api/documents', function() {
 });
 
 describe('POST /api/documents', function() {
+
   before(function(done) {
     database.createDatabase(done, support.populate);
   });
@@ -208,7 +209,7 @@ describe('POST /api/documents', function() {
         done();
       });
   });
- 
+
   it('should respond with unauthorized, if given an incorrect auth header', function(done) {
     request(app)
       .post('/api/documents')
@@ -219,7 +220,7 @@ describe('POST /api/documents', function() {
         done();
       });
   });
-  
+
   it('should respond with an error, if given correct auth header and but invalid metadata', function(done) {
     request(app)
       .post('/api/documents')
@@ -227,14 +228,13 @@ describe('POST /api/documents', function() {
       .send('{"name": "fileABC", "id": support.file1, "description":}}}}""/"New description}}}fasdfadfafdafdfdfafs....."}')
       .expect(400)
       .end(function(err, res) {
-        console.log('err: ' + err);
-        console.log('res: ' + res);
         if (err) return done(err);
         res.body.should.have.property('status', 400);
         done();
       });
   });
 });
+
 
 describe('GET /api/documents/id', function() {
   before(function(done) {
@@ -264,7 +264,7 @@ describe('GET /api/documents/id', function() {
         done();
       });
   });
-});     
+});
 
 //    .put(auth.decoder, documents.replace)
 // PUT is not yet implemented
@@ -296,7 +296,7 @@ describe.skip('PUT /api/documents/id', function() {
         done();
       });
   });
-});     
+});
 
 //    .post(auth.decoder, documents.update)
 describe('POST /api/documents/id', function() {
@@ -318,7 +318,7 @@ describe('POST /api/documents/id', function() {
           .set('Authorization', 'Bearer ' + support.token)
           .end(function(err, res) {
             if (err) return done(err);
-            res.body.should.have.property('description', 'New description'); 
+            res.body.should.have.property('description', 'New description');
             done();
           });
       });
@@ -336,7 +336,7 @@ describe('POST /api/documents/id', function() {
         done();
       });
   });
-  
+
   it('should respond with an error, if given correct auth header and file exists, but json is invalid', function(done) {
     request(app)
       .post('/api/documents/' + support.file1)
@@ -349,7 +349,7 @@ describe('POST /api/documents/id', function() {
         done();
       });
   });
-});     
+});
 
 //    .delete(auth.decoder, documents.delete);
 describe('DELETE /api/documents/id', function() {
@@ -387,7 +387,4 @@ describe('DELETE /api/documents/id', function() {
         done();
       });
   });
-});     
-
-
-
+});

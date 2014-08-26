@@ -7,17 +7,19 @@ var should = require('should'),
     jwt = require('jsonwebtoken'),
     config = require('../../../lib/config/config'),
     support = require('../support'),
-    database = require('../../../lib/config/database');  
+    database = require('../../../lib/config/database');
 
-//  app.route('/auth')
-//    .post(auth.signin);
+ // app.route('/auth')
+ //   .post(auth.signin);
 
 describe('POST /auth', function() {
-  
+
+  this.timeout(3000);
+
   before(function(done) {
     database.createDatabase(done, support.populate);
   });
- 
+
   it('should respond with success, if given correct user name and password', function(done) {
     request(app)
       .post('/auth')
@@ -32,13 +34,13 @@ describe('POST /auth', function() {
           .expect(200)
           .end(function(err, res) {
             if (err) return done(err);
-            res.body.should.have.property('files').with.lengthOf(5);
-            res.body.files.should.be.instanceOf.Array;      
+            res.body.should.have.property('documents').with.lengthOf(6);
+            res.body.documents.should.be.instanceOf.Array;
             done();
           });
       });
   });
-  
+
   it('should respond with unauthorized, if given incorrect user name and password', function(done) {
     request(app)
       .post('/auth')
@@ -50,4 +52,3 @@ describe('POST /auth', function() {
       });
   });
 });
-
