@@ -34,8 +34,8 @@ describe('POST /auth', function() {
           .expect(200)
           .end(function(err, res) {
             if (err) return done(err);
-            res.body.should.have.property('files').with.lengthOf(6);
-            res.body.files.should.be.instanceOf.Array;
+            res.body.should.have.property('documents').with.lengthOf(6);
+            res.body.documents.should.be.instanceOf.Array;
             done();
           });
       });
