@@ -17,9 +17,9 @@ CREATE TABLE IF NOT EXISTS documents (
     name character varying(255),
     description text,
     filepath character varying(255) NOT NULL,
-    organization_id integer,
     created_at timestamp with time zone NOT NULL,
-    updated_at timestamp with time zone NOT NULL
+    updated_at timestamp with time zone NOT NULL,
+    organization_id integer
 );
 
 
