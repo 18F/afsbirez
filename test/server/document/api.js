@@ -9,15 +9,15 @@ var should = require('should'),
     support = require('../support'),
     database = require('../../../lib/config/database');
 
-//  app.route('/api/documents')
-//    .get(auth.decoder, documents.getList)
-//    .post(auth.decoder, documents.add);
-
-//  app.route('/api/documents/:id')
-//    .get(auth.decoder, documents.getSingle)
-//    .put(auth.decoder, documents.replace)
-//    .post(auth.decoder, documents.update)
-//    .delete(auth.decoder, documents.delete);
+ // app.route('/api/documents')
+ //   .get(auth.decoder, documents.getList)
+ //   .post(auth.decoder, documents.add);
+ //
+ // app.route('/api/documents/:id')
+ //   .get(auth.decoder, documents.getSingle)
+ //   .put(auth.decoder, documents.replace)
+ //   .post(auth.decoder, documents.update)
+ //   .delete(auth.decoder, documents.delete);
 
 describe('GET /api/documents', function() {
 
@@ -266,125 +266,125 @@ describe('GET /api/documents/id', function() {
   });
 });
 
-// //    .put(auth.decoder, documents.replace)
-// // PUT is not yet implemented
-// describe.skip('PUT /api/documents/id', function() {
-//   before(function(done) {
-//     database.createDatabase(done, support.populate);
-//   });
-//
-//   it('should respond with success, if given correct auth header and file exists', function(done) {
-//     request(app)
-//       .put('/api/documents/' + support.file1)
-//       .set('Authorization', 'Bearer ' + support.token)
-//       .expect(200)
-//       .end(function(err, res) {
-//         if (err) return done(err);
-//         res.body.should.have.property('id', support.file1);
-//         done();
-//       });
-//   });
-//
-//   it('should respond with an error, if given correct auth header and file does not exist', function(done) {
-//     request(app)
-//       .put('/api/documents/1234233')
-//       .set('Authorization', 'Bearer ' + support.token)
-//       .expect(400)
-//       .end(function(err, res) {
-//         if (err) return done(err);
-//         res.body.should.have.property('status', 400);
-//         done();
-//       });
-//   });
-// });
-//
-// //    .post(auth.decoder, documents.update)
-// describe('POST /api/documents/id', function() {
-//   before(function(done) {
-//     database.createDatabase(done, support.populate);
-//   });
-//
-//   it('should respond with success, if given correct auth header, file exists, and json is valid', function(done) {
-//     request(app)
-//       .post('/api/documents/' + support.file1)
-//       .set('Authorization', 'Bearer ' + support.token)
-//       .send({"name": "fileABC", "id": support.file1, "description":"New description"})
-//       .expect(200)
-//       .end(function(err, res) {
-//         if (err) return done(err);
-//         res.body.should.have.property('id', support.file1);
-//         request(app)
-//           .get('/api/documents/' + support.file1)
-//           .set('Authorization', 'Bearer ' + support.token)
-//           .end(function(err, res) {
-//             if (err) return done(err);
-//             res.body.should.have.property('description', 'New description');
-//             done();
-//           });
-//       });
-//   });
-//
-//   it('should respond with an error, if given correct auth header and file does not exist', function(done) {
-//     request(app)
-//       .post('/api/documents/1234233')
-//       .set('Authorization', 'Bearer ' + support.token)
-//       .send({"name": "fileABC", "id": support.file1, "description":"New description"})
-//       .expect(404)
-//       .end(function(err, res) {
-//         if (err) return done(err);
-//         res.body.should.have.property('status', 404);
-//         done();
-//       });
-//   });
-//
-//   it('should respond with an error, if given correct auth header and file exists, but json is invalid', function(done) {
-//     request(app)
-//       .post('/api/documents/' + support.file1)
-//       .set('Authorization', 'Bearer ' + support.token)
-//       .send('{"name": "fileABC", "id": support.file1, "description":}}}}""/"New description}}}fasdfadfafdafdfdfafs....."}')
-//       .expect(400)
-//       .end(function(err, res) {
-//         if (err) return done(err);
-//         res.body.should.have.property('status', 400);
-//         done();
-//       });
-//   });
-// });
-//
-// //    .delete(auth.decoder, documents.delete);
-// describe('DELETE /api/documents/id', function() {
-//   before(function(done) {
-//     database.createDatabase(done, support.populate);
-//   });
-//
-//   it('should respond with success, if given correct auth header and file exists', function(done) {
-//     request(app)
-//       .del('/api/documents/' + support.file1)
-//       .set('Authorization', 'Bearer ' + support.token)
-//       .expect(200)
-//       .end(function(err, res) {
-//         if (err) return done(err);
-//         res.body.should.have.property('id', support.file1);
-//         request(app)
-//           .get('/api/documents/' + support.file1)
-//           .set('Authorization', 'Bearer ' + support.token)
-//           .expect(404)
-//           .end(function(err, res) {
-//             if (err) return done(err);
-//             done();
-//           });
-//       });
-//   });
-//
-//   it('should respond with an error, if given correct auth header and file does not exist', function(done) {
-//     request(app)
-//       .del('/api/documents/1234233')
-//       .set('Authorization', 'Bearer ' + support.token)
-//       .expect(404)
-//       .end(function(err, res) {
-//         if (err) return done(err);
-//         res.body.should.have.property('status', 404);
-//         done();
-//       });
-//   });
-// });
+//    .put(auth.decoder, documents.replace)
+// PUT is not yet implemented
+describe.skip('PUT /api/documents/id', function() {
+  before(function(done) {
+    database.createDatabase(done, support.populate);
+  });
+
+  it('should respond with success, if given correct auth header and file exists', function(done) {
+    request(app)
+      .put('/api/documents/' + support.file1)
+      .set('Authorization', 'Bearer ' + support.token)
+      .expect(200)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.body.should.have.property('id', support.file1);
+        done();
+      });
+  });
+
+  it('should respond with an error, if given correct auth header and file does not exist', function(done) {
+    request(app)
+      .put('/api/documents/1234233')
+      .set('Authorization', 'Bearer ' + support.token)
+      .expect(400)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.body.should.have.property('status', 400);
+        done();
+      });
+  });
+});
+
+//    .post(auth.decoder, documents.update)
+describe('POST /api/documents/id', function() {
+  before(function(done) {
+    database.createDatabase(done, support.populate);
+  });
+
+  it('should respond with success, if given correct auth header, file exists, and json is valid', function(done) {
+    request(app)
+      .post('/api/documents/' + support.file1)
+      .set('Authorization', 'Bearer ' + support.token)
+      .send({"name": "fileABC", "id": support.file1, "description":"New description"})
+      .expect(200)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.body.should.have.property('id', support.file1);
+        request(app)
+          .get('/api/documents/' + support.file1)
+          .set('Authorization', 'Bearer ' + support.token)
+          .end(function(err, res) {
+            if (err) return done(err);
+            res.body.should.have.property('description', 'New description');
+            done();
+          });
+      });
+  });
+
+  it('should respond with an error, if given correct auth header and file does not exist', function(done) {
+    request(app)
+      .post('/api/documents/1234233')
+      .set('Authorization', 'Bearer ' + support.token)
+      .send({"name": "fileABC", "id": support.file1, "description":"New description"})
+      .expect(404)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.body.should.have.property('status', 404);
+        done();
+      });
+  });
+
+  it('should respond with an error, if given correct auth header and file exists, but json is invalid', function(done) {
+    request(app)
+      .post('/api/documents/' + support.file1)
+      .set('Authorization', 'Bearer ' + support.token)
+      .send('{"name": "fileABC", "id": support.file1, "description":}}}}""/"New description}}}fasdfadfafdafdfdfafs....."}')
+      .expect(400)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.body.should.have.property('status', 400);
+        done();
+      });
+  });
+});
+
+//    .delete(auth.decoder, documents.delete);
+describe('DELETE /api/documents/id', function() {
+  before(function(done) {
+    database.createDatabase(done, support.populate);
+  });
+
+  it('should respond with success, if given correct auth header and file exists', function(done) {
+    request(app)
+      .del('/api/documents/' + support.file1)
+      .set('Authorization', 'Bearer ' + support.token)
+      .expect(200)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.body.should.have.property('id', support.file1);
+        request(app)
+          .get('/api/documents/' + support.file1)
+          .set('Authorization', 'Bearer ' + support.token)
+          .expect(404)
+          .end(function(err, res) {
+            if (err) return done(err);
+            done();
+          });
+      });
+  });
+
+  it('should respond with an error, if given correct auth header and file does not exist', function(done) {
+    request(app)
+      .del('/api/documents/1234233')
+      .set('Authorization', 'Bearer ' + support.token)
+      .expect(404)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.body.should.have.property('status', 404);
+        done();
+      });
+  });
+});

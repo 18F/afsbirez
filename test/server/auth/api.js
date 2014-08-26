@@ -9,8 +9,8 @@ var should = require('should'),
     support = require('../support'),
     database = require('../../../lib/config/database');
 
-//  app.route('/auth')
-//    .post(auth.signin);
+ // app.route('/auth')
+ //   .post(auth.signin);
 
 describe('POST /auth', function() {
 
