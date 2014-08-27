@@ -1,8 +1,8 @@
 SBIR-EZ
 ========
-[![Build Status](https://travis-ci.org/18F/afsbirez.svg?branch=master)](https://travis-ci.org/18F/afsbirez) [![Coverage Status](https://coveralls.io/repos/18F/afsbirez/badge.png)](https://coveralls.io/r/18F/afsbirez)
+[![Build Status](https://travis-ci.org/18F/afsbirez.svg?branch=master)](https://travis-ci.org/18F/afsbirez)
 
-The SBIR-EZ (_sih-bur-easy_)project, provides a web service and user interface abstraction over the Small Business Innovation Research Program process. Goals of the system are that users may:
+The SBIR-EZ (_sih-bur-easy_)project, provides a web service and user interface abstraction over the Small Business Innovation Research Program suite of tools used by SBIR.gov, DoDSBIR.com and various agency tools. The intent is that users may have a uniform interface to:
 
 * Research existing and past SBIR solicitations
 * Save opportunities for later processing
@@ -31,14 +31,47 @@ $ gem install sass
 $ gem install compass
 ```
 
+* Install node depedencies
+```
+$ npm install
+```
+
 * Run the bower install
 ```
 $ bower install
 ```
 
-* Setup the postgresql database
+### Configure the Database
+At this time, the development instance of sbir-ez connects to the local postgres installation using a user name matching your system user name and no password. 
+
+Configure the pg_hba.conf file on your system (location varies) to allow local connections without passwords. Your hba.conf should have
+lines like the below:
 ```
-$ psql -c 'create database afsbirez_test;' -U postgres
+local   all             all                                     trust
+host    all             all             127.0.0.1/32            trust
+```
+
+Create a database and role with your system user name
+```
+$ psql -c 'CREATE ROLE <youruser> LOGIN;' -U postgres
+$ psql -c 'CREATE DATABASE afsbirez_dev WITH OWNER <youruser>;' -U postgres
+```
+
+### Running the Server
+
+Use grunt to run the server. This will also open up a browser window to your application.
+```
+$ grunt serve
+```
+
+The first time you run the 
+
+### Running Tests
+
+First create a postgres database and test user
+
+```
+$ psql -c `create database afsbirez_test WITH OWNER <youruser>;` -U postgres
 ```
 
 ### License: Public Domain
