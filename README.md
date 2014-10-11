@@ -15,7 +15,25 @@ Please file issues at the [central repository for all Air Force Small Business r
 
 ### Installation
 * Install PostGRESql
-* Install Node.js 0.10+
+* Install Python 2.7
+* Install virtualenv
+* Checkout the source code and cd into it
+```
+$ git clone https://github.com/18F/afsbirez.git
+$ cd afsbirez
+```
+* Make a virtualenv
+```
+$ mkdir env
+$ virtualenv --no-site-packages ./env
+```
+* Activate the virtualenv
+```
+$ source env/bin/activate
+```
+you should now see (env) on your command prompt
+
+* Install the latest Node.js
 * Update NPM to the latest version 
 ```
 $ npm install npm -g
@@ -31,12 +49,12 @@ $ gem install sass
 $ gem install compass
 ```
 
-* Install node depedencies
+* Install node dependencies
 ```
 $ npm install
 ```
 
-* Run the bower install
+* Run the bower to install all the client-side javascript dependencies
 ```
 $ bower install
 ```

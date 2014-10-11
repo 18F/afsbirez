@@ -1,0 +1,5 @@
+#Libraries for testing
+sure
+selenium == 2.42.1
+mock
+nose
