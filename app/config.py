@@ -14,7 +14,7 @@ class ProductionConfig(Config):
     pass
 
 class DevelopmentConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'postgresql://vitals:vitals@localhost:5432/vitals'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://sbirez:sbirez@localhost:5432/sbirez'
     DEBUG = True
 
 class TestingConfig(Config):

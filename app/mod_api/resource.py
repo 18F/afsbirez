@@ -7,7 +7,7 @@ from flask import Blueprint, request
 from dougrain import Builder
 from flask.ext.restful import reqparse, Api, Resource, abort
 
-from app.model import Event, db, Business, Source
+from app.model import db
 
 logger = logging.getLogger(__name__)
 
