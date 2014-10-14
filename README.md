@@ -49,7 +49,7 @@ $ gem install sass
 $ gem install compass
 ```
 
-* Install node dependencies
+* Install grunt dependencies
 ```
 $ npm install
 ```
@@ -60,8 +60,6 @@ $ bower install
 ```
 
 ### Configure the Database
-At this time, the development instance of sbir-ez connects to the local postgres installation using a user name matching your system user name and no password. 
-
 Configure the pg_hba.conf file on your system (location varies) to allow local connections without passwords. Your hba.conf should have
 lines like the below:
 ```
@@ -71,16 +69,14 @@ host    all             all             127.0.0.1/32            trust
 
 Create a database and role with your system user name
 ```
-$ psql -c 'CREATE ROLE <youruser> LOGIN;' -U postgres
-$ psql -c 'CREATE DATABASE afsbirez_dev WITH OWNER <youruser>;' -U postgres
+$ psql -c 'create role afsbirez login password 'afsbirez';' -U postgres
+$ psql -c 'CREATE DATABASE afsbirez_dev WITH OWNER afsbirez;' -U postgres
 ```
 
 ### Running the Server
 
-Use grunt to run the server. This will also open up a browser window to your application.
-```
-$ grunt serve
-```
+Use TBD to run the server. This will also open up a browser window to your application.
+TBD
 
 The first time you run the 
 
@@ -89,7 +85,7 @@ The first time you run the
 First create a postgres database and test user
 
 ```
-$ psql -c `create database afsbirez_test WITH OWNER <youruser>;` -U postgres
+$ psql -c `create database afsbirez_test WITH OWNER afsbirez;` -U postgres
 ```
 
 ### License: Public Domain
