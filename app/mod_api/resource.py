@@ -7,8 +7,6 @@ from flask import Blueprint, request
 from dougrain import Builder
 from flask.ext.restful import reqparse, Api, Resource, abort
 
-from app.model import db
-
 logger = logging.getLogger(__name__)
 
 mod_api = Blueprint('api', __name__, url_prefix='/api')

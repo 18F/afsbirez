@@ -1,12 +1,9 @@
 # coding: utf-8
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, LargeBinary, String, Text, text
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
+from app.database import Base
 
-
-Base = declarative_base()
 metadata = Base.metadata
-
 
 class Content(Base):
     __tablename__ = 'contents'

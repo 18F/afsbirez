@@ -9,9 +9,6 @@ def create_application(config_object=DevelopmentConfig):
     application.config.from_object(config_object)
     application.config.from_envvar('sbirez_settings', True)
 
-    from app.model import db
-    db.init_app(application)
-
     from app.route import index
     application.add_url_rule('/', 'index', index)
 
@@ -29,9 +26,9 @@ def create_application(config_object=DevelopmentConfig):
     application.register_blueprint(rel_module)
     application.register_blueprint(mod_hal)
 
-
-    @application.before_first_request
-    def create_db():
-        db.create_all()
+    @application.teardown_appcontext
+    def shutdown_session(exception=None):
+        from app.database import db_session
+        db_session.remove()
 
     return application
