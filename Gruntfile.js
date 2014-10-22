@@ -1,6 +1,8 @@
 // Generated on 2014-05-06 using generator-angular-fullstack 1.4.2
 'use strict';
 
+var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
@@ -21,42 +23,30 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: {
       // configurable paths
-      app: require('./bower.json').appPath || 'app',
-      dist: 'dist'
+      app: require('./bower.json').appPath || 'app/static',
+      dist: 'app/dist'
     },
-    express: {
-      options: {
-        port: process.env.PORT || 9000
-      },
-      dev: {
-        options: {
-          script: 'server.js',
-          debug: true
-        }
-      },
-      prod: {
-        options: {
-          script: 'dist/server.js',
-          node_env: 'production'
-        }
+    sync: {
+      dist: {
+        files: [{
+          cwd: '<%= yeoman.app %>',
+          dest: '<%= yeoman.dist %>',
+          src: '**'
+        }]
       }
     },
     open: {
       server: {
-        url: 'http://localhost:<%= express.options.port %>'
+        url: 'http://localhost:5000'
       }
     },
     watch: {
       js: {
-        files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
+        files: ['<%= yeoman.app %>/js/{,*/}*.js'],
         tasks: ['newer:jshint:all'],
         options: {
           livereload: true
         }
-      },
-      mochaTest: {
-        files: ['test/server/{,*/}*.js'],
-        tasks: ['env:test', 'mochaTest']
       },
       jsTest: {
         files: ['test/client/spec/{,*/}*.js'],
@@ -73,7 +63,7 @@ module.exports = function (grunt) {
         files: [
           '<%= yeoman.app %>/views/{,*//*}*.{html,jade}',
           '{.tmp,<%= yeoman.app %>}/styles/{,*//*}*.css',
-          '{.tmp,<%= yeoman.app %>}/scripts/{,*//*}*.js',
+          '{.tmp,<%= yeoman.app %>}/js/{,*//*}*.js',
           '<%= yeoman.app %>/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
 
@@ -81,33 +71,47 @@ module.exports = function (grunt) {
           livereload: true
         }
       },
-      express: {
-        files: [
-          'server.js',
-          'lib/**/*.{js,json}'
+    },
+    connect: {
+      server: {
+        proxies: [
+          {
+            context: '/afsbirez',
+            host: 'localhost',
+            port: 5000,
+            https: false,
+            changeOrigin: false
+          }
         ],
-        tasks: ['newer:jshint:server', 'express:dev', 'wait'],
         options: {
-          livereload: true,
-          nospawn: true //Without this option specified express won't be reloaded
-        }
+          port: 9000,
+          // Change this to '0.0.0.0' to access the server from outside.
+          hostname: 'localhost',
+        },
+        livereload: {
+          options: {
+            open: true,
+            base: [
+              '<%= yeoman.app %>'
+            ],
+            middleware: function (connect) {
+              return [
+                proxySnippet,
+                connect.static(require('path').resolve('app/static'))
+              ];
+            }
+          }
+        },
       }
     },
-
     // Make sure code styles are up to par and there are no obvious mistakes
     jshint: {
       options: {
         jshintrc: '.jshintrc',
         reporter: require('jshint-stylish')
       },
-      server: {
-        options: {
-          jshintrc: 'lib/.jshintrc'
-        },
-        src: [ 'lib/{,*/}*.js']
-      },
       all: [
-        '<%= yeoman.app %>/scripts/{,*/}*.js'
+        '<%= yeoman.app %>/js/{,*/}*.js'
       ],
       test: {
         options: {
@@ -167,36 +171,11 @@ module.exports = function (grunt) {
       }
     },
 
-    // Use nodemon to run server in debug mode with an initial breakpoint
-    nodemon: {
-      debug: {
-        script: 'server.js',
-        options: {
-          nodeArgs: ['--debug-brk'],
-          env: {
-            PORT: process.env.PORT || 9000
-          },
-          callback: function (nodemon) {
-            nodemon.on('log', function (event) {
-              console.log(event.colour);
-            });
-
-            // opens browser on initial server start
-            nodemon.on('config:update', function () {
-              setTimeout(function () {
-                require('open')('http://localhost:8080/debug?port=5858');
-              }, 500);
-            });
-          }
-        }
-      }
-    },
-
     // Automatically inject Bower components into the app
     'bower-install': {
       app: {
-        html: '<%= yeoman.app %>/views/index.html',
-        ignorePath: '<%= yeoman.app %>/',
+        html: 'app/templates/index.html',
+        ignorePath: 'app/',
         exclude: ['bootstrap-sass']
       }
     },
@@ -204,13 +183,13 @@ module.exports = function (grunt) {
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {
       options: {
-        sassDir: '<%= yeoman.app %>/styles',
-        cssDir: '.tmp/styles',
+        sassDir: '<%= yeoman.app %>/sass',
+        cssDir: '<%= yeoman.app %>/css',
         generatedImagesDir: '.tmp/images/generated',
         imagesDir: '<%= yeoman.app %>/images',
-        javascriptsDir: '<%= yeoman.app %>/scripts',
+        javascriptsDir: '<%= yeoman.app %>/js',
         fontsDir: '<%= yeoman.app %>/styles/fonts',
-        importPath: '<%= yeoman.app %>/bower_components',
+        importPath: '<%= yeoman.app %>/lib',
         httpImagesPath: '/images',
         httpGeneratedImagesPath: '/images/generated',
         httpFontsPath: '/styles/fonts',
@@ -248,8 +227,8 @@ module.exports = function (grunt) {
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
     useminPrepare: {
-      html: ['<%= yeoman.app %>/views/index.html',
-             '<%= yeoman.app %>/views/index.jade'],
+      html: ['app/templates/index.html',
+             'app/templates/index.jade'],
       options: {
         dest: '<%= yeoman.dist %>/public'
       }
@@ -257,8 +236,8 @@ module.exports = function (grunt) {
 
     // Performs rewrites based on rev and the useminPrepare configuration
     usemin: {
-      html: ['<%= yeoman.dist %>/views/{,*/}*.html',
-             '<%= yeoman.dist %>/views/{,*/}*.jade'],
+      html: ['<%= yeoman.dist %>/templates/{,*/}*.html',
+             '<%= yeoman.dist %>/templates/{,*/}*.jade'],
       css: ['<%= yeoman.dist %>/public/styles/{,*/}*.css'],
       options: {
         assetsDirs: ['<%= yeoman.dist %>/public']
@@ -339,7 +318,7 @@ module.exports = function (grunt) {
           src: [
             '*.{ico,png,txt}',
             '.htaccess',
-            'bower_components/**/*',
+            'lib/**/*',
             'images/{,*/}*.{webp}',
             'fonts/**/*'
           ]
@@ -378,11 +357,9 @@ module.exports = function (grunt) {
         'compass:server'
       ],
       test: [
-        'compass'
       ],
       debug: {
         tasks: [
-          'nodemon',
           'node-inspector'
         ],
         options: {
@@ -397,45 +374,12 @@ module.exports = function (grunt) {
       ]
     },
 
-    // By default, your `index.html`'s <!-- Usemin block --> will take care of
-    // minification. These next options are pre-configured if you do not wish
-    // to use the Usemin blocks.
-    // cssmin: {
-    //   dist: {
-    //     files: {
-    //       '<%= yeoman.dist %>/styles/main.css': [
-    //         '.tmp/styles/{,*/}*.css',
-    //         '<%= yeoman.app %>/styles/{,*/}*.css'
-    //       ]
-    //     }
-    //   }
-    // },
-    // uglify: {
-    //   dist: {
-    //     files: {
-    //       '<%= yeoman.dist %>/scripts/scripts.js': [
-    //         '<%= yeoman.dist %>/scripts/scripts.js'
-    //       ]
-    //     }
-    //   }
-    // },
-    // concat: {
-    //   dist: {}
-    // },
-
     // Test settings
     karma: {
       unit: {
         configFile: 'karma.conf.js',
         singleRun: true 
       }
-    },
-
-    mochaTest: {
-      options: {
-        reporter: 'spec'
-      },
-      src: ['test/server/**/*.js']
     },
 
     env: {
@@ -457,8 +401,17 @@ module.exports = function (grunt) {
     }, 500);
   });
 
-  grunt.registerTask('express-keepalive', 'Keep grunt running', function() {
-    this.async();
+  grunt.registerTask('flask', 'Run flask server.', function() {
+    var spawn = require('child_process').spawn;
+    grunt.log.writeln('Starting Flask development server.');
+    // stdio: 'inherit' let us see flask output in grunt
+    var PIPE = {stdio: 'inherit'};
+    spawn('python', ['run.py'], PIPE);
+    
+    spawn.on('close', function (code) {
+      grunt.log.write('child process exited with code ' + code + '\n');
+    });
+
   });
 
   grunt.registerTask('serve', function (target) {
@@ -481,7 +434,10 @@ module.exports = function (grunt) {
       'bower-install',
       'concurrent:server',
       'autoprefixer',
-      'express:dev',
+//      'configureProxies:server',
+//      'connect:livereload',
+//      'watch'
+      'flask',
       'open',
       'watch'
     ]);
@@ -496,7 +452,6 @@ module.exports = function (grunt) {
     if (target === 'server') {
       return grunt.task.run([
         'env:test',
-        'mochaTest'
       ]);
     }
 
@@ -530,11 +485,6 @@ module.exports = function (grunt) {
     'rev',
     'usemin'
   ]);
-
-  grunt.registerTask('heroku', function () {
-    grunt.log.warn('The `heroku` task has been deprecated. Use `grunt build` to build for deployment.');
-    grunt.task.run(['build']);
-  });
 
   grunt.registerTask('default', [
     'newer:jshint',

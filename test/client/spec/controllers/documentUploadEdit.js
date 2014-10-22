@@ -13,8 +13,8 @@ describe('Controller: DocumentUploadEditCtrl', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$httpBackend_, $controller, $rootScope, $upload) {
     $httpBackend = _$httpBackend_;
-    $httpBackend.whenGET('partials/main.html').respond({});
-    $httpBackend.whenGET('partials/search.html').respond({});
+    $httpBackend.whenGET('static/views/partials/main.html').respond({});
+    $httpBackend.whenGET('static/views/partials/search.html').respond({});
     $httpBackend.expectGET('/api/proposals')
       .respond({'proposals':[
         {'name':'proposal1','id':1},

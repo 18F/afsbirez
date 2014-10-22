@@ -11,18 +11,18 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'app/bower_components/angular/angular.js',
-      'app/bower_components/angular-mocks/angular-mocks.js',
-      'app/bower_components/angular-resource/angular-resource.js',
-      'app/bower_components/angular-cookies/angular-cookies.js',
-      'app/bower_components/angular-sanitize/angular-sanitize.js',
-      'app/bower_components/angular-route/angular-route.js',
-      'app/bower_components/angular-schema-form/dist/schema-form.min.js',
-      'app/bower_components/ng-file-upload/angular-file-upload.js',
-      'app/bower_components/ngDialog/js/ngDialog.min.js',
-      'app/bower_components/angular-ui-router/release/angular-ui-router.js',
-      'app/scripts/*.js',
-      'app/scripts/**/*.js',
+      'app/static/lib/angular/angular.js',
+      'app/static/lib/angular-mocks/angular-mocks.js',
+      'app/static/lib/angular-resource/angular-resource.js',
+      'app/static/lib/angular-cookies/angular-cookies.js',
+      'app/static/lib/angular-sanitize/angular-sanitize.js',
+      'app/static/lib/angular-route/angular-route.js',
+      'app/static/lib/angular-schema-form/dist/schema-form.min.js',
+      'app/static/lib/ng-file-upload/angular-file-upload.js',
+      'app/static/lib/ngDialog/js/ngDialog.min.js',
+      'app/static/lib/angular-ui-router/release/angular-ui-router.js',
+      'app/static/js/*.js',
+      'app/static/js/**/*.js',
       'test/client/spec/**/*.js'
     ],
 
