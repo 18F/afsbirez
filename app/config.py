@@ -6,11 +6,11 @@ class Config(object):
     """
     DEBUG = False
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test.db'
     SECRET_KEY = "secret"
     CSRF_ENABLED = True
 
 class ProductionConfig(Config):
+    #TODO
     pass
 
 class DevelopmentConfig(Config):
@@ -18,4 +18,5 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
 class TestingConfig(Config):
+    SQLALCHEMY_DATABASE_URI = 'postgresql://afsbirez:afsbirez@localhost:5432/afsbirez_test'
     TESTING = True

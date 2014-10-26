@@ -13,8 +13,8 @@ class Content(db.Model):
     end_date = db.Column(db.DateTime(True))
     change_log = db.Column(db.Text)
     content = db.Column(db.LargeBinary)
-    created_at = db.Column(db.DateTime(True), nullable=False)
-    updated_at = db.Column(db.DateTime(True), nullable=False)
+    created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
+    updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now(), onupdate=db.func.now())
     document_id = db.Column(db.Integer)
 
 
@@ -25,8 +25,8 @@ class Document(db.Model):
     name = db.Column(db.String(255))
     description = db.Column(db.Text)
     filepath = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime(True), nullable=False)
-    updated_at = db.Column(db.DateTime(True), nullable=False)
+    created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
+    updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now(), onupdate=db.func.now())
     organization_id = db.Column(db.ForeignKey(u'organizations.id', ondelete=u'RESTRICT', onupdate=u'CASCADE'))
 
     organization = db.relationship(u'Organization')
@@ -35,8 +35,8 @@ class Document(db.Model):
 class Documentskeyword(db.Model):
     __tablename__ = 'documentskeywords'
 
-    created_at = db.Column(db.DateTime(True), nullable=False)
-    updated_at = db.Column(db.DateTime(True), nullable=False)
+    created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
+    updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now(), onupdate=db.func.now())
     keyword_id = db.Column(db.ForeignKey(u'keywords.id'), primary_key=True, nullable=False)
     document_id = db.Column(db.ForeignKey(u'documents.id'), primary_key=True, nullable=False)
 
@@ -47,8 +47,8 @@ class Documentskeyword(db.Model):
 class Documentsproposal(db.Model):
     __tablename__ = 'documentsproposals'
 
-    created_at = db.Column(db.DateTime(True), nullable=False)
-    updated_at = db.Column(db.DateTime(True), nullable=False)
+    created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
+    updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now(), onupdate=db.func.now())
     proposal_id = db.Column(db.ForeignKey(u'proposals.id'), primary_key=True, nullable=False)
     document_id = db.Column(db.ForeignKey(u'documents.id'), primary_key=True, nullable=False)
 
@@ -61,8 +61,8 @@ class Keyword(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     keyword = db.Column(db.String(255))
-    created_at = db.Column(db.DateTime(True), nullable=False)
-    updated_at = db.Column(db.DateTime(True), nullable=False)
+    created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
+    updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now(), onupdate=db.func.now())
 
 
 class Organization(db.Model):
@@ -72,15 +72,15 @@ class Organization(db.Model):
     name = db.Column(db.String(255), nullable=False)
     duns = db.Column(db.String(255))
     ein = db.Column(db.String(255))
-    created_at = db.Column(db.DateTime(True), nullable=False)
-    updated_at = db.Column(db.DateTime(True), nullable=False)
+    created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
+    updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now(), onupdate=db.func.now())
 
 
 class Organizationsuser(db.Model):
     __tablename__ = 'organizationsusers'
 
-    created_at = db.Column(db.DateTime(True), nullable=False)
-    updated_at = db.Column(db.DateTime(True), nullable=False)
+    created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
+    updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now(), onupdate=db.func.now())
     organization_id = db.Column(db.ForeignKey(u'organizations.id'), primary_key=True, nullable=False)
     user_id = db.Column(db.ForeignKey(u'users.id'), primary_key=True, nullable=False)
 
@@ -99,8 +99,8 @@ class Proposal(db.Model):
     end_date = db.Column(db.DateTime(True))
     organization_id = db.Column(db.ForeignKey(u'organizations.id', ondelete=u'RESTRICT', onupdate=u'CASCADE'))
     workflow_id = db.Column(db.ForeignKey(u'workflows.id', ondelete=u'RESTRICT', onupdate=u'CASCADE'))
-    created_at = db.Column(db.DateTime(True), nullable=False)
-    updated_at = db.Column(db.DateTime(True), nullable=False)
+    created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
+    updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now(), onupdate=db.func.now())
 
     organization = db.relationship(u'Organization')
     workflow = db.relationship(u'Workflow')
@@ -114,8 +114,8 @@ class User(db.Model):
     password = db.Column(db.String(255))
     email = db.Column(db.String(255))
     title = db.Column(db.String(255))
-    created_at = db.Column(db.DateTime(True), nullable=False)
-    updated_at = db.Column(db.DateTime(True), nullable=False)
+    created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
+    updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now(), onupdate=db.func.now())
 
 
 class Workflow(db.Model):
@@ -124,8 +124,8 @@ class Workflow(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
     description = db.Column(db.Text)
-    created_at = db.Column(db.DateTime(True), nullable=False)
-    updated_at = db.Column(db.DateTime(True), nullable=False)
+    created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
+    updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now(), onupdate=db.func.now())
 
 
 class WorkflowStepResult(db.Model):
@@ -135,8 +135,8 @@ class WorkflowStepResult(db.Model):
     result = db.Column(db.Text)
     completed_at = db.Column(db.DateTime(True))
     workflowstep_id = db.Column(db.ForeignKey(u'workflowsteps.id', ondelete=u'RESTRICT', onupdate=u'CASCADE'))
-    created_at = db.Column(db.DateTime(True), nullable=False)
-    updated_at = db.Column(db.DateTime(True), nullable=False)
+    created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
+    updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now(), onupdate=db.func.now())
 
     workflowstep = db.relationship(u'Workflowstep')
 
@@ -149,7 +149,7 @@ class WorkflowStep(db.Model):
     description = db.Column(db.Text)
     work = db.Column(db.Text)
     workflow_id = db.Column(db.ForeignKey(u'workflows.id', ondelete=u'RESTRICT', onupdate=u'CASCADE'))
-    created_at = db.Column(db.DateTime(True), nullable=False)
-    updated_at = db.Column(db.DateTime(True), nullable=False)
+    created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
+    updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now(), onupdate=db.func.now())
 
     workflow = db.relationship(u'Workflow')
