@@ -19,8 +19,8 @@ describe('Controller: DocumentUploadCtrl', function () {
     rootScope = $injector.get('$rootScope');
     upload = $upload;
 
-    $httpBackend.whenGET('partials/main.html').respond({});
-    $httpBackend.whenGET('partials/search.html').respond({});
+    $httpBackend.whenGET('static/views/partials/main.html').respond({});
+    $httpBackend.whenGET('static/views/partials/search.html').respond({});
 
     upload.progress = function() {};
     upload.success = function() {};

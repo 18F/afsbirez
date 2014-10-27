@@ -12,8 +12,8 @@ describe('Controller: ProposalListCtrl', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$httpBackend_, $controller, $rootScope) {
     $httpBackend = _$httpBackend_;
-    $httpBackend.whenGET('partials/main.html').respond({});
-    $httpBackend.whenGET('partials/search.html').respond({});
+    $httpBackend.whenGET('static/views/partials/main.html').respond({});
+    $httpBackend.whenGET('static/views/partials/search.html').respond({});
     $httpBackend.expectGET('/api/proposals')
       .respond({'proposals':[
         {'name':'file1','id':1},

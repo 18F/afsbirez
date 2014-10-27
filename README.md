@@ -15,7 +15,25 @@ Please file issues at the [central repository for all Air Force Small Business r
 
 ### Installation
 * Install PostGRESql
-* Install Node.js 0.10+
+* Install Python 2.7
+* Install virtualenv
+* Checkout the source code and cd into it
+```
+$ git clone https://github.com/18F/afsbirez.git
+$ cd afsbirez
+```
+* Make a virtualenv
+```
+$ mkdir env
+$ virtualenv --no-site-packages ./env
+```
+* Activate the virtualenv
+```
+$ source env/bin/activate
+```
+you should now see (env) on your command prompt
+
+* Install the latest Node.js
 * Update NPM to the latest version 
 ```
 $ npm install npm -g
@@ -31,19 +49,17 @@ $ gem install sass
 $ gem install compass
 ```
 
-* Install node depedencies
+* Install grunt dependencies
 ```
 $ npm install
 ```
 
-* Run the bower install
+* Run the bower to install all the client-side javascript dependencies
 ```
 $ bower install
 ```
 
 ### Configure the Database
-At this time, the development instance of sbir-ez connects to the local postgres installation using a user name matching your system user name and no password. 
-
 Configure the pg_hba.conf file on your system (location varies) to allow local connections without passwords. Your hba.conf should have
 lines like the below:
 ```
@@ -53,16 +69,14 @@ host    all             all             127.0.0.1/32            trust
 
 Create a database and role with your system user name
 ```
-$ psql -c 'CREATE ROLE <youruser> LOGIN;' -U postgres
-$ psql -c 'CREATE DATABASE afsbirez_dev WITH OWNER <youruser>;' -U postgres
+$ psql -c 'create role afsbirez login password 'afsbirez';' -U postgres
+$ psql -c 'CREATE DATABASE afsbirez_dev WITH OWNER afsbirez;' -U postgres
 ```
 
 ### Running the Server
 
-Use grunt to run the server. This will also open up a browser window to your application.
-```
-$ grunt serve
-```
+Use TBD to run the server. This will also open up a browser window to your application.
+TBD
 
 The first time you run the 
 
@@ -71,7 +85,7 @@ The first time you run the
 First create a postgres database and test user
 
 ```
-$ psql -c `create database afsbirez_test WITH OWNER <youruser>;` -U postgres
+$ psql -c `create database afsbirez_test WITH OWNER afsbirez;` -U postgres
 ```
 
 ### License: Public Domain
