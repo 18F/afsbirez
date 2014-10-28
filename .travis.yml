@@ -13,6 +13,7 @@ before_script:
   - 'npm install -g bower grunt-cli'
   - 'gem install sass'
   - 'gem install compass'
+  - 'grunt install'
   - 'bower install'
   - psql -c 'create database afsbirez_test;' -U postgres
 install:
