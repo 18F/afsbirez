@@ -1,6 +1,6 @@
-language: node_js
-node_js:
-  - '0.10'
+language: python 
+python:
+  - '2.7'
 services: postgresql
 addons:
   postgresql: "9.3"
@@ -14,3 +14,6 @@ before_script:
   - 'gem install compass'
   - 'bower install'
   - psql -c 'create database afsbirez_test;' -U postgres
+install:
+  - "pip install ."
+  - "pip install -r requirements.txt"
