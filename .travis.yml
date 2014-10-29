@@ -16,6 +16,7 @@ before_script:
   - 'npm install'
   - 'bower install'
   - psql -c 'create database afsbirez_test;' -U postgres
+  - 'grunt build'
 install:
   - "pip install ."
   - "pip install -r requirements.txt"
