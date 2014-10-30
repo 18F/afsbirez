@@ -1,6 +1,6 @@
-language: node_js
-node_js:
-  - '0.10'
+language: python 
+python:
+  - '2.7'
 services: postgresql
 addons:
   postgresql: "9.3"
@@ -9,8 +9,17 @@ before_install:
   - 'sh -e /etc/init.d/xvfb start'
 before_script:
   - 'npm install npm -g'
+  - 'npm install grunt'
   - 'npm install -g bower grunt-cli'
   - 'gem install sass'
   - 'gem install compass'
+  - 'npm install'
   - 'bower install'
+  - 'bower uninstall angular-schema-form'
+  - 'bower install angular-schema-form'
   - psql -c 'create database afsbirez_test;' -U postgres
+  - 'grunt build'
+install:
+  - "pip install ."
+  - "pip install -r requirements.txt"
+script: grunt test
