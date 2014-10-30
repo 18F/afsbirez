@@ -15,7 +15,7 @@ before_script:
   - 'gem install compass'
   - 'npm install'
   - 'bower install'
-  - psql -c 'create user afsbirez;'
+  - psql -c 'create user afsbirez;' -U postgres
   - psql -c 'create database afsbirez_test owner=afsbirez;' -U postgres
   - 'grunt build'
 install:
