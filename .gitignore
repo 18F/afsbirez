@@ -1,10 +1,15 @@
+*.pyc
+main.css
 node_modules
 public
 .tmp
 .sass-cache
-app/bower_components
 heroku
 /views
 dist
 data_store
 uploads
+env
+.idea
+bower_components
+lib

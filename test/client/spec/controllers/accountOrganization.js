@@ -19,8 +19,8 @@ describe('Controller: AccountOrganizationCtrl', function () {
       $scope: scope,
       $state: {params: {'id':1}}
     });
-    $httpBackend.whenGET('partials/main.html').respond({});
-    $httpBackend.whenGET('partials/search.html').respond({});
+    $httpBackend.whenGET('static/views/partials/main.html').respond({});
+    $httpBackend.whenGET('static/views/partials/search.html').respond({});
     $httpBackend.expectGET('api/organizations/1')
       .respond({'organization': {'id':1, 'name':'abc' }
       });
