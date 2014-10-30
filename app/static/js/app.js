@@ -4,7 +4,6 @@ angular.module('sbirezApp', [
   'ngResource',
   'ngSanitize',
   'ngRoute',
-  'schemaForm',
   'angularFileUpload',
   'ngDialog',
   'ui.router'
