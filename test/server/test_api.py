@@ -5,6 +5,7 @@ from datetime import datetime
 from app.model import db
 from test.server import hal_loads
 from app import create_application
+from test.server.support import test_data_queries
 import sure
 from app.config import TestingConfig
 
@@ -22,6 +23,9 @@ class ApiTest(unittest.TestCase):
         self.ctx = self.afsbirez.test_request_context()
         self.ctx.push()
         db.create_all()
+        for qry in test_data_queries:
+            db.session.execute(qry)
+        db.session.commit()
 
     def tearDown(self):
         """Removes temporary database at end of each test"""
