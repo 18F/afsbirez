@@ -11,3 +11,4 @@ uploads
 env
 .idea
 bower_components
+lib

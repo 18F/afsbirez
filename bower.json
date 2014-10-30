@@ -11,7 +11,7 @@
     "angular-cookies": ">=1.2.*",
     "angular-sanitize": ">=1.2.*",
     "angular-route": ">=1.2.*",
-    "angular-schema-form": "~0.6.*",
+    "angular-schema-form": ">=0.7.6",
     "ng-file-upload": "~1.5.1",
     "ngDialog": "~0.2.11",
     "angular-ui-router": "~0.2.10"
