@@ -29,6 +29,50 @@ def create_application(config_object=DevelopmentConfig):
     application.register_blueprint(rel_module)
     application.register_blueprint(mod_hal)
 
+    from flask_jwt import JWT, jwt_required, _get_serializer
+    from flask import jsonify
+
+    application.config['SECRET_KEY'] = '123'
+    application.config['JWT_EXPIRATION_DELTA'] = 300 
+
+    jwt = JWT(application)
+
+    class User(object):
+      def __init__(self, **kwargs):
+        for k, v in kwargs.items():
+          setattr(self, k, v)
+
+    @jwt.authentication_handler
+    def authenticate(username, password):
+      if username == 'test' and password == '123':
+        return User(id=1, username='test')
+      else:
+        return None
+
+    @jwt.user_handler
+    def load_user(payload):
+      #user = user_datastore.find_user(id=payload['user_id'])
+      #return user
+      return User(id=1, username='test') 
+
+    @jwt.payload_handler
+    def make_payload(user):
+      return {
+        'id': user.id,
+        'username': user.username
+      }
+
+    @jwt.encode_handler
+    def encode_payload(payload):
+      return jsonify({'token': _get_serializer().dumps(payload).decode('utf-8'), 'username': payload['username'], 'id': payload['id']})
+
+    @jwt.response_handler
+    def make_response(payload):
+      return payload 
+
+    @jwt_required()
+    def auth_func(**kw):
+      return True
 
     @application.before_first_request
     def create_db():
