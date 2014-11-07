@@ -6,6 +6,7 @@ import logging
 from flask import Blueprint, request 
 from dougrain import Builder
 from flask.ext.restful import reqparse, Api, Resource, abort
+from flask_jwt import verify_jwt
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +60,7 @@ class TopicsList(Resource):
         return {}
 
     def post(self):
+        verify_jwt
         """ Creates a new topic """
         return {}, 201
 
@@ -83,6 +85,7 @@ class AwardsList(Resource):
         super(AwardsList, self).__init__()
 
     def get(self):
+        verify_jwt
         """ Returns a collection of sources matching specified criteria """
         args = self.get_req_parse.parse_args()
 
@@ -91,6 +94,7 @@ class AwardsList(Resource):
 class Awards(Resource):
 
     def get(self, id):
+        verify_jwt
         """Get award by id"""
         return {}
 
@@ -116,6 +120,7 @@ class UsersList(Resource):
 class Users(Resource):
 
     def get(self, id):
+        verify_jwt
         """Get user by id"""
         return {}
 
@@ -132,6 +137,7 @@ class OrganizationsList(Resource):
 class Organizations(Resource):
 
     def get(self, id):
+        verify_jwt
         return {}
 
 class ApplicationsList(Resource):
@@ -141,12 +147,31 @@ class ApplicationsList(Resource):
         self.get_req_parse = reqparse.RequestParser()
 
     def get(self):
+        verify_jwt
         """Get"""
         return {}
 
 class Applications(Resource):
 
     def get(self, id):
+        verify_jwt
+        return {}
+
+class ProposalsList(Resource):
+    """Topic proposal packages submitted by small business"""
+
+    def __init__(self):
+        self.get_req_parse = reqparse.RequestParser()
+
+    def get(self):
+        verify_jwt
+        """Get"""
+        return {}
+
+class Proposals(Resource):
+
+    def get(self, id):
+        verify_jwt
         return {}
 
 class FormsList(Resource):
@@ -171,12 +196,14 @@ class DocumentsList(Resource):
         self.get_req_parse = reqparse.RequestParser()
 
     def get(self):
+        verify_jwt
         """Get"""
         return {}
 
 class Documents(Resource):
 
     def get(self, id):
+        verify_jwt
         return {}
 
 class ProcessesList(Resource):
@@ -207,6 +234,9 @@ api.add_resource(Organizations, '/organizations/<int:id>', endpoint='organizatio
 
 api.add_resource(ApplicationsList, '/applications', endpoint='applications')
 api.add_resource(Applications, '/applications/<int:id>', endpoint='application')
+
+api.add_resource(ProposalsList, '/proposals', endpoint='proposals')
+api.add_resource(Proposals, '/proposals/<int:id>', endpoint='proposal')
 
 api.add_resource(FormsList, '/forms', endpoint='forms')
 api.add_resource(Forms, '/forms/<int:id>', endpoint='form')
