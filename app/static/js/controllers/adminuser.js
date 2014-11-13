@@ -22,7 +22,7 @@ angular.module('sbirezApp')
             }
           },function(status) {
             console.log(status);
-            $scope.errorMsg = status.data.message;
+            $scope.errorMsg = status.data.description;
           });
         }
       };
