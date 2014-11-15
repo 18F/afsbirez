@@ -1,6 +1,29 @@
-from flask_jwt import JWT, jwt_required, _get_serializer
+from flask.ext.jwt import JWT, JWTError, _get_serializer, verify_jwt
 from flask import jsonify
 from app.model import User
+from functools import wraps
+from flask.ext.restful import abort
+
+def jwt_auth():
+  """
+  Decorator to require JSON web tokens for a given
+  resource created by the Flask-RESTful API
+  """
+
+  def wrapper(fn):
+    @wraps(fn)
+    def decorator(*args, **kwargs):
+      try:
+        verify_jwt() 
+        return fn(*args, **kwargs)
+      except JWTError as e:
+        response = jsonify({"message": e.error + ": " + e.description})
+        response.status_code = 401
+        return response
+        #return jsonify({"message": "Broke!"}), 401
+        #abort(401)
+    return decorator
+  return wrapper
 
 def create_jwt(application):
 
@@ -31,3 +54,4 @@ def create_jwt(application):
     @jwt.response_handler
     def make_response(payload):
       return payload
+
