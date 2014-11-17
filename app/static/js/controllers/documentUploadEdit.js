@@ -40,7 +40,7 @@ angular.module('sbirezApp')
       }
       data.changelog.push({'message': 'Added', 'dateChanged': new Date().getTime()});
       
-      $http.post('api/documents/', data).success(function(data) {
+      $http.post('api/documents', data).success(function(data) {
         $scope.start($scope.index, data.id);
       });
     };

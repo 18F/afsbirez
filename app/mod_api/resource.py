@@ -3,7 +3,7 @@ from datetime import datetime
 from datetime import date
 import logging
 
-from flask import Blueprint, request 
+from flask import Blueprint, request, jsonify 
 from dougrain import Builder
 from flask.ext.restful import reqparse, Api, Resource, abort
 from flask_jwt import jwt_required, JWTError
@@ -20,7 +20,6 @@ def log_exception(sender, exception, **extra):
 
 from flask import got_request_exception
 got_request_exception.connect(log_exception, mod_api)
-
 
 class Endpoints(Resource):
     """Index of all endpoints"""
@@ -194,12 +193,20 @@ class DocumentsList(Resource):
     """Storage for documents used as part of the proposal submission process."""
 
     def __init__(self):
-        self.get_req_parse = reqparse.RequestParser()
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('jwt', type=str, required=False)
 
     @jwt_auth()
     def get(self):
         """Get"""
         return {}
+
+    @jwt_auth()
+    def post(self):
+      args = self.reqparse.parse_args()
+      response = jsonify({"id": "1"})
+      response.status_code = 201
+      return response 
 
 class Documents(Resource):
 
@@ -212,9 +219,9 @@ class Documents(Resource):
         return {}
 
     @jwt_auth()
-    def post(self):
+    def post(self, id):
       args = self.reqparse.parse_args()
-      return {}
+      return {}, 201
 
 class ProcessesList(Resource):
     """Collection of steps that outline a SBIR application process."""
