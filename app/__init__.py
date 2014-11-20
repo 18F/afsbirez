@@ -12,8 +12,9 @@ def create_application(config_object=DevelopmentConfig):
     from app.model import db
     db.init_app(application)
 
-    from app.route import index
-    application.add_url_rule('/', 'index', index)
+    from app.route import angular_pages 
+    application.add_url_rule('/', 'index', angular_pages)
+    application.add_url_rule('/app/<string:path>', 'app', angular_pages)
 
     from app.error import not_found, internal_error
     application.error_handler_spec[None][404] = not_found

@@ -1,4 +1,5 @@
 from flask import render_template
 
-def index():
+def angular_pages(**kwargs):
     return render_template('index.html')
+
