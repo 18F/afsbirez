@@ -1,0 +1,14 @@
+-r  framework.txt
+
+Flask==0.10.1
+flask-restful==0.2.12
+Flask-SQLAlchemy==2.0
+#liveandletdie is also a testing requirement
+liveandletdie==0.0.2
+dougrain==0.5.1
+jsonschema==2.4.0
+alembic
+blinker==1.3
+psycopg2
+uwsgi
+Flask-JWT

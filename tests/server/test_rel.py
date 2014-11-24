@@ -1,7 +1,7 @@
 import json, os, tempfile, logging
 from jsonschema import Draft4Validator
 from app import create_application
-from test.server.test_api import ApiTest
+from tests.server.test_api import ApiTest
 from app.config import TestingConfig
 
 __author__ = 'DavidWCaraway'

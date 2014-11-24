@@ -3,9 +3,9 @@ import logging
 from datetime import datetime
 
 from app.model import db
-from test.server import hal_loads
+from tests.server import hal_loads
 from app import create_application
-from test.server.support import test_data_queries
+from tests.server.support import test_data_queries
 import sure
 from app.config import TestingConfig
 
