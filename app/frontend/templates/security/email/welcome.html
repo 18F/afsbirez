@@ -1,0 +1,4 @@
+<p>Wahoo {{ user.first_name|title }}!</p><p>You just signing up for the <a href="https://sbirez.gov">SBIR-EZ</a>... how sa'weet is that!</p>{% if security.confirmable %}
+<p>First things first... please confirm your email ({{ user.email|lower }}) through the link below:</p>
+<p><a href="{{ confirmation_link }}">Confirm my account</a>.</p>
+{% endif %}

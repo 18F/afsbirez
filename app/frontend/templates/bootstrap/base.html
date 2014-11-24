@@ -1,0 +1,82 @@
+{%- import "bootstrap/macros.html" as bootstrap %}
+{%- if "X-PJAX" not in request.headers -%}
+<!doctype html>
+<html {% block html_attrs %}class="no-js" lang="en"{% endblock %}>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="{{ description }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{%- endif %}{# end X-PJAX if #}
+    <title>{% block title %}{{ title }}{% endblock %}</title>
+{%- if "X-PJAX" not in request.headers %}
+    {% block favicon %}{% endblock %}
+    {% block css_site -%}
+      {%- assets "css_complete" -%}
+      <link rel="stylesheet" href="{{ ASSET_URL }}">
+      {%- endassets -%}
+    {%- endblock %}
+    {% block css -%}
+    {%- endblock %}
+    {%- block js_top -%}
+      <!--[if lt IE 9]>
+      {%- assets "js_shiv" -%}
+      <script src="{{ ASSET_URL }}"></script>
+      {%- endassets -%}
+      <![endif]-->
+      {% assets "js_top" -%}
+      <script src="{{ ASSET_URL }}"></script>
+      {%- endassets -%}
+    {%- endblock %}
+    {%- include "includes/mixpanel.html" ignore missing %}
+  </head>
+  <body>
+  {% endif -%}{# end X-PJAX if #}
+
+  {%- block body_content -%}
+    {%- if "X-PJAX" not in request.headers -%}
+      {% include "bootstrap/includes/upgrade_browser.html" ignore missing %}
+      <div id='wrap'>
+        {% block navbar -%}
+          {%- include "layouts/navbar.html" ignore missing -%}
+        {%- endblock %}
+        <div id="pjax-content">
+        {%- endif %}
+        {%- block flash_message %}
+          <div class="container" id="flash-message-container">
+            {{- bootstrap.flash_messages() }}
+          </div><!-- /div#flash-message-container -->
+        {%- endblock %}
+        {%- block body_container %}
+          <div class="container" id="body-container">
+            {%- block body -%}
+            {%- endblock %}
+          </div><!-- /div#body-container -->
+        {%- endblock %}
+        {%- if "X-PJAX" not in request.headers %}
+        </div><!-- /div#pjax-content -->
+        <div id="push"></div>
+      </div><!-- /div#wrap -->
+      {%- block footer %}
+        {%- include "layouts/footer.html" ignore missing -%}
+      {%- endblock -%}
+    {%- endif -%}{# end X-PJAX if #}
+  {%- endblock %}
+  {%- if "X-PJAX" not in request.headers %}
+    <!-- Javascript -->
+    {%- block js_base -%}
+    {%- assets "js_complete" %}
+      <script src="{{ ASSET_URL }}"></script>
+    {%- endassets -%}
+    {%- endblock %}
+    {%- block js_btm -%}
+      {%- block js -%}
+      {%- endblock -%}
+    {%- endblock %}
+
+    {% block google_analytics %}
+      {% include "includes/google_analytics.html" ignore missing %}
+    {% endblock %}
+  </body>
+</html>
+{% endif %}{# end X-PJAX if #}

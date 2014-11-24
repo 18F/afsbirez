@@ -1,0 +1,4 @@
+{% if not config.USE_PJAX and "X-PJAX" not in request.headers -%}
+{% extends "layouts/html5.html" %}{% endif %}
+<title>{% block title %}{{ title }}{% endblock %}</title>
+{% block h5bp_body %}{% endblock %}

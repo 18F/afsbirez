@@ -1,0 +1,4 @@
+Wahoo {{ user.first_name|title }}!!You just signing up for the SBIR-EZ at https://sbirez.gov ... how sa'weet is that!{% if security.confirmable %}
+First things first... Please confirm your email ({{ user.email|lower }}) through the link below:
+{{ confirmation_link }}
+{% endif %}

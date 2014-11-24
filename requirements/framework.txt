@@ -1,14 +1,55 @@
--r  framework.txt
-
-Flask==0.10.1
-flask-restful==0.2.12
-Flask-SQLAlchemy==2.0
-#liveandletdie is also a testing requirement
-liveandletdie==0.0.2
-dougrain==0.5.1
-jsonschema==2.4.0
-alembic
+# Flask
+Flask>=0.10.1
+MarkupSafe>=0.21
+Werkzeug>=0.9.6
+Jinja2>=2.7.3
+itsdangerous>=0.24
 blinker==1.3
-psycopg2
-uwsgi
-Flask-JWT
+
+# Celery
+celery>=3.1.12
+kombu>=3.0.24
+billiard>=3.3.0.19
+
+# Migrations
+Flask-Migrate>=1.0.0
+
+# Database
+Flask-SQLAlchemy>=1.0
+SQLAlchemy>=0.9.4
+psycopg2>=2.5.2
+SQLAlchemy-Searchable>=0.7.0
+SQLAlchemy-ImageAttach>=0.8.2
+
+# Migrations
+alembic>=0.6.7
+
+# Views
+-e git+https://github.com/apiguy/flask-classy.git#egg=Flask-Classy
+
+# Assets
+Flask-Assets>=0.10
+
+# API
+Flask-RESTful>=0.2.12
+Flask-Restless>=0.13.1
+dougrain>=0.5.1
+jsonschema>=2.4.0
+
+# Auth
+Flask-Security>=1.7.3
+-e git+https://github.com/mattupstate/flask-jwt.git#egg=Flask-JWT-devel
+passlib>=1.6.2
+py-bcrypt>=0.4
+
+# Caching
+Flask-Cache>=0.12
+
+# Management script
+Flask-Script>=2.0.5
+
+# Error Handling
+raven>=5.0.0
+
+# Debug toolbar
+Flask-DebugToolbar==0.9.0
