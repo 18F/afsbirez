@@ -79,3 +79,19 @@ body {
   padding-top:3px;
   padding-bottom:3px;
 }
+
+/* workflow */
+  .workflow-sidebar {
+}
+
+.workflow-sidebar > ul, .workflow-sidebar > ul > li > ul {
+  list-style-type: none;
+  padding-left: 10px;
+}
+
+.state-title {
+  margin-top:0px;
+}
+
+.current-state-list-item {
+}

@@ -4,6 +4,9 @@ angular.module('sbirezApp').directive('workflow', function() {
   return {
     restrict: 'A',
     replace: true,
+    scope: {
+      includeSidebar: '@'
+    },
     templateUrl: 'static/views/partials/workflow.html',
     controller: ['$scope', '$filter', '$window', '$location', 
       function ($scope, $filter, $window, $location) {
@@ -12,57 +15,63 @@ angular.module('sbirezApp').directive('workflow', function() {
         $scope.workflow = {
           name: 'Test Workflow',
           description: 'This is a test workflow',
-          states: [ 
+          sections: [
             {
-              id: 'start',
-              name: 'First State',
-              description: 'This is the first state',
-              fields: [ 
+              name: "Main Section",
+              description: "This is the main section",
+              states: [ 
                 {
-                  id: 'name',
-                  name: 'Name',
-                  type: 'text',
-                  required: true,
-                  helpMessage: 'Name is required.'
+                  id: 'start',
+                  name: 'First State',
+                  description: 'This is the first state',
+                  fields: [ 
+                    {
+                      id: 'name',
+                      name: 'Name',
+                      type: 'text',
+                      required: true,
+                      helpMessage: 'Name is required.'
+                    },
+                    {
+                      id: 'email',
+                      name: 'Email',
+                      type: 'text',
+                      required: true,
+                      helpMessage: 'Email is required.'
+                    }
+                  ],
+                  nextState: 'success1'
                 },
                 {
-                  id: 'email',
-                  name: 'Email',
-                  type: 'text',
-                  required: true,
-                  helpMessage: 'Email is required.'
-                }
-              ],
-              nextState: 'success1'
-            },
-            {
-              id: 'success1',
-              name: 'Success State',
-              description: 'This is the second state',
-              fields: [
+                  id: 'success1',
+                  name: 'Success State',
+                  description: 'This is the second state',
+                  fields: [
+                    {
+                      id: 'agree',
+                      name: 'I Agree',
+                      type: 'checkbox',
+                      required: true,
+                      helpMessage: 'You must agree.'
+                    }
+                  ],
+                  nextState: 'success2',
+                  priorState: 'start'
+                },
                 {
-                  id: 'agree',
-                  name: 'I Agree',
-                  type: 'checkbox',
-                  required: true,
-                  helpMessage: 'You must agree.'
+                  id: 'success2',
+                  name: 'All Done',
+                  description: 'Thank you for completing the workflow.',
+                  priorState: 'success1'
                 }
-              ],
-              nextState: 'success2',
-              priorState: 'start'
-            },
-            {
-              id: 'success2',
-              name: 'All Done',
-              description: 'Thank you for completing the workflow.',
-              priorState: 'success1'
+              ]
             }
           ]
         };
 
         var getStateById = function(id) {
-          for (var i = 0; i < $scope.workflow.states.length; i++) {
-            if ($scope.workflow.states[i].id === id) return $scope.workflow.states[i];
+          for (var i = 0; i < $scope.workflow.sections[0].states.length; i++) {
+            if ($scope.workflow.sections[0].states[i].id === id) return $scope.workflow.sections[0].states[i];
           }
         };
 
@@ -88,7 +97,7 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         $scope.getStateCount = function() {
-          return $scope.workflow.states.length;
+          return $scope.workflow.sections[0].states.length;
         };
 
         $scope.backState = function() {
@@ -96,12 +105,43 @@ angular.module('sbirezApp').directive('workflow', function() {
           $scope.currentStateIndex--;
         };
 
+        var validate = function() {
+          var validated = true;
+          if ($scope.currentState.fields && $scope.currentState.fields.length) {
+            for (var i = 0; i < $scope.currentState.fields.length; i++) {
+              var currentValue = $scope.currentStateData[$scope.currentState.fields[i].id];
+              if ($scope.currentState.fields[i].required && (currentValue === undefined || currentValue.length === 0 || currentValue === false)) {
+                $scope.currentState.fields[i].invalid = true;
+                validated = false;
+              }
+              else {
+                $scope.currentState.fields[i].invalid = false;
+              }
+            }
+          }
+          return validated;
+        }
+
         $scope.nextState = function() {
-//          for (var i = 0; i < $scope.currentState.fields.length; i++) {
-//            if ($scope.currentState.fields[i].required)
-//          }
-          $scope.currentState = getStateById($scope.currentState.nextState);
-          $scope.currentStateIndex++;
+          if (validate()) {
+            $scope.currentState = getStateById($scope.currentState.nextState);
+            $scope.currentStateIndex++;
+          }
+        };
+
+        $scope.changeState = function(state) {
+          if (validate()) {
+            for (var i = 0; i < $scope.workflow.sections[0].states.length; i++) {
+              if (state === $scope.workflow.sections[0].states[i].id) {
+                $scope.currentState = $scope.workflow.sections[0].states[i];
+                $scope.currentStateIndex = i + 1;
+              }
+            }
+          }
+        };
+
+        $scope.isCurrentId = function(state) {
+          return state === $scope.currentState.id;
         };
       }
     ]
