@@ -75,6 +75,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-coffee-react'
   grunt.loadNpmTasks 'grunt-contrib-watch'
 
-  grunt.registerTask 'default', ['bowercopy', 'coffee', 'cjsx']
+  #DWC -- commenting out the coffee script compilation for now until the AngularJS stuff is ported
+  #grunt.registerTask 'default', ['bowercopy', 'coffee', 'cjsx']
+  grunt.registerTask 'default', ['bowercopy']
   grunt.registerTask 'develop', ['default, watch:app']
 

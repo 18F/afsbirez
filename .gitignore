@@ -15,4 +15,4 @@ env
 .idea
 bower_components
 lib
-app/frontend/static
+app/frontend/old_static
