@@ -3,10 +3,11 @@ from datetime import datetime
 from datetime import date
 import logging
 
-from flask import Blueprint, request 
+from flask import Blueprint, request, jsonify 
 from dougrain import Builder
 from flask.ext.restful import reqparse, Api, Resource, abort
-from flask_jwt import verify_jwt
+from flask_jwt import jwt_required, JWTError
+from app.jwt import jwt_auth
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +20,6 @@ def log_exception(sender, exception, **extra):
 
 from flask import got_request_exception
 got_request_exception.connect(log_exception, mod_api)
-
 
 class Endpoints(Resource):
     """Index of all endpoints"""
@@ -59,8 +59,8 @@ class TopicsList(Resource):
 
         return {}
 
+    @jwt_auth()
     def post(self):
-        verify_jwt
         """ Creates a new topic """
         return {}, 201
 
@@ -84,8 +84,8 @@ class AwardsList(Resource):
 
         super(AwardsList, self).__init__()
 
+    @jwt_auth()
     def get(self):
-        verify_jwt
         """ Returns a collection of sources matching specified criteria """
         args = self.get_req_parse.parse_args()
 
@@ -93,8 +93,8 @@ class AwardsList(Resource):
 
 class Awards(Resource):
 
+    @jwt_auth()
     def get(self, id):
-        verify_jwt
         """Get award by id"""
         return {}
 
@@ -119,8 +119,8 @@ class UsersList(Resource):
 
 class Users(Resource):
 
+    @jwt_auth()
     def get(self, id):
-        verify_jwt
         """Get user by id"""
         return {}
 
@@ -136,8 +136,8 @@ class OrganizationsList(Resource):
 
 class Organizations(Resource):
 
+    @jwt_auth()
     def get(self, id):
-        verify_jwt
         return {}
 
 class ApplicationsList(Resource):
@@ -146,15 +146,15 @@ class ApplicationsList(Resource):
     def __init__(self):
         self.get_req_parse = reqparse.RequestParser()
 
+    @jwt_auth()
     def get(self):
-        verify_jwt
         """Get"""
         return {}
 
 class Applications(Resource):
 
+    @jwt_auth()
     def get(self, id):
-        verify_jwt
         return {}
 
 class ProposalsList(Resource):
@@ -163,15 +163,15 @@ class ProposalsList(Resource):
     def __init__(self):
         self.get_req_parse = reqparse.RequestParser()
 
+    @jwt_auth()
     def get(self):
-        verify_jwt
         """Get"""
         return {}
 
 class Proposals(Resource):
 
+    @jwt_auth()
     def get(self, id):
-        verify_jwt
         return {}
 
 class FormsList(Resource):
@@ -193,18 +193,35 @@ class DocumentsList(Resource):
     """Storage for documents used as part of the proposal submission process."""
 
     def __init__(self):
-        self.get_req_parse = reqparse.RequestParser()
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('jwt', type=str, required=False)
 
+    @jwt_auth()
     def get(self):
-        verify_jwt
         """Get"""
         return {}
 
+    @jwt_auth()
+    def post(self):
+      args = self.reqparse.parse_args()
+      response = jsonify({"id": "1"})
+      response.status_code = 201
+      return response 
+
 class Documents(Resource):
 
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument('jwt', type=str, required=False)
+
+    @jwt_auth()
     def get(self, id):
-        verify_jwt
         return {}
+
+    @jwt_auth()
+    def post(self, id):
+      args = self.reqparse.parse_args()
+      return {}, 201
 
 class ProcessesList(Resource):
     """Collection of steps that outline a SBIR application process."""

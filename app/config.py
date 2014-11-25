@@ -8,6 +8,7 @@ class Config(object):
     TESTING = False
     SECRET_KEY = "secret"
     CSRF_ENABLED = True
+    JWT_EXPIRATION_DELTA = 300
 
 class ProductionConfig(Config):
     #TODO
