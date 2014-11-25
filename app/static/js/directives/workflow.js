@@ -62,7 +62,20 @@ angular.module('sbirezApp').directive('workflow', function() {
                   id: 'success2',
                   name: 'All Done',
                   description: 'Thank you for completing the workflow.',
-                  priorState: 'success1'
+                  priorState: 'success1',
+                  nextState: 'start2'
+                }
+              ]
+            },
+            {
+              name: "Section 2",
+              description: "This is the second section.",
+              states: [
+                {
+                  id: 'start2',
+                  name: 'Start Next',
+                  description: 'Thank you for completing the workflow.',
+                  priorState: 'success2'
                 }
               ]
             }
@@ -70,8 +83,10 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         var getStateById = function(id) {
-          for (var i = 0; i < $scope.workflow.sections[0].states.length; i++) {
-            if ($scope.workflow.sections[0].states[i].id === id) return $scope.workflow.sections[0].states[i];
+          for (var i = 0; i < $scope.workflow.sections.length; i++) {
+            for (var j = 0; j < $scope.workflow.sections[i].states.length; j++) {
+              if ($scope.workflow.sections[i].states[j].id === id) return $scope.workflow.sections[i].states[j];
+            }
           }
         };
 
@@ -97,7 +112,11 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         $scope.getStateCount = function() {
-          return $scope.workflow.sections[0].states.length;
+          var count = 0;
+          for (var i = 0; i < $scope.workflow.sections.length; i++) {
+            count += $scope.workflow.sections[i].states.length;
+          }
+          return count;
         };
 
         $scope.backState = function() {
@@ -131,10 +150,14 @@ angular.module('sbirezApp').directive('workflow', function() {
 
         $scope.changeState = function(state) {
           if (validate()) {
-            for (var i = 0; i < $scope.workflow.sections[0].states.length; i++) {
-              if (state === $scope.workflow.sections[0].states[i].id) {
-                $scope.currentState = $scope.workflow.sections[0].states[i];
-                $scope.currentStateIndex = i + 1;
+            var count = 0;
+            for (var i = 0; i < $scope.workflow.sections.length; i++) {
+              for (var j = 0; j < $scope.workflow.sections[i].states.length; j++) {
+                count++;
+                if (state === $scope.workflow.sections[i].states[j].id) {
+                  $scope.currentState = $scope.workflow.sections[i].states[j];
+                  $scope.currentStateIndex = count;
+                }
               }
             }
           }
