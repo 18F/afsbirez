@@ -15,7 +15,7 @@ from flask import request
 from flask.ext.classy import FlaskView
 from flask.ext.jwt import verify_jwt, JWTError
 from flask.ext.restful import Api as RestfulAPI, Resource
-from flask.ext.restful import abort, representations, types
+from flask.ext.restful import abort, representations, fields
 from flask.ext.restful.representations.json import output_json
 from flask.ext.restful.reqparse import RequestParser
 from flask.ext.restful.utils import unpack
@@ -36,9 +36,9 @@ request_options.add_argument('page', type=int, location='args')
 request_options.add_argument('per_page', type=int, location='args')
 
 response_options = RequestParser()
-response_options.add_argument('envelope', type=types.boolean, location='args')
+response_options.add_argument('envelope', type=fields.Boolean, location='args')
 response_options.add_argument('callback', type=str, location='args')
-response_options.add_argument('X-Conditional', type=types.boolean,
+response_options.add_argument('X-Conditional', type=fields.Boolean,
                              location='headers')
 
 _log = logging.getLogger(__name__)
@@ -104,7 +104,7 @@ class ClassyAPI(RestfulAPI):
         return conditionalify_response(response)
 
 
-class BaseAPI(FlaskView):
+class BaseView(FlaskView):
     """Flask-Classy base class for ClassyAPI views."""
 
     trailing_slash = None
