@@ -26,6 +26,6 @@ def create_blueprint(name=None, url_prefix=None, subdomain=None):
     bp = Blueprint(name, __name__, url_prefix=url_prefix, subdomain=subdomain)
 
     # Register API endpoints
-    TodosAPI.register(bp)
+    TodosView.register(bp)
 
     return bp

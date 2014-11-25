@@ -13,14 +13,9 @@ import pytest
 
 from factory import Sequence
 from flask.ext.restless.helpers import to_dict
+from app.framework.sql import db, Model
 
-from sbirez.framework.sql import (
-    db,
-    Model,
-    ReferenceColumn,
-)
-
-from .factories import BaseFactory
+from tests.factories import BaseFactory
 
 class ApiModel(Model):
     __tablename__ = 'tests'

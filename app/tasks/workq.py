@@ -7,9 +7,9 @@
     :copyright: © 2014-2015, 18F
     :license: CC0 Public Domain License, see LICENSE for more details.
 """
-from ..framework.factory import create_celery_app
-celery = create_celery_app()
-task = celery.task
+from celery import Celery
+import os
+from app import create_app
 
 def create_celery_app(app=None):
     app = app or create_app('sbirez',
@@ -27,3 +27,6 @@ def create_celery_app(app=None):
                 return TaskBase.__call__(self, *args, **kwargs)
     celery.Task = ContextTask
     return celery
+
+celery = create_celery_app()
+task = celery.task

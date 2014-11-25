@@ -9,11 +9,10 @@
 
     templated from https://github.com/ryanolson/cookiecutter-webapp
 """
-from flask import Blueprint
-from sbirez import api
+from app import api
 
 
-class SecureAPI(api.BaseAPI):
+class SecureView(api.BaseView):
 
     @api.secure_endpoint()
     def index(self):
@@ -33,7 +32,7 @@ class SecureResource(api.BaseResource):
 def classy_api(app):
     """Create an Flask-Classy-based API on app"""
     bp = api.v1.create_blueprint('test', url_prefix='/api/tests')
-    SecureAPI.register(bp)
+    SecureView.register(bp)
     api.register_blueprint(app, bp)
 
 

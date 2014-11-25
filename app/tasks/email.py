@@ -14,7 +14,7 @@ from ..framework.extensions import mail, security
 
 @workq.task
 def send_email(message):
-    mail.send(msg)
+    mail.send(message)
 
 def send_message(subject, sender, recipients, text_body, html_body):
     msg = Message(subject, sender = sender, recipients = recipients)

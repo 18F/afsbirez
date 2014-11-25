@@ -54,7 +54,7 @@ def init_app(app):
     assets.debug = app.config.get('DEBUG', False)
     assets.directory = app.static_folder
     assets.url = app.static_url_path
-    assets.directory = app.static_folder
+
     assets.append_path(assets_directory)
     assets.append_path(app.static_folder)
     assets.register("h5bp_css", h5bp_css)

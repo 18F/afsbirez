@@ -9,33 +9,33 @@ module.exports = (grunt) ->
       app:
         expand: true
         src: ['**/*.coffee']
-        cwd: 'sbirez/frontend/client/coffee'
-        dest: 'sbirez/frontend/static/js/'
+        cwd: 'app/frontend/client/coffee'
+        dest: 'app/frontend/static/js/'
         ext: '.js'
         options:
           bare: false
           preserve_dirs: true
-          base_path: 'sbirez/frontend/client/coffee'
+          base_path: 'app/frontend/client/coffee'
 
     # compile coffee-react source files
     cjsx:
       app:
         expand: true
         src: ['**/*.cjsx']
-        cwd: 'sbirez/frontend/client/coffee'
-        dest: 'sbirez/frontend/static/js'
+        cwd: 'app/frontend/client/coffee'
+        dest: 'app/frontend/static/js'
         ext: '.js'
         options:
           base: false
           preserve_dirs: true
-          base_path: 'sbirez/frontend/client/coffee'
+          base_path: 'app/frontend/client/coffee'
 
     # watch for file changes and react
     watch:
       app:
         files: [
-          'sbirez/frontend/client/coffee/**/*.coffee',
-          'sbirez/frontend/client/coffee/**/*.cjsx',
+          'app/frontend/client/coffee/**/*.coffee',
+          'app/frontend/client/coffee/**/*.cjsx',
         ]
         tasks: ['coffee:app', 'cjsx:app']
 
@@ -43,7 +43,7 @@ module.exports = (grunt) ->
     bowercopy:
       options:
         srcPrefix: 'bower_components'
-        destPrefix: 'sbirez/frontend/static'
+        destPrefix: 'app/frontend/static'
       scripts:
         files:
           'js/vendor/backbone.js': 'backbone/backbone.js'

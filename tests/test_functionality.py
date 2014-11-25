@@ -15,8 +15,9 @@ import pytest
 from flask import url_for
 from flask.ext.security.utils import verify_password
 
-from sbirez.models.users import User
-from .factories import UserFactory
+from app.models.users import User
+from tests.factories import UserFactory
+
 
 @pytest.fixture
 def user(db):

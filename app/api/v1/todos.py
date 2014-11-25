@@ -11,20 +11,21 @@
 """
 from flask.ext.restful import abort, reqparse
 
-from ..base import BaseAPI, BaseResource, secure_endpoint
+from ..base import BaseView, BaseResource, secure_endpoint
 from ...models.todos import Todo
+from flask import jsonify
 
 todo_parser = reqparse.RequestParser()
 todo_parser.add_argument('title', type=str)
 todo_parser.add_argument('completed', type=bool, default=False)
 
 
-class TodosAPI(BaseAPI):
+class TodosView(BaseView):
     """A complete Flask-Classy-based Todo API resource."""
 
     def index(self):
         """Returns a Collection of Todos."""
-        return [todo.to_dict() for todo in Todo.all()]
+        return jsonify([todo.to_dict() for todo in Todo.all()])
 
     @secure_endpoint()
     def post(self):

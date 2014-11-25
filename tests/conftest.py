@@ -12,10 +12,9 @@
 import pytest
 from webtest import TestApp
 
-from sbirez import api
-from sbirez import frontend
-from sbirez.framework.sql import db as _db
-
+from app import api
+from app import frontend
+from app.framework.sql import db as _db
 from . import settings as test_settings
 from .apis import classy_api, restful_api
 from .factories import UserFactory
@@ -28,7 +27,9 @@ def app():
     yield _app
     ctx.pop()
 
-@pytest.yield_fixture(scope='function', params=['classy', 'restful'])
+#Temporarily disabling testing using the classy api
+#@pytest.yield_fixture(scope='function', params=['classy', 'restful'])
+@pytest.yield_fixture(scope='function', params=['restful'])
 def apiapp(request):
     _app = api.create_app(test_settings)
     if request.param == 'classy':

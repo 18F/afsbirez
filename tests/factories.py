@@ -13,9 +13,9 @@ from datetime import datetime
 from factory import Factory, Sequence, LazyAttribute, post_generation
 from flask.ext.security.utils import encrypt_password
 
-from sbirez.models.users import User, Role
-from sbirez.models.todos import Todo
-from sbirez.framework.sql import db
+from app.models.users import User, Role
+from app.models.todos import Todo
+from app.framework.sql import db
 
 class BaseFactory(Factory):
     ABSTRACT_FACTORY = True

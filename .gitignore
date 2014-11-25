@@ -13,3 +13,4 @@ env
 .idea
 bower_components
 lib
+app/frontend/static

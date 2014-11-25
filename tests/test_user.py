@@ -14,8 +14,9 @@ import pytest
 
 from flask.ext.security.utils import verify_password
 
-from sbirez.models.users import User, Role
-from .factories import UserFactory
+from app.models.users import User, Role
+from tests.factories import UserFactory
+
 
 @pytest.mark.usefixtures('db')
 class TestUser:
