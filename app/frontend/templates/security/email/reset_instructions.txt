@@ -1,1 +1,1 @@
-{{ user.first_name|title }},Rumor has it you forgot your password for SBIR-EZ.  No worries, here is your link to reset your password:{{ reset_link }}- 18F
+{{ user.first_name|title }},Rumor has it you forgot your password for SBIREZ.  No worries, here is your link to reset your password:{{ reset_link }}- 18F
