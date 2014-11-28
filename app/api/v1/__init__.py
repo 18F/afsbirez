@@ -9,7 +9,7 @@
 
     templated from https://github.com/ryanolson/cookiecutter-webapp
 """
-from .todos import TodosView, TodosResource, TodoResource
+from .todos import TodosView
 
 def create_blueprint(name=None, url_prefix=None, subdomain=None):
     """Register API endpoints on a Flask :class:`Blueprint`."""

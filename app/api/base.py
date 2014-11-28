@@ -43,7 +43,7 @@ response_options.add_argument('X-Conditional', type=fields.Boolean,
 
 _log = logging.getLogger(__name__)
 
-__all__ = ('ClassyAPI', 'BaseAPI', 'BaseResource', 'secure_endpoint')
+__all__ = ('ClassyAPI', 'BaseAPI', 'secure_endpoint')
 
 
 class ClassyAPI(RestfulAPI):
@@ -121,21 +121,6 @@ class BaseView(FlaskView):
     def make_response(cls, response):
         """JSONify responses"""
         return jsonify_response(envelopify_response(response))
-
-    @classmethod
-    def get_class_suffix(cls):
-        """API views will use the -API suffix rather than the -View suffix."""
-        return "API"
-
-
-class BaseResource(Resource):
-    """Flask-RESTful base class Resource API views."""
-
-    def dispatch_request(self, *args, **kwargs):
-        """Extend dispatch_request to enforce Content-Type == application/json"""
-        enforce_json_post_put_patch_requests()
-        return super(BaseResource, self).dispatch_request(*args, **kwargs)
-
 
 def secure_endpoint(jwt=True, oauth2=True, jwt_realm=None):
     """View decorator to protect API endpoints."""

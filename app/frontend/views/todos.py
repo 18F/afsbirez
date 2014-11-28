@@ -9,7 +9,7 @@
 
     templated from https://github.com/ryanolson/cookiecutter-webapp
 """
-from flask import flash, render_template
+from flask import flash, render_template, current_app
 from flask.ext.classy import FlaskView
 from flask.ext.security import current_user, login_required
 from werkzeug.local import LocalProxy

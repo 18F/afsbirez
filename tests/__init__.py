@@ -1,12 +1,13 @@
-# -*- coding: utf-8 -*-
-"""
-    tests
-    ~~~~~
+import sys
+import sure
+sys.path.append('../')
 
-    :author: 18F
-    :copyright: © 2014-2015, 18F
-    :license: CC0 Public Domain License, see LICENSE for more details.
+from dougrain import Document
+import json
 
-    templated from https://github.com/ryanolson/cookiecutter-webapp
-"""
 
+def hal_loads(resp_str):
+	"""
+	Helper function that converts a string into a HAL object
+	"""
+	return Document.from_object(json.loads(resp_str))

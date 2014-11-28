@@ -15,27 +15,41 @@ from webtest import TestApp
 from app import api
 from app import frontend
 from app.framework.sql import db as _db
-from . import settings as test_settings
-from .apis import classy_api, restful_api
+from .settings import TestingConfig
+from .apis import classy_api
 from .factories import UserFactory
+from webtest import TestResponse
+from dougrain import Document
+
+#monkey patch the TestResponse to return a HAL dougrain object
+def hal(self):
+        """
+        Return the response as a JSON response.  You must have `simplejson
+        <http://goo.gl/B9g6s>`_ installed to use this, or be using a Python
+        version with the json module.
+
+        The content type must be one of json type to use this.
+        """
+        if not self.content_type.endswith(('+json', '/json')):
+            raise AttributeError(
+                "Not a JSON response body (content-type: %s)"
+                % self.content_type)
+        return Document.from_string(self.testbody)
+
+TestResponse.hal = property(hal)
 
 @pytest.yield_fixture(scope='function')
 def app():
-    _app = frontend.create_app(test_settings)
+    _app = frontend.create_app(TestingConfig)
     ctx = _app.test_request_context()
     ctx.push()
     yield _app
     ctx.pop()
 
-#Temporarily disabling testing using the classy api
-#@pytest.yield_fixture(scope='function', params=['classy', 'restful'])
-@pytest.yield_fixture(scope='function', params=['restful'])
+@pytest.yield_fixture(scope='function')
 def apiapp(request):
-    _app = api.create_app(test_settings)
-    if request.param == 'classy':
-        classy_api(_app)
-    else:
-        restful_api(_app)
+    _app = api.create_app(TestingConfig)
+    classy_api(_app)
     ctx = _app.test_request_context()
     ctx.push()
     yield _app

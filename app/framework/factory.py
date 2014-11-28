@@ -42,10 +42,9 @@ def create_app(package_name, package_path, settings_override=None,
     app = Flask(package_name, instance_relative_config=True,
                 instance_path=instance_path)
 
-    from app.config import DevelopmentConfig
-
     # Initialize settings
-    app.config.from_object(DevelopmentConfig)
+    from app.settings import ProductionConfig
+    app.config.from_object(ProductionConfig())
     app.config.from_pyfile("settings.cfg", silent=True)
     app.config.from_object(settings_override)
 

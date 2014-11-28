@@ -10,12 +10,14 @@ from app import create_app
 from app.framework.sql import db
 from app.models.users import User
 
-
-application = create_app()
+from app.settings import DevelopmentConfig
+application = create_app(override_settings=DevelopmentConfig)
 
 manager = Manager(application.app)
 TEST_CMD = "py.test tests"
 
+from app.framework.extensions import celery
+celery.init_app(application.app)
 
 class Worker(Command):
 

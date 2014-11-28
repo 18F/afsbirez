@@ -7,12 +7,14 @@ itsdangerous>=0.24
 blinker==1.3
 
 # Celery
+-e git+https://github.com/Robpol86/Flask-Celery-Helper#egg=Flask-Celery-devel
 celery>=3.1.12
 kombu>=3.0.24
 billiard>=3.3.0.19
 
 # Migrations
 Flask-Migrate>=1.0.0
+alembic>=0.6.7
 
 # Database
 Flask-SQLAlchemy>=1.0
@@ -21,19 +23,19 @@ psycopg2>=2.5.2
 SQLAlchemy-Searchable>=0.7.0
 SQLAlchemy-ImageAttach>=0.8.2
 
-# Migrations
-alembic>=0.6.7
-
-# Views
--e git+https://github.com/apiguy/flask-classy.git#egg=Flask-Classy
-
 # Assets
 Flask-Assets>=0.10
+cssmin>=0.2.0
+jsmin>=2.0.11
 
 # API
 Flask-RESTful>=0.2.12
-Flask-Restless>=0.13.1
-dougrain>=0.5.1
+Flask-Restless>=0.15.0
+# Using a fork of the Flask-Classy with many of the pull requests merged in
+-e git+https://github.com/dwcaraway/flask-classy.git#egg=Flask-Classy-fork
+aniso8601
+-e git+https://github.com/dwcaraway/dougrain.git#egg=Dougrain-fork
+pytz
 jsonschema>=2.4.0
 
 # Auth

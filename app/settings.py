@@ -87,6 +87,3 @@ class DevelopmentConfig(Config):
     DEBUG = True
     TESTING = True
 
-class TestingConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'postgresql://sbirez:sbirez@localhost:5432/sbireztest'
-    TESTING = True

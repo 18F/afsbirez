@@ -1,4 +1,4 @@
-from app.config import DevelopmentConfig
+from app.settings import DevelopmentConfig
 import logging
 
 logger = logging.getLogger(__name__)

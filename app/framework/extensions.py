@@ -24,4 +24,7 @@ mail = Mail()
 from flask.ext.security import Security
 security = Security()
 
-__all__ = ("db", "migrate", "jwt", "mail", "security", )
+from flask.ext.celery import Celery
+celery = Celery()
+
+__all__ = ("db", "migrate", "jwt", "mail", "security", "celery")

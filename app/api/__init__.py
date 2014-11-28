@@ -11,11 +11,11 @@
 """
 from . import v1
 from .. import framework
-from .base import (ClassyAPI, BaseView, BaseResource, secure_endpoint,
-                   json_required, )
+from .base import (ClassyAPI, BaseView, secure_endpoint,
+                   json_required )
 
-__all__ = ('create_app', 'register_blueprint', 'ClassyAPI', 'BaseAPI',
-           'BaseResource', 'secure_endpoint', 'json_required', 'v1', )
+__all__ = ('create_app', 'register_blueprint', 'ClassyAPI', 'BaseView',
+           'secure_endpoint', 'json_required', 'v1', )
 
 
 def create_app(settings_override=None):
