@@ -68,6 +68,10 @@ class User(UserMixin, Model):
     last_login_ip = db.Column(db.String(100))
     current_login_ip = db.Column(db.String(100))
     login_count = db.Column(db.Integer)
+
+    name = db.Column(db.String(255), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
+
     roles = db.relationship('Role', secondary=roles_users,
             backref=db.backref('users', lazy='dynamic'))
     connections = db.relationship('Connection',
@@ -76,3 +80,4 @@ class User(UserMixin, Model):
     def reset_secret(self):
         self.secret = generate_secret()
         self.save()
+

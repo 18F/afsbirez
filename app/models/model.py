@@ -108,19 +108,6 @@ class Proposal(Model):
                                 db.ForeignKey(u'organizations.id', ondelete=u'RESTRICT', onupdate=u'CASCADE'))
     workflows = db.relationship('Workflow', backref='proposal')
 
-
-class User(Model):
-    __tablename__ = 'users'
-
-
-    name = db.Column(db.String(255), nullable=False)
-    password = db.Column(db.String(255))
-    email = db.Column(db.String(255))
-    title = db.Column(db.String(255))
-    created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
-    updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
-
-
 class Workflow(Model):
     __tablename__ = 'workflows'
 
