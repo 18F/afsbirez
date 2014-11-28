@@ -14,7 +14,7 @@
 import copy
 import pytest
 
-from .factories import TodoFactory, UserFactory
+from tests.factories import TodoFactory, UserFactory
 
 @pytest.fixture
 def user(db):
@@ -51,8 +51,8 @@ class TestAPI:
 
     def test_todos_index(self, todos, testapi):
         resp = testapi.get("/api/tests/todos")
-        assert isinstance(resp.json, list)
-        assert len(resp.json) == 2
+        assert isinstance(resp.json['todos'], list)
+        assert len(resp.json['todos']) == 2
 
     def test_todos_post(self, user, testapi):
         token = self.test_jwt_log_in_returns_200_with_token(user, testapi)
@@ -109,7 +109,7 @@ class TestAPI:
         resp = testapi.get("/api/tests/todos?envelope=true")
         assert isinstance(resp.json, dict)
         assert resp.json['status'] == resp.status_code
-        assert len(resp.json['data']) == 2
+        assert len(resp.json['data']['todos']) == 2
 
     def test_jwt_log_in_returns_200_with_token(self, user, testapi):
         data = dict(username=user.email, password='myprecious')
