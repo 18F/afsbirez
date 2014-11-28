@@ -1,5 +1,7 @@
-from app.settings import DevelopmentConfig
 import logging
+
+from app.settings import DevelopmentConfig
+
 
 logger = logging.getLogger(__name__)
     
@@ -9,7 +11,7 @@ def create_application(config_object=DevelopmentConfig):
     application.config.from_object(config_object)
     application.config.from_envvar('sbirez_settings', True)
 
-    from app.model import db
+    from app.models.model import db
     db.init_app(application)
 
     from app.route import index

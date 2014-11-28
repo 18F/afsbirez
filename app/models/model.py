@@ -2,13 +2,13 @@
 from flask.ext.sqlalchemy import SQLAlchemy
 import sqlalchemy as sa
 # Define the database functions
-db = SQLAlchemy()
 
+from ..framework.sql import (Model, db)
 
-class Content(db.Model):
+class Content(Model):
     __tablename__ = 'contents'
 
-    id = db.Column(db.Integer, primary_key=True)
+
     version = db.Column(db.Integer)
     start_date = db.Column(db.DateTime(True))
     end_date = db.Column(db.DateTime(True))
@@ -39,10 +39,10 @@ documentskeywords = db.Table(
     )
 
 
-class Document(db.Model):
+class Document(Model):
     __tablename__ = 'documents'
 
-    id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(255))
     description = db.Column(db.Text)
     filepath = db.Column(db.String(255), nullable=False)
@@ -58,10 +58,10 @@ class Document(db.Model):
                                 backref=db.backref('document'))
 
 
-class Keyword(db.Model):
+class Keyword(Model):
     __tablename__ = 'keywords'
 
-    id = db.Column(db.Integer, primary_key=True)
+
     keyword = db.Column(db.String(255))
     created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
     updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
@@ -76,10 +76,10 @@ organizationsusers = db.Table(
     )
 
 
-class Organization(db.Model):
+class Organization(Model):
     __tablename__ = 'organizations'
 
-    id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(255), nullable=False)
     duns = db.Column(db.String(255))
     ein = db.Column(db.String(255))
@@ -92,10 +92,10 @@ class Organization(db.Model):
     proposals = db.relationship('Proposal', backref='organization')
     
 
-class Proposal(db.Model):
+class Proposal(Model):
     __tablename__ = 'proposals'
 
-    id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(255))
     description = db.Column(db.Text)
     sbir_topic_reference = db.Column(db.String(255))
@@ -109,10 +109,10 @@ class Proposal(db.Model):
     workflows = db.relationship('Workflow', backref='proposal')
 
 
-class User(db.Model):
+class User(Model):
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(255))
     email = db.Column(db.String(255))
@@ -121,10 +121,10 @@ class User(db.Model):
     updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
 
 
-class Workflow(db.Model):
+class Workflow(Model):
     __tablename__ = 'workflows'
 
-    id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(255))
     description = db.Column(db.Text)
     created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
@@ -134,10 +134,10 @@ class Workflow(db.Model):
     steps = db.relationship('WorkflowStep', backref='workflow')
 
     
-class WorkflowStep(db.Model):
+class WorkflowStep(Model):
     __tablename__ = 'workflowsteps'
 
-    id = db.Column(db.Integer, primary_key=True)
+
     name = db.Column(db.String(255))
     description = db.Column(db.Text)
     work = db.Column(db.Text)
@@ -150,10 +150,10 @@ class WorkflowStep(db.Model):
     results = db.relationship('WorkflowStepResult', backref='step')
 
     
-class WorkflowStepResult(db.Model):
+class WorkflowStepResult(Model):
     __tablename__ = 'workflowstepresults'
 
-    id = db.Column(db.Integer, primary_key=True)
+
     result = db.Column(db.Text)
     completed_at = db.Column(db.DateTime(True))
     created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())

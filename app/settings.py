@@ -65,10 +65,10 @@ class Config(object):
     CELERY_RESULT_BACKEND='redis://127.0.0.1:6379'
     CELERYD_PREFETCH_MULTIPLIER=0
     CELERY_IMPORT = [
-        'sbirez.tasks',
+        'app.tasks',
     ]
     CELERY_INCLUDE = [
-        'sbirez.tasks',
+        'app.tasks',
     ]
     CELERYBEAT_SCHEDULE = {
     #   example of a celery beat entry

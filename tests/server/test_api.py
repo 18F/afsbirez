@@ -1,13 +1,12 @@
 import unittest
 import logging
-from datetime import datetime
 
-from app.model import db
+from app.models.model import db
 from tests.server import hal_loads
 from app import create_application
 from tests.server.support import test_data_queries
-import sure
 from app.config import TestingConfig
+
 
 logger = logging.getLogger(__name__)
 
