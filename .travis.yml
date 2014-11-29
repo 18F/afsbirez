@@ -14,14 +14,12 @@ before_script:
   - 'gem install sass'
   - 'gem install compass'
   - 'npm install'
-  - 'bower install'
-  - psql -c 'create user afsbirez;' -U postgres
-  - psql -c 'create database afsbirez_test owner=afsbirez;' -U postgres
-  - 'grunt build'
+  - psql -c 'create user sbirez;' -U postgres
+  - psql -c 'create database sbireztest owner=sbirez;' -U postgres
+  - 'python manage.py db upgrade'
+  - 'grunt'
 install:
-  - "pip install ."
   - "pip install -r requirements.txt"
-  - 'pip install -r test-requirements.txt'
 script:
 - grunt test
-- nosetests
+- 'python manage.py test'
