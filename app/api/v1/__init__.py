@@ -26,25 +26,19 @@ import inspect
 import pkgutil
 import os
 
-file_path = os.path.realpath(__file__)
-
-def get_views(package):
+def get_views():
     """
     Get all view classes within a given module
     params
 
-    :param package: a string containing the module e.g. 'my.package.foo'
-    :param re: regular expression string to match, example '.*some[~!]one'
-    :returns an array of class view names
+    :returns an array of class
     """
-    modules = [name for _, name, _ in pkgutil.iter_modules(path=package)]
-
     rv = []
-    for m in modules:
-        i = importlib.import_module(m)
-        for name, obj in inspect.getmembers(i):
-            if inspect.isclass(obj) and 'View' in name:
-                rv.append(name)
+    for _, m, _ in pkgutil.iter_modules(path=__path__):
+        i = importlib.import_module(name="{0}.{1}".format(__name__, m))
+        for name, obj in inspect.getmembers(i, predicate=inspect.isclass):
+            if u'View' in name and obj.__module__ == i.__name__:
+                rv.append(obj)
 
     return rv
 
@@ -63,7 +57,7 @@ def create_blueprint(name=None, url_prefix=None, subdomain=None):
     bp = Blueprint(name, __name__, url_prefix=url_prefix, subdomain=subdomain)
 
     # Register API endpoints
-    for v in get_views('app.api.v1'):
+    for v in get_views():
         v.register(bp)
 
     return bp
