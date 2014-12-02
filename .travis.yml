@@ -15,7 +15,7 @@ before_script:
   - 'gem install compass'
   - 'npm install'
   - psql -c 'create user sbirez;' -U postgres
-  - psql -c 'create database sbireztest owner=sbirez;' -U postgres
+  - psql -c 'create database sbirezdev owner=sbirez;' -U postgres
   - 'python manage.py db upgrade'
   - 'grunt'
 install:
