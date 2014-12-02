@@ -32,4 +32,6 @@ class TestingConfig:
     SECURITY_FLASH_MESSAGES = True
     SECURITY_SEND_PASSWORD_CHANGE_EMAIL = False
 
+    #Flask-JWT settings
     JWT_AUTH_HEADER_PREFIX = 'Bearer'
+    JWT_EXPIRATION_DELTA = 300

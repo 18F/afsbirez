@@ -13,7 +13,8 @@
 """
 import copy
 import pytest
-
+import json
+from jsonschema import Draft4Validator
 from tests.factories import TodoFactory, UserFactory
 
 @pytest.fixture
@@ -93,6 +94,22 @@ class TestAPI:
             "Authorization": "Bearer {token}".format(token=token),
         })
         resp.status_code == 204
+
+    def test_rel_index(self, testapi):
+        resp = testapi.get("/api/tests/rels")
+        resp.json.should_not.be.empty
+
+    def test_rel_index_is_valid_json_schema(self, testapi):
+        resp = testapi.get("/api/tests/rels")
+
+        for schema in resp.json.itervalues():
+            schema_errors = Draft4Validator.check_schema(schema)
+            schema_errors.should.be.none
+
+    def test_rel_get(self, testapi):
+        resp = testapi.get("/api/tests/rels/foo")
+        resp.json['properties'].should.have.key("name")
+        resp.json['properties'].should.have.key("email")
 
     def test_todos_patch(self, todos, testapi):
         uri = "/api/tests/todos/{0}".format(todos[0].id)

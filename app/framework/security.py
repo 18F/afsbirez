@@ -45,3 +45,13 @@ def make_payload(user):
         "user_id": user.id,
         "secret": user.secret
     }
+
+# TODO - Delete this content after migration to cookiecutter-webapp is complete
+# def encode_payload(payload):
+#   return jsonify({'token': _get_serializer().dumps(payload).decode('utf-8'), 'username': payload['username'], 'id': payload['id']})
+#
+# def make_response(payload):
+#   return payload
+#
+# def auth_func(**kw):
+#   return True

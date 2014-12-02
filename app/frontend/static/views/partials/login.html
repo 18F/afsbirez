@@ -3,7 +3,7 @@
 </div>
 <div class="row">
   <div class="col-md-6 signup-form">
-    <form role="form">
+    <form id="signup-form" role="form">
       <div class="form-group">
         <label for="inputNewName" class="control-label">Name:</label>
         <input type="text" class="form-control" id="inputNewName" placeholder="Enter your name" ng-model="signup.name">
@@ -20,7 +20,7 @@
     </form>
   </div>
   <div class="col-md-6 login-form">
-    <form role="form">
+    <form id="login-form" role="form">
       Already have an account? Login here:
       <div ng-show="errorMsg" class="bg-danger"><p>{{errorMsg}}</p></div>
       <div class="form-group">

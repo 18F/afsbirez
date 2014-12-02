@@ -4,8 +4,8 @@ import logging
 from app.models.model import db
 from tests.server import hal_loads
 from app import create_application
-from tests.server.support import test_data_queries
-from app.config import TestingConfig
+from tests.support import test_data_queries
+from tests.settings import TestingConfig
 
 
 logger = logging.getLogger(__name__)

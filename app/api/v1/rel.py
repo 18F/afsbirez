@@ -48,5 +48,5 @@ class LinkRelationsView(BaseView):
 
         if schema is None:
             abort(404, message="Rel {} doesn't exist".format(id))
-        else:
-            return RELS[id]
+
+        return RELS[id]

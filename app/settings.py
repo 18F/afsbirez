@@ -78,6 +78,9 @@ class Config(object):
     #   }
     }
 
+    #Flask-JWT settings
+    JWT_EXPIRATION_DELTA = 300
+
 class ProductionConfig(Config):
     #TODO
     pass
