@@ -1,3 +1,7 @@
+app/frontend/static/js/sbirez.min.js
+app/frontend/static/css/sbirez.min.css
+app/frontend/static/.webassets-cache/
+app/frontend/static/js/bundled/
 .DS_Store
 *.pyc
 *.swp
