@@ -14,7 +14,6 @@ from factory import Factory, Sequence, LazyAttribute, post_generation
 from flask.ext.security.utils import encrypt_password
 
 from app.models.users import User, Role
-from app.models.todos import Todo
 from app.framework.sql import db
 
 class BaseFactory(Factory):
@@ -31,10 +30,6 @@ class RoleFactory(BaseFactory):
     FACTORY_FOR = Role
     name = 'admin'
     description = 'Administrator'
-
-class TodoFactory(BaseFactory):
-    FACTORY_FOR = Todo
-    title = Sequence(lambda n: "todo #{0}".format(n))
 
 class UserFactory(BaseFactory):
     FACTORY_FOR = User

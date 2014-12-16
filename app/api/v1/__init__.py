@@ -9,7 +9,6 @@
 
     templated from https://github.com/ryanolson/cookiecutter-webapp
 """
-# from .todos import TodosView
 # from .applications import ApplicationsView
 # from .awards import AwardsView
 # from .documents import DocumentsView
