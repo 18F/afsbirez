@@ -1,4 +1,4 @@
 {
-    "directory": "app/static/lib",
-    "json": "bower.json"
+  "directory": "bower_components",
+  "analytics": false
 }

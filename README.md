@@ -33,14 +33,14 @@ $ source env/bin/activate
 ```
 you should now see (env) on your command prompt
 
-* Install the latest Node.js
+* Install the latest [Node.js](http://nodejs.org/download/)
 * Update NPM to the latest version 
 ```
 $ npm install npm -g
 ```
-* Install bower and grunt command line clients
+* Install bower and grunt command line clients, as well as grunt dependencies
 ```
-$ npm install -g bower grunt-cli
+$ npm install
 ```
 
 * Install Sass and Compass gems
@@ -49,14 +49,9 @@ $ gem install sass
 $ gem install compass
 ```
 
-* Install grunt dependencies
+* Perform default grunt tasks, including downloading the client side dependencies
 ```
-$ npm install
-```
-
-* Run the bower to install all the client-side javascript dependencies
-```
-$ bower install
+$ grunt
 ```
 
 ### Configure the Database
@@ -69,23 +64,33 @@ host    all             all             127.0.0.1/32            trust
 
 Create a database and role with your system user name
 ```
-$ psql -c 'create role afsbirez login password 'afsbirez';' -U postgres
-$ psql -c 'CREATE DATABASE afsbirez_dev WITH OWNER afsbirez;' -U postgres
+$ psql -c 'create role sbirez password 'sbirez';' -U postgres
+$ psql -c 'CREATE DATABASE sbirezdev WITH OWNER sbirez;' -U postgres
 ```
 
-### Running the Server
+Create the database tables on 'sbirezdev'
+```
+$ python manage.py db upgrade
+```
 
-Use TBD to run the server. This will also open up a browser window to your application.
-TBD
+### Running the Server using the Werkzeug built-in run_simple WSGI server. Please note that this is for
+### development only.
 
-The first time you run the 
+```
+$ python manage.py runserver
+```
 
 ### Running Tests
 
 First create a postgres database and test user
 
 ```
-$ psql -c `create database afsbirez_test WITH OWNER afsbirez;` -U postgres
+$ psql -c `create database sbireztest WITH OWNER sbirez;` -U postgres
+```
+
+Next, run the tests
+```
+$ python manage.py test
 ```
 
 ### License: Public Domain

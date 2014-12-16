@@ -1,0 +1,34 @@
+{% extends "layouts/pjax.html" %}
+{% import "macros/js.html" as js %}
+
+{% block h5bp_css %}
+  {% assets "h5bp_css" %}<link rel="stylesheet" href="{{ ASSET_URL }}">{% endassets %}
+  {% block css %}{% endblock %}
+{% endblock %}
+
+{% block h5bp_shiv %}
+  <!--[if lt IE 9]>
+    {% assets "h5bp_shiv" %}<script src="{{ ASSET_URL }}"></script>{% endassets %}
+  <![endif]-->
+{% endblock %}
+
+{% block h5bp_head_js %}
+  {% assets "h5bp_head_js" %}<script src="{{ ASSET_URL }}"></script>{% endassets %}
+{% endblock %}
+
+{% block h5bp_body %}
+  {% if not config.USE_PJAX and "X-PJAX" not in request.headers -%}
+    {% block header %}{% endblock %}
+  {% endif %}
+  {% block contents %}{% endblock %}
+  {% if not config.USE_PJAX and "X-PJAX" not in request.headers -%}
+    {% block footer %}{% endblock %}
+  {% endif %}
+{% endblock %}
+
+{% block h5bp_body_js %}
+  {% block requirejs -%}
+    {{ js.require() }}
+  {%- endblock %}
+  {% block js %}{% endblock %}
+{% endblock %}

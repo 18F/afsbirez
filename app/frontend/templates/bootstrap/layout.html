@@ -1,0 +1,5 @@
+{%- if config.USE_CDN -%}
+{%- extends "bootstrap/base_cdn.html" -%}
+{%- else -%}
+{%- extends "bootstrap/base.html" -%}
+{%- endif -%}
