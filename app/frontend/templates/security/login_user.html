@@ -1,0 +1,65 @@
+{% extends "security/base.html" %}
+
+{% macro social_login(provider_id, display_name) %}
+  <form class="form form-social" action="{{ url_for('social.login', provider_id=provider_id) }}" method="POST">
+    <button type="submit" class="btn btn-lg btn-primary btn-block">Login with {{ display_name }}</button>
+  </form>
+{% endmacro %}
+
+{% block body %}
+  {%- if security.registerable -%}
+  <div class="row">
+  <div class="alert alert-warning col-xs-12 col-md-8 col-md-offset-2">
+    Before you can login, you need to <a href="{{ url_for('security.register') }}">register</a>.
+  </div>
+  </div>
+  {%- endif %}
+  <div class="top-buffer hidden-xs"></div>
+  <div class="row">
+    <div class="col-xs-12 col-md-6 col-md-offset-3">
+
+      <!-- Login Content -->
+      <ul class="nav nav-tabs" id="login-tabs">
+        <li class="active"><a href="#login-password" data-toggle="tab">Login</a></li>
+        <!-- <li><a href="#login-social" data-toggle="tab">Passwords Suck</a></li> -->
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade in active" id="login-password">
+          <form class="form-signin well" method="POST" action="{{ url_for('security.login') }}" id="login_form">
+            {{ login_user_form.hidden_tag() }}
+            {{ render_field(login_user_form.email) }}
+            {{ render_field(login_user_form.password) }}
+            <div class="checkbox">
+              <label class="checkbox">
+              {{ login_user_form.remember }} Remember me
+              </label>
+            <div>
+            {{ login_user_form.submit(class="btn btn-lg btn-primary btn-block") }}
+          </form>
+          {%- if security.recoverable -%}
+          <a href="{{ url_for('security.forgot_password') }}">Forgot your password?</a>
+          {%- endif %}
+        </div>
+        <!--
+        <div class="tab-pane fade" id="login-social">
+          <div class="well">
+            <p>To login without a password, you must first make the connections from your profile.</p>
+            <hr>
+            {# social_login('facebook', 'Facebook') #}
+            {# social_login('strava', 'Strava') #}
+          </div>
+        </div>
+        -->
+      </div>
+      <!-- End Login -->
+
+    </div>
+  </div>
+{% endblock %}
+
+{% block js_btm %}
+  {{ super() }}
+  <script>
+    $('.input-popover').popover();
+  </script>
+{% endblock %}

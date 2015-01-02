@@ -1,0 +1,5 @@
+{% macro require(main='main') %}
+  {% assets "h5bp_body_js" -%}
+  <script data-main={{ url_for('static', filename=('js/' ~ main ~ '.js')) }} src="{{ ASSET_URL }}"></script>
+  {%- endassets %}
+{% endmacro %}
