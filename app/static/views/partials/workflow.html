@@ -6,7 +6,8 @@
           <span class="label label-success">{{section.name}}</span>
           <ul>
             <li ng-repeat="state in section.states">
-              <a href="#" ng-click="changeState(state.id)"><span class="label" ng-class="{ 'current-state-list-item label-primary': isCurrentState(state.id), 'label-default': !isCurrentState(state.id) }">{{state.name}}</span></a>
+              <a href="#" ng-click="changeState(state.id)">
+                <span class="label" ng-class="getStateStatus(state.id)">{{state.name}}</span></a>
             </li>
           </ul>
         </li>

@@ -7,5 +7,4 @@ angular.module('sbirezApp')
       console.log(list);
       $scope.proposalList = list.proposals;
     });
-    console.log('Proposal List Ctrl');
   });
