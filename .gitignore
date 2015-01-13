@@ -1,4 +1,10 @@
+app/frontend/static/js/sbirez.min.js
+app/frontend/static/css/sbirez.min.css
+app/frontend/static/.webassets-cache/
+app/frontend/static/js/bundled/
+.DS_Store
 *.pyc
+*.swp
 main.css
 node_modules
 public
@@ -13,3 +19,9 @@ env
 .idea
 bower_components
 lib
+app/frontend/old_static
+app/frontend/static/fonts
+app/frontend/static/css/vendor
+app/frontend/static/js/vendor
+app/frontend/static/swf
+app/frontend/static/webassets-external

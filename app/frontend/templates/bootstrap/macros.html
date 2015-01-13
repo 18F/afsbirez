@@ -1,0 +1,74 @@
+{% macro modal_dialog(id) %}
+  <div class="modal fade" id="{{ id }}" tabindex="-1" role="dialog" aria-labelledby="{{ id }}_label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        {{ caller() }}
+      </div>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro modal_dialog_header(header) %}
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">{{ header }}</h4>
+  </div>
+{% endmacro %}
+
+{% macro modal_dialog_body() %}
+  <div class="modal-body">
+    {{ caller() }}
+  </div>
+{% endmacro %}
+
+{% macro modal_dialog_footer() %}
+  <div class="modal-footer">
+    {{ caller() }}
+  </div>
+{% endmacro %}
+
+
+{% macro simple_panel(heading=None, footer=None, category=None, heading_url=None) %}
+  <div class="panel {% if category %}panel-{{category}}{% endif %}">
+    {% if heading %}
+      <div class="panel-heading">
+        {% if heading_url %}
+          <a href="{{heading_url}}">{{heading}}</a>
+        {% else %}
+          {{heading}}
+        {% endif %}
+      </div>
+    {% endif %}
+    <div class="panel-body">
+      {{ caller() }}
+    </div>
+    {% if footer %}
+      <div class="panel-footer">{{footer}}</div>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro alert(message, category='success') %}
+  {% if category == 'error' %}
+    {% set category = 'danger' %}
+  {% endif %}
+  {% if category not in ['success', 'info', 'warning', 'danger'] %}
+    {% set category = 'info' %}
+  {% endif %}
+  <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+    {{ message }}
+  </div>
+{% endmacro %}
+
+{%- macro flash_messages() -%}
+  {%- with messages = get_flashed_messages(with_categories=True) -%}
+  {%- if messages -%}
+  <div id='flash_message_container'>
+    {%- for category, msg in messages %}
+    {{ alert(msg, category) }}
+    {%- endfor -%}
+  </div>
+  {%- endif -%}
+  {%- endwith -%}
+{%- endmacro %}

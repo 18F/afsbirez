@@ -23,7 +23,7 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: {
       // configurable paths
-      app: require('./bower.json').appPath || 'app/static',
+      app: require('./bower.json').appPath || 'app/frontend/static',
       dist: 'app/dist'
     },
     sync: {
@@ -97,7 +97,7 @@ module.exports = function (grunt) {
             middleware: function (connect) {
               return [
                 proxySnippet,
-                connect.static(require('path').resolve('app/static'))
+                connect.static(require('path').resolve('app/frontend/static'))
               ];
             }
           }
@@ -115,9 +115,9 @@ module.exports = function (grunt) {
       ],
       test: {
         options: {
-          jshintrc: 'test/client/.jshintrc'
+          jshintrc: 'tests/client/.jshintrc'
         },
-        src: ['test/client/spec/{,*/}*.js']
+        src: ['tests/client/spec/{,*/}*.js']
       }
     },
 

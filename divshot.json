@@ -1,0 +1,6 @@
+{
+  "name": "sbirez",
+  "root": "./app",
+  "clean_urls": true,
+  "routes": { "**": "templates/index.html" }
+}
