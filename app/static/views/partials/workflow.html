@@ -1,0 +1,56 @@
+<div>
+  <div class="row">
+    <div class="col-xs-2 workflow-sidebar" ng-if="includeSidebar === 'true'">
+      <ul>
+        <li ng-repeat="section in workflow.sections">
+          <span class="label label-success">{{section.name}}</span>
+          <ul>
+            <li ng-repeat="state in section.states">
+              <a href="#" ng-click="changeState(state.id)">
+                <span class="label" ng-class="getStateStatus(state.id)">{{state.name}}</span></a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="col-xs-9 currentState">
+      <h3 class="state-title">{{currentState.name}}</h3>
+      <p>{{currentState.description}}</p>
+      <form>
+        <div ng-repeat="field in currentState.fields">
+          <span ng-if="field.type === 'text'">
+            <label for="{{field.id}}">{{field.name}}</label>
+            <input id="{{field.id}}" 
+                   placeholder="{{field.name}}" 
+                   class="form-control" 
+                   ng-model="currentStateData[field.id]"
+                   type="text">
+            </input>
+          </span>
+          <span ng-if="field.type === 'checkbox'">
+            <label>
+              <input id="{{field.id}}"
+                     ng-model="currentStateData[field.id]"
+                     type="checkbox">
+                {{field.name}}
+              </input>
+            </label>
+          </span>
+          <p ng-if="field.invalid">{{field.helpMessage}}</p>
+        </div>
+      </form>
+      <div class="pull-right">
+        <span>Step {{currentStateIndex}} of {{getStateCount()}}</span>
+        <button ng-if="showBackButton()" type="button" id="prior_state" ng-click="backState()">Back</button>
+        <button ng-if="showNextButton()" type="button" id="next_state" ng-click="nextState()">Next</button>
+      </div>
+      <div class="row workflow-metro" ng-if="includeMetro === 'true'">
+        <ul class="section-indicator sections-{{workflow.sections.length}}">
+          <li class="section default" ng-class="{ 'current' : isCurrentSection(section.id) }"  ng-repeat="section in workflow.sections">
+            <a href="#"><div class="rotated-text">{{section.name}}</div></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
