@@ -11,7 +11,7 @@ angular.module('sbirezApp')
     $scope.availableProposals = [];
     $scope.selectedProposal = 'Please select a proposal';
 
-    $http.get('/api/proposals').success(function(data) {
+    $http.get('api/proposals').success(function(data) {
       $scope.availableProposals = data.proposals;
     });
 

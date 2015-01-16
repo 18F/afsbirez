@@ -9,10 +9,10 @@ angular.module('sbirezApp').directive('workflow', function() {
       includeMetro: '@'
     },
     templateUrl: 'static/views/partials/workflow.html',
-    controller: ['$scope', '$filter', '$window', '$location', '$http', 
+    controller: ['$scope', '$filter', '$window', '$location', '$http',
       function ($scope, $filter, $window, $location, $http) {
 
-        $scope.stateData = {}; 
+        $scope.stateData = {};
         $scope.stateData.fields = [];
 
         $http.get('api/workflowdata/1').success(function(data) {
@@ -56,7 +56,9 @@ angular.module('sbirezApp').directive('workflow', function() {
             }
           }
           var newData = {id: id};
-          if (!$scope.stateData.fields) $scope.stateData.fields = [];
+          if (!$scope.stateData.fields) {
+            $scope.stateData.fields = [];
+          }
           $scope.stateData.fields.push(newData);
           return $scope.stateData.fields[$scope.stateData.fields.length - 1];
         };
@@ -147,8 +149,9 @@ angular.module('sbirezApp').directive('workflow', function() {
 
         $scope.isStateCompleted = function(state) {
           for (var i = 0; i < $scope.stateData.fields.length; i++) {
-            if ($scope.stateData.fields[i].id == state && $scope.stateData.fields[i].validated)
+            if ($scope.stateData.fields[i].id === state && $scope.stateData.fields[i].validated) {
               return true;
+            }
           }
           return false;
         };

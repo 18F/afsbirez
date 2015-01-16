@@ -14,7 +14,7 @@ describe('Controller: DocumentListCtrl', function () {
     $httpBackend = _$httpBackend_;
     $httpBackend.whenGET('static/views/partials/main.html').respond({});
     $httpBackend.whenGET('static/views/partials/search.html').respond({});
-    $httpBackend.expectGET('/api/documents')
+    $httpBackend.expectGET('api/documents')
       .respond({'files':[
         {'name':'file1','id':1},
         {'name':'file2','id':2},
