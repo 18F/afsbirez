@@ -15,7 +15,7 @@ describe('Controller: DocumentUploadEditCtrl', function () {
     $httpBackend = _$httpBackend_;
     $httpBackend.whenGET('static/views/partials/main.html').respond({});
     $httpBackend.whenGET('static/views/partials/search.html').respond({});
-    $httpBackend.expectGET('/api/proposals')
+    $httpBackend.expectGET('api/proposals')
       .respond({'proposals':[
         {'name':'proposal1','id':1},
         {'name':'proposal2','id':2},

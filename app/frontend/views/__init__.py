@@ -10,8 +10,8 @@
     templated from https://github.com/ryanolson/cookiecutter-webapp
 """
 from .auth import AuthView
-from .legal import LegalView
+from .main import MainView 
 
 def init_app(app):
     AuthView.register(app)
-    LegalView.register(app)
+    MainView.register(app)

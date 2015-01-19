@@ -9,10 +9,10 @@ angular.module('sbirezApp').directive('workflow', function() {
       includeMetro: '@'
     },
     templateUrl: 'static/views/partials/workflow.html',
-    controller: ['$scope', '$filter', '$window', '$location', 
-      function ($scope, $filter, $window, $location) {
+    controller: ['$scope', '$filter', '$window', '$location', '$http',
+      function ($scope, $filter, $window, $location, $http) {
 
-        $scope.stateData = {}; 
+        $scope.stateData = {};
         $scope.stateData.fields = [];
 
         $http.get('api/workflowdata/1').success(function(data) {
@@ -30,7 +30,9 @@ angular.module('sbirezApp').directive('workflow', function() {
         var getStateById = function(id) {
           for (var i = 0; i < $scope.workflow.sections.length; i++) {
             for (var j = 0; j < $scope.workflow.sections[i].states.length; j++) {
-              if ($scope.workflow.sections[i].states[j].id === id) return $scope.workflow.sections[i].states[j];
+              if ($scope.workflow.sections[i].states[j].id === id) {
+                return $scope.workflow.sections[i].states[j];
+              }
             }
           }
         };
@@ -38,7 +40,9 @@ angular.module('sbirezApp').directive('workflow', function() {
         var getSectionIdByStateId = function(id) {
           for (var i = 0; i < $scope.workflow.sections.length; i++) {
             for (var j = 0; j < $scope.workflow.sections[i].states.length; j++) {
-              if ($scope.workflow.sections[i].states[j].id === id) return $scope.workflow.sections[i].id;
+              if ($scope.workflow.sections[i].states[j].id === id) {
+                return $scope.workflow.sections[i].id;
+              }
             }
           }
         };
@@ -52,28 +56,37 @@ angular.module('sbirezApp').directive('workflow', function() {
             }
           }
           var newData = {id: id};
-          if (!$scope.stateData.fields) $scope.stateData.fields = [];
+          if (!$scope.stateData.fields) {
+            $scope.stateData.fields = [];
+          }
           $scope.stateData.fields.push(newData);
           return $scope.stateData.fields[$scope.stateData.fields.length - 1];
         };
 
-        $scope.currentStateIndex = 1;
-        $scope.currentState = $scope.workflow.sections[0].states[0];
-        $scope.currentStateData = getStateDataById($scope.currentState.id);
-        $scope.currentSectionId = $scope.workflow.sections[0].id;
-
         $scope.showBackButton = function() {
-          return $scope.currentState.id !== $scope.workflow.sections[0].states[0].id; 
+          if ($scope.workflow && $scope.workflow.sections) {
+            return $scope.currentState.id !== $scope.workflow.sections[0].states[0].id;
+          }
+          else {
+            return false;
+          }
         };
 
         $scope.showNextButton = function() {
-          return $scope.currentState.nextState !== undefined && $scope.currentState.nextState !== null;
+          if ($scope.workflow && $scope.workflow.sections) {
+            return $scope.currentState.nextState !== undefined && $scope.currentState.nextState !== null;
+          }
+          else {
+            return false;
+          }
         };
 
         $scope.getStateCount = function() {
           var count = 0;
-          for (var i = 0; i < $scope.workflow.sections.length; i++) {
-            count += $scope.workflow.sections[i].states.length;
+          if ($scope.workflow && $scope.workflow.sections) {
+            for (var i = 0; i < $scope.workflow.sections.length; i++) {
+              count += $scope.workflow.sections[i].states.length;
+            }
           }
           return count;
         };
@@ -100,7 +113,7 @@ angular.module('sbirezApp').directive('workflow', function() {
           }
           $scope.currentStateData.validated = validated;
           return validated;
-        }
+        };
 
         $scope.nextState = function() {
           validate();
@@ -136,8 +149,9 @@ angular.module('sbirezApp').directive('workflow', function() {
 
         $scope.isStateCompleted = function(state) {
           for (var i = 0; i < $scope.stateData.fields.length; i++) {
-            if ($scope.stateData.fields[i].id == state && $scope.stateData.fields[i].validated)
+            if ($scope.stateData.fields[i].id === state && $scope.stateData.fields[i].validated) {
               return true;
+            }
           }
           return false;
         };
