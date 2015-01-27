@@ -12,6 +12,7 @@
     templated from https://github.com/ryanolson/cookiecutter-webapp
 """
 import pytest
+import six
 from jsonschema import Draft4Validator
 from tests.factories import UserFactory
 
@@ -54,7 +55,7 @@ class TestAPI:
     def test_rel_index_is_valid_json_schema(self, testapi):
         resp = testapi.get("/api/tests/rels")
 
-        for schema in resp.json.itervalues():
+        for schema in six.itervalues(resp.json):
             schema_errors = Draft4Validator.check_schema(schema)
             schema_errors.should.be.none
 
