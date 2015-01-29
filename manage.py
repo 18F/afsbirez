@@ -80,13 +80,13 @@ def _make_context():
         'User': User
     }
 
-def servertest():
+def server_test():
     """Run the server side tests"""
     import pytest
     exit_code = pytest.main(['tests', '--verbose'])
     return exit_code
 
-def clienttest():
+def client_test():
     """Run the frontend tests."""
     import subprocess
     return subprocess.call(["node_modules/karma/bin/karma", "start"])
@@ -96,11 +96,13 @@ def test(type):
     """Run the tests."""
     print type
     if type == "server":
-        return servertest()
+        return server_test()
     elif type == "client":
-        return clienttest()
+        return client_test()
     else:
-        return servertest() and clienttest()
+        server_exit_code = server_test()
+        client_exit_code = client_test()
+        return server_exit_code and client_exit_code
 
 manager.add_command('runserver', WSGI(host='0.0.0.0'), )
 manager.add_command('worker', Worker())
