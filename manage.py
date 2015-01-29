@@ -46,9 +46,23 @@ class WSGI(Server):
         if use_reloader is None:
             use_reloader = use_debugger
 
+        extra_files = None
+        if use_debugger is not None:
+            extra_dirs = ['app/frontend/static', 'tests']
+            extra_files = extra_dirs[:]
+            ignore_exts = ['.swp']
+            for extra_dir in extra_dirs:
+                for dirname, dirs, files in os.walk(extra_dir):
+                    for filename in files:
+                        filename = os.path.join(dirname, filename)
+                        file, ext = os.path.splitext(filename)
+                        if os.path.isfile(filename) and ext not in ignore_exts:
+                            extra_files.append(filename)
+
         run_simple(host, port, application,
                    use_debugger=use_debugger,
                    use_reloader=use_reloader,
+                   extra_files=extra_files,
                    threaded=threaded,
                    processes=processes,
                    passthrough_errors=passthrough_errors,
@@ -66,12 +80,27 @@ def _make_context():
         'User': User
     }
 
-@manager.command
-def test():
-    """Run the tests."""
+def servertest():
+    """Run the server side tests"""
     import pytest
     exit_code = pytest.main(['tests', '--verbose'])
     return exit_code
+
+def clienttest():
+    """Run the frontend tests."""
+    import subprocess
+    return subprocess.call(["node_modules/karma/bin/karma", "start"])
+
+@manager.option('-t', '--type', dest='type', default='all')
+def test(type):
+    """Run the tests."""
+    print type
+    if type == "server":
+        return servertest()
+    elif type == "client":
+        return clienttest()
+    else:
+        return servertest() and clienttest()
 
 manager.add_command('runserver', WSGI(host='0.0.0.0'), )
 manager.add_command('worker', Worker())
