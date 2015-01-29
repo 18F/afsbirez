@@ -6,7 +6,6 @@
     "json3": "~3.2.6",
     "es5-shim": "~2.1.0",
     "jquery": ">=1.11.0",
-    "bootstrap-sass-official": "~3.1.1",
     "angular-resource": ">=1.2.*",
     "angular-cookies": ">=1.2.*",
     "angular-sanitize": ">=1.2.*",
@@ -14,24 +13,12 @@
     "ng-file-upload": "~1.5.1",
     "ngDialog": "~0.2.11",
     "angular-ui-router": "~0.2.10",
-    "backbone": "",
     "bootstrap": "~3",
-    "font-awesome": "",
-    "html5-boilerplate": "",
-    "html5shiv": "",
-    "lodash": "~2.4.1",
-    "modernizr": "",
-    "pjax": "",
-    "react": "",
-    "requirejs": "",
-    "respond": "",
-    "zeroclipboard": ""
+    "font-awesome": ""
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",
-    "angular-scenario": ">=1.2.*",
-    "jasmine": "~2.0.1",
-    "karma": "~0.2.2"
+    "angular-scenario": ">=1.2.*"
   },
   "testPath": "test/client/spec",
   "resolutions": {
