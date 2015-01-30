@@ -38,7 +38,7 @@ you should now see (env) on your command prompt
 ```
 $ npm install npm -g
 ```
-* Install bower and grunt command line clients, as well as grunt dependencies
+* Install the bower command line clients, as well as the karma test runner. 
 ```
 $ npm install
 ```
@@ -49,9 +49,9 @@ $ gem install sass
 $ gem install compass
 ```
 
-* Perform default grunt tasks, including downloading the client side dependencies
+* install client side dependencies via bower
 ```
-$ grunt
+$ bower install
 ```
 
 ### Configure the Database
