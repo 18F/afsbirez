@@ -17,7 +17,6 @@ module.exports = function(config) {
       'app/frontend/static/lib/angular-cookies/angular-cookies.js',
       'app/frontend/static/lib/angular-sanitize/angular-sanitize.js',
       'app/frontend/static/lib/angular-route/angular-route.js',
-      'app/frontend/static/lib/angular-schema-form/dist/schema-form.min.js',
       'app/frontend/static/lib/ng-file-upload/angular-file-upload.js',
       'app/frontend/static/lib/ngDialog/js/ngDialog.min.js',
       'app/frontend/static/lib/angular-ui-router/release/angular-ui-router.js',

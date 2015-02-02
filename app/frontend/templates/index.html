@@ -10,18 +10,9 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(app) styles/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="static/lib/ngDialog/css/ngDialog.css" />
-    <link rel="stylesheet" href="static/lib/ngDialog/css/ngDialog-theme-default.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css({.tmp,app}) styles/main.css -->
-    <link rel="stylesheet" href="static/css/main.css">
-    <link rel="stylesheet" href="static/css/ngdialog-theme-login.css">
-    <link rel="stylesheet" href="static/css/ngdialog-theme-logout.css">
-    <!-- endbuild -->
+    {% assets "combined_css" %}
+      <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
   </head>
   <body ng-app="sbirezApp">
     <!--[if lt IE 7]>
@@ -51,54 +42,12 @@
     <script src="static/lib/json3/lib/json3.min.js"></script>
     <![endif]-->
 
+    {% assets "bower_js" %}
+      <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 
-    <!-- build:js(app) scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="static/lib/jquery/dist/jquery.js"></script>
-    <script src="static/lib/angular/angular.js"></script>
-    <script src="static/lib/angular-resource/angular-resource.js"></script>
-    <script src="static/lib/angular-cookies/angular-cookies.js"></script>
-    <script src="static/lib/angular-sanitize/angular-sanitize.js"></script>
-    <script src="static/lib/angular-route/angular-route.js"></script>
-    <script src="static/lib/ng-file-upload/angular-file-upload.js"></script>
-    <script src="static/lib/ngDialog/js/ngDialog.js"></script>
-    <script src="static/lib/angular-ui-router/release/angular-ui-router.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="static/js/app.js"></script>
-        <script src="static/js/filters/truncate.js"></script>
-        <script src="static/js/directives/workflow.js"></script>
-        <script src="static/js/directives/pagination.js"></script>
-        <script src="static/js/directives/header.js"></script>
-        <script src="static/js/directives/footer.js"></script>
-        <script src="static/js/controllers/main.js"></script>
-        <script src="static/js/controllers/appmain.js"></script>
-        <script src="static/js/controllers/search.js"></script>
-        <script src="static/js/controllers/form.js"></script>
-        <script src="static/js/controllers/contact.js"></script>
-        <script src="static/js/controllers/activity.js"></script>
-        <script src="static/js/controllers/account.js"></script>
-        <script src="static/js/controllers/accountUser.js"></script>
-        <script src="static/js/controllers/accountOrganization.js"></script>
-        <script src="static/js/controllers/savedOpps.js"></script>
-        <script src="static/js/controllers/savedSearches.js"></script>
-        <script src="static/js/controllers/history.js"></script>
-        <script src="static/js/controllers/notification.js"></script>
-        <script src="static/js/controllers/documentList.js"></script>
-        <script src="static/js/controllers/document.js"></script>
-        <script src="static/js/controllers/documentUpload.js"></script>
-        <script src="static/js/controllers/documentUploadEdit.js"></script>
-        <script src="static/js/controllers/proposalList.js"></script>
-        <script src="static/js/controllers/proposal.js"></script>
-        <script src="static/js/controllers/adminuser.js"></script>
-        <script src="static/js/services/authsvc.js"></script>
-        <script src="static/js/services/dialogsvc.js"></script>
-        <script src="static/js/services/usersvc.js"></script>
-        <script src="static/js/services/oppsvc.js"></script>
-        <script src="static/js/services/searchsvc.js"></script>
-        <script src="static/js/services/tokensvc.js"></script>
-        <!-- endbuild -->
+    {% assets "angular_js" %}
+      <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 </body>
 </html>

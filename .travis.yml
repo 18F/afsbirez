@@ -9,17 +9,14 @@ before_install:
   - 'sh -e /etc/init.d/xvfb start'
 before_script:
   - 'npm install npm -g'
-  - 'npm install grunt'
-  - 'npm install -g bower grunt-cli'
+  - 'npm install -g bower'
   - 'gem install sass'
   - 'gem install compass'
   - 'npm install'
   - psql -c 'create user sbirez;' -U postgres
   - psql -c 'create database sbirezdev owner=sbirez;' -U postgres
   - 'python manage.py db upgrade'
-  - 'grunt'
 install:
   - "pip install -r requirements.txt"
 script:
-- 'grunt --gruntfile Gruntfile.js test'
 - 'python manage.py test'
