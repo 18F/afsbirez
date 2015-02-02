@@ -13,41 +13,75 @@ import os
 from flask.ext.assets import Bundle, Environment
 
 root_directory = os.path.dirname(os.path.abspath(__file__))
-assets_directory = os.path.join(root_directory, 'client')
-bower_directory = os.path.join(root_directory, 'static')
+assets_directory = os.path.join(root_directory, 'static')
 
-# h5bp_css = Bundle(
-#     "css/vendor/bootstrap.css",
-#     "css/vendor/font-awesome.css",
-#     "css/sbirez.css",
-#     filters="cssmin",
-#     output="css/sbirez.min.css"
-# )
-
-h5bp_shiv = Bundle(
-    "js/vendor/html5shiv.js",
-    "js/vendor/respond.js",
+bower_js = Bundle(
+    "lib/jquery/dist/jquery.js",
+    "lib/angular/angular.js",
+    "lib/angular-resource/angular-resource.js",
+    "lib/angular-cookies/angular-cookies.js",
+    "lib/angular-sanitize/angular-sanitize.js",
+    "lib/angular-route/angular-route.js",
+    "lib/ng-file-upload/angular-file-upload.js",
+    "lib/ngDialog/js/ngDialog.min.js",
+    "lib/angular-ui-router/release/angular-ui-router.js",
     filters="jsmin",
-    output="js/bundled/shiv.js"
+    output="js/bower.min.js"
 )
 
-h5bp_head_js = Bundle(
-    "js/vendor/modernizr.js",
+angular_js = Bundle(
+    "js/app.js",
+    "js/filters/truncate.js",
+    "js/directives/workflow.js",
+    "js/directives/pagination.js",
+    "js/directives/header.js",
+    "js/directives/footer.js",
+    "js/controllers/main.js",
+    "js/controllers/appmain.js",
+    "js/controllers/search.js",
+    "js/controllers/form.js",
+    "js/controllers/contact.js",
+    "js/controllers/activity.js",
+    "js/controllers/account.js",
+    "js/controllers/accountUser.js",
+    "js/controllers/accountOrganization.js",
+    "js/controllers/savedOpps.js",
+    "js/controllers/savedSearches.js",
+    "js/controllers/history.js",
+    "js/controllers/notification.js",
+    "js/controllers/documentList.js",
+    "js/controllers/document.js",
+    "js/controllers/documentUpload.js",
+    "js/controllers/documentUploadEdit.js",
+    "js/controllers/proposalList.js",
+    "js/controllers/proposal.js",
+    "js/controllers/adminuser.js",
+    "js/controllers/topic.js",
+    "js/services/authsvc.js",
+    "js/services/dialogsvc.js",
+    "js/services/usersvc.js",
+    "js/services/oppsvc.js",
+    "js/services/searchsvc.js",
+    "js/services/tokensvc.js",
     filters="jsmin",
-    output="js/head.min.js"
+    output="js/angular.min.js"
 )
 
-# h5bp_body_js_devel = Bundle(
-#     "js/vendor/require.js",
-#     filters="jsmin",
-#     output="js/develop.min.js"
-# )
+combined_sass = Bundle(
+    "sass/main.scss",
+    filters="scss",
+    output="css/main.min.css"
+)
 
-# h5bp_body_js_production = Bundle(
-#     "js/vendor/require.js",
-#     filters="jsmin",
-#     output="js/sbirez.min.js"
-# )
+combined_css = Bundle(
+    "lib/ngDialog/css/ngDialog.css",
+    "lib/ngDialog/css/ngDialog-theme-default.css",
+    "css/ngdialog-theme-login.css",
+    "css/ngdialog-theme-logout.css",
+    combined_sass,
+    filters="cssmin",
+    output="css/sbirez.min.css"
+)
 
 def init_app(app):
     assets = Environment(app)
@@ -57,10 +91,6 @@ def init_app(app):
 
     assets.append_path(assets_directory)
     assets.append_path(app.static_folder)
-    # assets.register("h5bp_css", h5bp_css)
-    assets.register("h5bp_shiv", h5bp_shiv)
-    assets.register("h5bp_head_js", h5bp_head_js)
-    # if assets.debug:
-    #     assets.register("h5bp_body_js", h5bp_body_js_devel)
-    # else:
-    #     assets.register("h5bp_body_js", h5bp_body_js_production)
+    assets.register("bower_js", bower_js)
+    assets.register("angular_js", angular_js)
+    assets.register("combined_css", combined_css)
