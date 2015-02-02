@@ -3,3 +3,4 @@ create schema import;
 set search_path=import;
 \i topics.sql
 \i transfer_schemas.sql
+\i fulltext.sql

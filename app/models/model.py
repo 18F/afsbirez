@@ -1,6 +1,7 @@
 # coding: utf-8
 from flask.ext.sqlalchemy import SQLAlchemy
 import sqlalchemy as sa
+from sqlalchemy.dialects import postgresql as pg
 # Define the database functions
 
 from ..framework.sql import (Model, db)
@@ -161,6 +162,7 @@ class Topic(Model):
     pre_release_date = db.Column(db.DateTime(), nullable=False)
     proposals_begin_date = db.Column(db.DateTime(), nullable=False)
     proposals_end_date = db.Column(db.DateTime(), nullable=False)
+    full_text = pg.TSVECTOR()
 
 
 topicsareas = db.Table(
@@ -226,3 +228,5 @@ class ParticipatingComponent(Model):
     participatingcomponent = db.Column(db.Text(), nullable=False, unique=True)
     topics = db.relationship('Topic', secondary=participatingcomponentstopics,
                              backref=db.backref('participating_components'))
+
+
