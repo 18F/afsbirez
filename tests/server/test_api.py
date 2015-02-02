@@ -71,6 +71,12 @@ class TestAPI:
         assert 'token' in resp.json
         return resp.json['token']
 
+    def test_topic_search(self, testapi):
+        resp = testapi.get('/api/tests/topics?q=KC-135')
+        resp.hal.links.should_not.be.empty
+        import ipdb; ipdb.set_trace()
+
+
 
 class TestAPILoggingIn:
 

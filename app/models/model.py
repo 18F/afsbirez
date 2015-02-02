@@ -16,11 +16,11 @@ class Content(Model):
     content = db.Column(db.LargeBinary)
     created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
     updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now(), onupdate=db.func.now())
-    
+
     document_id = db.Column(db.Integer,
                             db.ForeignKey(u'documents.id', ondelete=u'RESTRICT', onupdate=u'CASCADE'))
 
-    
+
 documentsproposals = db.Table(
     'documentsproposals',
     db.Column('document_id', db.Integer, db.ForeignKey('documents.id')),
@@ -48,23 +48,14 @@ class Document(Model):
     filepath = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
     updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now(), onupdate=db.func.now())
-    
+
     organization_id = db.Column(db.Integer,
                                 db.ForeignKey(u'organizations.id', ondelete=u'RESTRICT', onupdate=u'CASCADE'))
     contents = db.relationship('Content', backref='document')
-    proposals = db.relationship('Proposal', secondary=documentsproposals, 
-                                backref=db.backref('document'))
-    keywords = db.relationship('Keyword', secondary=documentskeywords, 
-                                backref=db.backref('document'))
-
-
-class Keyword(Model):
-    __tablename__ = 'keywords'
-
-
-    keyword = db.Column(db.String(255))
-    created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
-    updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
+    proposals = db.relationship('Proposal', secondary=documentsproposals,
+                                backref=db.backref('documents'))
+    keywords = db.relationship('Keyword', secondary=documentskeywords,
+                                backref=db.backref('documents'))
 
 
 organizationsusers = db.Table(
@@ -85,12 +76,12 @@ class Organization(Model):
     ein = db.Column(db.String(255))
     created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
     updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
-    
+
     documents = db.relationship('Document', backref='organization')
-    users = db.relationship('User', secondary=organizationsusers, 
+    users = db.relationship('User', secondary=organizationsusers,
                             backref=db.backref('organizations'))
     proposals = db.relationship('Proposal', backref='organization')
-    
+
 
 class Proposal(Model):
     __tablename__ = 'proposals'
@@ -103,7 +94,7 @@ class Proposal(Model):
     end_date = db.Column(db.DateTime(True))
     created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
     updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
-    
+
     organization_id = db.Column(db.Integer,
                                 db.ForeignKey(u'organizations.id', ondelete=u'RESTRICT', onupdate=u'CASCADE'))
     workflows = db.relationship('Workflow', backref='proposal')
@@ -116,11 +107,11 @@ class Workflow(Model):
     description = db.Column(db.Text)
     created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
     updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
-    proposal_id = db.Column(db.Integer, 
+    proposal_id = db.Column(db.Integer,
                             db.ForeignKey(u'proposals.id', ondelete=u'RESTRICT', onupdate=u'CASCADE'))
     steps = db.relationship('WorkflowStep', backref='workflow')
 
-    
+
 class WorkflowStep(Model):
     __tablename__ = 'workflowsteps'
 
@@ -132,11 +123,11 @@ class WorkflowStep(Model):
                             db.ForeignKey(u'workflows.id', ondelete=u'RESTRICT', onupdate=u'CASCADE'))
     created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
     updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
-    
+
     workflow_id = db.Column(db.Integer, db.ForeignKey(u'workflows.id', ondelete=u'RESTRICT', onupdate=u'CASCADE'))
     results = db.relationship('WorkflowStepResult', backref='step')
 
-    
+
 class WorkflowStepResult(Model):
     __tablename__ = 'workflowstepresults'
 
@@ -145,7 +136,93 @@ class WorkflowStepResult(Model):
     completed_at = db.Column(db.DateTime(True))
     created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
     updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
-    
+
     workflowstep_id = db.Column(db.Integer,
                                 db.ForeignKey(u'workflowsteps.id', ondelete=u'RESTRICT', onupdate=u'CASCADE'))
 
+
+class Program(Model):
+    __tablename__ = 'programs'
+
+    program = db.Column(db.Text)
+    topics = db.relationship('Topic', backref='program')
+
+
+class Topic(Model):
+    __tablename__ = 'topics'
+
+    topic_number = db.Column(db.Text(), nullable=False, unique=True)
+    solicitation_id = db.Column(db.Text(), nullable=False)
+    url = db.Column(db.Text(), nullable=False, unique=True)
+    title = db.Column(db.Text(), nullable=False)
+    program_id = db.Column(db.Integer, db.ForeignKey(u'programs.id', ondelete=u'RESTRICT', onupdate=u'CASCADE'))
+    description = db.Column(db.Text(), nullable=False)
+    objective = db.Column(db.Text(), nullable=False)
+    pre_release_date = db.Column(db.DateTime(), nullable=False)
+    proposals_begin_date = db.Column(db.DateTime(), nullable=False)
+    proposals_end_date = db.Column(db.DateTime(), nullable=False)
+
+
+topicsareas = db.Table(
+    'topicsareas',
+    db.Column('topic_id', db.Integer, db.ForeignKey('topics.id')),
+    db.Column('area_id', db.Integer, db.ForeignKey('areas.id')),
+    )
+
+
+class Area(Model):
+    __tablename__ = 'areas'
+
+    area = db.Column(db.Text(), nullable=False, unique=True)
+    topics = db.relationship('Topic', secondary=topicsareas,
+                             backref=db.backref('areas'))
+
+
+topicskeywords = db.Table(
+    'topicskeywords',
+    db.Column('topic_id', db.Integer, db.ForeignKey('topics.id')),
+    db.Column('keyword_id', db.Integer, db.ForeignKey('keywords.id')),
+    )
+
+
+class Keyword(Model):
+    __tablename__ = 'keywords'
+
+
+    keyword = db.Column(db.String(255), nullable=False, unique=True)
+    created_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
+    updated_at = db.Column(db.DateTime(True), nullable=False, default=db.func.now())
+    topics = db.relationship('Topic', secondary=topicskeywords,
+                             backref=db.backref('keywords'))
+
+
+
+class Phase(Model):
+    __tablename__ = 'phases'
+
+    phase = db.Column(db.Text(), nullable=False, unique=True)
+    topic_id = db.Column(db.Integer(), db.ForeignKey('topics.id'), nullable=False)
+    topic = db.relationship('Topic', backref='phases')
+
+
+class Reference(Model):
+    __tablename__ = 'references'
+
+    reference = db.Column(db.Text(), nullable=False, unique=True)
+    topic_id = db.Column(db.Integer(), db.ForeignKey('topics.id'), nullable=False),
+    topic = db.relationship('Topic', backref='references')
+
+
+participatingcomponentstopics = db.Table(
+    'participatingcomponentstopics',
+    db.Column('topic_id', db.Integer, db.ForeignKey('topics.id')),
+    db.Column('participatingcomponent_id', db.Integer, db.ForeignKey('participatingcomponents.id')),
+    )
+
+
+class ParticipatingComponent(Model):
+    __tablename__ = 'participatingcomponents'
+
+    participatingcomponent = db.Column(db.Text(), nullable=False, unique=True)
+    topics = db.relationship('Topic', secondary=participatingcomponentstopics,
+                             backref=db.backref('participating_components'))
