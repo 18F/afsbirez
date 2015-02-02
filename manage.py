@@ -102,7 +102,7 @@ def test(type):
     else:
         server_exit_code = server_test()
         client_exit_code = client_test()
-        return server_exit_code and client_exit_code
+        return server_exit_code or client_exit_code
 
 manager.add_command('runserver', WSGI(host='0.0.0.0'), )
 manager.add_command('worker', Worker())
