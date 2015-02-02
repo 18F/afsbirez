@@ -46,7 +46,7 @@ class WSGI(Server):
         if use_reloader is None:
             use_reloader = use_debugger
 
-        extra_files = None
+        extra_files = [] 
         if use_debugger is not None:
             extra_dirs = ['app/frontend/static', 'tests']
             extra_files = extra_dirs[:]
