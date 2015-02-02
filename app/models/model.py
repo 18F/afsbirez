@@ -211,7 +211,7 @@ class Reference(Model):
     __tablename__ = 'references'
 
     reference = db.Column(db.Text(), nullable=False, unique=True)
-    topic_id = db.Column(db.Integer(), db.ForeignKey('topics.id'), nullable=False),
+    topic_id = db.Column(db.Integer(), db.ForeignKey('topics.id'), nullable=False)
     topic = db.relationship('Topic', backref='references')
 
 

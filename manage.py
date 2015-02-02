@@ -46,7 +46,7 @@ class WSGI(Server):
         if use_reloader is None:
             use_reloader = use_debugger
 
-        extra_files = [] 
+        extra_files = []
         if use_debugger is not None:
             extra_dirs = ['app/frontend/static', 'tests']
             extra_files = extra_dirs[:]
@@ -94,7 +94,7 @@ def client_test():
 @manager.option('-t', '--type', dest='type', default='all')
 def test(type):
     """Run the tests."""
-    print type
+    print(type)
     if type == "server":
         return server_test()
     elif type == "client":
