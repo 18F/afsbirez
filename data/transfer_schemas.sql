@@ -11,7 +11,7 @@ DELETE FROM public.topicsareas;
 DELETE FROM public.topics;
 DELETE FROM public.areas;
 DELETE FROM public.programs;
-DELETE FROM public.keywords WHERE id NOT IN (SELECT keyword_id FROM documentskeywords);
+DELETE FROM public.keywords WHERE id NOT IN (SELECT keyword_id FROM public.documentskeywords);
 
 -- programs
 
@@ -107,3 +107,14 @@ SELECT participating_components, COUNT(*) FROM import.participating_components G
 
 SELECT COUNT(DISTINCT participating_components) FROM import.participating_components;
 SELECT COUNT(DISTINCT participatingcomponent_id) FROM public.participatingcomponentstopics;
+
+-- phases
+
+INSERT INTO public.phases (phase, topic_id)
+SELECT DISTINCT
+       p.phases,
+       t.id
+FROM   import.phases p
+JOIN   import.topics it ON (p.topics_id = it.topics_id)
+JOIN   public.topics t ON (it.topic_number = t.topic_number);
+
