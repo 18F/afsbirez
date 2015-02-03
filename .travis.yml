@@ -1,6 +1,6 @@
 language: python 
 python:
-  - '2.7'
+  - '3.4'
 services: postgresql
 addons:
   postgresql: "9.3"
@@ -16,6 +16,7 @@ before_script:
   - psql -c 'create user sbirez;' -U postgres
   - psql -c 'create database sbirezdev owner=sbirez;' -U postgres
   - 'python manage.py db upgrade'
+  - psql -f data/sbireztest.sql -U postgres sbirezdev
 install:
   - "pip install -r requirements.txt"
 script:
