@@ -4,6 +4,8 @@
 
 -- TODO: check against duplicates that differ only by case
 
+SET search_path=public;
+
 DELETE FROM public.participatingcomponentstopics;
 DELETE FROM public.participatingcomponents;
 DELETE FROM public.topicskeywords;
