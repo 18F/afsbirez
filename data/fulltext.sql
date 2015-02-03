@@ -1,3 +1,5 @@
+SET search_path=public;
+
 WITH subq AS (
   SELECT t.id,
          setweight(to_tsvector(string_agg(coalesce(t.title, ''), ' ')), 'A') ||
