@@ -11,6 +11,7 @@
 """
 import datetime as dt
 import pytest
+import six
 
 from flask.ext.security.utils import verify_password
 
@@ -40,7 +41,7 @@ class TestUser:
         assert isinstance(user.confirmed_at, dt.datetime)
         assert isinstance(user.last_login_at, dt.datetime)
         assert isinstance(user.current_login_at, dt.datetime)
-        assert isinstance(user.secret, basestring)
+        assert isinstance(user.secret, six.string_types)
 
     def test_password_is_nullable(self):
         user = User(email='foo@bar.com')

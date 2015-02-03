@@ -9,3 +9,4 @@ liveandletdie==0.0.2
 pytest>=2.5.2
 -e git+https://github.com/aromanovich/flask-webtest.git#egg=Flask-Webtest-devel
 factory-boy>=2.2.1
+ddlgenerator >= 0.1.8.1
