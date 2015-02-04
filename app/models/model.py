@@ -2,9 +2,13 @@
 from flask.ext.sqlalchemy import SQLAlchemy
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql as pg
+from sqlalchemy_utils.types import TSVectorType
+from sqlalchemy_searchable import make_searchable
 # Define the database functions
 
 from ..framework.sql import (Model, db)
+
+make_searchable()
 
 class Content(Model):
     __tablename__ = 'contents'
@@ -162,7 +166,7 @@ class Topic(Model):
     pre_release_date = db.Column(db.DateTime(), nullable=False)
     proposals_begin_date = db.Column(db.DateTime(), nullable=False)
     proposals_end_date = db.Column(db.DateTime(), nullable=False)
-    full_text = pg.TSVECTOR()
+    full_text = sa.Column(TSVectorType)
 
 
 topicsareas = db.Table(
