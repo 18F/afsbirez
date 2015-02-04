@@ -160,6 +160,7 @@ class Topic(Model):
     solicitation_id = db.Column(db.Text(), nullable=False)
     url = db.Column(db.Text(), nullable=False, unique=True)
     title = db.Column(db.Text(), nullable=False)
+    agency = db.Column(db.Text())
     program_id = db.Column(db.Integer, db.ForeignKey(u'programs.id', ondelete=u'RESTRICT', onupdate=u'CASCADE'))
     description = db.Column(db.Text(), nullable=False)
     objective = db.Column(db.Text(), nullable=False)
