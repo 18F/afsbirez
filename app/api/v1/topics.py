@@ -15,6 +15,8 @@ class TopicsView(BaseView):
 
     parser = reqparse.RequestParser()
     parser.add_argument('q', type=str, help='Full-text search')
+    parser.add_argument('closed', type=bool, default=False,
+                        help='Include topics already closed')
 
     date_format = '%Y%m%d'
 
@@ -38,7 +40,7 @@ class TopicsView(BaseView):
             "id": datum.id,
             "title": datum.title,
             "description": datum.description,
-            "agency": "AirForce",  # TODO: actually should come from data
+            "agency": datum.agency,
             "release_date": datum.pre_release_date.strftime(self.date_format),
             "open_date": datum.proposals_begin_date.strftime(self.date_format),
             "close_date": datum.proposals_end_date.strftime(self.date_format),
@@ -48,7 +50,11 @@ class TopicsView(BaseView):
 
     def index(self):
         args = self.parser.parse_args(strict=True)
-        data = search(model.Topic.query, args.q, sort=True).all()
+        data = search(model.Topic.query, args.q, sort=True)
+        if not args.closed:
+            now = datetime.datetime.now()
+            data = data.filter(model.Topic.c.proposals_end_date <= now)
+        data = data.all()
         result = {
                     "_links": {
                         "self": {

@@ -73,9 +73,8 @@ class TestAPI:
 
     def test_topic_search(self, testapi):
         resp = testapi.get('/api/tests/topics?q=KC-135')
-        resp.hal.links.should_not.be.empty
         import ipdb; ipdb.set_trace()
-
+        resp.hal.links.should_not.be.empty
 
 
 class TestAPILoggingIn:
