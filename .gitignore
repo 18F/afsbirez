@@ -1,3 +1,6 @@
+app/frontend/static/css/main.min.css
+app/frontend/static/js/angular.min.js
+app/frontend/static/js/bower.min.js
 app/frontend/static/js/sbirez.min.js
 app/frontend/static/css/sbirez.min.css
 app/frontend/static/.webassets-cache/
@@ -19,6 +22,8 @@ env
 .idea
 bower_components
 lib
+.vagrant/
+src/
 app/frontend/old_static
 app/frontend/static/fonts
 app/frontend/static/css/vendor
