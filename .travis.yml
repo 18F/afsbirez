@@ -9,7 +9,7 @@ before_install:
   - 'sh -e /etc/init.d/xvfb start'
 before_script:
   - 'npm install npm -g'
-  - 'npm install -g bower'
+  - 'npm install --dev'
   - 'gem install sass'
   - 'gem install compass'
   - 'bower install'
