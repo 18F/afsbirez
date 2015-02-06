@@ -22,7 +22,7 @@ class TestingConfig:
     SQLALCHEMY_POOL_TIMEOUT = None
     SQLALCHEMY_POOL_RECYCLE = None
     # SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-    SQLALCHEMY_DATABASE_URI = 'postgresql://:@/sbireztest'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://sbirez:sbirez@/sbireztest'
 
     SECURITY_PASSWORD_HASH = 'plaintext'
     SECURITY_CONFIRMABLE = False
