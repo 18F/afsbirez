@@ -12,7 +12,7 @@ before_script:
   - 'npm install -g bower'
   - 'gem install sass'
   - 'gem install compass'
-  - 'npm install'
+  - 'bower install'
   - psql -c 'create user sbirez;' -U postgres
   - psql -c 'create database sbirezdev owner=sbirez;' -U postgres
   - 'python manage.py db upgrade'

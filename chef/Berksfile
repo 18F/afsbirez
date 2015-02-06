@@ -1,0 +1,10 @@
+source 'https://api.berkshelf.com'
+
+cookbook 'user', git: 'https://github.com/fnichol/chef-user'
+cookbook 'afsbirez', path: '/Users/davidbest/Development/18F/afsbirez-cookbook'
+cookbook 'postgresql', '3.4.4'
+cookbook 'nginx'
+cookbook 'nodejs'
+cookbook 'apt'
+cookbook 'build-essential'
+cookbook 'citadel', git: 'https://github.com/dlapiduz/citadel.git'
