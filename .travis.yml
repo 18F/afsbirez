@@ -9,17 +9,14 @@ before_install:
   - 'sh -e /etc/init.d/xvfb start'
 before_script:
   - 'npm install npm -g'
-  - 'npm install -g bower'
+  - 'npm install'
   - 'gem install sass'
   - 'gem install compass'
-  - 'npm install --dev'
   - 'bower install'
   - psql -c 'create user sbirez;' -U postgres
-  - psql -c "alter user sbirez with password 'sbirez'" -U postgres
   - psql -c 'create database sbirezdev owner=sbirez;' -U postgres
-  - psql -c 'create database sbireztest owner=sbirez;' -U postgres
   - 'python manage.py db upgrade'
 install:
-  - "pip install --use-mirrors -r requirements.txt"
+  - "pip install -r requirements.txt"
 script:
 - 'python manage.py test'
