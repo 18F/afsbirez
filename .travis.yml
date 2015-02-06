@@ -18,6 +18,6 @@ before_script:
   - 'python manage.py db upgrade'
   - psql -f data/sbireztest.sql -U postgres sbirezdev
 install:
-  - "pip install -r requirements.txt"
+  - "pip install --use-mirrors -r requirements.txt"
 script:
 - 'python manage.py test'
