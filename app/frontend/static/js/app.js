@@ -27,6 +27,15 @@ angular.module('sbirezApp', [
           }
         }
       })
+      .state('topic', {
+        url: '/topic/:id',
+        views: {
+          '': {
+            templateUrl: 'static/views/partials/topicDetails.html',
+            controller: 'TopicCtrl'
+          }
+        }
+      })
       .state('app', {
         url: '/app',
         abstract: true,
