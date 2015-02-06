@@ -12,6 +12,7 @@ before_script:
   - 'npm install -g bower'
   - 'gem install sass'
   - 'gem install compass'
+  - 'npm install --dev'
   - 'bower install'
   - psql -c 'create user sbirez;' -U postgres
   - psql -c "alter user sbirez with password 'sbirez'" -U postgres
