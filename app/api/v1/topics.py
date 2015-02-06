@@ -53,7 +53,7 @@ class TopicsView(BaseView):
         data = search(model.Topic.query, args.q, sort=True)
         if not args.closed:
             now = datetime.datetime.now()
-            data = data.filter(model.Topic.c.proposals_end_date <= now)
+            data = data.filter(model.Topic.proposals_end_date >= now)
         data = data.all()
         result = {
                     "_links": {
