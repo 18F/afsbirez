@@ -71,7 +71,8 @@ class TestAPI:
         assert 'token' in resp.json
         return resp.json['token']
 
-    def test_topic_search(self, testapi):
+    @pytest.mark.usefixtures('db')
+    def test_topic_search(self, db, testapi):
         resp = testapi.get('/api/tests/topics?q=security')
         resp.hal.links.should_not.be.empty
 
