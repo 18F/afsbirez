@@ -61,9 +61,9 @@ describe('Controller: TopicCtrl', function () {
 
   it('page should display an error message if an invalid topic is requested', function () {
     expect(scope.data).toEqual({});
-    $httpBackend.expectGET('api/v1/topics/1').respond(notFound);
+    $httpBackend.expectGET('api/v1/topics/1').respond(emptyData);
     $httpBackend.flush();
-    expect(scope.data).toEqual({});
+    expect(scope.data).toEqual(emptyData);
   });
 
   it('page should display a back button if coming from a search', function () {

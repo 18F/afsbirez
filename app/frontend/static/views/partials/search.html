@@ -20,9 +20,32 @@
     <br/>
     <div class="row">
       <div class="col-md-2">
-        <div ng-show="results.docs && results.numFound > 0">
-          <p>{{results.numFound}} Results</p>
+        <div ng-show="results.docs && itemCount > 0">
+          <p>{{itemCount}} Results</p>
         </div>
+        <div ng-show="results.docs && itemCount === 0">
+          <p>No Results Found</p>
+        </div>
+      </div>
+      <div ng-hide="simpleMode" class="col-md-3 col-md-offset-7">
+        <p class="text-right"><em><a href="#" ng-click="saveSearch()">Save this search >>></a></em></p>
+      </div>
+    </div>
+    <div ng-hide="simpleMode" class="row">
+      <div class="col-md-6">
+        <div class="btn-group" data-toggle="buttons">
+          <label class="btn btn-default btn-sm active">
+            <input type="radio">All Opportunities
+          </label>
+          <label class="btn btn-default btn-sm">
+            <input type="radio">Open Opportunities
+          </label>
+          <label class="btn btn-default btn-sm">
+            <input type="radio">Pre-Releases
+          </label>
+        </div>
+      </div>
+      <div class="col-md-2 col-md-offset-1">
       </div>
       <div ng-hide="simpleMode" class="col-md-3 col-md-offset-7">
         <p class="text-right"><em><a href="#" ng-click="saveSearch()">Save this search >>></a></em></p>
@@ -53,9 +76,9 @@
   <br/>
   <div ng-repeat="topic in results.docs" class="row">
     <div class="col-md-9">
-      <h4><a href="{{topic.listing_url}}">{{topic.title}}</a></h4>
-      <p>{{topic.description|truncate:500}}<span ng-if="topic.description.length > 500"><a href="{{topic.listing_url}}">MORE >>></a></span></p>
-      <button class="btn btn-default btn-sm pull-right" ng-click="saveOpportunity(topic.id)" type="button">Save for later</button>
+      <h4><a href="topic/{{topic.id}}">{{topic.title}}</a></h4>
+      <p>{{topic.description|truncate:500}}<span ng-if="topic.description.length > 500"><a href="topic/{{topic.id}}">MORE >>></a></span></p>
+      <!--<button class="btn btn-default btn-sm pull-right" ng-click="saveOpportunity(topic.id)" type="button">Save for later</button>-->
     </div>
   </div>
   <div class="row">

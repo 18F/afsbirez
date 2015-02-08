@@ -1,17 +1,20 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('SearchCtrl', function ($scope, $http, $window, SavedOpportunityService, SavedSearchService) {
+  .controller('SearchCtrl', function ($scope, $http, $window,
+               SearchService, SavedOpportunityService, SavedSearchService) {
     $scope.jwt = $window.sessionStorage.token;
-    $scope.results = {};
+    
+    var state = SearchService.loadState();
 
-    var SEARCH_URI = 'api/v1/topics';
     var SOLICITATIONS_PER_PAGE = 10;
-    $scope.simpleMode = true;
-    $scope.searchTerm = '';
     $scope.itemsPerPage = SOLICITATIONS_PER_PAGE;
-    $scope.currentPage = 0;
-    $scope.itemCount = 0;
+
+    $scope.simpleMode = true;
+    $scope.searchTerm = state.searchTerm; 
+    $scope.currentPage = state.currentPage;
+    $scope.itemCount = state.itemCount;
+    $scope.results = state.results;
 
     $scope.saveOpportunity = function(opportunityId) {
       SavedOpportunityService.save(opportunityId);
@@ -22,27 +25,14 @@ angular.module('sbirezApp')
     };
 
     $scope.search = function(page) {
-      if (page === undefined) {
-        page = 0;
-      }
-      else if (page === 'next') {
-        page = $scope.currentPage + 1;
-      }
-      else if (page === 'prev') {
-        page = $scope.currentPage - 1;
-      }
-
       $scope.currentPage = page;
-
-      var config = {};
-      config.params = [];
-      config.params.q = $scope.searchTerm;
-      config.params.limit = SOLICITATIONS_PER_PAGE;
-      config.params.start = SOLICITATIONS_PER_PAGE * page;
-      $http.get(SEARCH_URI, config).success(function(data) {
+      var data = SearchService.search(page, $scope.searchTerm).then(function(data) {
         $scope.results = data;
-        $scope.itemCount = data.numFound;
-//        $scope.simpleMode = false;
+        if (data !== undefined && data._embedded !== undefined) {
+          $scope.results.docs = data._embedded["ea:topic"];
+          $scope.itemCount = data._embedded["ea:topic"].length;
+//          $scope.simpleMode = false;
+        }
       });
     };
   });
