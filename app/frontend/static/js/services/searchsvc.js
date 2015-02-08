@@ -1,15 +1,55 @@
 'use strict';
 
-angular.module('sbirezApp').factory('SavedSearchService', function($http, $window, DialogService, AuthenticationService) {
+angular.module('sbirezApp').factory('SearchService', function($http, $window, $q, DialogService, AuthenticationService) {
+  var SEARCH_URI = 'api/v1/topics';
+  var SOLICITATIONS_PER_PAGE = 10;
+  var lastSearch = '';
+  var itemsPerPage = SOLICITATIONS_PER_PAGE;
+  var currentPage = 0;
+  var itemCount = 0;
+  var results = {};
+ 
   return {
-    save: function(query) {
-      if (!AuthenticationService.isAuthenticated) {
-        var intention = {};
-        intention.name = 'app.activity.savedSearches';
-        intention.data = {};
-        intention.data.query = query;
-        DialogService.openLogin(intention);
+    search: function(page, searchTerm) {
+      var deferred = $q.defer();
+      if (page === undefined) {
+        page = 0;
       }
+      else if (page === 'next') {
+        page = currentPage + 1;
+      }
+      else if (page === 'prev') {
+        page = currentPage - 1;
+      }
+
+      if (page === currentPage && lastSearch === searchTerm) {
+        deferred.resolve(results);
+        return deferred.promise;
+      }
+
+      currentPage = page;
+      lastSearch = searchTerm;
+
+      var config = {};
+      config.params = [];
+      config.params.q = searchTerm;
+//      config.params.limit = SOLICITATIONS_PER_PAGE;
+//      config.params.start = SOLICITATIONS_PER_PAGE * page;
+      $http.get(SEARCH_URI, config).success(function(data) {
+        results = data;
+        itemCount = data._embedded["ea:topic"].length;
+        deferred.resolve(results);
+      });
+      return deferred.promise;
+    },
+
+    loadState: function() {
+      return {
+        searchTerm: lastSearch,
+        currentPage: currentPage,
+        itemCount: itemCount,
+        results: results
+      };
     }
   };
 });
