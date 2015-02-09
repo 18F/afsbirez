@@ -31,7 +31,7 @@ angular.module('sbirezApp').directive('header', function() {
           $scope.menu.push({'title': 'Login', 'click':$scope.openLogin});
         }
 
-        $scope.menu.push({'title': 'Contact', 'link':'/contact'});
+//        $scope.menu.push({'title': 'Contact', 'link':'/contact'});
 
         $scope.isActive = function(route) {
           return route === $location.path();

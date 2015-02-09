@@ -24,7 +24,7 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
         if (id === undefined || id === null) {
           id = $window.sessionStorage.userid;
         }
-        $http.get('api/users/' + id).success(function(data) {
+        $http.get('api/v1/users/' + id).success(function(data) {
           user = data.user;
           $rootScope.$broadcast('userUpdated', user);
           return user;
