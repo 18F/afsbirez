@@ -11,12 +11,23 @@ from flask.ext.restful import reqparse
 import sqlalchemy as sa
 from sqlalchemy_searchable import search
 
+
+class SortOrderString(str):
+    def __init__(self, s):
+        s = s.lower().strip()
+        if s not in ('asc', 'desc'):
+            raise ValueError("sort order must be `asc` or `desc`")
+        str.__init__(s)
+
+
 class TopicsView(BaseView):
 
     parser = reqparse.RequestParser()
     parser.add_argument('q', type=str, help='Full-text search')
     parser.add_argument('closed', type=bool, default=False,
                         help='Include topics already closed')
+    parser.add_argument('order', type=SortOrderString, default='asc',
+                        help='Sort order for results(`asc` or `desc`)')
 
     date_format = '%Y%m%d'
 
@@ -50,7 +61,10 @@ class TopicsView(BaseView):
 
     def index(self):
         args = self.parser.parse_args(strict=True)
-        data = search(model.Topic.query, args.q, sort=True)
+        if args.q:
+            data = search(model.Topic.query, args.q, sort=True)
+        else:
+            data = model.Topic.query().order_by(model.Topic.topic_number)
         if not args.closed:
             now = datetime.datetime.now()
             data = data.filter(model.Topic.proposals_end_date >= now)
