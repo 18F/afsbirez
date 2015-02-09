@@ -17,4 +17,5 @@ UPDATE topics
 SET    full_text = (SELECT weights FROM subq
                     WHERE  topics.id = subq.id);
 
-CREATE INDEX topics_fulltext_idx ON topics USING gin(full_text);
+-- appears to be created by sqlalchemy-searchable already
+-- CREATE INDEX topics_fulltext_idx ON topics USING gin(full_text);
