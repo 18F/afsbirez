@@ -89,6 +89,26 @@ class TestAPI:
         assert resp.json["id"] == 7
         assert 'title' in resp.json
         assert 'description' in resp.json
+        assert 'objective' in resp.json 
+        assert 'agency' in resp.json 
+        assert 'topic_number' in resp.json 
+        assert 'solicitation_id' in resp.json 
+        assert 'url' in resp.json 
+        assert 'program' in resp.json 
+        assert 'pre_release_date' in resp.json 
+        assert 'proposals_begin_date' in resp.json 
+        assert 'proposals_end_date' in resp.json 
+        assert 'days_to_close' in resp.json 
+        assert 'status' in resp.json 
+        assert 'areas' in resp.json
+        assert isinstance(resp.json["areas"], list)
+        assert 'phases' in resp.json 
+        assert isinstance(resp.json["phases"], list)
+        assert 'references' in resp.json 
+        assert isinstance(resp.json["references"], list)
+        assert 'keywords' in resp.json 
+        assert isinstance(resp.json["keywords"], list)
+
 
 
 class TestAPILoggingIn:
