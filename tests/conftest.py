@@ -18,23 +18,25 @@ from app.framework.sql import db as _db
 from .settings import TestingConfig
 from .apis import classy_api
 from .factories import UserFactory
+from .test_data import insert_test_rows
 from webtest import TestResponse
 from dougrain import Document
+import sqlalchemy as sa
 
 #monkey patch the TestResponse to return a HAL dougrain object
 def hal(self):
-        """
-        Return the response as a JSON response.  You must have `simplejson
-        <http://goo.gl/B9g6s>`_ installed to use this, or be using a Python
-        version with the json module.
+    """
+    Return the response as a JSON response.  You must have `simplejson
+    <http://goo.gl/B9g6s>`_ installed to use this, or be using a Python
+    version with the json module.
 
-        The content type must be one of json type to use this.
-        """
-        if not self.content_type.endswith(('+json', '/json')):
-            raise AttributeError(
-                "Not a JSON response body (content-type: %s)"
-                % self.content_type)
-        return Document.from_string(self.testbody)
+    The content type must be one of json type to use this.
+    """
+    if not self.content_type.endswith(('+json', '/json')):
+        raise AttributeError(
+            "Not a JSON response body (content-type: %s)"
+            % self.content_type)
+    return Document.from_string(self.testbody)
 
 TestResponse.hal = property(hal)
 
@@ -70,6 +72,10 @@ def db(app):
     _db.app = app
     with app.app_context():
         _db.create_all()
+        meta = sa.MetaData(bind=_db.engine)
+        meta.reflect()
+        conn = _db.engine.connect()
+        insert_test_rows(meta, conn)
     yield _db
     _db.drop_all()
 
