@@ -11,12 +11,34 @@ from flask.ext.restful import reqparse
 import sqlalchemy as sa
 from sqlalchemy_searchable import search
 
+MAX_RESULTSET_SIZE = 200
+
+def limited_value_class(base_class, min_val = None, max_val = None):
+    class Limited(base_class):
+        min_ = min_val
+        max_ = max_val
+        def __init__(self, val, *arg, **kwarg):
+            val = base_class(val)
+            if (min_val is not None) and (val < self.min_):
+                raise TypeError("Value should be at least %s" % self.min_)
+            elif (max_val is not None) and (val > self.max_):
+                raise TypeError("Value should be no more than %s" % self.max_)
+            base_class.__init__(val, *arg, **kwarg)
+    return Limited
+
+NaturalNumber = limited_value_class(int, 1)
+LimitedInt = limited_value_class(int, 1, MAX_RESULTSET_SIZE)
+
 class TopicsView(BaseView):
 
     parser = reqparse.RequestParser()
     parser.add_argument('q', type=str, help='Full-text search')
     parser.add_argument('closed', type=bool, default=False,
                         help='Include topics already closed')
+    parser.add_argument('start', type=NaturalNumber, default=1,
+                        help='Get results staring at')
+    parser.add_argument('limit', type=LimitedInt, default=20,
+                        help='Number of topics to return (max %s)' % MAX_RESULTSET_SIZE)
 
     date_format = '%Y%m%d'
 
@@ -63,6 +85,8 @@ class TopicsView(BaseView):
         if not args.closed:
             now = datetime.datetime.now()
             data = data.filter(model.Topic.proposals_end_date >= now)
+        data = data.offset(args.start)
+        data = data.limit(args.limit)
         data = data.all()
         result = {
                     "_links": {
