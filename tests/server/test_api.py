@@ -84,9 +84,9 @@ class TestAPI:
 
     @pytest.mark.usefixtures('db')
     def test_single_topic(self, db, testapi):
-        resp = testapi.get('/api/tests/topics/7')
+        resp = testapi.get('/api/tests/topics/11')
         resp.hal.links.should_not.be.empty
-        assert resp.json["id"] == 7
+        assert resp.json["id"] == 11
         assert 'title' in resp.json
         assert 'description' in resp.json
 
