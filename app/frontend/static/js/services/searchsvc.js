@@ -1,10 +1,8 @@
 'use strict';
 
-angular.module('sbirezApp').factory('SearchService', function($http, $window, $q, DialogService, AuthenticationService) {
+angular.module('sbirezApp').factory('SearchService', function($http, $window, $q) {
   var SEARCH_URI = 'api/v1/topics';
-  var SOLICITATIONS_PER_PAGE = 10;
   var lastSearch = '';
-  var itemsPerPage = SOLICITATIONS_PER_PAGE;
   var currentPage = 0;
   var itemCount = 0;
   var results = {};
@@ -37,7 +35,7 @@ angular.module('sbirezApp').factory('SearchService', function($http, $window, $q
 //      config.params.start = SOLICITATIONS_PER_PAGE * page;
       $http.get(SEARCH_URI, config).success(function(data) {
         results = data;
-        itemCount = data._embedded["ea:topic"].length;
+        itemCount = data._embedded['ea:topic'].length;
         deferred.resolve(results);
       });
       return deferred.promise;

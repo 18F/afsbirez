@@ -26,11 +26,11 @@ angular.module('sbirezApp')
 
     $scope.search = function(page) {
       $scope.currentPage = page;
-      var data = SearchService.search(page, $scope.searchTerm).then(function(data) {
+      SearchService.search(page, $scope.searchTerm).then(function(data) {
         $scope.results = data;
         if (data !== undefined && data._embedded !== undefined) {
-          $scope.results.docs = data._embedded["ea:topic"];
-          $scope.itemCount = data._embedded["ea:topic"].length;
+          $scope.results.docs = data._embedded['ea:topic'];
+          $scope.itemCount = data._embedded['ea:topic'].length;
 //          $scope.simpleMode = false;
         }
       });
