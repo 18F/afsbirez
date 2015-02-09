@@ -14,7 +14,9 @@ before_script:
   - 'gem install compass'
   - 'bower install'
   - psql -c 'create user sbirez;' -U postgres
+  - psql -c "alter user sbirez with password 'sbirez'" -U postgres
   - psql -c 'create database sbirezdev owner=sbirez;' -U postgres
+  - psql -c 'create database sbireztest owner=sbirez;' -U postgres
   - 'python manage.py db upgrade'
 install:
   - "pip install -r requirements.txt"

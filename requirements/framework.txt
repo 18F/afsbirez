@@ -20,7 +20,7 @@ alembic>=0.6.7
 Flask-SQLAlchemy>=1.0
 SQLAlchemy>=0.9.4
 psycopg2>=2.5.2
-SQLAlchemy-Searchable>=0.7.0
+-e git://github.com/18F/sqlalchemy-searchable.git#egg=sqlalchemy-searchable
 SQLAlchemy-ImageAttach>=0.8.2
 
 # Assets

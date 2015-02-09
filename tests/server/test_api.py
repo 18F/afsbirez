@@ -71,11 +71,24 @@ class TestAPI:
         assert 'token' in resp.json
         return resp.json['token']
 
-    def test_topic_search(self, testapi):
-        resp = testapi.get('/api/tests/topics?q=KC-135')
+    @pytest.mark.usefixtures('db')
+    def test_topic_search_accurate(self, db, testapi):
+        resp = testapi.get('/api/tests/topics?q=security')
         resp.hal.links.should_not.be.empty
-        import ipdb; ipdb.set_trace()
+        for topic in resp.json['_embedded']['ea:topic']:
+            assert (   'security' in topic['description'].lower()
+                    or 'security' in topic['title'].lower()
+                   )
+        resp = testapi.get('/api/tests/topics?q=thereisnosuchword')
+        assert len(resp.json['_embedded']['ea:topic']) == 0
 
+    @pytest.mark.usefixtures('db')
+    def test_single_topic(self, db, testapi):
+        resp = testapi.get('/api/tests/topics/7')
+        resp.hal.links.should_not.be.empty
+        assert resp.json["id"] == 7
+        assert 'title' in resp.json
+        assert 'description' in resp.json
 
 
 class TestAPILoggingIn:
