@@ -10,6 +10,7 @@ from app.models import model
 from flask.ext.restful import reqparse
 import sqlalchemy as sa
 from sqlalchemy_searchable import search
+from werkzeug.routing import ValidationError
 
 MAX_RESULTSET_SIZE = 200
 
@@ -20,9 +21,9 @@ def limited_value_class(base_class, min_val = None, max_val = None):
         def __init__(self, val, *arg, **kwarg):
             val = base_class(val)
             if (min_val is not None) and (val < self.min_):
-                raise TypeError("Value should be at least %s" % self.min_)
+                raise ValidationError("Value should be at least %s" % self.min_)
             elif (max_val is not None) and (val > self.max_):
-                raise TypeError("Value should be no more than %s" % self.max_)
+                raise ValidationError("Value should be no more than %s" % self.max_)
             base_class.__init__(val, *arg, **kwarg)
     return Limited
 
@@ -82,7 +83,7 @@ class TopicsView(BaseView):
         result = {
                     "_links": {
                         "self": {
-                            "href": request.path
+                            "href": request.url  # but should it be relative?
                             },
                         "curies": [
                             {
