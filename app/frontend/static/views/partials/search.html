@@ -1,12 +1,11 @@
 <div ng-controller="SearchCtrl">
   <form ng-submit="search()">
-    <p>Enter a search term:</p>
     <div class="row">
       <div class="col-md-7">
         <div class="input-group">
-          <input type="text" ng-model="searchTerm" class="form-control">
+          <input type="text" ng-model="searchTerm" placeholder="Enter a search term" class="form-control input-lg">
           <span class="input-group-btn">
-            <button class="btn btn-default" type="submit">Search</button>
+            <button class="btn btn-default btn-lg" type="submit">Search</button>
           </span>
         </div>
       </div>
@@ -76,7 +75,7 @@
   <br/>
   <div ng-repeat="topic in results._embedded['ea:topic']" class="row">
     <div class="col-md-9">
-      <h4><a href="topic/{{topic.id}}">{{topic.title}}</a></h4>
+      <h4><a href="topic/{{topic.id}}">{{topic.topic_number}}: {{topic.title}}</a></h4>
       <p>{{topic.description|truncate:500}}<span ng-if="topic.description.length > 500"><a href="topic/{{topic.id}}">MORE >>></a></span></p>
       <!--<button class="btn btn-default btn-sm pull-right" ng-click="saveOpportunity(topic.id)" type="button">Save for later</button>-->
     </div>
