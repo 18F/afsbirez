@@ -45,15 +45,12 @@ class TopicsView(BaseView):
     parser.add_argument('q', type=str, help='Full-text search')
     parser.add_argument('closed', type=bool, default=False,
                         help='Include topics already closed')
-<<<<<<< HEAD
     parser.add_argument('order', type=SortOrderString, default='asc',
                         help='Sort order for results(`asc` or `desc`)')
-=======
     parser.add_argument('start', type=NaturalNumber, default=1,
                         help='Get results staring at')
     parser.add_argument('limit', type=LimitedInt, default=20,
                         help='Number of topics to return (max %s)' % MAX_RESULTSET_SIZE)
->>>>>>> 35dfc37c84aec8ae8f4bd01daf1401c208ad7fae
 
     date_format = '%Y%m%d'
 
