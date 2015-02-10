@@ -73,8 +73,10 @@ class TopicsView(BaseView):
             },
             "id": datum.id,
             "title": datum.title,
+            "topic_number": datum.topic_number,
             "description": datum.description,
             "agency": datum.agency,
+            "topic_number": datum.topic_number,
             "release_date": datum.pre_release_date.strftime(self.date_format),
             "open_date": datum.proposals_begin_date.strftime(self.date_format),
             "close_date": datum.proposals_end_date.strftime(self.date_format),
@@ -87,7 +89,10 @@ class TopicsView(BaseView):
         if args.q:
             data = search(model.Topic.query, args.q, sort=True)
         else:
-            data = model.Topic.query().order_by(model.Topic.topic_number)
+            if args.order == 'desc':
+                data = model.Topic.query.order_by(sa.desc(model.Topic.topic_number))
+            else:
+                data = model.Topic.query.order_by(model.Topic.topic_number)
         if not args.closed:
             now = datetime.datetime.now()
             data = data.filter(model.Topic.proposals_end_date >= now)
