@@ -124,6 +124,12 @@ class TestAPI:
         resp = testapi.get('/api/tests/topics?start=1000000')
         assert len(resp.json['_embedded']['ea:topic']) == 0
 
+    @pytest.mark.usefixtures('db')
+    def test_numFound(self, db, testapi):
+        all_results = testapi.get('/api/tests/topics?start=1&limit=6')
+        assert 'numFound' in all_results.json
+        assert all_results.json['numFound'] >= 10
+
 
 class TestAPILoggingIn:
 
