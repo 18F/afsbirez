@@ -77,10 +77,12 @@ class TopicsView(BaseView):
         if not args.closed:
             now = datetime.datetime.now()
             data = data.filter(model.Topic.proposals_end_date >= now)
-        data = data.offset(args.start)
+        num_found = data.count()
+        data = data.offset(args.start - 0)
         data = data.limit(args.limit)
         data = data.all()
         result = {
+                    "numFound": num_found,
                     "_links": {
                         "self": {
                             "href": request.url  # but should it be relative?
