@@ -5,19 +5,23 @@ angular.module('sbirezApp').factory('SearchService', function($http, $window, $q
   var lastSearch = '';
   var currentPage = 0;
   var itemCount = 0;
+  var numFound = 0;
   var results = {};
  
   return {
-    search: function(page, searchTerm) {
+    search: function(page, searchTerm, itemsPerPage) {
       var deferred = $q.defer();
-      if (page === undefined) {
-        page = 0;
+      if (typeof page === 'number' && page === Math.floor(page) && page >= 0) {
+        page = page;
       }
       else if (page === 'next') {
         page = currentPage + 1;
       }
       else if (page === 'prev') {
         page = currentPage - 1;
+      }
+      else {
+        page = 0;
       }
 
       if (page === currentPage && lastSearch === searchTerm) {
@@ -31,10 +35,11 @@ angular.module('sbirezApp').factory('SearchService', function($http, $window, $q
       var config = {};
       config.params = [];
       config.params.q = searchTerm;
-//      config.params.limit = SOLICITATIONS_PER_PAGE;
-//      config.params.start = SOLICITATIONS_PER_PAGE * page;
+      config.params.limit = itemsPerPage;
+      config.params.start = itemsPerPage * page + 1;
       $http.get(SEARCH_URI, config).success(function(data) {
         results = data;
+        numFound = data._embedded.numFound;
         itemCount = data._embedded['ea:topic'].length;
         deferred.resolve(results);
       });
@@ -46,6 +51,7 @@ angular.module('sbirezApp').factory('SearchService', function($http, $window, $q
         searchTerm: lastSearch,
         currentPage: currentPage,
         itemCount: itemCount,
+        numFound: numFound,
         results: results
       };
     }
