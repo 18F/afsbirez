@@ -15,6 +15,7 @@ import pytest
 import six
 from jsonschema import Draft4Validator
 from tests.factories import UserFactory
+from werkzeug.routing import ValidationError
 
 @pytest.fixture
 def user(db):
@@ -89,6 +90,45 @@ class TestAPI:
         assert resp.json["id"] == 11
         assert 'title' in resp.json
         assert 'description' in resp.json
+
+    @pytest.mark.usefixtures('db')
+    def test_result_limit(self, db, testapi):
+        # test limiting to two records
+        resp = testapi.get('/api/tests/topics?limit=2')
+        assert len(resp.json['_embedded']['ea:topic']) == 2
+
+        # test default limit
+        # default limit is actually 20, but our test data set is not that large
+        resp = testapi.get('/api/tests/topics')
+        assert len(resp.json['_embedded']['ea:topic']) >= 10
+
+        # reject excessive demand for one... million... records
+        with pytest.raises(Exception):
+            resp = testapi.get('/api/tests/topics?limit=1000000')
+
+        # reject nonsensical limit
+        with pytest.raises(Exception):
+            resp = testapi.get('/api/tests/topics?limit=-34.2')
+
+    @pytest.mark.usefixtures('db')
+    def test_result_start(self, db, testapi):
+        resp1 = testapi.get('/api/tests/topics?start=1&limit=6')
+        resp2 = testapi.get('/api/tests/topics?start=4&limit=3')
+        assert resp2.json['_embedded']['ea:topic'] == resp1.json['_embedded']['ea:topic'][3:]
+
+        # reject negative start point
+        with pytest.raises(Exception):
+            resp = testapi.get('/api/tests/topics?start=-22')
+
+        # excessive start permitted, but no records result
+        resp = testapi.get('/api/tests/topics?start=1000000')
+        assert len(resp.json['_embedded']['ea:topic']) == 0
+
+    @pytest.mark.usefixtures('db')
+    def test_numFound(self, db, testapi):
+        all_results = testapi.get('/api/tests/topics?start=1&limit=6')
+        assert 'numFound' in all_results.json
+        assert all_results.json['numFound'] >= 10
 
 
 class TestAPILoggingIn:
