@@ -90,24 +90,24 @@ class TestAPI:
         assert resp.json["id"] == 11
         assert 'title' in resp.json
         assert 'description' in resp.json
-        assert 'objective' in resp.json 
-        assert 'agency' in resp.json 
-        assert 'topic_number' in resp.json 
-        assert 'solicitation_id' in resp.json 
-        assert 'url' in resp.json 
-        assert 'program' in resp.json 
-        assert 'pre_release_date' in resp.json 
-        assert 'proposals_begin_date' in resp.json 
-        assert 'proposals_end_date' in resp.json 
-        assert 'days_to_close' in resp.json 
-        assert 'status' in resp.json 
+        assert 'objective' in resp.json
+        assert 'agency' in resp.json
+        assert 'topic_number' in resp.json
+        assert 'solicitation_id' in resp.json
+        assert 'url' in resp.json
+        assert 'program' in resp.json
+        assert 'pre_release_date' in resp.json
+        assert 'proposals_begin_date' in resp.json
+        assert 'proposals_end_date' in resp.json
+        assert 'days_to_close' in resp.json
+        assert 'status' in resp.json
         assert 'areas' in resp.json
         assert isinstance(resp.json["areas"], list)
-        assert 'phases' in resp.json 
+        assert 'phases' in resp.json
         assert isinstance(resp.json["phases"], list)
-        assert 'references' in resp.json 
+        assert 'references' in resp.json
         assert isinstance(resp.json["references"], list)
-        assert 'keywords' in resp.json 
+        assert 'keywords' in resp.json
         assert isinstance(resp.json["keywords"], list)
 
 
@@ -149,6 +149,25 @@ class TestAPI:
         all_results = testapi.get('/api/tests/topics?start=1&limit=6')
         assert 'numFound' in all_results.json
         assert all_results.json['numFound'] >= 10
+
+    @pytest.mark.usefixtures('db')
+    def test_links_present(self, db, testapi):
+        results = testapi.get('/api/tests/topics?start=1&limit=6')
+        assert '_links' in results.json
+
+        assert 'self' in results.json['_links']
+        selflink = results.json['_links']['self']['href']
+        assert '/topics' in selflink
+        assert 'limit=6' in selflink
+
+        assert 'prev' not in results.json['_links']
+
+        assert 'next' in results.json['_links']
+        assert 'start=7' in results.json['_links']['next']['href']
+
+        results = testapi.get('/api/tests/topics?start=7&limit=6')
+        assert 'prev' in results.json['_links']
+        assert 'start=1' in results.json['_links']['prev']['href']
 
 
 class TestAPILoggingIn:
