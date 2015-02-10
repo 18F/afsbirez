@@ -39,7 +39,7 @@ angular.module('sbirezApp').factory('SearchService', function($http, $window, $q
       config.params.start = itemsPerPage * page + 1;
       $http.get(SEARCH_URI, config).success(function(data) {
         results = data;
-        numFound = data._embedded.numFound;
+        numFound = data.numFound;
         itemCount = data._embedded['ea:topic'].length;
         deferred.resolve(results);
       });

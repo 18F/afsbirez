@@ -30,9 +30,9 @@ angular.module('sbirezApp')
       SearchService.search(page, $scope.searchTerm, $scope.itemsPerPage).then(function(data) {
         $scope.results = data;
         if (data !== undefined && data._embedded !== undefined) {
-          $scope.results.docs = data._embedded['ea:topic'];
+//          $scope.results.docs = data._embedded['ea:topic'];
           $scope.itemCount = data._embedded['ea:topic'].length;
-          $scope.numFound = data._embedded.numFound;
+          $scope.numFound = data.numFound;
 //          $scope.simpleMode = false;
         }
       });

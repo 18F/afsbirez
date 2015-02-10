@@ -15,8 +15,8 @@ describe('Controller: SearchCtrl', function () {
     longData;
 
   emptyData = {
-    '_embedded': {'ea:topic': [], 'numFound': 0},
-    'docs':[]
+    'numFound': 0,
+    '_embedded': {'ea:topic': []}
   };
 
   var shortResultList = [
@@ -27,11 +27,10 @@ describe('Controller: SearchCtrl', function () {
 
   data = {
     'start': 0,
+    'numFound': 3,
     '_embedded': {
-      'ea:topic': shortResultList,
-      'numFound': 3
-    },
-    'docs': shortResultList 
+      'ea:topic': shortResultList
+    }
   };
 
   var longResultList = [
@@ -49,11 +48,10 @@ describe('Controller: SearchCtrl', function () {
 
   longData = {
     'start': 0,
+    'numFound': 30,
     '_embedded': {
-      'ea:topic':longResultList,
-      'numFound': 30
-    },
-    'docs': longResultList
+      'ea:topic':longResultList
+    }
   };
 
   beforeEach(function(){
@@ -95,7 +93,7 @@ describe('Controller: SearchCtrl', function () {
     scope.search(0);
     $httpBackend.flush();
     expect(scope.results).toEqual(data);
-    expect(scope.itemCount).toEqual(data._embedded.numFound);
+    expect(scope.itemCount).toEqual(data.numFound);
   });
 
   it('searching for page 2 should change the start parameter', function () {
@@ -152,7 +150,7 @@ describe('Controller: SearchCtrl', function () {
     scope.search(0);
     $httpBackend.flush();
     expect(scope.results).toEqual(longData);
-    expect(scope.numFound).toEqual(longData._embedded.numFound);
+    expect(scope.numFound).toEqual(longData.numFound);
   });
 
 });

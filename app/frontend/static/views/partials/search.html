@@ -20,10 +20,10 @@
     <br/>
     <div class="row">
       <div class="col-md-2">
-        <div ng-show="results.docs && numFound > 0">
+        <div ng-show="results._embedded && results._embedded['ea:topic'] && numFound > 0">
           <p>{{numFound}} Results</p>
         </div>
-        <div ng-show="results.docs && numFound === 0">
+        <div ng-show="results._embedded && results._embedded['ea:topic'] && numFound === 0">
           <p>No Results Found</p>
         </div>
       </div>
@@ -74,7 +74,7 @@
     </div>
   </form>
   <br/>
-  <div ng-repeat="topic in results.docs" class="row">
+  <div ng-repeat="topic in results._embedded['ea:topic']" class="row">
     <div class="col-md-9">
       <h4><a href="topic/{{topic.id}}">{{topic.title}}</a></h4>
       <p>{{topic.description|truncate:500}}<span ng-if="topic.description.length > 500"><a href="topic/{{topic.id}}">MORE >>></a></span></p>
@@ -82,8 +82,8 @@
     </div>
   </div>
   <div class="row">
-    <div ng-if="results && itemCount > itemsPerPage" class="col-md-9">
-      <pagination ng-attr-current-page="{{currentPage}}" ng-attr-item-count="{{itemCount}}" ng-attr-items-per-page="{{itemsPerPage}}" ng-attr-method="search" />
+    <div ng-if="results._embedded['ea:topic'] && numFound > itemCount" class="col-md-9">
+      <pagination ng-attr-current-page="{{currentPage}}" ng-attr-item-count="{{numFound}}" ng-attr-items-per-page="{{itemsPerPage}}" ng-attr-method="search" />
     </div>
   </div>
 </div>
