@@ -10,6 +10,7 @@ DELETE FROM public.participatingcomponentstopics;
 DELETE FROM public.participatingcomponents;
 DELETE FROM public.topicskeywords;
 DELETE FROM public.topicsareas;
+DELETE FROM public.references;
 DELETE FROM public.topics;
 DELETE FROM public.areas;
 DELETE FROM public.programs;
@@ -120,14 +121,18 @@ FROM   import.phases p
 JOIN   import.topics it ON (p.topics_id = it.topics_id)
 JOIN   public.topics t ON (it.topic_number = t.topic_number);
 
-SELECT t.topic_number,
-       SUBSTRING(t.topic_number from '(.*?)\s+\(') AS new_topic_number,
-       SUBSTRING(t.topic_number from '.*?\s+\((.*?)\)') AS agency
-FROM   public.topics t
-WHERE  t.topic_number LIKE '% %)%';
+-- references
+INSERT INTO public.references (reference, topic_id)
+SELECT DISTINCT
+       ir._references,
+       t.id
+FROM   import._references ir
+JOIN   import.topics it ON (ir.topics_id = it.topics_id)
+JOIN   public.topics t ON (it.topic_number = t.topic_number);
 
-UPDATE public.topics t
-SET    topic_number = SUBSTRING(t.topic_number from '(.*?)\s+\('),
-       agency = SUBSTRING(t.topic_number from '.*?\s+\((.*?)\)')
-WHERE  t.topic_number LIKE '% %)%';
+-- extract agency from topic number
+--UPDATE public.topics t
+--SET    topic_number = SUBSTRING(t.topic_number from '(.*?)\s+\('),
+--       agency = SUBSTRING(t.topic_number from '.*?\s+\((.*?)\)')
+--WHERE  t.topic_number LIKE '% %)%';
 

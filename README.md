@@ -15,7 +15,7 @@ Please file issues at the [central repository for all Air Force Small Business r
 
 ### Installation
 * Install PostGRESql
-* Install Python 2.7
+* Install Python 3.4
 * Install virtualenv
 * Checkout the source code and cd into it
 ```
