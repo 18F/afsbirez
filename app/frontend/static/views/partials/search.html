@@ -20,10 +20,10 @@
     <br/>
     <div class="row">
       <div class="col-md-2">
-        <div ng-show="results.docs && itemCount > 0">
-          <p>{{itemCount}} Results</p>
+        <div ng-show="results.docs && numFound > 0">
+          <p>{{numFound}} Results</p>
         </div>
-        <div ng-show="results.docs && itemCount === 0">
+        <div ng-show="results.docs && numFound === 0">
           <p>No Results Found</p>
         </div>
       </div>

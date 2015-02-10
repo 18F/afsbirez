@@ -1,4 +1,8 @@
 <div>
+  <div ng-show="errorMsg"> 
+    <h2 class="text-center text-danger">{{errorMsg}}</h2>
+    <p class="text-center"><a href="/">Search</a> for topics from our <a href="/">Home</a> page.</a>
+  </div>
   <h2><center>{{data.title}}</center></h2>
   <center><h4>{{data.program}} {{data.topic_number}}</h4></center>
   <center><a href="{{data.url}}">{{data.url}}</a></center>
@@ -31,12 +35,12 @@
     </div>
   </div>
   <br />
-  <div ng-show="data.phases" class="row">
+  <div ng-show="data.phases && data.phases.length > 0" class="row">
     <div class="col-md-9 col-md-offset-3">
-      <p ng-repeat="phase in data.phases">{{phase}}</p>
+      <p ng-repeat="phase in data.phases | orderBy:phase">{{phase}}</p>
     </div>
   </div>
-  <div ng-show="data.references" class="row">
+  <div ng-show="data.references && data.references.length > 0" class="row">
     <div class="col-md-3">
       <p class="text-right"><strong>References:</strong></p>
     </div>
@@ -46,7 +50,7 @@
       </ul>
     </div>
   </div>
-  <div ng-show="data.keywords" class="row">
+  <div ng-show="data.keywords && data.keywords.length > 0" class="row">
     <div class="col-md-3">
       <p class="text-right"><strong>Keywords:</strong></p>
     </div>
@@ -62,7 +66,7 @@
       {{data.solicitation_id}}
     </div>
   </div>
-  <div ng-show="data.pre_release_data" class="row">
+  <div ng-show="data.pre_release_date" class="row">
     <div class="col-md-3">
       <p class="text-right"><strong>Pre-Release Date:</strong></p>
     </div>

@@ -14,26 +14,23 @@ describe('Controller: TopicCtrl', function () {
     emptyData;
 
   emptyData = {
-    'numFound':  0,
-    'start': 0,
-    'docs': {}
+    'title': '',
+    pre_release_date:'',
+    proposals_begin_date:'',
+    proposals_end_date:''
   };
 
   data = {
-    'numFound': 3,
-    'start': 0,
-    'docs': [
-      {'title': 'ABC', 'description': 'The desc', 'topic_number': '123'},
-      {'title': 'BCD', 'description': 'The desc', 'topic_number': '234'},
-      {'title': 'CDE', 'description': 'The desc', 'topic_number': '345'}
-    ]
+    'title': 'The title.',
+    pre_release_date:'',
+    proposals_begin_date:'',
+    proposals_end_date:''
   };
 
   beforeEach(function(){
     mockDependency = {};
     mockDependency.params = {};
     mockDependency.params.id = 1;
-    mockDependency.params.fromSearch = {'q': 'searchTerm'};
  
     inject(function (_$httpBackend_, $controller, $rootScope) {
       $httpBackend = _$httpBackend_;
@@ -56,21 +53,14 @@ describe('Controller: TopicCtrl', function () {
     expect(scope.data).toEqual({});
     $httpBackend.expectGET('api/v1/topics/1').respond(data);
     $httpBackend.flush();
-    expect(scope.data).toEqual(data);
+    expect(scope.data.title).toEqual(data.title);
   });
 
   it('page should display an error message if an invalid topic is requested', function () {
     expect(scope.data).toEqual({});
-    $httpBackend.expectGET('api/v1/topics/1').respond(emptyData);
+    $httpBackend.expectGET('api/v1/topics/1').respond(500);
     $httpBackend.flush();
-    expect(scope.data).toEqual(emptyData);
-  });
-
-  it('page should display a back button if coming from a search', function () {
-    expect(scope.data).toEqual({});
-    $httpBackend.expectGET('api/v1/topics/1').respond(data);
-    $httpBackend.flush();
-    expect(scope.data).toEqual(data);
+    expect(scope.errorMsg).toEqual('The topic you are looking for does not exist.');
   });
 
 });

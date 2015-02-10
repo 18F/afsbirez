@@ -14,6 +14,7 @@ angular.module('sbirezApp')
     $scope.searchTerm = state.searchTerm; 
     $scope.currentPage = state.currentPage;
     $scope.itemCount = state.itemCount;
+    $scope.numFound = state.numFound;
     $scope.results = state.results;
 
     $scope.saveOpportunity = function(opportunityId) {
@@ -26,11 +27,12 @@ angular.module('sbirezApp')
 
     $scope.search = function(page) {
       $scope.currentPage = page;
-      SearchService.search(page, $scope.searchTerm).then(function(data) {
+      SearchService.search(page, $scope.searchTerm, $scope.itemsPerPage).then(function(data) {
         $scope.results = data;
         if (data !== undefined && data._embedded !== undefined) {
           $scope.results.docs = data._embedded['ea:topic'];
           $scope.itemCount = data._embedded['ea:topic'].length;
+          $scope.numFound = data._embedded.numFound;
 //          $scope.simpleMode = false;
         }
       });
