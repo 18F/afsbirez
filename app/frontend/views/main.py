@@ -17,6 +17,8 @@ class MainView(FlaskView):
     route_base = '/'
 
     @route('/')
+    @route('/topic', endpoint='index')
+    @route('/topic/<path>', endpoint='index')
     @route('/app', endpoint='index')
     @route('/app/<path>', endpoint='index')
     @route('/app/<path>/<path2>', endpoint='index')

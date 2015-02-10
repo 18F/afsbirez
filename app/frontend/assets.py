@@ -34,6 +34,7 @@ angular_js = Bundle(
     "js/filters/truncate.js",
     "js/directives/workflow.js",
     "js/directives/pagination.js",
+    "js/directives/backbutton.js",
     "js/directives/header.js",
     "js/directives/footer.js",
     "js/controllers/main.js",
@@ -62,6 +63,7 @@ angular_js = Bundle(
     "js/services/usersvc.js",
     "js/services/oppsvc.js",
     "js/services/searchsvc.js",
+    "js/services/savedSearchsvc.js",
     "js/services/tokensvc.js",
     filters="jsmin",
     output="js/angular.min.js"
