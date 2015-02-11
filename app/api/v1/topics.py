@@ -5,17 +5,19 @@ __author__ = 'DavidWCaraway'
 import datetime
 from flask.ext.restful import abort
 from flask import request
-from app.api.base import BaseView, secure_endpoint, limited_value_class, Paginated, MAX_RESULTSET_SIZE
+from app.api.base import BaseView, secure_endpoint
+from app.api.base import paginated_parser, modified_path, apply_pagination
 from app.models import model
 from flask.ext.restful import reqparse
 import sqlalchemy as sa
 from sqlalchemy_searchable import search
 from werkzeug.routing import ValidationError
 
+MAX_RESULTSET_SIZE = 200
 
-class TopicsView(BaseView, Paginated):
+class TopicsView(BaseView):
 
-    parser = Paginated.parser.copy()
+    parser = paginated_parser(MAX_RESULTSET_SIZE)
     parser.add_argument('q', type=str, help='Full-text search')
     parser.add_argument('closed', type=bool, default=False,
                         help='Include topics already closed')
@@ -66,13 +68,13 @@ class TopicsView(BaseView, Paginated):
             now = datetime.datetime.now()
             data = data.filter(model.Topic.proposals_end_date >= now)
         num_found = data.count()
-        data = self.apply_pagination(data, args)
+        data = apply_pagination(args, data)
         data = data.all()
         result = {
                     "numFound": num_found,
                     "_links": {
                         "self": {
-                            "href": request.url  # but should it be relative?
+                            "href": modified_path(request, args)
                             },
                         "curies": [
                             {
@@ -91,9 +93,9 @@ class TopicsView(BaseView, Paginated):
                    }
                 }
         if num_found > (args.start + args.limit):
-            result['_links']['_next'] = {'href': self.modified_path(args, start=args.start + args.limit)}
+            result['_links']['next'] = {'href': modified_path(request, args, start=args.start + args.limit)}
         if args.start > 1:
-            result['_links']['_prev'] = {'href': self.modified_path(args, start=max(1, args.start - args.limit))}
+            result['_links']['prev'] = {'href': modified_path(request, args, start=max(1, args.start - args.limit))}
         return result
 
     @secure_endpoint()

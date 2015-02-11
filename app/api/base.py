@@ -222,33 +222,30 @@ def limited_value_class(base_class, min_val = None, max_val = None):
             base_class.__init__(val, *arg, **kwarg)
     return Limited
 
-
-MAX_RESULTSET_SIZE = 200
 NaturalNumber = limited_value_class(int, 1)
-LimitedInt = limited_value_class(int, 1, MAX_RESULTSET_SIZE)
 
-
-class Paginated(object):
-
+def paginated_parser(max_result_size):
     parser = RequestParser()
     parser.add_argument('start', type=NaturalNumber, default=1,
-                        help='Get results staring at')
+                                  help='Get results staring at')
+    LimitedInt = limited_value_class(int, 1, max_result_size)
     parser.add_argument('limit', type=LimitedInt, default=20,
-                        help='Number of topics to return (max %s)' % MAX_RESULTSET_SIZE)
+                        help='Number of topics to return (max %s)' % max_result_size)
+    return parser
 
-    def modified_path(self, args, **changes):
-        """Builds a new request, like the one described by `request.path` and `args`,
-           but with the edits specified by **changes."""
+def modified_path(request, args, **changes):
+    """Builds a new request, like the one described by `request.path` and `args`,
+       but with the edits specified by **changes."""
 
-        newargs = dict(args)
-        newargs.update(changes)
-        if newargs:
-            return '%s?%s' % (request.path, '&'.join('%s=%s' % (k, v) for (k, v) in newargs.items()))
-        else:
-            return request.path
+    newargs = dict(args)
+    newargs.update(changes)
+    if newargs:
+        return '%s?%s' % (request.path, '&'.join('%s=%s' % (k, v) for (k, v) in newargs.items()))
+    else:
+        return request.path
 
-    def apply_pagination(args, data):
-        data = data.offset(args.start - 0)
-        data = data.limit(args.limit)
-        return data
+def apply_pagination(args, data):
+    data = data.offset(args.start - 0)
+    data = data.limit(args.limit)
+    return data
 
