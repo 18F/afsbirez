@@ -30,12 +30,23 @@ def limited_value_class(base_class, min_val = None, max_val = None):
 NaturalNumber = limited_value_class(int, 1)
 LimitedInt = limited_value_class(int, 1, MAX_RESULTSET_SIZE)
 
+
+class SortOrderString(str):
+    def __init__(self, s):
+        s = s.lower().strip()
+        if s not in ('asc', 'desc'):
+            raise ValueError("sort order must be `asc` or `desc`")
+        str.__init__(s)
+
+
 class TopicsView(BaseView):
 
     parser = reqparse.RequestParser()
     parser.add_argument('q', type=str, help='Full-text search')
     parser.add_argument('closed', type=bool, default=False,
                         help='Include topics already closed')
+    parser.add_argument('order', type=SortOrderString, default='asc',
+                        help='Sort order for results(`asc` or `desc`)')
     parser.add_argument('start', type=NaturalNumber, default=1,
                         help='Get results staring at')
     parser.add_argument('limit', type=LimitedInt, default=20,
@@ -62,10 +73,10 @@ class TopicsView(BaseView):
             },
             "id": datum.id,
             "title": datum.title,
+            "topic_number": datum.topic_number,
             "objective": datum.objective,
             "description": datum.description,
             "agency": datum.agency,
-            "topic_number": datum.topic_number,
             "solicitation_id": datum.solicitation_id,
             "url": datum.url,
             "program": datum.program.program,
@@ -82,7 +93,13 @@ class TopicsView(BaseView):
 
     def index(self):
         args = self.parser.parse_args(strict=True)
-        data = search(model.Topic.query, args.q, sort=True)
+        if args.q:
+            data = search(model.Topic.query, args.q, sort=True)
+        else:
+            if args.order == 'desc':
+                data = model.Topic.query.order_by(sa.desc(model.Topic.topic_number))
+            else:
+                data = model.Topic.query.order_by(model.Topic.topic_number)
         if not args.closed:
             now = datetime.datetime.now()
             data = data.filter(model.Topic.proposals_end_date >= now)
