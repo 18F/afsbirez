@@ -74,13 +74,21 @@ class TopicsView(BaseView):
             "id": datum.id,
             "title": datum.title,
             "topic_number": datum.topic_number,
+            "objective": datum.objective,
             "description": datum.description,
             "agency": datum.agency,
-            "release_date": datum.pre_release_date.strftime(self.date_format),
-            "open_date": datum.proposals_begin_date.strftime(self.date_format),
-            "close_date": datum.proposals_end_date.strftime(self.date_format),
+            "solicitation_id": datum.solicitation_id,
+            "url": datum.url,
+            "program": datum.program.program,
+            "pre_release_date": datum.pre_release_date.strftime(self.date_format),
+            "proposals_begin_date": datum.proposals_begin_date.strftime(self.date_format),
+            "proposals_end_date": datum.proposals_end_date.strftime(self.date_format),
             "days_to_close": (datum.proposals_end_date - now).days,
-            "status": self.status(datum)
+            "status": self.status(datum),
+            "areas": [ area.area for area in datum.areas ],
+            "phases": [ phase.phase for phase in datum.phases],
+            "references": [reference.reference for reference in datum.references],
+            "keywords": [keyword.keyword for keyword in datum.keywords]
             }
 
     def index(self):
