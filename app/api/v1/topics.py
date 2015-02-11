@@ -5,41 +5,20 @@ __author__ = 'DavidWCaraway'
 import datetime
 from flask.ext.restful import abort
 from flask import request
-from app.api.base import BaseView, secure_endpoint
+from app.api.base import BaseView, secure_endpoint, limited_value_class, Paginated, MAX_RESULTSET_SIZE
 from app.models import model
 from flask.ext.restful import reqparse
 import sqlalchemy as sa
 from sqlalchemy_searchable import search
 from werkzeug.routing import ValidationError
 
-MAX_RESULTSET_SIZE = 200
 
-def limited_value_class(base_class, min_val = None, max_val = None):
-    class Limited(base_class):
-        min_ = min_val
-        max_ = max_val
-        def __init__(self, val, *arg, **kwarg):
-            val = base_class(val)
-            if (min_val is not None) and (val < self.min_):
-                raise ValidationError("Value should be at least %s" % self.min_)
-            elif (max_val is not None) and (val > self.max_):
-                raise ValidationError("Value should be no more than %s" % self.max_)
-            base_class.__init__(val, *arg, **kwarg)
-    return Limited
+class TopicsView(BaseView, Paginated):
 
-NaturalNumber = limited_value_class(int, 1)
-LimitedInt = limited_value_class(int, 1, MAX_RESULTSET_SIZE)
-
-class TopicsView(BaseView):
-
-    parser = reqparse.RequestParser()
+    parser = Paginated.parser.copy()
     parser.add_argument('q', type=str, help='Full-text search')
     parser.add_argument('closed', type=bool, default=False,
                         help='Include topics already closed')
-    parser.add_argument('start', type=NaturalNumber, default=1,
-                        help='Get results staring at')
-    parser.add_argument('limit', type=LimitedInt, default=20,
-                        help='Number of topics to return (max %s)' % MAX_RESULTSET_SIZE)
 
     date_format = '%Y%m%d'
 
@@ -87,8 +66,7 @@ class TopicsView(BaseView):
             now = datetime.datetime.now()
             data = data.filter(model.Topic.proposals_end_date >= now)
         num_found = data.count()
-        data = data.offset(args.start - 0)
-        data = data.limit(args.limit)
+        data = self.apply_pagination(data, args)
         data = data.all()
         result = {
                     "numFound": num_found,
@@ -103,9 +81,6 @@ class TopicsView(BaseView):
                                 "templated": True
                             }
                             ],
-                        "next": {
-                            "href": "/topics?start=21" # TODO: support start
-                            },
                         "ea:find": {
                             "href": "/topics{?id}",
                             "templated": True
@@ -115,6 +90,10 @@ class TopicsView(BaseView):
                         "ea:topic": [ self._single(datum) for datum in data ]
                    }
                 }
+        if num_found > (args.start + args.limit):
+            result['_links']['_next'] = {'href': self.modified_path(args, start=args.start + args.limit)}
+        if args.start > 1:
+            result['_links']['_prev'] = {'href': self.modified_path(args, start=max(1, args.start - args.limit))}
         return result
 
     @secure_endpoint()

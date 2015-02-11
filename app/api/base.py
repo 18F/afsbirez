@@ -71,7 +71,7 @@ class ClassyAPI(RestfulAPI):
         # Check Flask-Restful ownership
         if super(ClassyAPI, self).owns_endpoint(endpoint):
             return True
-        # Check ClassyAPI ownership 
+        # Check ClassyAPI ownership
         for bp_name in self.classy_blueprints.keys():
             if endpoint.startswith(bp_name) and 'API:' in endpoint:
                 return True
@@ -208,3 +208,47 @@ def json_required(func):
         enforce_json_post_put_patch_requests()
         return func(*args, **kwargs)
     return decorated_view
+
+def limited_value_class(base_class, min_val = None, max_val = None):
+    class Limited(base_class):
+        min_ = min_val
+        max_ = max_val
+        def __init__(self, val, *arg, **kwarg):
+            val = base_class(val)
+            if (min_val is not None) and (val < self.min_):
+                raise ValidationError("Value should be at least %s" % self.min_)
+            elif (max_val is not None) and (val > self.max_):
+                raise ValidationError("Value should be no more than %s" % self.max_)
+            base_class.__init__(val, *arg, **kwarg)
+    return Limited
+
+
+MAX_RESULTSET_SIZE = 200
+NaturalNumber = limited_value_class(int, 1)
+LimitedInt = limited_value_class(int, 1, MAX_RESULTSET_SIZE)
+
+
+class Paginated(object):
+
+    parser = RequestParser()
+    parser.add_argument('start', type=NaturalNumber, default=1,
+                        help='Get results staring at')
+    parser.add_argument('limit', type=LimitedInt, default=20,
+                        help='Number of topics to return (max %s)' % MAX_RESULTSET_SIZE)
+
+    def modified_path(self, args, **changes):
+        """Builds a new request, like the one described by `request.path` and `args`,
+           but with the edits specified by **changes."""
+
+        newargs = dict(args)
+        newargs.update(changes)
+        if newargs:
+            return '%s?%s' % (request.path, '&'.join('%s=%s' % (k, v) for (k, v) in newargs.items()))
+        else:
+            return request.path
+
+    def apply_pagination(args, data):
+        data = data.offset(args.start - 0)
+        data = data.limit(args.limit)
+        return data
+
