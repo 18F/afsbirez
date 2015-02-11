@@ -76,7 +76,6 @@ class TopicsView(BaseView):
             "topic_number": datum.topic_number,
             "description": datum.description,
             "agency": datum.agency,
-            "topic_number": datum.topic_number,
             "release_date": datum.pre_release_date.strftime(self.date_format),
             "open_date": datum.proposals_begin_date.strftime(self.date_format),
             "close_date": datum.proposals_end_date.strftime(self.date_format),
