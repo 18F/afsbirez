@@ -169,6 +169,11 @@ class TestAPI:
         assert 'prev' in results.json['_links']
         assert 'start=1' in results.json['_links']['prev']['href']
 
+    @pytest.mark.usefixtures('db')
+    def test_links_url_encoded(self, db, testapi):
+        results = testapi.get('/api/tests/topics?q=test software')
+        assert 'test+software' in results.json['_links']['self']['href']
+
 
 class TestAPILoggingIn:
 

@@ -20,6 +20,7 @@ from flask.ext.restful.representations.json import output_json
 from flask.ext.restful.reqparse import RequestParser
 from flask.ext.restful.utils import unpack
 from functools import wraps
+from urllib.parse import urlencode
 from werkzeug.http import parse_options_header
 
 # Monkey-patch flask.ext.restful.representations.json.settings to always
@@ -240,7 +241,7 @@ def modified_path(request, args, **changes):
     newargs = dict(args)
     newargs.update(changes)
     if newargs:
-        return '%s?%s' % (request.path, '&'.join('%s=%s' % (k, v) for (k, v) in newargs.items()))
+        return '%s?%s' % (request.path, urlencode(newargs))
     else:
         return request.path
 
