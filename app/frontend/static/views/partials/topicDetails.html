@@ -7,7 +7,7 @@
   <center><h4>{{data.program}} {{data.topic_number}}</h4></center>
   <center><a href="{{data.url}}">{{data.url}}</a></center>
   <hr />
-  <p class="lead">{{data.objective}}</p>
+  <p class="lead"><strong>Objective:</strong> {{data.objective}}</p>
   <div ng-show="data.areas" class="row">
     <div class="col-md-3">
       <p class="text-right"><strong>Research &amp; Technical Areas:</strong></p>
@@ -76,7 +76,7 @@
   </div>
   <div ng-show="data.proposals_begin_date" class="row">
     <div class="col-md-3">
-      <p class="text-right"><strong>Proposal Begin Date:</strong></p>
+      <p class="text-right"><strong>Proposal Submission Begin Date:</strong></p>
     </div>
     <div class="col-md-9">
       {{data.proposals_begin_date | date }}
@@ -84,7 +84,7 @@
   </div>
   <div ng-show="data.proposals_end_date" class="row">
     <div class="col-md-3">
-      <p class="text-right"><strong>Proposal End Date:</strong></p>
+      <p class="text-right"><strong>Proposal Submission End Date:</strong></p>
     </div>
     <div class="col-md-9">
       {{data.proposals_end_date | date}}
