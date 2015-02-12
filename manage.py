@@ -1,14 +1,18 @@
 import os
+import os.path
 import sys
 import subprocess
 
 from flask.ext.script import Command, Manager, Option, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from werkzeug.serving import run_simple
+import ddlgenerator
 
 from app import create_app
 from app.framework.sql import db
 from app.models.users import User
+
+from data.make_unique import filter_json_for_unique
 
 from app.settings import DevelopmentConfig
 application = create_app(override_settings=DevelopmentConfig)
@@ -104,9 +108,37 @@ def test(type):
         client_exit_code = client_test()
         return server_exit_code or client_exit_code
 
+
+class ExtractCommand(Command):
+    "Populates topics data from .json dump of scraped topics"
+
+    option_list = (
+        Option('-f', '--file-loc', dest='file_loc', default='data/aftopics.json'),
+    )
+
+    def run(self, file_loc):
+        def path_to(filename):
+            return os.path.join('data', filename)
+        def insert_file(filename, outfile):
+            with open(path_to(filename)) as addfile:
+                outfile.write(addfile.read())
+        json_filename = path_to('topics.json')
+        sql_filename = path_to('topics.sql')
+        filter_json_for_unique(file_loc, json_filename)
+        with open(sql_filename, 'w') as outfile:
+            insert_file('empty_topic_data.sql', outfile)
+            print('\n\ncreate schema import;\nset search_path=import;\n\n', file=outfile)
+            ddlgenerator.generate(['--inserts', 'postgresql', json_filename], file=outfile)
+            insert_file('transfer_schemas.sql', outfile)
+            insert_file('fulltext.sql', outfile)
+        db_name = application.app.config['SQLALCHEMY_DATABASE_URI'].split('/')[-1]
+        os.system('psql -f %s %s' % (sql_filename, db_name))
+
+
 manager.add_command('runserver', WSGI(host='0.0.0.0'), )
 manager.add_command('worker', Worker())
 manager.add_command('shell', Shell(make_context=_make_context))
+MigrateCommand.add_command('extract', ExtractCommand)
 manager.add_command('db', MigrateCommand)
 
 if __name__ == '__main__':

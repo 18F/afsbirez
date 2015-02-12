@@ -30,3 +30,11 @@ app/frontend/static/css/vendor
 app/frontend/static/js/vendor
 app/frontend/static/swf
 app/frontend/static/webassets-external
+data/*.json
+*.log
+Untitled*.ipynb
+.floo*
+*.wpr
+*.wpu
+.ipynb_checkpoints/
+*.egg-info/
