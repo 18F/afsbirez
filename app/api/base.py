@@ -246,7 +246,7 @@ def modified_path(request, args, **changes):
         return request.path
 
 def apply_pagination(args, data):
-    data = data.offset(args.start - 0)
+    data = data.offset(args.start - 1)
     data = data.limit(args.limit)
     return data
 

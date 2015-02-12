@@ -150,6 +150,10 @@ class TestAPI:
         assert 'numFound' in all_results.json
         assert all_results.json['numFound'] >= 10
 
+        some_results = testapi.get('/api/tests/topics?q=temperature&limit=100')
+        assert (some_results.json['numFound'] ==   
+                len(some_results.json['_embedded']['ea:topic']))
+
     @pytest.mark.usefixtures('db')
     def test_links_present(self, db, testapi):
         results = testapi.get('/api/tests/topics?start=1&limit=6')
