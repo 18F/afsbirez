@@ -7,7 +7,7 @@
   <center><h4>{{data.program}} {{data.topic_number}}</h4></center>
   <center><a href="{{data.url}}">{{data.url}}</a></center>
   <hr />
-  <p class="lead"><strong>Objective:</strong> {{data.objective}}</p>
+  <p ng-show="data.objective" class="lead"><strong>Objective:</strong> {{data.objective}}</p>
   <div ng-show="data.areas" class="row">
     <div class="col-md-3">
       <p class="text-right"><strong>Research &amp; Technical Areas:</strong></p>
@@ -45,9 +45,7 @@
       <p class="text-right"><strong>References:</strong></p>
     </div>
     <div class="col-md-9">
-      <ul class="list-unstyled">
-        <li ng-repeat="reference in data.references">{{reference}}</li>
-      </ul>
+      <p ng-repeat="reference in data.references | orderBy:reference">{{reference}}</p>
     </div>
   </div>
   <div ng-show="data.keywords && data.keywords.length > 0" class="row">
