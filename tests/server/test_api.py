@@ -174,6 +174,20 @@ class TestAPI:
         results = testapi.get('/api/tests/topics?q=test software')
         assert 'test+software' in results.json['_links']['self']['href']
 
+    @pytest.mark.usefixtures('db')
+    def test_sort_order(self, db, testapi):
+        asc = testapi.get('/api/tests/topics?order=asc')
+        desc = testapi.get('/api/tests/topics?order=desc')
+        assert desc.json['numFound'] >= 10
+        assert asc.json['numFound'] == desc.json['numFound']
+        assert asc.json['_embedded']['ea:topic'][0] != desc.json['_embedded']['ea:topic'][0]
+        # these tests don't work b/c Python and PostgreSQL disagree on whether 'AF15-AT25  (AirForce)' > 'AF151-190  (AirForce)'
+        # need to check that element 0 of ASC matches element -1 of DESC, but that will fail vs. the production dataset
+        # until we can establish a filter that generates 1 < n < max limit rows for both test and production datasets
+        #
+        # assert asc.json['_embedded']['ea:topic'][0]['topic_number'] < asc.json['_embedded']['ea:topic'][1]['topic_number']
+        # assert desc.json['_embedded']['ea:topic'][0]['topic_number'] > desc.json['_embedded']['ea:topic'][1]['topic_number']
+
 
 class TestAPILoggingIn:
 
