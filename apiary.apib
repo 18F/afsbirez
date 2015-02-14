@@ -204,7 +204,7 @@ A collection of awarded contracts
         + Values
             + `asc`
             + `desc`
-    
+
 + Response 200 (application/vnd.api+json)
 
         {
@@ -303,8 +303,8 @@ An individual awarded contract.
             "company": "Vista Partners LLC",
             "ri": "Institute for Creative Technologies"
         }
- 
-# Group Profile        
+
+# Group Profile
 # Profile CRUD [/profile]
 Your profile.
 
@@ -321,7 +321,7 @@ Get your profile
           "id": "409047",
           "username": "testuser"
         }
-        
+
 ## Update your profile [PUT]
 Updates a topic application using patch partial representation
 + Request (application/json)
@@ -333,7 +333,7 @@ Updates a topic application using patch partial representation
 
         {
         "TO":"DO"
-        }        
+        }
 
 ## Partial update your profile [PATCH]
 Partially updates your profile using patch
@@ -381,7 +381,7 @@ Gets an application by id
         {
         "TO":"DO"
         }
-        
+
 ## Create an application [POST]
 Updates a topic application using patch partial representation
 + Parameters
@@ -395,7 +395,7 @@ Updates a topic application using patch partial representation
 
         {
         "TO":"DO"
-        }        
+        }
 
 ## Update an application [PUT]
 Updates a topic
@@ -426,7 +426,7 @@ Updates a topic application using patch partial representation
         {
         "TO":"DO"
         }
-        
+
 ## Delete an application [DELETE]
 Updates a topic application using patch partial representation
 + Parameters
@@ -475,7 +475,7 @@ Gets a document by id
         {
         "TO":"DO"
         }
-        
+
 ## Create a document [POST]
 Updates a topic application using patch partial representation
 + Parameters
@@ -489,7 +489,7 @@ Updates a topic application using patch partial representation
 
         {
         "TO":"DO"
-        }        
+        }
 
 ## Update an document [PUT]
 Updates a topic
@@ -520,7 +520,7 @@ Updates a document using patch partial representation
         {
         "TO":"DO"
         }
-        
+
 ## Delete an application [DELETE]
 Removes a document
 + Parameters
@@ -543,7 +543,7 @@ Your forms.
 # Form Collection [/forms]
 Resource representing a collection of forms
 
-    
+
 ## GET /forms?{q,start,limit,order}
 Returns a collection of forms matching specified criteria
 + Parameters
@@ -572,7 +572,7 @@ Gets an application by id
         {
         "TO":"DO"
         }
-        
+
 ## Create a form [POST]
 Creates a filled form
 + Parameters
@@ -586,4 +586,232 @@ Creates a filled form
 
         {
         "TO":"DO"
-        } 
+        }
+
+
+# Group Users
+Application users
+
+# User Collection [/users]
+Resource representing a collection of users
+
+
+## GET /users?{q,start,limit,order}
+Returns a collection of users matching specified criteria
++ Parameters
+    + q (optional, string) ... A free-text strings
+    + start = `1` (optional, number) ... Starting index
+    + limit = `20` (optional, number) ... Number of items to return. ***Maximum value is 200***
+    + order = `asc` (optional, text) ... Sort order of collection response
+
+        + Values
+            + `asc`
+            + `desc`
++ Response 200 (application/vnd.api+json)
+
+        {
+          "_links": {
+            "self": {
+              "href": "/users"
+            },
+            "curies": [
+              {
+                "name": "ea",
+                "href": "http://sbirez.gsa.gov/rels/{rel}",
+                "templated": true
+              }
+            ],
+            "next": {
+              "href": "/users?start=21"
+            },
+            "ea:find": {
+              "href": "/users{?id}",
+              "templated": true
+            }
+          },
+          "_embedded": {
+            "ea:user": [
+              {
+                "_links": {
+                  "self": {
+                    "href": "/users/123"
+                  }
+                },
+                "id": 123,
+                "email":"jane.shepard@normandysr2.gov",
+                "active": "true",
+                "confirmed_at": "2182-04-11T18:25:43Z",
+                "last_login_at": "2183-09-19T13:11:33Z",
+                "current_login_at": "2183-09-19T13:11:33Z",
+                "last_login_ip": "50.41.123.231",
+                "current_login_ip": "50.41.123.231",
+                "login_count": 22,
+                "name": "Jane Shephard",
+                "title": "Commander,
+              },
+            ]
+          }
+        }
+
+
+## GET /users/{id}
+Gets a user by id
++ Parameters
+    + id (required, nuber) ... The unique id
++ Response 200
+
+{
+  "_links": {
+    "self": {
+      "href": "/users/123"
+    }
+  },
+  "id": 123,
+  "email":"jane.shepard@normandysr2.gov",
+  "active": "true",
+  "confirmed_at": "2182-04-11T18:25:43Z",
+  "last_login_at": "2183-09-19T13:11:33Z",
+  "current_login_at": "2183-09-19T13:11:33Z",
+  "last_login_ip": "50.41.123.231",
+  "current_login_ip": "50.41.123.231",
+  "login_count": 22,
+  "name": "Jane Shephard",
+  "title": "Commander,
+}
+
+
+# Users CRUD [/users]
+
+## POST /users
+Creates a new user
++ Parameters
+    + email (required, string) ... The user's email address
+    + password (required, string) ... the user's password
+    + active (optional, string) ... Whether the account should be active
+
+        + Values
+            + `true`
+            + `false`
+
+    + secret (optional, string) ...
+    + name (optional, string) ... User's real-life name
+    + title (optional, string) ... User's job title
++ Request
+
+        {
+        "email":"jane.shepard@normandysr2.gov",
+        "password":"15omnigel",
+        }
++ Response 201
+
+        {
+          "_links": {
+            "self": "/users/123",
+            }
+        "id": 123,
+        "email": "jane.shepard@normandysr2.gov",
+        "active": "true",
+        "confirmed_at": null,
+        "last_login_at": null,
+        "current_login_at": null,
+        "last_login_ip": null,
+        "current_login_ip": null,
+        "login_count": 0,
+        "name": null,
+        "title": null,
+        }
+
+
+## PUT /users/{id}
+Replaces existing user record.  Any fields not supplied are filled with `null`.
++ Parameters
+    + id (required, integer) ... Existing record identifier
+    + email (required, string) ... The user's email address
+    + password (required, string) ... the user's password
+    + active (optional, string) ... Whether the account should be active
+
+        + Values
+            + `true`
+            + `false`
+
+    + secret (optional, string) ...
+    + name (optional, string) ... User's real-life name
+    + title (optional, string) ... User's job title
++ Request
+
+        {
+        "email":"jane.shepard@normandysr2.gov",
+        "password":"15omn1gel",
+        }
++ Response 200
+
+        {
+          "_links": {
+            "self": "/users/123",
+            }
+        "id": 123,
+        "email": "jane.shepard@normandysr2.gov",
+        "active": "true",
+        "confirmed_at": null,
+        "last_login_at": null,
+        "current_login_at": null,
+        "last_login_ip": null,
+        "current_login_ip": null,
+        "login_count": 0,
+        "name": null,
+        "title": null,
+        }
+
+
+## PATCH /users/{id}
+Edits existing user record.  Any fields not supplied are left unchanged.
++ Parameters
+    + id (required, integer) ... Existing record identifier
+    + email (optional, string) ... The user's email address
+    + password (optional, string) ... the user's password
+    + active (optional, string) ... Whether the account should be active
+
+        + Values
+            + `true`
+            + `false`
+
+    + secret (optional, string) ...
+    + name (optional, string) ... User's real-life name
+    + title (optional, string) ... User's job title
++ Request
+
+        {
+        "name":"Jane Shepard",
+        }
++ Response 200
+
+        {
+          "_links": {
+            "self": "/users/123",
+            }
+        "id": 123,
+        "email": "jane.shepard@normandysr2.gov",
+        "active": "true",
+        "confirmed_at": null,
+        "last_login_at": null,
+        "current_login_at": null,
+        "last_login_ip": null,
+        "current_login_ip": null,
+        "login_count": 0,
+        "name": "Jane Shepard",
+        "title": null,
+        }
+
+
+## DELETE /users/{id}
+Deletes a user account.
++ Parameters
+    + id (required, integer) ... Existing record identifier
++ Request
+
+        {
+        }
++ Response 204
+
+        {
+        }
