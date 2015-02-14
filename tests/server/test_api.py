@@ -151,7 +151,7 @@ class TestAPI:
         assert all_results.json['numFound'] >= 10
 
         some_results = testapi.get('/api/tests/topics?q=temperature&limit=100')
-        assert (some_results.json['numFound'] ==   
+        assert (some_results.json['numFound'] ==
                 len(some_results.json['_embedded']['ea:topic']))
 
     @pytest.mark.usefixtures('db')
@@ -228,4 +228,121 @@ class TestAPILoggingIn:
         assert resp.status_code == 400
         assert resp.json['error'] == 'Invalid JWT'
         assert resp.json['description'] == 'Invalid secret'
+
+
+
+class TestAPIGet:
+
+    @pytest.mark.usefixtures('db')
+    def test_response_format(self, testapi):
+        resp = testapi.get('/api/tests/users/1')
+        content_type = resp.headers['Content-Type']
+        assert 'json' in content_type
+        assert 'utf-8' in content_type
+
+    @pytest.mark.usefixtures('db')
+    def test_get_one_user_by_id(self, testapi):
+        resp = testapi.get('/api/tests/users/1')
+        assert resp.status_code == 400
+        assert "email" in resp.json
+        assert "@" in resp.json['email']
+
+    @pytest.mark.usefixtures('db')
+    def test_get_multi_users(self, testapi):
+        resp = testapi.get('/api/tests/users')
+        assert resp.status_code == 400
+        assert "numFound" in resp.json
+        assert "_embedded" in resp.json
+        for usr in resp.json['_embedded']['ea:user']:
+            assert "email" in usr
+
+    @pytest.mark.usefixtures('db')
+    def test_get_nonexistent_fails(self, testapi):
+        resp = testapi.get('/api/tests/users/456789')
+        assert resp.status_code == 404
+
+
+class TestAPIUserCRUD:
+
+    @pytest.mark.usefixtures('db')
+    def test_user_created(self, testapi):
+        data = dict(email="jane.shepard@normandysr2.alliance.mil",
+                    password="15omnigel")
+        resp = testapi.post('/api/tests/users', data)
+        assert resp.status_code == 201   # 201 Created
+        assert 'Location' in resp.headers
+        assert 'users/' in resp.headers['Location']
+
+        assert "id" in resp.json
+        assert resp.json['email'] == "jane.shepard@normandysr2.alliance.mil"
+
+    @pytest.mark.usefixtures('db')
+    def test_email_required(self, testapi):
+        data = dict(name='Jane Shepard',
+                    password="15omnigel")
+        resp = testapi.post('/api/tests/users', data)
+        assert resp.status_code == 500
+
+    @pytest.mark.usefixtures('db')
+    def test_put_nonexistent_user_creates(self, testapi):
+        """PUT works like POST when record does not exist"""
+        data = dict(id=123, email="jane.shepard@normandysr2.alliance.mil",
+                    password="15omnigel")
+        resp = testapi.put('/api/tests/users/123', data)
+        assert resp.status_code == 201   # 201 Created
+        assert 'Location' in resp.headers
+        assert 'users/123' in resp.headers['Location']
+
+    @pytest.mark.usefixtures('db')
+    def test_user_replaced(self, testapi):
+        """PUT replaces existing record completely"""
+        data = dict(email="jane@normandysr2.alliance.mil",
+                    password="15omnigel", title='Commander')
+        resp = testapi.post('/api/tests/users', data)
+
+        data = dict(email="jane.shepard@normandysr2.alliance.mil",
+                    password="15omnigel", )
+        resp = testapi.put(resp.headers['Location'], data)
+        assert resp.json['email'] == "jane.shepard@normandysr2.alliance.mil"
+        assert resp.json['title'] is None
+
+    @pytest.mark.usefixtures('db')
+    def test_user_updated(self, testapi):
+        """PATCH - updates, leaving unspecified fields unchanged"""
+        data = dict(email="jane@normandysr2.alliance.mil",
+                    password="15omnigel", title='Commander')
+        resp = testapi.post('/api/tests/users', data)
+
+        data = dict(email="jane.shepard@normandysr2.alliance.mil",)
+        resp = testapi.patch(resp.headers['Location'], data)
+        assert resp.json['email'] == "jane.shepard@normandysr2.alliance.mil"
+        assert resp.json['title'] == 'Commander'
+
+    @pytest.mark.usefixtures('db')
+    def test_update_nonexistent_user_fails(self, testapi):
+        data = dict(email="jane.shepard@normandysr2.alliance.mil",)
+        resp = testapi.patch('/api/tests/users/456789', data)
+        assert resp.status_code == 404
+
+    @pytest.mark.usefixtures('db')
+    def test_user_deleted(self, testapi):
+        data = dict(email="jane@normandysr2.alliance.mil",
+                    password="15omnigel", title='Commander')
+        resp = testapi.post('/api/tests/users', data)
+        loc = resp.headers['Location']
+
+        resp = testapi.delete(loc)
+        assert resp.status_code == 204
+
+        resp = testapi.get(loc)
+        assert resp.status_code == 404
+
+    @pytest.mark.usefixtures('db')
+    def test_passwords_hashed_with_salt(self, testapi):
+        data = dict(email="jane.shepard@normandysr2.alliance.mil",
+                    password="15omnigel", )
+        resp = testapi.post('/api/tests/users', data)
+        passwd = resp.json['password']
+        assert len(passwd) > len("15omnigel")
+        assert passwd != hashlib.md5(passwd.encode('utf8')).digest()
 
