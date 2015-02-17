@@ -11,8 +11,8 @@
 """
 import logging
 
-from flask import current_app
-from flask.ext.jwt import JWTError
+from flask import current_app, jsonify
+from flask.ext.jwt import JWTError, _get_serializer, verify_jwt
 from flask.ext.security.utils import verify_and_update_password
 from werkzeug.local import LocalProxy
 
@@ -43,15 +43,15 @@ def make_payload(user):
     """Returns a dictionary to be encoded based on the user."""
     return {
         "user_id": user.id,
-        "secret": user.secret
+        "secret": user.secret,
+        "username": user.name
     }
 
-# TODO - Delete this content after migration to cookiecutter-webapp is complete
-# def encode_payload(payload):
-#   return jsonify({'token': _get_serializer().dumps(payload).decode('utf-8'), 'username': payload['username'], 'id': payload['id']})
-#
-# def make_response(payload):
-#   return payload
-#
-# def auth_func(**kw):
-#   return True
+def encode_payload(payload):
+    return jsonify({'token': _get_serializer().dumps(payload).decode('utf-8'), 'username': payload['username'], 'id': payload['user_id']})
+
+def make_response(payload):
+    return payload
+
+def auth_func(**kw):
+    return True
