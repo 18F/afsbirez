@@ -18,7 +18,7 @@ from raven.contrib.flask import Sentry
 
 from .extensions import *
 from .middleware import HTTPMethodOverrideMiddleware
-from .security import authenticate, load_user, make_payload
+from .security import authenticate, load_user, make_payload, encode_payload, make_response
 from ..models.users import User, Role
 
 _log = logging.getLogger(__name__)
@@ -66,6 +66,8 @@ def create_app(package_name, package_path, settings_override=None,
     jwt.authentication_handler(authenticate)
     jwt.payload_handler(make_payload)
     jwt.user_handler(load_user)
+    jwt.encode_handler(encode_payload)
+    jwt.response_handler(make_response)
 
     # Sentry - only for production 
     if not app.debug and not app.testing and 'SENTRY_DSN' in app.config:
