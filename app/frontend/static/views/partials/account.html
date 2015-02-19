@@ -1,7 +1,0 @@
-<div class="row">
-  <ul class="nav nav-pills nav-stacked sidebar col-md-2">
-    <li><a ui-sref="app.account.user">User</a></li>
-    <li ng-repeat="org in user.organizations"><a ui-sref="app.account.organization({id:{{org.id}}})">{{org.name}}</a></li>
-  </ul>
-  <div class="col-md-10" ui-view="accountContent"></div>
-</div>

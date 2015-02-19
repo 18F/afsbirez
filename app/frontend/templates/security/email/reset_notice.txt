@@ -1,3 +1,0 @@
-Hey {{ user.first_name|title }} -Just a heads up... Your password at SBIREZ [https://sbirez.gov] has been changed.
-
-- 18F

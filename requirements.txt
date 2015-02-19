@@ -1,1 +1,2 @@
--r ./requirements/develop.txt
+Django==1.7
+psycopg2==2.6
