@@ -37,7 +37,7 @@ class Topic(models.Model):
     pre_release_date = models.DateTimeField()
     proposals_begin_date = models.DateTimeField()
     proposals_end_date = models.DateTimeField()
-    fts = models.TextField()
+    fts = models.TextField(blank=True, null=True)
 
 
 
