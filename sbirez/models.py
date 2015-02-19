@@ -13,7 +13,7 @@ class Keyword(models.Model):
     topics = models.ManyToManyField('Topic', blank=True, null=True)
 
 class Phase(models.Model):
-    phase = models.TextField(unique=True)
+    phase = models.TextField()
     topic = models.ForeignKey('Topic')
 
 class Reference(models.Model):
