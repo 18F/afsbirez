@@ -1,0 +1,91 @@
+<div>
+  <div ng-show="errorMsg"> 
+    <h2 class="text-center text-danger">{{errorMsg}}</h2>
+    <p class="text-center"><a href="/">Search</a> for topics from our <a href="/">Home</a> page.</a>
+  </div>
+  <h2><center>{{data.title}}</center></h2>
+  <center><h4>{{data.program}} {{data.topic_number}}</h4></center>
+  <center><a href="{{data.url}}">{{data.url}}</a></center>
+  <hr />
+  <p ng-show="data.objective" class="lead"><strong>Objective:</strong> {{data.objective}}</p>
+  <div ng-show="data.areas" class="row">
+    <div class="col-md-3">
+      <p class="text-right"><strong>Research &amp; Technical Areas:</strong></p>
+    </div>
+    <div class="col-md-9">
+      <ul class="list-unstyled">
+        <li ng-repeat="area in data.areas">{{area}}</li>
+      </ul>
+    </div>
+  </div>
+  <div ng-show="data.acquisition_program" class="row">
+    <div class="col-md-3">
+      <p class="text-right"><strong>Acquisition Program:</strong></p>
+    </div>
+    <div class="col-md-9">
+      {{data.acquisition_program}}
+    </div>
+  </div>
+  <div ng-show="data.description" class="row">
+    <div class="col-md-3">
+      <p class="text-right"><strong>Description:</strong></p>
+    </div>
+    <div class="col-md-9">
+      <p style="white-space: pre-line;">{{data.description}}</p>
+    </div>
+  </div>
+  <br />
+  <div ng-show="data.phases && data.phases.length > 0" class="row">
+    <div class="col-md-9 col-md-offset-3">
+      <p ng-repeat="phase in data.phases | orderBy:phase">{{phase}}</p>
+    </div>
+  </div>
+  <div ng-show="data.references && data.references.length > 0" class="row">
+    <div class="col-md-3">
+      <p class="text-right"><strong>References:</strong></p>
+    </div>
+    <div class="col-md-9">
+      <p ng-repeat="reference in data.references | orderBy:reference">{{reference}}</p>
+    </div>
+  </div>
+  <div ng-show="data.keywords && data.keywords.length > 0" class="row">
+    <div class="col-md-3">
+      <p class="text-right"><strong>Keywords:</strong></p>
+    </div>
+    <div class="col-md-9">
+      {{data.keywords.join(', ')}}
+    </div>
+  </div>
+  <div ng-show="data.solicitation_id" class="row">
+    <div class="col-md-3">
+      <p class="text-right"><strong>Solicitation ID:</strong></p>
+    </div>
+    <div class="col-md-9">
+      {{data.solicitation_id}}
+    </div>
+  </div>
+  <div ng-show="data.pre_release_date" class="row">
+    <div class="col-md-3">
+      <p class="text-right"><strong>Pre-Release Date:</strong></p>
+    </div>
+    <div class="col-md-9">
+      {{data.pre_release_date | date}}
+    </div>
+  </div>
+  <div ng-show="data.proposals_begin_date" class="row">
+    <div class="col-md-3">
+      <p class="text-right"><strong>Proposal Submission Begin Date:</strong></p>
+    </div>
+    <div class="col-md-9">
+      {{data.proposals_begin_date | date }}
+    </div>
+  </div>
+  <div ng-show="data.proposals_end_date" class="row">
+    <div class="col-md-3">
+      <p class="text-right"><strong>Proposal Submission End Date:</strong></p>
+    </div>
+    <div class="col-md-9">
+      {{data.proposals_end_date | date}}
+    </div>
+  </div>
+</div>

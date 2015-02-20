@@ -28,6 +28,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'sbirez',
     'rest_framework',
+    'pg_fts',
+    'django_assets',
 )
 
 MIDDLEWARE_CLASSES = (
