@@ -27,7 +27,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sbirez',
-    'pg_fts',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (

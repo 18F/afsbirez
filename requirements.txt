@@ -1,4 +1,4 @@
 Django>=1.7.4
-psycopg2==2.6
-DjangoRestless
+psycopg2>=2.6
+djangorestframework
 ddlgenerator >=0.1.9
