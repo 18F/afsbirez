@@ -19,5 +19,5 @@ DATABASES = {
     },
 }
 
-MEDIA_ROOT = './media/'
-MEDIA_URL = '/media/'
+STATIC_ROOT = 'sbirez/static/'
+STATIC_URL = '/static/'

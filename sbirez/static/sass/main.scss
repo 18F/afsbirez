@@ -1,0 +1,282 @@
+$icon-font-path: '../lib/bootstrap-sass/assets/fonts/bootstrap/';
+
+@import '../lib/bootstrap-sass/assets/stylesheets/_bootstrap.scss';
+
+.browsehappy {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+/* Space out content a bit */
+body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Make the masthead heading the same height as the navigation */
+.header h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 40px;
+    padding-bottom: 19px;
+}
+
+/* Custom page footer */
+.footer {
+    padding-top: 19px;
+    color: #777;
+    border-top: 1px solid #e5e5e5;
+}
+
+.container-narrow > hr {
+    margin: 30px 0;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+    text-align: center;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.jumbotron .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+}
+
+/* Supporting marketing content */
+.marketing {
+    margin: 40px 0;
+}
+
+.marketing p + h4 {
+    margin-top: 28px;
+}
+
+.drop-box {
+    background: #F8F8F8;
+    border: 5px dashed #DDD;
+    width: 200px;
+    height: 65px; 
+    text-align: center;
+    padding-top: 35px; 
+}
+
+.drop-box.dragover {
+    border: 5px dashed blue;
+}
+
+.nav > li > a {
+    padding-top:3px;
+    padding-bottom:3px;
+}
+
+/* workflow sidebar */
+.workflow-sidebar {
+}
+
+.current-state-list-item {
+}
+
+.workflow-sidebar > ul, .workflow-sidebar > ul > li > ul {
+    list-style-type: none;
+    padding-left: 10px;
+}
+
+/* workflow step */
+.state-title {
+    margin-top:0px;
+}
+
+/* workflow metro */
+.workflow-metro {
+    margin-left: 80px;
+    padding-top:150px;
+    position:relative;
+}
+
+.section-indicator {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 35px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.section-indicator:before {
+    position: absolute;
+    height: 8px;
+    top: -3px;
+    background-color: #000;
+    content: '';
+}
+
+.section-indicator.sections-2:before {
+    right: calc(100% / 2 / 2 + 28%);
+    left: calc(100% / 2 / 2);
+}
+
+.section-indicator.sections-3:before {
+    right: calc(100% / 3 / 2 + 28%);
+    left: calc(100% / 3 / 2);
+}
+
+.section-indicator.sections-4:before {
+    right: calc(100% / 4 / 2 + 28%);
+    left: calc(100% / 4 / 2);
+}
+
+.section-indicator.sections-5:before {
+    right: calc(100% / 5 / 2 + 28%);
+    left: calc(100% / 5 / 2);
+}
+
+.section-indicator.sections-6:before {
+    right: calc(100% / 6 / 2 + 28%);
+    left: calc(100% / 6 / 2);
+}
+
+.section-indicator.sections-7:before {
+    right: calc(100% / 7 / 2 + 28%);
+    left: calc(100% / 7 / 2);
+}
+
+.section-indicator.sections-8:before {
+    right: calc(100% / 8 / 2 + 28%);
+    left: calc(100% / 8 / 2);
+}
+
+.section-indicator.sections-9:before {
+    right: calc(100% / 9 / 2 + 28%);
+    left: calc(100% / 9 / 2);
+}
+
+.section-indicator.sections-10:before {
+    right: calc(100% / 10 / 2 + 28%);
+    left: calc(100% / 10 / 2);
+}
+
+.section-indicator * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.section-indicator li {
+    position: relative;
+    float: left;
+    padding: 0;
+    padding-top: 15px;
+    margin: 0;
+    line-height: 15px;
+}
+
+.section-indicator li a {
+    color: #9b9b9b;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.section-indicator li.current a {
+    color: #000;
+}
+
+.rotated-text {
+    -webkit-transform: translate(20px, -80px) rotate(-45deg) translateY(-50%);
+    -ms-transform: translate(20px, -80px) rotate(-45deg) translateY(-50%);
+    transform: translate(20px, -80px) rotate(-45deg) translateY(-50%);
+    top: 50%;
+    width: 100px;
+}
+
+.section-indicator li a:before {
+    position: absolute;
+    top: -12px;
+    left: calc(40%);
+    width: 24px;
+    height: 24px;
+    background-color: #9b9b9b;
+    border-radius: 100%;
+    content: '';
+    transition: 0.25s;
+}
+
+.section-indicator li a:hover {
+    color: #4d4d4d;
+}
+
+.section-indicator.sections-2 li {
+    width: calc(70% / 2);
+}
+
+.section-indicator.sections-3 li {
+    width: calc(70% / 3);
+}
+
+.section-indicator.sections-4 li {
+    width: calc(70% / 4);
+}
+
+.section-indicator.sections-5 li {
+    width: calc(70% / 5);
+}
+
+.section-indicator.sections-6 li {
+    width: calc(70% / 6);
+}
+
+.section-indicator.sections-7 li {
+    width: calc(70% / 7);
+}
+
+.section-indicator.sections-8 li {
+    width: calc(70% / 8);
+}
+
+.section-indicator.sections-9 li {
+    width: calc(70% / 9);
+}
+
+.section-indicator.sections-10 li {
+    width: calc(70% / 10);
+}
+
+.section-indicator.sections-11 li {
+    width: calc(70% / 11);
+}
+
+.section-indicator li.default,
+.section-indicator li.current {
+    pointer-events: none;
+    color: #000;
+}
+
+.section-indicator li.default a:hover {
+    color: #9b9b9b;
+}
+
+.section-indicator li.current a:before {
+    color: #9b9b9b;
+    border-style: solid;
+    border-color: #000;
+}
+
+.search-control {
+    margin-top: 30px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
