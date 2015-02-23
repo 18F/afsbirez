@@ -19,3 +19,8 @@ class UserTests(TestCase):
         request = factory.get('/groups/')
         response = Response(request)
         self.assertEqual(200, response.status_code)
+
+    def test_topic_view_set(self):
+        request = factory.get('/topics/')
+        response = Response(request)
+        self.assertEqual(200, response.status_code)
