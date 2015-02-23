@@ -12,7 +12,7 @@ router.register(r'topics', api.TopicViewSet, 'topics')
 
 urlpatterns = patterns('',
     # api navigation
-    url(r'^api-nav/', include(router.urls)),
+    url(r'^api/v1/', include(router.urls)),
 
     #django default admin
     url(r'^admin/', include(admin.site.urls)),
@@ -34,4 +34,5 @@ urlpatterns = patterns('',
 
     # angular app endpoint
     url(r'^$', 'sbirez.views.home', name='home'),
+    url(r'^app/', 'sbirez.views.home', name='home'),
 )
