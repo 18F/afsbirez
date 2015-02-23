@@ -4,7 +4,7 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
   var user = {};
   return {
     logIn: function(username, password) {
-      return $http.post('auth', {username: username, password: password});
+      return $http.post('auth/', {username: username, password: password});
     },
 
     logOut: function() {
@@ -13,6 +13,15 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
         $window.sessionStorage.userid = null;
         AuthenticationService.setAuthenticated(false);
         $location.path('/');      
+    },
+
+    resetPassword: function(email) {
+      return $http.post('rest-auth/password/reset/', {'email': email});
+    },
+
+    createUser: function(name, username, password) {
+      return $http.post('api/v1/users/', {name: name, username: username, password: password})
+             .then(this.logIn(username, password));
     },
 
     addOrganization: function(orgName) {

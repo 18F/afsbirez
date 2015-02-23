@@ -29,14 +29,24 @@ angular.module('sbirezApp')
       };
 
       $scope.signUp = function signUp(name, email, password) {
-        console.log('Signups are not yet implemented. Name: ' + name + ', Email: ' + email);
-        if ($scope.closeThisDialog !== undefined) {
-          $scope.closeThisDialog();
+        if (name !== undefined && username !== undefined && password !== undefined) {
+          UserService.createUser(name, email, password).then(function(data) {
+            if ($scope.closeThisDialog !== undefined) {
+              $scope.closeThisDialog();
+            }
+          }, function(status) {
+            console.log(status);
+            $scope.errorMsg = status.data.message;
+          });
         }
       };
  
       $scope.logOut = function logout() {
         UserService.logOut();
+      };
+
+      $scope.resetPassword = function resetPassword(email) {
+        UserService.resetPassword(email);
       };
 
       $scope.cancel = function cancel() {

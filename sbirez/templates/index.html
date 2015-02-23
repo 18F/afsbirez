@@ -43,6 +43,14 @@
     <script src="static/lib/json3/lib/json3.min.js"></script>
     <![endif]-->
 
+    <script>
+    // Add the CSRF Token
+    var app = angular.module('sbirezApp'); 
+    app.config(['$httpProvider', function($httpProvider) {
+      $httpProvider.defaults.headers.common['X-CSRFToken'] = '{{ csrf_token|escapejs }}';
+    }]);
+    </script>
+
     {% assets "bower_js" %}
       <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
