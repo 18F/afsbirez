@@ -20,8 +20,15 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
     },
 
     createUser: function(name, username, password) {
-      return $http.post('api/v1/users/', {name: name, username: username, password: password})
-             .then(this.logIn(username, password));
+      return $http.post('api/v1/users/', 
+        {
+          name: name, 
+          username: username, 
+          email: username, 
+          password: password,
+          groups: [],
+          is_staff: false 
+        });
     },
 
     addOrganization: function(orgName) {
@@ -49,7 +56,7 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
     },
    
     updateUserDetails: function(id, user) {
-      $http.post('api/users/' + id, user).success(function() {
+      $http.post('api/v1/users/' + id, user).success(function() {
       });
     }
   };

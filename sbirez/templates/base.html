@@ -35,6 +35,9 @@
     <div class="container theme-showcase" role="main">
       {% block content %}{% endblock %}
     </div>
+    <div>
+      <p class="col-sm-2 pull-right"><a href="/">Back to application</a></p>
+    </div>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -42,10 +45,18 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script type="text/javascript">
       var error_response = function(data){
-        $('.api-response').html("API Response: " + data.status + ' ' + data.statusText + '<br/>Content: ' + data.responseText);
+        if ($('input[name=new_password1]').val() !== $('input[name=new_password2]').val()) {
+          $('.api-response').html('Passwords must match.');
+        }
+        else if ($('input[name=new_password1]') === '' || $('input[name=new_password2]') === '') {
+          $('.api-response').html('Must provide both password fields.');
+        }
+        else {
+          $('.api-response').html('Error: Invalid Token ' + data.responseText);
+        }
       }
       var susccess_response = function(data){
-        $('.api-response').html("API Response: OK<br/>Content: " + JSON.stringify(data));
+        $('.api-response').html(data.success + ' Go back to the <a href="/">application</a> to log in.');
       }
 
       $().ready(function(){
