@@ -218,6 +218,8 @@ angular.module('sbirezApp', [
       });
 
     $httpProvider.interceptors.push('TokenInterceptor');
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 
     $locationProvider.html5Mode(true);
   })

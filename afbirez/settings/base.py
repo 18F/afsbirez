@@ -27,9 +27,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sbirez',
-    'rest_framework',
-    'pg_fts',
     'django_assets',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -41,6 +42,22 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
+
+REST_SESSION_LOGIN = False
+
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER':'sbirez.utils.jwt_response_payload_handler',
+}
 
 ROOT_URLCONF = 'afbirez.urls'
 
