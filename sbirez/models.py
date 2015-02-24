@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from djorm_pgfulltext.fields import VectorField
 from djorm_pgfulltext.models import SearchManager
 
@@ -40,6 +41,10 @@ class Topic(models.Model):
     proposals_begin_date = models.DateTimeField()
     proposals_end_date = models.DateTimeField()
     fts = VectorField()
+
+    @property
+    def days_to_close(self):
+        return (self.proposals_end_date - timezone.now()).days
 
     objects = SearchManager(fields=None, search_field='fts',
                            auto_update_search_field=False)
