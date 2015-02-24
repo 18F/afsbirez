@@ -46,6 +46,16 @@ class Topic(models.Model):
     def days_to_close(self):
         return (self.proposals_end_date - timezone.now()).days
 
+    @property
+    def status(self):
+        now = timezone.now()
+        if now > self.proposals_end_date:
+            return 'Closed'
+        elif now >= self.proposals_begin_date:
+            return 'Open'
+        else:
+            return 'Future'
+
     objects = SearchManager(fields=None, search_field='fts',
                            auto_update_search_field=False)
 
