@@ -4,7 +4,7 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
   var user = {};
   return {
     logIn: function(username, password) {
-      return $http.post('auth/', {username: username, password: password});
+      return $http.post('auth/', {email: username, password: password});
     },
 
     logOut: function() {
@@ -23,7 +23,6 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
       return $http.post('api/v1/users/', 
         {
           name: name, 
-          username: username, 
           email: username, 
           password: password,
           groups: [],

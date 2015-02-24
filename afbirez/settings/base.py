@@ -26,6 +26,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'custom_user',
     'sbirez',
     'django_assets',
     'rest_framework',
@@ -63,6 +64,7 @@ ROOT_URLCONF = 'afbirez.urls'
 
 WSGI_APPLICATION = 'afbirez.wsgi.application'
 
+AUTH_USER_MODEL = 'custom_user.EmailUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
