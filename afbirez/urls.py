@@ -34,5 +34,6 @@ urlpatterns = patterns('',
 
     # angular app endpoint
     url(r'^$', 'sbirez.views.home', name='home'),
+    url(r'^topic/', 'sbirez.views.home', name='home'),
     url(r'^app/', 'sbirez.views.home', name='home'),
 )

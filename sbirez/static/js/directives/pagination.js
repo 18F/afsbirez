@@ -19,7 +19,7 @@ angular.module('sbirezApp').directive('pagination', ['$compile', function($compi
       });
 
       function updatePagination() {
-        var page = 0;
+        var page = 1;
         var linkTextStart = '<li';
         var linkTextStart2 = '><a ng-href="#" ng-click="$parent.' + attrs.method + '(';
         var linkTextMiddle = ')">';
@@ -41,7 +41,7 @@ angular.module('sbirezApp').directive('pagination', ['$compile', function($compi
 
         // add the individual page callouts
         for (currentItem; currentItem < itemCount; currentItem += itemsPerPage) {
-          retVal += linkTextStart + (currentPage === page ? linkTextActive : '') + linkTextStart2 + page + linkTextMiddle + (page+1) + linkTextEnd;
+          retVal += linkTextStart + (currentPage === page ? linkTextActive : '') + linkTextStart2 + page + linkTextMiddle + page + linkTextEnd;
           page++;
         }
 

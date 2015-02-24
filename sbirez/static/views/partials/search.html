@@ -1,36 +1,40 @@
 <div ng-controller="SearchCtrl">
   <form ng-submit="search()">
     <div class="row search-control">
-      <div >
-        <div class="input-group">
-          <input type="text" ng-model="searchTerm" placeholder="Enter a search term" class="form-control input-lg">
-          <span class="input-group-btn">
-            <button class="btn btn-default btn-lg" type="submit">Search</button>
-          </span>
+      <div class="form-inline">
+        <div class="form-group col-md-9">
+          <div class="input-group col-md-12">
+            <input type="text" ng-model="searchTerm" placeholder="Enter a search term" class="form-control input-lg">
+            <span class="input-group-btn">
+              <button class="btn btn-default btn-lg" type="submit">Search</button>
+            </span>
+          </div>
         </div>
-      </div>
-      <div ng-hide="simpleMode" class="col-md-3">
-        <button class="btn btn-default" type="button">Advanced Search Options</button>
-      </div>
-      <div ng-hide="simpleMode" class="col-md-2">
-        <button class="btn btn-default pull-right" type="button">Start Over</button>
+        <div class="form-group">
+          <div ng-hide="simpleModeIcebox" class="col-md-3">
+            <button class="btn btn-default" type="button">Advanced Search Options</button>
+          </div>
+          <div ng-hide="simpleMode" class="col-md-2">
+            <button class="btn btn-default btn-lg" ng-click="clear()" type="button">Start Over</button>
+          </div>
+        </div>
       </div>
     </div>
     <br/>
     <div class="row">
       <div class="col-md-2">
-        <div ng-show="results._embedded && results._embedded['ea:topic'] && numFound > 0">
+        <div ng-show="results && results.results && numFound > 0">
           <p>{{numFound}} Results</p>
         </div>
-        <div ng-show="results._embedded && results._embedded['ea:topic'] && numFound === 0">
+        <div ng-show="results && results.results && numFound === 0">
           <p>No Results Found</p>
         </div>
       </div>
-      <div ng-hide="simpleMode" class="col-md-3 col-md-offset-7">
+      <div ng-hide="simpleModeIcebox" class="col-md-3 col-md-offset-7">
         <p class="text-right"><em><a href="#" ng-click="saveSearch()">Save this search >>></a></em></p>
       </div>
     </div>
-    <div ng-hide="simpleMode" class="row">
+    <div ng-hide="simpleModeIcebox" class="row">
       <div class="col-md-6">
         <div class="btn-group" data-toggle="buttons">
           <label class="btn btn-default btn-sm active">
@@ -46,11 +50,11 @@
       </div>
       <div class="col-md-2 col-md-offset-1">
       </div>
-      <div ng-hide="simpleMode" class="col-md-3 col-md-offset-7">
+      <div ng-hide="simpleModeIcebox" class="col-md-3 col-md-offset-7">
         <p class="text-right"><em><a href="#" ng-click="saveSearch()">Save this search >>></a></em></p>
       </div>
     </div>
-    <div ng-hide="simpleMode" class="row">
+    <div ng-hide="simpleModeIcebox" class="row">
       <div class="col-md-6">
         <div class="btn-group" data-toggle="buttons">
           <label class="btn btn-default btn-sm active">
@@ -73,7 +77,7 @@
     </div>
   </form>
   <br/>
-  <div ng-repeat="topic in results._embedded['ea:topic']" class="row">
+  <div ng-repeat="topic in results.results" class="row">
     <div class="col-md-9">
       <h4><a href="topic/{{topic.id}}">{{topic.topic_number}}: {{topic.title}}</a></h4>
       <p>{{topic.description|truncate:500}}<span ng-if="topic.description.length > 500"><a href="topic/{{topic.id}}">MORE >>></a></span></p>
@@ -81,7 +85,7 @@
     </div>
   </div>
   <div class="row">
-    <div ng-if="results._embedded['ea:topic'] && numFound > itemCount" class="col-md-9">
+    <div ng-if="results.results && numFound > itemCount" class="col-md-9">
       <pagination ng-attr-current-page="{{currentPage}}" ng-attr-item-count="{{numFound}}" ng-attr-items-per-page="{{itemsPerPage}}" ng-attr-method="search" />
     </div>
   </div>
