@@ -19,6 +19,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
+
 class TopicViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows topics to be viewed or edited.
@@ -26,8 +27,15 @@ class TopicViewSet(viewsets.ModelViewSet):
     serializer_class = TopicSerializer
 
     def get_queryset(self):
-        queryset = Topic.objects.all()
-        title = self.request.QUERY_PARAMS.get('title', None)
-        if title is not None:
-            queryset = queryset.filter(title__contains=title)
+        """
+        Find records for /topics query; apply any filters called
+        """
+
+        params = dict(self.request.QUERY_PARAMS)
+        q = params.pop('q', None)
+        if q is None:
+            queryset = Topic.objects.all()
+        else:
+            queryset = Topic.objects.search(q)
+
         return queryset

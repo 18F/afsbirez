@@ -1,4 +1,6 @@
 from django.db import models
+from djorm_pgfulltext.fields import VectorField
+from djorm_pgfulltext.models import SearchManager
 
 # from pg_fts.fields import TSVectorField
 
@@ -37,7 +39,10 @@ class Topic(models.Model):
     pre_release_date = models.DateTimeField()
     proposals_begin_date = models.DateTimeField()
     proposals_end_date = models.DateTimeField()
-    fts = models.TextField(blank=True, null=True)
+    fts = VectorField()
+
+    objects = SearchManager(fields=None, search_field='fts',
+                           auto_update_search_field=False)
 
 
 
