@@ -50,7 +50,7 @@ describe('Controller: AdminUserCtrl', function () {
     mockDeferred.reject(data);
     scope.$root.$digest();
     expect(window.sessionStorage.token).toNotBe(data.data.token);
-    expect(scope.errorMsg).toBeUndefined();
+    expect(scope.errorMsg).toBeDefined();
   });
   
   it('should remove tokens and redirect to root when logout', function () {

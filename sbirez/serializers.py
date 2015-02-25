@@ -1,11 +1,12 @@
 from django.contrib.auth.models import User, Group
 from sbirez.models import Topic, Reference, Phase, Keyword, Area
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = User
-        fields = ('password', 'url', 'username', 'email', 'groups')
+        model = get_user_model() 
+        fields = ('password', 'url', 'email', 'groups')
         write_only_fields = ('password',)
 
     def create(self, validated_data):
@@ -15,7 +16,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        instance.username = validated_data.get('username', instance.username)
         instance.email = validated_data.get('email', instance.email)
         instance.save()
         return instance
