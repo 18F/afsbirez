@@ -26,22 +26,20 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'name')
 
 
-class TopicSerializer(serializers.HyperlinkedModelSerializer):
-    # reference = serializers.HyperlinkedIdentityField(view_name='reference-detail', format='html')
-    # highlight = serializers.HyperlinkedIdentityField(view_name='snippet-highlight', format='html')
+class ReferenceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reference
+        fields = ('reference')
+
+
+class TopicSerializer(serializers.ModelSerializer):
+    references = ReferenceSerializer(many=True)
     class Meta:
         model = Topic
         fields = ('id', 'topic_number', 'solicitation_id', 'url', 'title', 'agency',
                     'program', 'description', 'objective', 'pre_release_date',
                     'proposals_begin_date', 'proposals_end_date', 'days_to_close',
                     'status'
-                    # , 'reference_set'
+                    , 'references'
                     )
-
-
-class ReferenceSerializer(serializers.HyperlinkedModelSerializer):
-    topic = TopicSerializer(source='reference')
-    class Meta:
-        model = Reference
-        fields = ('reference')
 
