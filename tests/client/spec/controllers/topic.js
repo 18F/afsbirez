@@ -51,14 +51,14 @@ describe('Controller: TopicCtrl', function () {
   
   it('page should be populated when a request for a valid topic is made', function () {
     expect(scope.data).toEqual({});
-    $httpBackend.expectGET('api/v1/topics/1').respond(data);
+    $httpBackend.expectGET('api/v1/topics/1/').respond(data);
     $httpBackend.flush();
     expect(scope.data.title).toEqual(data.title);
   });
 
   it('page should display an error message if an invalid topic is requested', function () {
     expect(scope.data).toEqual({});
-    $httpBackend.expectGET('api/v1/topics/1').respond(500);
+    $httpBackend.expectGET('api/v1/topics/1/').respond(500);
     $httpBackend.flush();
     expect(scope.errorMsg).toEqual('The topic you are looking for does not exist.');
   });

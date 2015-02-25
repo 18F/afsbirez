@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('sbirezApp').factory('SearchService', function($http, $window, $q) {
-  var SEARCH_URI = 'api/v1/topics';
+  var SEARCH_URI = 'api/v1/topics/';
   var lastSearch = '';
-  var currentPage = 0;
+  var currentPage = 1;
   var itemCount = 0;
   var numFound = 0;
   var results = {};
@@ -21,7 +21,7 @@ angular.module('sbirezApp').factory('SearchService', function($http, $window, $q
         page = currentPage - 1;
       }
       else {
-        page = 0;
+        page = 1;
       }
 
       if (page === currentPage && lastSearch === searchTerm) {
@@ -35,12 +35,12 @@ angular.module('sbirezApp').factory('SearchService', function($http, $window, $q
       var config = {};
       config.params = [];
       config.params.q = searchTerm;
-      config.params.limit = itemsPerPage;
-      config.params.start = itemsPerPage * page + 1;
+      config.params.page_size = itemsPerPage;
+      config.params.page = page;
       $http.get(SEARCH_URI, config).success(function(data) {
         results = data;
-        numFound = data.numFound;
-        itemCount = data._embedded['ea:topic'].length;
+        numFound = data.count;
+        itemCount = data.results.length;
         deferred.resolve(results);
       });
       return deferred.promise;
@@ -54,6 +54,18 @@ angular.module('sbirezApp').factory('SearchService', function($http, $window, $q
         numFound: numFound,
         results: results
       };
+    },
+
+    clearState: function() {
+      lastSearch = '';
+      currentPage = 0;
+      itemCount = 0;
+      numFound = 0;
+      results = {};
+    },
+
+    getPage: function() {
+      return currentPage;
     }
   };
 });
