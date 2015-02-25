@@ -22,7 +22,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 class TopicParameterSchema(mm.Schema):
-    q = mm.fields.String()   # TODO: what if somebody passes multiple values?
+    q = mm.fields.String(description='Search term for any text field')   # TODO: what if somebody passes multiple values?
     closed = mm.fields.Boolean(default=False)
     order = mm.fields.String(default='desc', validate=lambda x: x.lower() in ('asc', 'desc'))
 
@@ -32,6 +32,8 @@ topic_parameter_schema = TopicParameterSchema()
 class TopicViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows topics to be viewed or edited.
+
+    closed -- Include closed topics in results (those whose proposals_end_date has passed)  bool
     """
     serializer_class = TopicSerializer
 
