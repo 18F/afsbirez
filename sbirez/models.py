@@ -7,21 +7,21 @@ from djorm_pgfulltext.models import SearchManager
 
 class Area(models.Model):
     area = models.TextField(unique=True)
-    topics = models.ManyToManyField('Topic', blank=True, null=True)
+    topics = models.ManyToManyField('Topic', blank=True, null=True, related_name='areas')
 
 class Keyword(models.Model):
     keyword = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    topics = models.ManyToManyField('Topic', blank=True, null=True)
+    topics = models.ManyToManyField('Topic', blank=True, null=True, related_name='keywords')
 
 class Phase(models.Model):
     phase = models.TextField()
-    topic = models.ForeignKey('Topic')
+    topic = models.ForeignKey('Topic', related_name='phases')
 
 class Reference(models.Model):
     reference = models.TextField()
-    topic = models.ForeignKey('Topic')
+    topic = models.ForeignKey('Topic', related_name='references')
 
 class Topic(models.Model):
     PROGRAM_CHOICES = (

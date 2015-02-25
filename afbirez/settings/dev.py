@@ -39,4 +39,5 @@ STATIC_ROOT = 'sbirez/static/'
 STATIC_URL = '/static/'
 
 INSTALLED_APPS.append('django_extensions')
+INSTALLED_APPS.append('debug_toolbar')
 
