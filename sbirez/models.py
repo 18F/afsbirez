@@ -1,24 +1,27 @@
 from django.db import models
+from django.utils import timezone
+from djorm_pgfulltext.fields import VectorField
+from djorm_pgfulltext.models import SearchManager
 
 # from pg_fts.fields import TSVectorField
 
 class Area(models.Model):
     area = models.TextField(unique=True)
-    topics = models.ManyToManyField('Topic', blank=True, null=True)
+    topics = models.ManyToManyField('Topic', blank=True, null=True, related_name='areas')
 
 class Keyword(models.Model):
     keyword = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    topics = models.ManyToManyField('Topic', blank=True, null=True)
+    topics = models.ManyToManyField('Topic', blank=True, null=True, related_name='keywords')
 
 class Phase(models.Model):
     phase = models.TextField()
-    topic = models.ForeignKey('Topic')
+    topic = models.ForeignKey('Topic', related_name='phases')
 
 class Reference(models.Model):
     reference = models.TextField()
-    topic = models.ForeignKey('Topic')
+    topic = models.ForeignKey('Topic', related_name='references')
 
 class Topic(models.Model):
     PROGRAM_CHOICES = (
@@ -37,7 +40,24 @@ class Topic(models.Model):
     pre_release_date = models.DateTimeField()
     proposals_begin_date = models.DateTimeField()
     proposals_end_date = models.DateTimeField()
-    fts = models.TextField(blank=True, null=True)
+    fts = VectorField()
+
+    @property
+    def days_to_close(self):
+        return (self.proposals_end_date - timezone.now()).days
+
+    @property
+    def status(self):
+        now = timezone.now()
+        if now > self.proposals_end_date:
+            return 'Closed'
+        elif now >= self.proposals_begin_date:
+            return 'Open'
+        else:
+            return 'Future'
+
+    objects = SearchManager(fields=None, search_field='fts',
+                           auto_update_search_field=False)
 
 
 

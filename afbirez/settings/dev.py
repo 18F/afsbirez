@@ -24,9 +24,11 @@ MEDIA_URL = '/media/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# TODO: Move these into base.py?
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
-    'PAGINATE_BY': 10,
+    'PAGINATE_BY': 20,
+    'MAX_PAGINATE_BY': 200,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.TokenAuthentication',
@@ -35,3 +37,7 @@ REST_FRAMEWORK = {
 
 STATIC_ROOT = 'sbirez/static/'
 STATIC_URL = '/static/'
+
+INSTALLED_APPS.append('django_extensions')
+INSTALLED_APPS.append('debug_toolbar')
+
