@@ -15,6 +15,7 @@ before_script:
   - 'bower install'
   - psql -c 'create user afsbirez;' -U postgres
   - psql -c "alter user afsbirez with password 'afsbirez'" -U postgres
+  - psql -c "alter user afsbirez createdb" -U postgres
   - psql -c 'create database afsbirez owner=afsbirez;' -U postgres
   - 'python manage.py migrate'
 install:
