@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from django.utils import timezone
-from django.contrib.auth import get_user_model 
+from django.contrib.auth import get_user_model
 from sbirez.models import Topic
 from rest_framework import viewsets
 from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer
@@ -43,8 +43,12 @@ class TopicViewSet(viewsets.ModelViewSet):
         Find records for /topics query; apply any filters called
         """
 
+        if self.lookup_field in self.kwargs:
+            # getting a single item by pk, ignore all filters
+            return Topic.objects.all()
+
         topic_parameter_schema.validate(self.request.query_params)
-        (params, err) = topic_parameter_schema.load(self.request.QUERY_PARAMS)
+        (params, err) = topic_parameter_schema.load(self.request.query_params)
 
         fulltext_query = params.get('q')
         if fulltext_query:
