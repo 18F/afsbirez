@@ -6,6 +6,7 @@ from django.test import TestCase
 from sbirez import api
 from django.contrib.auth import get_user_model 
 from django.contrib.auth.models import Group
+import pdb
 
 factory = APIRequestFactory()
 
@@ -143,7 +144,16 @@ class UserTests(APITestCase):
         response = Response(request)
         self.assertEqual(200, response.status_code)
 
+class TopicTests(APITestCase):
+
+    fixtures = ['topictest.yaml']
+
+    # Check that the topics index loads
     def test_topic_view_set(self):
-        request = factory.get('/topics/')
-        response = Response(request)
+        response = self.client.get('/api/v1/topics/')
+        self.assertEqual(200, response.status_code)
+
+    # Check that a topic detail loads
+    def test_topic_detail(self):
+        response = self.client.get('/api/v1/topics/19/')
         self.assertEqual(200, response.status_code)
