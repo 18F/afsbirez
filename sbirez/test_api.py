@@ -6,7 +6,6 @@ from django.test import TestCase
 from sbirez import api
 from django.contrib.auth import get_user_model 
 from django.contrib.auth.models import Group
-import pdb
 
 factory = APIRequestFactory()
 
