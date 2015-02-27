@@ -14,6 +14,7 @@ module.exports = function(config) {
       'sbirez/static/lib/angular/angular.js',
       'sbirez/static/lib/angular-mocks/angular-mocks.js',
       'sbirez/static/lib/angular-resource/angular-resource.js',
+      'sbirez/static/lib/angular-aria/angular-aria.js',
       'sbirez/static/lib/angular-cookies/angular-cookies.js',
       'sbirez/static/lib/angular-sanitize/angular-sanitize.js',
       'sbirez/static/lib/angular-route/angular-route.js',
