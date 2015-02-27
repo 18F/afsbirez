@@ -6,6 +6,7 @@ bower_js = Bundle(
     "lib/angular-resource/angular-resource.js",
     "lib/angular-cookies/angular-cookies.js",
     "lib/angular-sanitize/angular-sanitize.js",
+    "lib/angular-aria/angular-aria.js",
     "lib/angular-route/angular-route.js",
     "lib/ng-file-upload/angular-file-upload.js",
     "lib/ngDialog/js/ngDialog.min.js",

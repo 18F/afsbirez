@@ -23,14 +23,6 @@ body {
     padding-right: 15px;
 }
 
-/* Make the masthead heading the same height as the navigation */
-.header h3 {
-    margin-top: 0;
-    margin-bottom: 0;
-    line-height: 40px;
-    padding-bottom: 19px;
-}
-
 /* Custom page footer */
 .footer {
     padding-top: 19px;
@@ -279,4 +271,51 @@ body {
     margin-left: 0px;
     margin-right: 0px;
 }
+
+/* 508 Compliance
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+    background-color:#145b98;
+}*/
+
+.topic-header-text, dialog-header-text {
+    font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: 500;
+    line-height: 1.1;
+}
+
+.header-text {
+    font-size: 24px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    line-height: 1.1;
+}
+
+div.skip-nav a {
+  position: absolute;
+  left: -10000;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+div.skip-nav a:focus {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: auto; 
+    height: auto;
+    z-index: 999999;
+    background-color: white;
+    padding-left: 2px;
+    padding-right: 2px;
+    overflow: visible;
+ }
+
+ .mainContent:focus {
+    outline: none;
+ }
 

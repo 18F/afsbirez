@@ -1,21 +1,24 @@
 <div class="row">
   <div ng-show="getMode()==='signup'" class="signup-form">
     <div>
-      <h3><strong>New to SBIR-EZ?</strong> Sign Up</h3>
+      <p class="dialog-header-text"><strong>New to SBIR-EZ?</strong> Sign Up</h3>
     </div>
     <form id="signup-form" role="form">
       <row>
         <div class="form-group col-md-12">
+          <label for="inputNewName" class="sr-only">Full Name:</label>
           <input type="text" class="form-control" id="inputNewName" placeholder="Full name" ng-model="signup.name">
         </div>
       </row>
       <row>
         <div class="form-group col-md-12">
+          <label for="inputNewEmail" class="sr-only">Email:</label>
           <input type="text" class="form-control" id="inputNewEmail" placeholder="Email" ng-model="signup.email">
         </div>
       </row>
       <row>
         <div class="form-group col-md-12">
+          <label for="inputPassword" class="sr-only">Password:</label>
           <input type="password" class="form-control" id="inputPassword" placeholder="Password" ng-model="signup.password">
         </div>
       </row>
@@ -41,15 +44,17 @@
      </form>
    </div>
   <div ng-show="getMode()==='login'" class="login-form">
-    <h3>Log In</h3>
+    <p class="dialog-header-text">Log In</p>
     <form id="login-form" role="form">
       <row>
         <div class="form-group col-md-12">
+          <label for="inputUsername" class="sr-only">Email:</label>
           <input type="text" class="form-control" id="inputUsername" placeholder="Email" ng-model="login.email">
         </div>
       </row>
       <row>
         <div class="form-group col-md-12">
+          <label for="inputPassword" class="sr-only">Password:</label>
           <input type="password" class="form-control" id="inputPassword" placeholder="Password" ng-model="login.password">
         </div>
       </row>
@@ -71,13 +76,14 @@
     </form>
   </div>
   <div ng-show="getMode()==='reset'" class="login-form">
-    <h3>Reset Your Password</h3>
+    <p class="dialog-header-text">Reset Your Password</p>
     <form id="reset-form" role="form">
       <row>
         <p>We will send a password reset link to the email address below:</p>
       </row>
       <row>
         <div class="form-group col-md-12">
+          <label for="inputUsername" class="sr-only">Email:</label>
           <input type="text" class="form-control" id="inputUsername" placeholder="Email" ng-model="login.email">
         </div>
       </row>

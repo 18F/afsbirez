@@ -1,9 +1,9 @@
 <div id="header" class="header">
   <ul id="header-nav" class="nav nav-pills pull-right">
     <li id="header-nav-{{item.title | lowercase }}" ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
-      <a ng-show="item.click" ng-href='#' ng-click="item.click()">{{item.title}}</a>
-      <a ng-show="item.link" ng-href="{{item.link}}">{{item.title}}</a>
+      <a name="{{item.title}}" ng-show="item.click" ng-href='#' ng-click="item.click()">{{item.title}}</a>
+      <a name="{{item.title}}" ng-show="item.link" ng-href="{{item.link}}">{{item.title}}</a>
     </li>
   </ul>
-  <h3 class="text-muted">SBIR-EZ</h3>
+  <p class="header-text text-muted">SBIR-EZ</p>
 </div>
