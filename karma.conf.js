@@ -11,22 +11,23 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'app/frontend/static/lib/angular/angular.js',
-      'app/frontend/static/lib/angular-mocks/angular-mocks.js',
-      'app/frontend/static/lib/angular-resource/angular-resource.js',
-      'app/frontend/static/lib/angular-cookies/angular-cookies.js',
-      'app/frontend/static/lib/angular-sanitize/angular-sanitize.js',
-      'app/frontend/static/lib/angular-route/angular-route.js',
-      'app/frontend/static/lib/ng-file-upload/angular-file-upload.js',
-      'app/frontend/static/lib/ngDialog/js/ngDialog.min.js',
-      'app/frontend/static/lib/angular-ui-router/release/angular-ui-router.js',
-      'app/frontend/static/js/*.js',
-      'app/frontend/static/js/**/*.js',
+      'sbirez/static/lib/angular/angular.js',
+      'sbirez/static/lib/angular-mocks/angular-mocks.js',
+      'sbirez/static/lib/angular-resource/angular-resource.js',
+      'sbirez/static/lib/angular-aria/angular-aria.js',
+      'sbirez/static/lib/angular-cookies/angular-cookies.js',
+      'sbirez/static/lib/angular-sanitize/angular-sanitize.js',
+      'sbirez/static/lib/angular-route/angular-route.js',
+      'sbirez/static/lib/ng-file-upload/angular-file-upload.js',
+      'sbirez/static/lib/ngDialog/js/ngDialog.min.js',
+      'sbirez/static/lib/angular-ui-router/release/angular-ui-router.js',
+      'sbirez/static/js/*.js',
+      'sbirez/static/js/**/*.js',
       'tests/client/spec/**/*.js'
     ],
 
     // list of files / patterns to exclude
-    exclude: ['app/frontend/static/js/vendor/*.js'],
+    exclude: ['sbirez/static/js/vendor/*.js'],
 
     // web server port
     port: 8080,

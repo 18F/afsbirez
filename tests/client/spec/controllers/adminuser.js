@@ -18,8 +18,7 @@ describe('Controller: AdminUserCtrl', function () {
     $httpBackend = _$httpBackend_;
     $httpBackend.whenGET('static/views/partials/appmain.html').respond({});
     $httpBackend.whenGET('static/views/partials/activity.html').respond({});
-    $httpBackend.whenGET('static/views/partials/proposal.html').respond({});
-    $httpBackend.whenGET('static/views/partials/proposalList.html').respond({});
+    $httpBackend.whenGET('static/views/partials/search.html').respond({});
     UserService = _UserService_;
     scope = $rootScope.$new();
     window = $window;
@@ -51,7 +50,7 @@ describe('Controller: AdminUserCtrl', function () {
     mockDeferred.reject(data);
     scope.$root.$digest();
     expect(window.sessionStorage.token).toNotBe(data.data.token);
-    expect(scope.errorMsg).toBeUndefined();
+    expect(scope.errorMsg).toBeDefined();
   });
   
   it('should remove tokens and redirect to root when logout', function () {

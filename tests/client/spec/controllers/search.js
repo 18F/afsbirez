@@ -15,8 +15,8 @@ describe('Controller: SearchCtrl', function () {
     longData;
 
   emptyData = {
-    'numFound': 0,
-    '_embedded': {'ea:topic': []}
+    'count': 0,
+    'results': []
   };
 
   var shortResultList = [
@@ -27,10 +27,8 @@ describe('Controller: SearchCtrl', function () {
 
   data = {
     'start': 0,
-    'numFound': 3,
-    '_embedded': {
-      'ea:topic': shortResultList
-    }
+    'count': 3,
+    'results': shortResultList
   };
 
   var longResultList = [
@@ -48,10 +46,8 @@ describe('Controller: SearchCtrl', function () {
 
   longData = {
     'start': 0,
-    'numFound': 30,
-    '_embedded': {
-      'ea:topic':longResultList
-    }
+    'count': 30,
+    'results':longResultList
   };
 
   beforeEach(function(){
@@ -80,8 +76,8 @@ describe('Controller: SearchCtrl', function () {
   it('search results should be empty if no results are returned', function () {
     scope.searchTerm = 'xyz';
     expect(scope.results).toEqual({});
-    $httpBackend.expectGET('api/v1/topics?limit=10&q=' + scope.searchTerm + '&start=1').respond(emptyData);
-    scope.search(0);
+    $httpBackend.expectGET('api/v1/topics/?closed=true&page=1&page_size=10&q=' + scope.searchTerm).respond(emptyData);
+    scope.search(1);
     $httpBackend.flush();
     expect(scope.results).toEqual(emptyData);
   });
@@ -89,68 +85,70 @@ describe('Controller: SearchCtrl', function () {
   it('search results count should match the number of results returned ', function () {
     scope.searchTerm = 'searchTerm';
     expect(scope.results).toEqual({});
-    $httpBackend.expectGET('api/v1/topics?limit=10&q=' + scope.searchTerm + '&start=1').respond(data);
-    scope.search(0);
+    $httpBackend.expectGET('api/v1/topics/?closed=true&page=1&page_size=10&q=' + scope.searchTerm).respond(data);
+    scope.search(1);
     $httpBackend.flush();
     expect(scope.results).toEqual(data);
-    expect(scope.itemCount).toEqual(data.numFound);
+    expect(scope.itemCount).toEqual(data.count);
   });
 
   it('searching for page 2 should change the start parameter', function () {
     scope.searchTerm = 'searchTerm';
-    $httpBackend.expectGET('api/v1/topics?limit=10&q=' + scope.searchTerm + '&start=11').respond(emptyData);
-    scope.search(1);
+    $httpBackend.expectGET('api/v1/topics/?closed=true&page=2&page_size=10&q=' + scope.searchTerm).respond(emptyData);
+    scope.search(2);
     $httpBackend.flush();
   });
 
   it('searching for a non-whole number should default to the first page', function () {
     scope.searchTerm = 'searchTerm';
-    $httpBackend.expectGET('api/v1/topics?limit=10&q=' + scope.searchTerm + '&start=1').respond(emptyData);
+    $httpBackend.expectGET('api/v1/topics/?closed=true&page=1&page_size=10&q=' + scope.searchTerm).respond(emptyData);
     scope.search(2.5);
     $httpBackend.flush();
   });
 
   it('searching for a the same page and search term twice should return the cached results.', function () {
     scope.searchTerm = 'searchTerm';
-    $httpBackend.expectGET('api/v1/topics?limit=10&q=' + scope.searchTerm + '&start=1').respond(emptyData);
-    scope.search(0);
-    scope.search(0);
+    $httpBackend.expectGET('api/v1/topics/?closed=true&page=1&page_size=10&q=' + scope.searchTerm).respond(emptyData);
+    scope.search(1);
+    scope.search(1);
     $httpBackend.flush();
   });
 
   it('searching for a bogus text string should search for the first page of results', function () {
     scope.searchTerm = 'searchTerm';
-    $httpBackend.expectGET('api/v1/topics?limit=10&q=' + scope.searchTerm + '&start=1').respond(emptyData);
+    $httpBackend.expectGET('api/v1/topics/?closed=true&page=1&page_size=10&q=' + scope.searchTerm).respond(emptyData);
     scope.search('bogustextstring');
     $httpBackend.flush();
   });
 
   it('searching for "next" page should change the start parameter after a search is completed.', function () {
     scope.searchTerm = 'searchTerm';
-    $httpBackend.expectGET('api/v1/topics?limit=10&q=' + scope.searchTerm + '&start=1').respond(emptyData);
-    scope.search(0);
+    $httpBackend.expectGET('api/v1/topics/?closed=true&page=1&page_size=10&q=' + scope.searchTerm).respond(emptyData);
+    scope.search(1);
     $httpBackend.flush();
-    $httpBackend.expectGET('api/v1/topics?limit=10&q=' + scope.searchTerm + '&start=11').respond(emptyData);
+    $httpBackend.expectGET('api/v1/topics/?closed=true&page=2&page_size=10&q=' + scope.searchTerm).respond(emptyData);
     scope.search('next');
+    expect(scope.currentPage).toEqual(2);
   });
 
   it('searching for "prev" page should change the start parameter after a search is completed.', function () {
     scope.searchTerm = 'searchTerm';
-    $httpBackend.expectGET('api/v1/topics?limit=10&q=' + scope.searchTerm + '&start=11').respond(emptyData);
-    scope.search(1);
+    $httpBackend.expectGET('api/v1/topics/?closed=true&page=2&page_size=10&q=' + scope.searchTerm).respond(emptyData);
+    scope.search(2);
     $httpBackend.flush();
-    $httpBackend.expectGET('api/v1/topics?limit=10&q=' + scope.searchTerm + '&start=1').respond(emptyData);
+    $httpBackend.expectGET('api/v1/topics/?closed=true&page=1&page_size=10&q=' + scope.searchTerm).respond(emptyData);
     scope.search('prev');
+    expect(scope.currentPage).toEqual(1);
   });
 
   it('results should include a pagination component if there are more than 10 results', function () {
     scope.searchTerm = 'searchTerm';
     expect(scope.results).toEqual({});
-    $httpBackend.expectGET('api/v1/topics?limit=10&q=' + scope.searchTerm + '&start=1').respond(longData);
-    scope.search(0);
+    $httpBackend.expectGET('api/v1/topics/?closed=true&page=1&page_size=10&q=' + scope.searchTerm).respond(longData);
+    scope.search(1);
     $httpBackend.flush();
     expect(scope.results).toEqual(longData);
-    expect(scope.numFound).toEqual(longData.numFound);
+    expect(scope.numFound).toEqual(longData.count);
   });
 
 });

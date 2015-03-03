@@ -30,8 +30,7 @@ individual organizations to maximize utility to their users.
     can just include one or more properties. Set the appropriate header type.
     + **Delete:** DELETE to remove a resource, where allowed.
 * **Sort Order:** You can adjust the sort order of a collection response by appending ?order=<field1>,<field2>asc,<field3>desc
-* **Pagination:** Although we have pre-built pagination links via the rels “first”, “prev”, “next”, and “last”, you can also control the number of items per page
-with (? or &)limit=<limit>&offset=<offset> (the default limit is 20 and the max limit is currently 300).
+* **Pagination:** Long results will be broken into pages, defaultng to 20 items per page.  The optional `page` and `page_size` parameters control paginated output details.
 * **Partial Resources:** If you only need a small portion of a resource (e.g. agency and description), specify fields by appending (? or &)fields=<field1>,<field2> to your href
 * **Rels:** The following registered rels are used by our system: self, first, prev, next, and last. All other rels (in accordance with the [Web Linking RFC](http://tools.ietf.org/html/rfc5988))
 are full URIs
@@ -40,153 +39,259 @@ are full URIs
 The solicitations put out by a Federal Agency for small businesses to respond to. This resource is *READ-ONLY*.
 
 ## GET /topics?{closed,q,start,limit,order}
-Returns a collection of topics matching specified criteria
+Returns a collection of topics (opportunities, solicitations) matching specified criteria.
 + Parameters
     + closed = `false` (optional, string) ... True if closed topics should be included in the results, false otherwise.
         +Values
             + `true`
             + `false`
     + q (optional, string) ... A free-text string
-    + start = `1` (optional, number) ... Starting index
-    + limit = `20` (optional, number) ... Number of items to return. ***Maximum value is 200***
+    + page = `1` (optional, number) ... Page number to return
+    + page_size = `20` (optional, number) ... Number of items per page. ***Maximum value is 200***
     + order = `asc` (optional, text) ... The order of collection response
         + Values
             + `asc`
             + `desc`
 + Response 200 (application/vnd.api+json)
-
-        {
-          "_links": {
-            "self": {
-              "href": "/topics"
+    {
+        "count": 188,
+        "next": "http://localhost:8000/api/v1/topics/?page=2&closed=true",
+        "previous": null,
+        "results": [
+            {
+                "id": 21,
+                "topic_number": "AF15-AT13",
+                "solicitation_id": "DoD STTR 2015.1",
+                "url": "http://www.dodsbir.net/sitis/display_topic.asp?Bookmark=46482",
+                "title": "Low-Latency Embedded Vision Processor (LLEVS)",
+                "agency": "AirForce",
+                "program": "STTR",
+                "description": "High-performance, low-power, and low-latency processing is needed to perform image processing algorithms in next-generation aircraft helmet systems. New architectures and technologies are needed to respond to issues arising due to continued shrinking of semiconductor fabrication process geometries. Existing approaches have not satisfied end-user needs, such as multi-channel I/O, low-latency, large image sizes, and high frame rates. Novel architectures are needed, and alternatives promising improved power efficiencies of the processor clock tree, logic, memory, and chip I/O must be investigated. Familiarity with the important algorithms, such as distortion correction, multi-spectral/multi-modal fusion, and head-tracking, is required to ensure the solution can meet the challenging performance requirements. Consideration must also be given to the robustness of the processor, as a warfighters life may depend on its reliability in a challenging electromagnetic radiating environment. Finally, consideration must be given to a solution that can not only be applied to the digital binocular helmet-mounted display, but also to a wider set of applications that can take advantage of high-performance, low-power, low-latency image processing.  The processor requirements for the vision processor ASIC developed under the DARPA Multispectral Adaptive Networked Tactical Imaging System (MANTIS) program (2003-2010) is a good example. It was originally conceived to fuse inputs from five helmet-mounted electro-optical sensors operating in the visible-near infrared (VNIR x 2), short wave infrared (SWIR x 2), and long wave infrared (LWIR) bands and generate two synchronized SXGA video outputs at 60 Hz to a pair of microdisplays. However, it resulted in a processor that ingested three sensors (one each VNIR, SWIR, LWIR) and generated just one video output at 30 Hz due to the technical approach (e.g., architecture, microelectronic technologies) and processor geometry (90 nm) used at the time [1].  Under this program, a vision processor for helmet systems (VPHS) is required to enable the design and fabrication of a digital binocular helmet-mounted display (HMD) having all source image fusion with two video outputs. Binocular systems needed by warfighters require threshold (objective) performance comprising two synchronized video outputs, each at 60 Hz x 1.3 Mpx/frame x 8b/px = 0.624 Gbps (5Mpx x 8b x 96Hz = 3.84 Gbps), and must be capable of ingesting matching resolution video (in Mbps) from multiple sources (on-helmet or on-aircraft) comprising various mixtures of live video from sensors, synthetic imagery, and overlay symbology.  Monocular systems with similar processing requirements are also of interest. To understand the power and latency impacts of a total solution, it is necessary to both demonstrate a representative set of algorithms on the proposed processor, and to measure the system level performance, including required peripherals, such as external memory. Demonstrated success against a metric, such as GOPS/W or GFLOPS/W, is not sufficient, as it only provides a partial picture of a solution, potentially pushing off the power requirements and demanding physical capabilities to other parts of the system.",
+                "objective": "Develop architectures for an embedded processor capable of implementing the image processing algorithms required for a digital helmet-mounted display for dismounted soldiers.",
+                "pre_release_date": "2014-12-12T05:00:00Z",
+                "proposals_begin_date": "2015-01-15T05:00:00Z",
+                "proposals_end_date": "2015-02-18T05:00:00Z",
+                "days_to_close": -14,
+                "status": "Closed",
+                "references": [
+                    {
+                        "reference": "4. The Board of Trustees of the University of Arkansas, Jia Di and Scott Christopher Smith, Ultra-low power multi-threshold asynchronous circuit design,\" United States Patent 7,977,972 B2, July 12, 2011."
+                    },
+                    {
+                        "reference": "1. Acadia II System-on-a-Chip; http://www.sarnoff.com/products/acadia-video-processors/acadia-II."
+                    },
+                    {
+                        "reference": "3. D. Markovic, V. Stojanovic, B. Nikolic, M.A. Horowitz and R.W. Brodersen, Methods for true energy-Performance Optimization, IEEE Journal of Solid-State Circuits, 39(8), pp 1282  1293, Aug. 2004."
+                    },
+                    {
+                        "reference": "2. Rockwell Collins MicroCore technology, included in Steven E. Koenck, and David W. Jensen, \"High dynamic range sensor system and method,\" United States Patent Application 20090268192."
+                    },
+                    {
+                        "reference": "5. Field Programmable Gate Arrays (FPGA), http://en.wikipedia.org/wiki/Field-programmable_gate_array, accessed 16 Jul 2014."
+                    }
+                ],
+                "phases": [
+                    {
+                        "phase": "PHASE II:  Design a prototype VPHS. Perform a simulation of the proposed VPHS design that demonstrates the threshold (objective) capability to process the outputs of two 1.3Mpx 14b 60Hz (5Mpx 14b 96Hz) sensor outputs through a representative set of imaging and display algorithms to drive two synchronized 1.3Mpx 8b 60Hz (5Mpx 8b 96Hz) microdisplays with less than 1-frame latency."
+                    },
+                    {
+                        "phase": "PHASE III:  Fabricate a prototype VPHS and demonstrate threshold (objective) capability to process two 1.3Mpx 14b 60Hz (5Mpx 14b 96Hz) VNIR sensor outputs through a representative set of imaging and display algorithms to drive two 1.3Mpx 8b 60Hz (5Mpx 8b 96Hz) flat panel displays with less than 1-frame latency."
+                    },
+                    {
+                        "phase": "PHASE I:  Based upon existing data, develop two plans to design and fabricate a VPHS, one containing a high-risk approach and one containing a low-risk approach.  Estimate the power, frame latency, weight, and size of each of the processors and any peripheral devices. Clearly identify the risks and benefits associated with each approach.  Binocular and monocular VPHS applications are both of interest."
+                    }
+                ],
+                "keywords": [
+                    {
+                        "keyword": "embedded image processor"
+                    },
+                    {
+                        "keyword": "wearable electronics"
+                    },
+                    {
+                        "keyword": "multi-source image fusion"
+                    },
+                    {
+                        "keyword": "alternative night/day imaging technologies"
+                    },
+                    {
+                        "keyword": "helmet-mounted systems"
+                    },
+                    {
+                        "keyword": "battlespace visualization"
+                    },
+                    {
+                        "keyword": "dismounted operations"
+                    },
+                    {
+                        "keyword": "vision processor"
+                    },
+                    {
+                        "keyword": "low-latency video processing"
+                    },
+                    {
+                        "keyword": "algorithms"
+                    }
+                ],
+                "areas": [
+                    {
+                        "area": "Human Systems"
+                    }
+                ]
             },
-            "curies": [
-              {
-                "name": "ea",
-                "href": "http://sbirez.gsa.gov/rels/{rel}",
-                "templated": true
-              }
-            ],
-            "next": {
-              "href": "/topics?start=21"
-            },
-            "ea:find": {
-              "href": "/topics{?id}",
-              "templated": true
+            {
+                "id": 3,
+                "topic_number": "AF151-084",
+                "solicitation_id": "DoD SBIR 2015.1",
+                "url": "http://www.dodsbir.net/sitis/display_topic.asp?Bookmark=46389",
+                "title": "High-Temperature, Radiation-Hard and High-Efficiency DC-DC Converters for Space",
+                "agency": "AirForce",
+                "program": "SBIR",
+                "description": "Spacecraft power management and distribution (PMAD) systems use DC-DC converters for bidirectional energy transfer from the batteries. They are also used for down converting the energy produced by the solar arrays for delivery to the various loads on the spacecraft.  While these converters traditionally operate at temperatures around 80 degrees centigrade, with convertor efficiencies ranging from 80 percent to 90 percent. Advanced technology switching devices that are becoming available will allow high-temperature operation and reduced switching losses. These devices, such as GaN HEMTs or SiC JFETs, have been shown to be inherently radiation hard, which should increase the overall converter hardness and reduce the radiation shielding requirements.\r\n\r\nThe challenge for this technology development is to demonstrate that a DC-DC converter can be developed to operate with power stage semiconductor switch junction temperatures between 200 and 250 degrees centigrade. The DC-DC converter should be suitable for use on large communications spacecraft with converter efficiencies greater than 95 percent, and specific power of 1kW/kg. We are primarily interested in large satellites so the converter modules should be scalable for use in 5 to 30 kW power systems; however, supporting smaller platforms (",
+                "objective": "Investigate advancements required to achieve high-temperature, high-efficiency and low-specific-mass DC-DC converters for spacecraft.",
+                "pre_release_date": "2014-12-12T05:00:00Z",
+                "proposals_begin_date": "2015-01-15T05:00:00Z",
+                "proposals_end_date": "2015-02-18T05:00:00Z",
+                "days_to_close": -14,
+                "status": "Closed",
+                "references": [
+                    {
+                        "reference": "3. Bradley A. Reese, Brice McPherson, Jared Hornberger, Roberto M. Schupbach, Alexander B. Lostetter, High Temperature SOI/SiC Based Power Electronic Converters, The International Conference on High Temperature Electronics (HITEN), Oxford, UK, September 2007."
+                    },
+                    {
+                        "reference": "5. Gavin Mitchell, Edgar Cilio, Marcelo Schupbach, and Alexander B. Lostetter, Digital Control of High Temperature SiC Power Modules Utilizing HTSOI, SAE 2008 Power Systems Conference, Bellevue, Washington, November 11-13, 2008."
+                    },
+                    {
+                        "reference": "2. A. M. Abou-Alfotouh, A. V. Radun, H-R. Chang, & C. Winterhalter, A 1-MHz hard-switched silicon carbide DC-DC converter, IEEE transactions on power electronics 2006, vol. 21, no. 4, pp. 880-889."
+                    },
+                    {
+                        "reference": "1. I. Shigenori, A. Hirofumi, A bidirectional isolated DC-DC converter as a core circuit of the next-generation medium-voltage power conversion system, IEEE transactions on power electronics, 2007, vol. 22, no. 2, pp. 535-542."
+                    },
+                    {
+                        "reference": "4. Gavin Mitchell, Edgar Cilio, Bradley A. Reese, Roberto M. Schupbach, and Alexander B. Lostetter, A Reconfigurable Fault-Tolerant Multi Module Converter System Utilizing HTSOI and SiC Technology, IECON 2008, Orlando, Florida, November 10-13, 2008."
+                    }
+                ],
+                "phases": [
+                    {
+                        "phase": "PHASE I:  Design a high efficiency, radiation hard, power processing module to operate at greater than 200 degrees centigrade. The power processing module shall be scalable for use for primary bus regulation in a spacecraft power system and provide high efficiency at all load points."
+                    },
+                    {
+                        "phase": "PHASE III:  Technology developed will be applicable to all military and commercial space platforms. Expected benefits include increased payload mass and volume margin and more power for fixed resource allocation (mass)."
+                    },
+                    {
+                        "phase": "PHASE II:  Demonstrate a breadboard with a delivered output power processing module. Demonstrate the radiation hardness of all key components."
+                    }
+                ],
+                "keywords": [
+                    {
+                        "keyword": "DC-DC converter"
+                    },
+                    {
+                        "keyword": "spacecraft"
+                    },
+                    {
+                        "keyword": "power"
+                    },
+                    {
+                        "keyword": "high temperature"
+                    }
+                ],
+                "areas": [
+                    {
+                        "area": "Space Platforms"
+                    }
+                ]
             }
-          },
-          "_embedded": {
-            "ea:topic": [
-              {
-                "_links": {
-                  "self": {
-                    "href": "/topics/361509"
-                  }
-                },
-                "id": 361509,
-                "title": "New Technology for Proteomics and Glycomics",
-                "objective": "Some objective",
-                "description": "Some description",
-                "agency": "HHS",
-                "topic_number": "AF151-001",
-                "solicitation_id": "DoD SBIR 2015.1",
-                "url":"http://dodsbir.net/topic/1",
-                "program":"SBIR",
-                "pre_release_date": 20110519,
-                "proposals_begin_date": 20110705,
-                "proposals_end_date": 20140508,
-                "days_to_close": 16,
-                "status": "Open/Future",
-                "areas": [ "Biomedical", "Human Systems"],
-                "phases": ["Phase 1", "Phase 2", "Phase 3"],
-                "references": ["Ref 1", "Ref 2"],
-                "keywords": ["portable", "health"]
-              },
-              {
-                "_links": {
-                  "self": {
-                    "href": "/topics/361511"
-                  }
-                },
-                "id": 361511,
-                "title": "New Technology for Proteomics and Glycomics",
-                "objective": "Some objective",
-                "description": "Some description",
-                "agency": "HHS",
-                "topic_number": "AF151-001",
-                "solicitation_id": "DoD SBIR 2015.1",
-                "url":"http://dodsbir.net/topic/1",
-                "program":"SBIR",
-                "pre_release_date": 20110519,
-                "proposals_begin_date": 20110705,
-                "proposals_end_date": 20140508,
-                "days_to_close": 16,
-                "status": "Open/Future",
-                "areas": [ "Biomedical", "Human Systems"],
-                "phases": ["Phase 1", "Phase 2", "Phase 3"],
-                "references": ["Ref 1", "Ref 2"],
-                "keywords": ["portable", "health"]
-              },
-              {
-                "_links": {
-                  "self": {
-                    "href": "/topics/361512"
-                  }
-                },
-                "id": 361512,
-                "title": "New Technology for Proteomics and Glycomics",
-                "objective": "Some objective",
-                "description": "Some description",
-                "agency": "HHS",
-                "topic_number": "AF151-001",
-                "solicitation_id": "DoD SBIR 2015.1",
-                "url":"http://dodsbir.net/topic/1",
-                "program":"SBIR",
-                "pre_release_date": 20110519,
-                "proposals_begin_date": 20110705,
-                "proposals_end_date": 20140508,
-                "days_to_close": 16,
-                "status": "Open/Future",
-                "areas": [ "Biomedical", "Human Systems"],
-                "phases": ["Phase 1", "Phase 2", "Phase 3"],
-                "references": ["Ref 1", "Ref 2"],
-                "keywords": ["portable", "health"]
-              }
-            ]
-          }
-        }
+        ]
+    }
+
 
 ## GET /topics/{id}
-Find a topic put out by an agency (solicitation)
+Return details on a single topic put out by an agency (solicitation)
 + Parameter
     + id (required, number) ... the unique identifier of the topic
 + Response 200 (application/vnd.api+json)
-
-        {
-        "_links": {
-          "self": {
-            "href": "/topics/361509"
-          }
-        },
-        "id": 361509,
-        "title": "New Technology for Proteomics and Glycomics",
-        "objective": "Some objective",
-        "description": "Some description",
-        "agency": "HHS",
-        "topic_number": "AF151-001",
-        "solicitation_id": "DoD SBIR 2015.1",
-        "url":"http://dodsbir.net/topic/1",
-        "program":"SBIR",
-        "pre_release_date": 20110519,
-        "proposals_begin_date": 20110705,
-        "proposals_end_date": 20140508,
-        "days_to_close": 16,
-        "status": "Open/Future",
-        "areas": [ "Biomedical", "Human Systems"],
-        "phases": ["Phase 1", "Phase 2", "Phase 3"],
-        "references": ["Ref 1", "Ref 2"],
-        "keywords": ["portable", "health"]
-        }
+    {
+        "id": 21,
+        "topic_number": "AF15-AT13",
+        "solicitation_id": "DoD STTR 2015.1",
+        "url": "http://www.dodsbir.net/sitis/display_topic.asp?Bookmark=46482",
+        "title": "Low-Latency Embedded Vision Processor (LLEVS)",
+        "agency": "AirForce",
+        "program": "STTR",
+        "description": "High-performance, low-power, and low-latency processing is needed to perform image processing algorithms in next-generation aircraft helmet systems. New architectures and technologies are needed to respond to issues arising due to continued shrinking of semiconductor fabrication process geometries. Existing approaches have not satisfied end-user needs, such as multi-channel I/O, low-latency, large image sizes, and high frame rates. Novel architectures are needed, and alternatives promising improved power efficiencies of the processor clock tree, logic, memory, and chip I/O must be investigated. Familiarity with the important algorithms, such as distortion correction, multi-spectral/multi-modal fusion, and head-tracking, is required to ensure the solution can meet the challenging performance requirements. Consideration must also be given to the robustness of the processor, as a warfighters life may depend on its reliability in a challenging electromagnetic radiating environment. Finally, consideration must be given to a solution that can not only be applied to the digital binocular helmet-mounted display, but also to a wider set of applications that can take advantage of high-performance, low-power, low-latency image processing.  The processor requirements for the vision processor ASIC developed under the DARPA Multispectral Adaptive Networked Tactical Imaging System (MANTIS) program (2003-2010) is a good example. It was originally conceived to fuse inputs from five helmet-mounted electro-optical sensors operating in the visible-near infrared (VNIR x 2), short wave infrared (SWIR x 2), and long wave infrared (LWIR) bands and generate two synchronized SXGA video outputs at 60 Hz to a pair of microdisplays. However, it resulted in a processor that ingested three sensors (one each VNIR, SWIR, LWIR) and generated just one video output at 30 Hz due to the technical approach (e.g., architecture, microelectronic technologies) and processor geometry (90 nm) used at the time [1].  Under this program, a vision processor for helmet systems (VPHS) is required to enable the design and fabrication of a digital binocular helmet-mounted display (HMD) having all source image fusion with two video outputs. Binocular systems needed by warfighters require threshold (objective) performance comprising two synchronized video outputs, each at 60 Hz x 1.3 Mpx/frame x 8b/px = 0.624 Gbps (5Mpx x 8b x 96Hz = 3.84 Gbps), and must be capable of ingesting matching resolution video (in Mbps) from multiple sources (on-helmet or on-aircraft) comprising various mixtures of live video from sensors, synthetic imagery, and overlay symbology.  Monocular systems with similar processing requirements are also of interest. To understand the power and latency impacts of a total solution, it is necessary to both demonstrate a representative set of algorithms on the proposed processor, and to measure the system level performance, including required peripherals, such as external memory. Demonstrated success against a metric, such as GOPS/W or GFLOPS/W, is not sufficient, as it only provides a partial picture of a solution, potentially pushing off the power requirements and demanding physical capabilities to other parts of the system.",
+        "objective": "Develop architectures for an embedded processor capable of implementing the image processing algorithms required for a digital helmet-mounted display for dismounted soldiers.",
+        "pre_release_date": "2014-12-12T05:00:00Z",
+        "proposals_begin_date": "2015-01-15T05:00:00Z",
+        "proposals_end_date": "2015-02-18T05:00:00Z",
+        "days_to_close": -14,
+        "status": "Closed",
+        "references": [
+            {
+                "reference": "4. The Board of Trustees of the University of Arkansas, Jia Di and Scott Christopher Smith, Ultra-low power multi-threshold asynchronous circuit design,\" United States Patent 7,977,972 B2, July 12, 2011."
+            },
+            {
+                "reference": "1. Acadia II System-on-a-Chip; http://www.sarnoff.com/products/acadia-video-processors/acadia-II."
+            },
+            {
+                "reference": "3. D. Markovic, V. Stojanovic, B. Nikolic, M.A. Horowitz and R.W. Brodersen, Methods for true energy-Performance Optimization, IEEE Journal of Solid-State Circuits, 39(8), pp 1282 293, Aug. 2004."
+            },
+            {
+                "reference": "2. Rockwell Collins MicroCore technology, included in Steven E. Koenck, and David W. Jensen, \"High dynamic range sensor system and method,\" United States Patent Application 20090268192."
+            },
+            {
+                "reference": "5. Field Programmable Gate Arrays (FPGA), http://en.wikipedia.org/wiki/Field-programmable_gate_array, accessed 16 Jul 2014."
+            }
+        ],
+        "phases": [
+            {
+                "phase": "PHASE II:  Design a prototype VPHS. Perform a simulation of the proposed VPHS design that demonstrates the threshold (objective) capability to process the outputs of two 1.3Mpx 14b 60Hz (5Mpx 14b 96Hz) sensor outputs through a representative set of imaging and display algorithms to drive two synchronized 1.3Mpx 8b 60Hz (5Mpx 8b 96Hz) microdisplays with less than 1-frame latency."
+            },
+            {
+                "phase": "PHASE III:  Fabricate a prototype VPHS and demonstrate threshold (objective) capability to process two 1.3Mpx 14b 60Hz (5Mpx 14b 96Hz) VNIR sensor outputs through a representative set of imaging and display algorithms to drive two 1.3Mpx 8b 60Hz (5Mpx 8b 96Hz) flat panel displays with less than 1-frame latency."
+            },
+            {
+                "phase": "PHASE I:  Based upon existing data, develop two plans to design and fabricate a VPHS, one containing a high-risk approach and one containing a low-risk approach.  Estimate the power, frame latency, weight, and size of each of the processors and any peripheral devices. Clearly identify the risks and benefits associated with each approach.  Binocular and monocular VPHS applications are both of interest."
+            }
+        ],
+        "keywords": [
+            {
+                "keyword": "embedded image processor"
+            },
+            {
+                "keyword": "wearable electronics"
+            },
+            {
+                "keyword": "multi-source image fusion"
+            },
+            {
+                "keyword": "alternative night/day imaging technologies"
+            },
+            {
+                "keyword": "helmet-mounted systems"
+            },
+            {
+                "keyword": "battlespace visualization"
+            },
+            {
+                "keyword": "dismounted operations"
+            },
+            {
+                "keyword": "vision processor"
+            },
+            {
+                "keyword": "low-latency video processing"
+            },
+            {
+                "keyword": "algorithms"
+            }
+        ],
+        "areas": [
+            {
+                "area": "Human Systems"
+            }
+        ]
+    }
 
 # Group Awards
 SBIR Phase I and II contracts awarded to small businesses. This resource is *READ-ONLY*.
@@ -204,7 +309,7 @@ A collection of awarded contracts
         + Values
             + `asc`
             + `desc`
-    
+
 + Response 200 (application/vnd.api+json)
 
         {
@@ -303,8 +408,8 @@ An individual awarded contract.
             "company": "Vista Partners LLC",
             "ri": "Institute for Creative Technologies"
         }
- 
-# Group Profile        
+
+# Group Profile
 # Profile CRUD [/profile]
 Your profile.
 
@@ -321,7 +426,7 @@ Get your profile
           "id": "409047",
           "username": "testuser"
         }
-        
+
 ## Update your profile [PUT]
 Updates a topic application using patch partial representation
 + Request (application/json)
@@ -333,7 +438,7 @@ Updates a topic application using patch partial representation
 
         {
         "TO":"DO"
-        }        
+        }
 
 ## Partial update your profile [PATCH]
 Partially updates your profile using patch
@@ -381,7 +486,7 @@ Gets an application by id
         {
         "TO":"DO"
         }
-        
+
 ## Create an application [POST]
 Updates a topic application using patch partial representation
 + Parameters
@@ -395,7 +500,7 @@ Updates a topic application using patch partial representation
 
         {
         "TO":"DO"
-        }        
+        }
 
 ## Update an application [PUT]
 Updates a topic
@@ -426,7 +531,7 @@ Updates a topic application using patch partial representation
         {
         "TO":"DO"
         }
-        
+
 ## Delete an application [DELETE]
 Updates a topic application using patch partial representation
 + Parameters
@@ -475,7 +580,7 @@ Gets a document by id
         {
         "TO":"DO"
         }
-        
+
 ## Create a document [POST]
 Updates a topic application using patch partial representation
 + Parameters
@@ -489,7 +594,7 @@ Updates a topic application using patch partial representation
 
         {
         "TO":"DO"
-        }        
+        }
 
 ## Update an document [PUT]
 Updates a topic
@@ -520,7 +625,7 @@ Updates a document using patch partial representation
         {
         "TO":"DO"
         }
-        
+
 ## Delete an application [DELETE]
 Removes a document
 + Parameters
@@ -543,7 +648,7 @@ Your forms.
 # Form Collection [/forms]
 Resource representing a collection of forms
 
-    
+
 ## GET /forms?{q,start,limit,order}
 Returns a collection of forms matching specified criteria
 + Parameters
@@ -572,7 +677,7 @@ Gets an application by id
         {
         "TO":"DO"
         }
-        
+
 ## Create a form [POST]
 Creates a filled form
 + Parameters
@@ -586,4 +691,4 @@ Creates a filled form
 
         {
         "TO":"DO"
-        } 
+        }
