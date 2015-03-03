@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'django_assets',
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_auth',
+    'rest_auth'
 ]
 
 MIDDLEWARE_CLASSES = (
@@ -45,9 +45,9 @@ MIDDLEWARE_CLASSES = (
 )
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
+    'PAGINATE_BY': 20,
+    'MAX_PAGINATE_BY': 200,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.TokenAuthentication',
@@ -80,3 +80,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'sbirez/static/'
+
+STATICFILES_FINDERS = (
+   "django.contrib.staticfiles.finders.FileSystemFinder",
+   "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+   "django_assets.finders.AssetsFinder"
+)

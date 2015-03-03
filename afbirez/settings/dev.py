@@ -3,7 +3,7 @@ import os
 from .base import *
 from django.utils.crypto import get_random_string
 
-DEBUG = True
+DEBUG = True 
 TEMPLATE_DEBUG = True
 
 INTERNAL_IPS = ('127.0.0.1',)
@@ -19,25 +19,4 @@ DATABASES = {
     },
 }
 
-MEDIA_ROOT = './media/'
-MEDIA_URL = '/media/'
-
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-# TODO: Move these into base.py?
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
-    'PAGINATE_BY': 20,
-    'MAX_PAGINATE_BY': 200,
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    ),
-}
-
-STATIC_ROOT = 'sbirez/static/'
-STATIC_URL = '/static/'
-
-INSTALLED_APPS.append('django_extensions')
-INSTALLED_APPS.append('debug_toolbar')
-

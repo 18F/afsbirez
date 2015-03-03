@@ -65,6 +65,7 @@ combined_css = Bundle(
     "lib/ngDialog/css/ngDialog.css",
     "lib/ngDialog/css/ngDialog-theme-default.css",
     "css/ngdialog-theme-login.css",
+    "css/ngdialog-theme-intromessage.css",
     "css/ngdialog-theme-logout.css",
     combined_sass,
     filters="cssmin",

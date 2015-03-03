@@ -86,5 +86,14 @@ angular.module('sbirezApp')
       $scope.getMode = function() {
         return mode;
       };
+
+      $scope.introMessage = function(username, password) {
+        if (username === 'doduser' && password === 'sbireztest') {
+          $scope.closeThisDialog();
+        }
+        else {
+          $scope.errorMsg = 'Invalid credentials.'; 
+        }
+      };
     }
 ]);
