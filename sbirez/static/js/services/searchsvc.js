@@ -37,6 +37,7 @@ angular.module('sbirezApp').factory('SearchService', function($http, $window, $q
       config.params.q = searchTerm;
       config.params.page_size = itemsPerPage;
       config.params.page = page;
+      config.params.closed = 'true';
       $http.get(SEARCH_URI, config).success(function(data) {
         results = data;
         numFound = data.count;
