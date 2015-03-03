@@ -9,6 +9,7 @@ router = routers.DefaultRouter()
 router.register(r'users', api.UserViewSet)
 router.register(r'groups', api.GroupViewSet)
 router.register(r'topics', api.TopicViewSet, 'topics')
+router.register(r'savedtopics', api.SavedTopicViewSet, 'savedtopics')
 
 urlpatterns = patterns('',
     # api navigation

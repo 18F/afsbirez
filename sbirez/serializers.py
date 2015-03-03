@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from sbirez.models import Topic, Reference, Phase, Keyword, Area
+from sbirez.models import Topic, Reference, Phase, Keyword, Area, SavedTopic
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
@@ -25,7 +25,6 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
         fields = ('url', 'name')
-
 
 
 class AreaSerializer(serializers.HyperlinkedModelSerializer):
@@ -66,6 +65,10 @@ class TopicSerializer(serializers.ModelSerializer):
                     , 'references', 'phases', 'keywords', 'areas'
                     )
 
-
+class SavedTopicSerializer(serializers.ModelSerializer):
+    topics = TopicSerializer(many=True)
+    class Meta:
+        model = SavedTopic
+        fields = ('topics', )
 
 

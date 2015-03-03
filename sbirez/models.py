@@ -2,8 +2,7 @@ from django.db import models
 from django.utils import timezone
 from djorm_pgfulltext.fields import VectorField
 from djorm_pgfulltext.models import SearchManager
-
-# from pg_fts.fields import TSVectorField
+from django.conf import settings
 
 class Area(models.Model):
     area = models.TextField(unique=True)
@@ -60,4 +59,6 @@ class Topic(models.Model):
                            auto_update_search_field=False)
 
 
-
+class SavedTopic(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='savedtopics')
+    topic = models.ForeignKey('Topic', related_name='savedtopics')

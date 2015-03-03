@@ -1,9 +1,9 @@
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from sbirez.models import Topic
+from sbirez.models import Topic, SavedTopic
 from rest_framework import viewsets
-from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer
+from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer, SavedTopicSerializer
 import marshmallow as mm
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -60,3 +60,7 @@ class TopicViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(proposals_end_date__gte = timezone.now())
 
         return queryset
+
+class SavedTopicViewSet(viewsets.ModelViewSet):
+    queryset = SavedTopic.objects.all()
+    serializer_class = SavedTopicSerializer
