@@ -22,5 +22,17 @@ angular.module('sbirezApp').factory('DialogService', function(ngDialog) {
         'data':JSON.stringify(intention)
       });
     },
+
+    openIntroMessage : function(intention) {
+      ngDialog.open({
+        'template':'static/views/partials/introMessage.html',
+        'className':'ngdialog-theme-intromessage',
+        'controller':'AdminUserCtrl',
+        'showClose':false,
+        'closeByEscape':false,
+        'closeByDocument':false,
+        'data':JSON.stringify(intention)
+      });
+    }
   };
 });

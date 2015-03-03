@@ -226,6 +226,7 @@ angular.module('sbirezApp', [
   })
 
 .run(function($rootScope, $location, $state, $window, AuthenticationService) {
+  $rootScope.preproduction = true;
 //  $rootScope.$on('$stateChangeError',function(event, toState, toParams, fromState, fromParams){
 //    console.log('$stateChangeError - fired when an error occurs during transition.');
 //    console.log(arguments);

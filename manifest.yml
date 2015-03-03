@@ -1,0 +1,9 @@
+# all applications use these settings and services
+memory: 512M
+instances: 1
+buildpack: https://github.com/cloudfoundry/buildpack-python.git
+applications:
+- name: sbirez 
+  timeout: 180
+  command: waitress-serve --port=$VCAP_APP_PORT afbirez.wsgi:application 
+#  command: python manage.py migrate && waitress-serve --port=$VCAP_APP_PORT afbirez.wsgi:application 
