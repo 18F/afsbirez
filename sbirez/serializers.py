@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = get_user_model() 
+        model = get_user_model()
         fields = ('password', 'url', 'email', 'groups')
         write_only_fields = ('password',)
 
@@ -65,8 +65,10 @@ class TopicSerializer(serializers.ModelSerializer):
                     , 'references', 'phases', 'keywords', 'areas'
                     )
 
+
 class SavedTopicSerializer(serializers.ModelSerializer):
     topics = TopicSerializer(many=True)
+    users = UserSerializer(many=True)
     class Meta:
         model = SavedTopic
         fields = ('topics', )

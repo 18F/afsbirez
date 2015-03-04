@@ -2,7 +2,7 @@ from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from sbirez.models import Topic, SavedTopic
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer, SavedTopicSerializer
 import marshmallow as mm
 
@@ -64,3 +64,10 @@ class TopicViewSet(viewsets.ModelViewSet):
 class SavedTopicViewSet(viewsets.ModelViewSet):
     queryset = SavedTopic.objects.all()
     serializer_class = SavedTopicSerializer
+
+    def get_queryset(self):
+        user = get_user_model().objects.get(email=self.request.user)
+        return SavedTopic.objects.filter(user=user).all()
+
+    def perform_create(self, serializer):
+        serializer.save(user = self.request.user)
