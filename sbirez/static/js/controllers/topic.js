@@ -1,9 +1,13 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('TopicCtrl', function ($scope, $http, $window, $state, AuthenticationService) {
+  .controller('TopicCtrl', function ($scope, $http, $window, $state, AuthenticationService, SavedOpportunityService) {
     $scope.topicId = $state.params.id;
     $scope.data = {};
+
+    $scope.saveOpportunity = function() {
+      SavedOpportunityService.save($scope.topicId);
+    };
 
     $http.get('api/v1/topics/' + $scope.topicId + '/').success(function(data) {
       $scope.data = data;

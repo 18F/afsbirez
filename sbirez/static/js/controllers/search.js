@@ -12,14 +12,14 @@ angular.module('sbirezApp')
       $scope.itemCount = state.itemCount;
       $scope.numFound = state.numFound;
       $scope.results = state.results;
-    }
+    };
 
     loadState(); 
 
     var SOLICITATIONS_PER_PAGE = 10;
     $scope.itemsPerPage = SOLICITATIONS_PER_PAGE;
 
-    $scope.simpleMode = ($scope.searchTerm === '')
+    $scope.simpleMode = ($scope.searchTerm === '');
     $scope.simpleModeIcebox = true;
 
     $scope.saveOpportunity = function(opportunityId) {

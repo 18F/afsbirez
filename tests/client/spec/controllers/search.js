@@ -10,6 +10,7 @@ describe('Controller: SearchCtrl', function () {
     $state,
     mockDependency,
     $httpBackend,
+    AuthenticationService,
     data,
     emptyData,
     longData;
@@ -55,10 +56,11 @@ describe('Controller: SearchCtrl', function () {
     mockDependency.params = {};
     mockDependency.params.id = 1;
     
-    inject(function (_$httpBackend_, $controller, $rootScope) {
+    inject(function (_$httpBackend_, $controller, $rootScope, _AuthenticationService_) {
       $httpBackend = _$httpBackend_;
       $httpBackend.whenGET('static/views/partials/main.html').respond({});
       $httpBackend.whenGET('static/views/partials/search.html').respond({});
+      AuthenticationService = _AuthenticationService_;
       scope = $rootScope.$new();
       $state = mockDependency;
       SearchCtrl = $controller('SearchCtrl', {
@@ -149,6 +151,26 @@ describe('Controller: SearchCtrl', function () {
     $httpBackend.flush();
     expect(scope.results).toEqual(longData);
     expect(scope.numFound).toEqual(longData.count);
+  });
+
+  it('saving a valid opportunity when logged in should result in a saved opportunity', function() {
+    AuthenticationService.setAuthenticated(true);
+    scope.saveOpportunity(1);
+    $httpBackend.expectPOST('api/v1/savedtopics/').respond(201);
+    $httpBackend.flush();
+  });
+
+  it('saving a opportunity when not logged in should result in the login dialog showing', function() {
+    scope.saveOpportunity(1);
+    $httpBackend.expectGET('static/views/partials/login.html').respond({});
+    $httpBackend.flush();
+  });
+
+  it('saving an invalid opportunity when logged in should result in no change to the opportunity list.', function() {
+    AuthenticationService.setAuthenticated(true);
+    scope.saveOpportunity(9999999);
+    $httpBackend.expectPOST('api/v1/savedtopics/').respond(404);
+    $httpBackend.flush();
   });
 
 });
