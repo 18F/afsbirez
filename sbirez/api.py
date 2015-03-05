@@ -69,15 +69,6 @@ class TopicViewSet(viewsets.ModelViewSet):
 
         return queryset
 
-    """Router seems to ignore this!"""
-    @detail_route(methods=['POST',], url_path='save_topic')
-    def save_topic(self, request, *args, **kwargs):
-        topic = self.get_object()
-        topic.saved_by.add(self.request.user)
-        topic.save()
-        rev = reverse('topic-detail', request=request)
-        return rev
-
 
 class ResourceDoesNotExist(exceptions.APIException):
     status_code = 404
@@ -92,7 +83,6 @@ class SaveTopicView(generics.GenericAPIView):
         topic = self.get_object()
         topic.saved_by.add(request.user.id)
         topic.save()
-        # serializer = UserSerializer(user, data)
         return Response(status=status.HTTP_206_PARTIAL_CONTENT)
 
     def delete(self, request, *args, **kwargs):
