@@ -187,7 +187,7 @@ class TopicTests(APITestCase):
         # get a topic
         response = self.client.get('/api/v1/topics/19/')
         # verify that is not yet saved
-        self.assertFalse(response.data['is_saved_by_me'])
+        self.assertFalse(response.data['saved'])
 
         # save the topic
         response = self.client.post('/api/v1/topics/19/saved/', {})
@@ -195,7 +195,7 @@ class TopicTests(APITestCase):
 
         # check that the topic now shows as saved
         response = self.client.get('/api/v1/topics/19/')
-        self.assertTrue(response.data['is_saved_by_me'])
+        self.assertTrue(response.data['saved'])
 
     def test_unsave_topic(self):
         # create a user and login
@@ -213,13 +213,13 @@ class TopicTests(APITestCase):
         response = self.client.post('/api/v1/topics/19/saved/', {})
         # check that the topic now shows as saved
         response = self.client.get('/api/v1/topics/19/')
-        self.assertTrue(response.data['is_saved_by_me'])
+        self.assertTrue(response.data['saved'])
 
         # now unsave
         response = self.client.delete('/api/v1/topics/19/saved/', {})
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
         response = self.client.get('/api/v1/topics/19/')
-        self.assertFalse(response.data['is_saved_by_me'])
+        self.assertFalse(response.data['saved'])
 
 
     # When a saved topic is saved again... TODO: what IS the desired response?
