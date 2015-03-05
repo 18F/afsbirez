@@ -9,9 +9,11 @@ router = routers.DefaultRouter()
 router.register(r'users', api.UserViewSet)
 router.register(r'groups', api.GroupViewSet)
 router.register(r'topics', api.TopicViewSet, 'topics')
-router.register(r'savedtopics', api.SavedTopicViewSet, 'savedtopics')
+
 
 urlpatterns = patterns('',
+    url(r'^api/v1/topics/(?P<pk>[0-9]+)/saved/$', api.SaveTopicView.as_view()),
+
     # api navigation
     url(r'^api/v1/', include(router.urls)),
 
