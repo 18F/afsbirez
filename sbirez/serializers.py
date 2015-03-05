@@ -61,9 +61,11 @@ class TopicSerializer(serializers.ModelSerializer):
     phases = PhaseSerializer(many=True)
     keywords = KeywordSerializer(many=True)
     areas = AreaSerializer(many=True)
-    is_saved_by_me = serializers.SerializerMethodField()
+    saved = serializers.SerializerMethodField()
 
-    def get_is_saved_by_me(self, obj):
+    def get_saved(self, obj):
+        "``True`` if current has saved this topic for later reference.  ``None`` if no current user."
+
         current_user = self.context.get('request').user
         if current_user.is_anonymous():
             return None
@@ -77,6 +79,6 @@ class TopicSerializer(serializers.ModelSerializer):
                     'proposals_begin_date', 'proposals_end_date', 'days_to_close',
                     'status'
                     , 'references', 'phases', 'keywords', 'areas',
-                    'is_saved_by_me',
+                    'saved',
                     )
 
