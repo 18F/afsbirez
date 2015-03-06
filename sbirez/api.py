@@ -1,8 +1,11 @@
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from sbirez.models import Topic
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins, generics, status, permissions, exceptions
+from rest_framework.decorators import detail_route
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer
 import marshmallow as mm
 
@@ -24,7 +27,8 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 class TopicParameterSchema(mm.Schema):
     q = mm.fields.String(description='Search term for any text field')   # TODO: what if somebody passes multiple values?
-    closed = mm.fields.Boolean(default=False)
+    closed = mm.fields.Boolean(default=False, description='Include closed topics (those whose close date has passed)')
+    saved = mm.fields.Boolean(default=False, description='Limit results to my `saved` topics')
     order = mm.fields.String(default='desc', validate=lambda x: x.lower() in ('asc', 'desc'))
 
 topic_parameter_schema = TopicParameterSchema()
@@ -59,4 +63,32 @@ class TopicViewSet(viewsets.ModelViewSet):
         if not params.get('closed'):
             queryset = queryset.filter(proposals_end_date__gte = timezone.now())
 
+        if params.get('saved'):
+            # TODO: if not logged in, raise error?
+            queryset = queryset.filter(saved_by__id=self.request.user.id)
+
         return queryset
+
+
+class ResourceDoesNotExist(exceptions.APIException):
+    status_code = 404
+    default_detail = 'The resource being sought does not exist'
+
+
+class SaveTopicView(generics.GenericAPIView):
+    queryset = Topic.objects.all()
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def post(self, request, *args, **kwargs):
+        topic = self.get_object()
+        topic.saved_by.add(request.user.id)
+        topic.save()
+        return Response(status=status.HTTP_206_PARTIAL_CONTENT)
+
+    def delete(self, request, *args, **kwargs):
+        topic = self.get_object()
+        if topic.saved_by.filter(id=request.user.id).exists():
+            topic.saved_by.remove(request.user.id)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            raise ResourceDoesNotExist()

@@ -6,25 +6,27 @@ angular.module('sbirezApp').factory('DialogService', function(ngDialog) {
       if (intention) {
         console.log(intention);
       }
-      ngDialog.open({
+      var dialog = ngDialog.open({
         'template':'static/views/partials/login.html',
         'className':'ngdialog-theme-login',
         'controller':'AdminUserCtrl',
         'data':JSON.stringify(intention)
       });
+      return dialog.closePromise;
     },
 
     openLogout : function(intention) {
-      ngDialog.open({
+      var dialog = ngDialog.open({
         'template':'static/views/partials/logout.html',
         'className':'ngdialog-theme-logout',
         'controller':'AdminUserCtrl',
         'data':JSON.stringify(intention)
       });
+      return dialog.closePromise;
     },
 
     openIntroMessage : function(intention) {
-      ngDialog.open({
+      var dialog = ngDialog.open({
         'template':'static/views/partials/introMessage.html',
         'className':'ngdialog-theme-intromessage',
         'controller':'AdminUserCtrl',
@@ -33,6 +35,7 @@ angular.module('sbirezApp').factory('DialogService', function(ngDialog) {
         'closeByDocument':false,
         'data':JSON.stringify(intention)
       });
+      return dialog.closePromise;
     }
   };
 });

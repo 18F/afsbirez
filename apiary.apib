@@ -37,11 +37,16 @@ are full URIs
 
 # Group Topics
 The solicitations put out by a Federal Agency for small businesses to respond to. This resource is *READ-ONLY*.
+However, the `saved` attribute for a topic may be toggled on and off with PUT and DELETE.
 
 ## GET /topics?{closed,q,start,limit,order}
 Returns a collection of topics (opportunities, solicitations) matching specified criteria.
 + Parameters
     + closed = `false` (optional, string) ... True if closed topics should be included in the results, false otherwise.
+        +Values
+            + `true`
+            + `false`
+    + saved = `false` (optional, string) ... If `true`, include only topics this user has previously saved for later reference.
         +Values
             + `true`
             + `false`
@@ -137,7 +142,8 @@ Returns a collection of topics (opportunities, solicitations) matching specified
                     {
                         "area": "Human Systems"
                     }
-                ]
+                ],
+            "saved": null
             },
             {
                 "id": 3,
@@ -200,7 +206,8 @@ Returns a collection of topics (opportunities, solicitations) matching specified
                     {
                         "area": "Space Platforms"
                     }
-                ]
+                ],
+            "saved": null
             }
         ]
     }
@@ -290,7 +297,24 @@ Return details on a single topic put out by an agency (solicitation)
             {
                 "area": "Human Systems"
             }
-        ]
+        ],
+    "saved": null
+    }
+
+## PUT /topics/{id}/saved/
+Records that the currently logged-in user wants to save this topic for later reference.
++ Parameter
+    + id (required, number) ... the unique identifier of the topic
++ Response 206 (application/vnd.api+json)
+    {
+    }
+
+## DELETE /topics/{id}/saved/
+Records that a topic this user had previously saved for future reference should no longer be saved.
++ Parameter
+    + id (required, number) ... the unique identifier of the topic
++ Response 204 (application/vnd.api+json)
+    {
     }
 
 # Group Awards

@@ -12,18 +12,27 @@ angular.module('sbirezApp')
       $scope.itemCount = state.itemCount;
       $scope.numFound = state.numFound;
       $scope.results = state.results;
-    }
+    };
 
     loadState(); 
 
     var SOLICITATIONS_PER_PAGE = 10;
     $scope.itemsPerPage = SOLICITATIONS_PER_PAGE;
 
-    $scope.simpleMode = ($scope.searchTerm === '')
+    $scope.simpleMode = ($scope.searchTerm === '');
     $scope.simpleModeIcebox = true;
 
     $scope.saveOpportunity = function(opportunityId) {
-      SavedOpportunityService.save(opportunityId);
+      SavedOpportunityService.save(opportunityId).then(function(data) {
+        for (var index = 0; index < $scope.itemCount; index++) {
+          if ($scope.results.results[index].id === opportunityId) {
+            $scope.results.results[index].saved = true;
+            break;
+          }
+        }
+      }, function(error) {
+        console.log(error);
+      });
     };
 
     $scope.saveSearch = function() {
@@ -38,6 +47,8 @@ angular.module('sbirezApp')
           $scope.numFound = data.count;
           $scope.simpleMode = false;
         }
+      }, function(error) {
+        console.log(error);
       });
       $scope.currentPage = SearchService.getPage();
     };

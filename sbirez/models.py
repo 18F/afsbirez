@@ -2,8 +2,7 @@ from django.db import models
 from django.utils import timezone
 from djorm_pgfulltext.fields import VectorField
 from djorm_pgfulltext.models import SearchManager
-
-# from pg_fts.fields import TSVectorField
+from django.conf import settings
 
 class Area(models.Model):
     area = models.TextField(unique=True)
@@ -41,6 +40,9 @@ class Topic(models.Model):
     proposals_begin_date = models.DateTimeField()
     proposals_end_date = models.DateTimeField()
     fts = VectorField()
+    saved_by = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                      blank=True, null=True,
+                                      related_name='saved_topics')
 
     @property
     def days_to_close(self):
@@ -58,6 +60,4 @@ class Topic(models.Model):
 
     objects = SearchManager(fields=None, search_field='fts',
                            auto_update_search_field=False)
-
-
 

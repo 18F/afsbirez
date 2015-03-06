@@ -5,7 +5,7 @@ angular.module('sbirezApp').factory('TokenInterceptor', function ($q, $window, $
     request: function (config) {
       config.headers = config.headers || {};
       if ($window.sessionStorage.token) {
-        config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
+        config.headers.Authorization = 'JWT ' + $window.sessionStorage.token;
       }
       return config;
     },

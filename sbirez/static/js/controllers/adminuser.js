@@ -14,7 +14,7 @@ angular.module('sbirezApp')
             $window.sessionStorage.userid = data.data.id;
             AuthenticationService.setAuthenticated(true);
             if ($scope.closeThisDialog !== undefined) {
-              $scope.closeThisDialog();
+              $scope.closeThisDialog(true);
             }
             if ($scope.ngDialogData !== undefined && $scope.ngDialogData !== null) {
               $state.go($scope.ngDialogData.name, $scope.ngDialogData);
@@ -74,7 +74,7 @@ angular.module('sbirezApp')
 
       $scope.cancel = function cancel() {
          if ($scope.closeThisDialog !== undefined) {
-           $scope.closeThisDialog();
+           $scope.closeThisDialog(false);
          }
       };
 
