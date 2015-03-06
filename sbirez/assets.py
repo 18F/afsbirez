@@ -11,6 +11,7 @@ bower_js = Bundle(
     "lib/ng-file-upload/angular-file-upload.js",
     "lib/ngDialog/js/ngDialog.min.js",
     "lib/angular-ui-router/release/angular-ui-router.js",
+    "lib/angular-order-object-by/src/ng-order-object-by.js",
     filters="jsmin",
     output="js/bower.min.js"
 )

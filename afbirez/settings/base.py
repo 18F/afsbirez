@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+import datetime
 
 DATABASES = { }
 # ALLOWED_HOSTS = []
@@ -58,6 +59,8 @@ REST_SESSION_LOGIN = False
 
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER':'sbirez.utils.jwt_response_payload_handler',
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3000),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
 }
 
 ROOT_URLCONF = 'afbirez.urls'

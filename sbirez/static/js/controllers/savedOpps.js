@@ -4,15 +4,17 @@ angular.module('sbirezApp')
   .controller('SavedOppsCtrl', function ($scope, SavedOpportunityService) {
     $scope.data = {};
 
-
-    SavedOpportunityService.list().success(function(data){
+    SavedOpportunityService.list().then(function(data){
       $scope.data = data;
-    }).error(function(/*data, status, headers, config*/) {
-      $scope.errorMsg = 'Unable to retrieve saved opportunities.';
     });
 
     $scope.removeOpportunity = function(opportunityId) {
-      SavedOpportunityService.remove(opportunityId);
-      $scope.data = SavedOpportunityService.list();
+      SavedOpportunityService.remove(opportunityId).then(function() {
+        SavedOpportunityService.list().then(function(data) {
+          $scope.data = data;
+        }, function(error) { 
+          console.log(error);
+        });
+      });
     }
   });

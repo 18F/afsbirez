@@ -156,7 +156,7 @@ describe('Controller: SearchCtrl', function () {
   it('saving a valid opportunity when logged in should result in a saved opportunity', function() {
     AuthenticationService.setAuthenticated(true);
     scope.saveOpportunity(1);
-    $httpBackend.expectPOST('api/v1/savedtopics/').respond(201);
+    $httpBackend.expectPOST('api/v1/topics/1/saved/').respond(201);
     $httpBackend.flush();
   });
 
@@ -169,7 +169,7 @@ describe('Controller: SearchCtrl', function () {
   it('saving an invalid opportunity when logged in should result in no change to the opportunity list.', function() {
     AuthenticationService.setAuthenticated(true);
     scope.saveOpportunity(9999999);
-    $httpBackend.expectPOST('api/v1/savedtopics/').respond(404);
+    $httpBackend.expectPOST('api/v1/topics/9999999/saved/').respond(404);
     $httpBackend.flush();
   });
 

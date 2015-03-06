@@ -7,7 +7,8 @@ angular.module('sbirezApp', [
   'ngAria',
   'angularFileUpload',
   'ngDialog',
-  'ui.router'
+  'ui.router',
+  'ngOrderObjectBy'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider.otherwise('/');

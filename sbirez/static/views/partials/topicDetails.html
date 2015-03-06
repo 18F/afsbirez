@@ -6,7 +6,12 @@
   <h2><center>{{data.title}}</center></h2>
   <center><h4>{{data.program}} {{data.topic_number}}</h4></center>
   <center><a href="{{data.url}}">{{data.url}}</a></center>
-    <button class="btn btn-default btn-sm pull-right" ng-click="saveOpportunity()" type="button">Save for later</button>
+  <div ng-hide="data.saved">
+    <button class="btn btn-default btn-sm pull-right" ng-click="saveOpportunity()" title="Save {{topic.topic_number}} for later" type="button">Save for later</button>
+  </div>
+  <div ng-show="data.saved">
+    <button class="btn btn-disabled btn-sm pull-right" disabled title="{{topic.topic_number}} is saved" type="button">Saved</button>
+  </div>
   <hr />
   <p ng-show="data.objective" class="lead"><strong>Objective:</strong> {{data.objective}}</p>
   <div ng-show="data.areas" class="row">
@@ -38,7 +43,7 @@
   <br />
   <div ng-show="data.phases && data.phases.length > 0" class="row">
     <div class="col-md-9 col-md-offset-3">
-      <p ng-repeat="phase in data.phases | orderBy:phase.phase">{{phase.phase}}</p>
+      <p ng-repeat="phaseObj in data.phases | orderObjectBy:'phase'">{{phaseObj.phase}}</p>
     </div>
   </div>
   <div ng-show="data.references && data.references.length > 0" class="row">
@@ -46,7 +51,7 @@
       <p class="text-right"><strong>References:</strong></p>
     </div>
     <div class="col-md-9">
-      <p ng-repeat="reference in data.references | orderBy:reference.reference">{{reference.reference}}</p>
+      <p ng-repeat="referenceObj in data.references | orderObjectBy:'reference'">{{referenceObj.reference}}</p>
     </div>
   </div>
   <div ng-show="data.keywords && data.keywords.length > 0" class="row">
@@ -54,7 +59,7 @@
       <p class="text-right"><strong>Keywords:</strong></p>
     </div>
     <div class="col-md-9">
-      {{data.keywords.join(', ')}}
+      {{getKeywordList()}}
     </div>
   </div>
   <div ng-show="data.solicitation_id" class="row">
