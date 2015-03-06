@@ -21,7 +21,7 @@ module.exports = function(config) {
       'sbirez/static/lib/ng-file-upload/angular-file-upload.js',
       'sbirez/static/lib/ngDialog/js/ngDialog.min.js',
       'sbirez/static/lib/angular-ui-router/release/angular-ui-router.js',
-      'sbirez/static/lib/angular-order-object-by/src/angular-order-object-by.js',
+      'sbirez/static/lib/angular-order-object-by/src/ng-order-object-by.js',
       'sbirez/static/js/*.js',
       'sbirez/static/js/**/*.js',
       'tests/client/spec/**/*.js'
