@@ -1,5 +1,0 @@
-Hola {{ user.first_name|title }},
-
-Please confirm your email through the link below:
-
-{{ confirmation_link }}

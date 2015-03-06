@@ -1,0 +1,64 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html lang="en" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <base href="/">
+    <title>SBIR-EZ</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    {% load assets %} 
+    {% assets "combined_css" %}
+      <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
+  </head>
+  <body ng-app="sbirezApp">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <div class="container">
+      <div class="skip-nav">
+        <a tab-index="1" href="#mainContent">Skip to main content</a>
+      </div>
+      <div header></div>
+      <div ui-view></div>
+      <div footer></div>
+    </div>
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+     <script>
+       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+       ga('create', 'UA-49480678-2');
+       ga('send', 'pageview');
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="static/lib/es5-shim/es5-shim.js"></script>
+    <script src="static/lib/json3/lib/json3.min.js"></script>
+    <![endif]-->
+
+    {% assets "bower_js" %}
+      <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    {% assets "angular_js" %}
+      <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+    <script>
+    // Add the CSRF Token
+    var app = angular.module('sbirezApp'); 
+    app.config(['$httpProvider', function($httpProvider) {
+      $httpProvider.defaults.headers.common['X-CSRFToken'] = '{{ csrf_token|escapejs }}';
+    }]);
+    </script>
+</body>
+</html>
