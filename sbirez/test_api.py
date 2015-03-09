@@ -173,16 +173,15 @@ class TopicTests(APITestCase):
         response = self.client.post('/api/v1/topics/19/saved/', {})
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
-    def test_save_topic_for_user(self):
-        # create a user and login
-        response = self.client.post('/api/v1/users/',
-            {'password':'123', 'email':'a@b.com', 'groups':[]})
-        response = self.client.post('/auth/',
-            {'password':'123', 'email':'a@b.com'})
+    def _fixture_user(self):
+        "Authenticate as pre-existing user from test fixture.  Returns user instance."
         user_model = get_user_model()
-        user = user_model.objects.get(email='a@b.com')
-        self.client.force_authenticate(user=user,
-                                       token=response.data['token'])
+        user = user_model.objects.get(email='r2d2@naboo.gov') # r2's password = 'bleep'
+        self.client.force_authenticate(user=user)
+        return user
+
+    def test_save_topic_for_user(self):
+        user = self._fixture_user()
 
         # get a topic
         response = self.client.get('/api/v1/topics/19/')
@@ -198,18 +197,9 @@ class TopicTests(APITestCase):
         self.assertTrue(response.data['saved'])
 
     def test_unsave_topic(self):
-        # create a user and login
-        # TODO: just like the method above, this is SO not DRY
-        response = self.client.post('/api/v1/users/',
-            {'password':'123', 'email':'a@b.com', 'groups':[]})
-        response = self.client.post('/auth/',
-            {'password':'123', 'email':'a@b.com'})
-        user_model = get_user_model()
-        user = user_model.objects.get(email='a@b.com')
-        self.client.force_authenticate(user=user,
-                                       token=response.data['token'])
-
+        user = self._fixture_user()
         # save a topic
+
         response = self.client.post('/api/v1/topics/19/saved/', {})
         # check that the topic now shows as saved
         response = self.client.get('/api/v1/topics/19/')
@@ -222,18 +212,9 @@ class TopicTests(APITestCase):
         self.assertFalse(response.data['saved'])
 
 
-    # When a saved topic is saved again... TODO: what IS the desired response?
+    # Permit saved topic to be "saved" again without error
     def test_resave_topic(self):
-        # create a user and login
-        # TODO: just like the method above, this is SO not DRY
-        response = self.client.post('/api/v1/users/',
-            {'password':'123', 'email':'a@b.com', 'groups':[]})
-        response = self.client.post('/auth/',
-            {'password':'123', 'email':'a@b.com'})
-        user_model = get_user_model()
-        user = user_model.objects.get(email='a@b.com')
-        self.client.force_authenticate(user=user,
-                                       token=response.data['token'])
+        user = self._fixture_user()
 
         # save a topic
         response = self.client.post('/api/v1/topics/19/saved/', {})
@@ -244,15 +225,8 @@ class TopicTests(APITestCase):
         self.assertEqual(status.HTTP_206_PARTIAL_CONTENT, response.status_code)
 
     def test_filter_for_saved_topics(self):
-        # create a user and login
-        response = self.client.post('/api/v1/users/',
-            {'password':'123', 'email':'a@b.com', 'groups':[]})
-        response = self.client.post('/auth/',
-            {'password':'123', 'email':'a@b.com'})
-        user_model = get_user_model()
-        user = user_model.objects.get(email='a@b.com')
-        self.client.force_authenticate(user=user,
-                                       token=response.data['token'])
+        user = self._fixture_user()
+
         # save the topic
         response = self.client.post('/api/v1/topics/19/saved/', {})
 
