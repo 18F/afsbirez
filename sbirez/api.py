@@ -9,6 +9,7 @@ from rest_framework.reverse import reverse
 from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer
 import marshmallow as mm
 
+
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -30,6 +31,7 @@ class TopicParameterSchema(mm.Schema):
     closed = mm.fields.Boolean(default=False, description='Include closed topics (those whose close date has passed)')
     saved = mm.fields.Boolean(default=False, description='Limit results to my `saved` topics')
     order = mm.fields.String(default='desc', validate=lambda x: x.lower() in ('asc', 'desc'))
+
 
 topic_parameter_schema = TopicParameterSchema()
 
@@ -89,6 +91,5 @@ class SaveTopicView(generics.GenericAPIView):
         topic = self.get_object()
         if topic.saved_by.filter(id=request.user.id).exists():
             topic.saved_by.remove(request.user.id)
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
-            raise ResourceDoesNotExist()
+        # Returning 204 even if the item never was saved in the first place (is this correct?)
+        return Response(status=status.HTTP_204_NO_CONTENT)
