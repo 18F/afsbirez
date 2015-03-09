@@ -60,6 +60,7 @@ REST_SESSION_LOGIN = False
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER':'sbirez.utils.jwt_response_payload_handler',
     'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3000),
+    'JWT_ALLOW_REFRESH': True,
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
 }
 
