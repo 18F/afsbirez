@@ -196,6 +196,12 @@ class TopicTests(APITestCase):
         response = self.client.get('/api/v1/topics/19/')
         self.assertTrue(response.data['saved'])
 
+    def test_unsave_unsaved_topic_again(self):
+        # should not error even if trying to "unsave" a topic the user had not saved
+        user = self._fixture_user()
+        response = self.client.delete('/api/v1/topics/19/saved/', {})
+        self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
+
     def test_unsave_topic(self):
         user = self._fixture_user()
         # save a topic
@@ -211,7 +217,6 @@ class TopicTests(APITestCase):
         response = self.client.get('/api/v1/topics/19/')
         self.assertFalse(response.data['saved'])
 
-
     # Permit saved topic to be "saved" again without error
     def test_resave_topic(self):
         user = self._fixture_user()
@@ -223,6 +228,13 @@ class TopicTests(APITestCase):
         # re-save
         response = self.client.post('/api/v1/topics/19/saved/', {})
         self.assertEqual(status.HTTP_206_PARTIAL_CONTENT, response.status_code)
+
+    def test_filter_for_nonexistent_saved_topics(self):
+        # Filter for saved topics should not error even if this user has not saved any
+        user = self._fixture_user()
+        response = self.client.get('/api/v1/topics/?closed=True&saved=True')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 0)
 
     def test_filter_for_saved_topics(self):
         user = self._fixture_user()
@@ -237,4 +249,15 @@ class TopicTests(APITestCase):
         response = self.client.get('/api/v1/topics/?closed=True&saved=True')
         self.assertEqual(response.data['count'], 1)
 
+    def test_save_nonexistent_topic(self):
+        # should throw 404
+        user = self._fixture_user()
+        response = self.client.post('/api/v1/topics/2222/saved/', {})
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+
+    def unsave_nonexistent_topic(self):
+        # should throw 404
+        user = self._fixture_user()
+        response = self.client.delete('/api/v1/topics/2222/saved/', {})
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 

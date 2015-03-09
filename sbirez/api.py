@@ -91,6 +91,5 @@ class SaveTopicView(generics.GenericAPIView):
         topic = self.get_object()
         if topic.saved_by.filter(id=request.user.id).exists():
             topic.saved_by.remove(request.user.id)
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
-            raise ResourceDoesNotExist()
+        # Returning 204 even if the item never was saved in the first place (is this correct?)
+        return Response(status=status.HTTP_204_NO_CONTENT)
