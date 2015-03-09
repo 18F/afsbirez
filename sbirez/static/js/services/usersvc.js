@@ -15,6 +15,10 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
         $location.path('/');      
     },
 
+    refreshToken: function() {
+      return $http.post('auth-refresh/', {token: $window.sessionStorage.token});
+    },
+
     resetPassword: function(email) {
       return $http.post('rest-auth/password/reset/', {'email': email});
     },
