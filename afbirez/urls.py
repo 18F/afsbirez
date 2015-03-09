@@ -34,6 +34,7 @@ urlpatterns = patterns('',
 
     # jwt authentication endpoint
     url(r'^auth/', 'rest_framework_jwt.views.obtain_jwt_token'),
+    url(r'^auth-refresh/', 'rest_framework_jwt.views.refresh_jwt_token'),
 
     # angular app endpoint
     url(r'^$', 'sbirez.views.home', name='home'),

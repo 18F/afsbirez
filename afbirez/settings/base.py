@@ -48,6 +48,7 @@ MIDDLEWARE_CLASSES = (
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
     'PAGINATE_BY': 20,
+    'PAGINATE_BY_PARAM': 'page_size',
     'MAX_PAGINATE_BY': 200,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
@@ -60,6 +61,7 @@ REST_SESSION_LOGIN = False
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER':'sbirez.utils.jwt_response_payload_handler',
     'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3000),
+    'JWT_ALLOW_REFRESH': True,
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
 }
 
