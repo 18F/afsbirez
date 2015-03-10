@@ -31,7 +31,7 @@ angular.module('sbirezApp').factory('SavedOpportunityService', function($http, $
       deferred.reject(new Error(data));
     });
     return deferred.promise;
-  }
+  };
 
   return {
     save: function(opportunityId) {

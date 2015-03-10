@@ -1,7 +1,6 @@
 from django_assets import Bundle, register
 
 bower_js = Bundle(
-    "lib/jquery/dist/jquery.js",
     "lib/angular/angular.js",
     "lib/angular-resource/angular-resource.js",
     "lib/angular-cookies/angular-cookies.js",
