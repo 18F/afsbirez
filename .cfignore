@@ -31,7 +31,6 @@ env
 .idea
 bower_components
 .vagrant/
-src/
 data
 *.log
 Untitled*.ipynb
