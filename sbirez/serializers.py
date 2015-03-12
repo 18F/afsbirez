@@ -3,15 +3,15 @@ from sbirez.models import Topic, Reference, Phase, Keyword, Area
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
 
     saved_topics = serializers.HyperlinkedRelatedField(many=True,
-                                                       view_name='topic-detail',
+                                                       view_name='topics-detail',
                                                        read_only=True)
 
     class Meta:
         model = get_user_model()
-        fields = ('password', 'url', 'email', 'groups', 'saved_topics',)
+        fields = ('name', 'password', 'url', 'email', 'groups', 'saved_topics',)
         write_only_fields = ('password',)
 
     def create(self, validated_data):
@@ -56,7 +56,7 @@ class ReferenceSerializer(serializers.ModelSerializer):
         fields = ('reference', )
 
 
-class TopicSerializer(serializers.ModelSerializer):
+class TopicSerializer(serializers.HyperlinkedModelSerializer):
     references = ReferenceSerializer(many=True)
     phases = PhaseSerializer(many=True)
     keywords = KeywordSerializer(many=True)
