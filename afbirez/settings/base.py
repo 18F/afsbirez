@@ -69,7 +69,7 @@ ROOT_URLCONF = 'afbirez.urls'
 
 WSGI_APPLICATION = 'afbirez.wsgi.application'
 
-AUTH_USER_MODEL = 'custom_user.EmailUser'
+AUTH_USER_MODEL = 'sbirez.SbirezUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/

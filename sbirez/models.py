@@ -3,6 +3,10 @@ from django.utils import timezone
 from djorm_pgfulltext.fields import VectorField
 from djorm_pgfulltext.models import SearchManager
 from django.conf import settings
+from custom_user.models import AbstractEmailUser
+
+class SbirezUser(AbstractEmailUser):
+    name = models.TextField()
 
 class Area(models.Model):
     area = models.TextField(unique=True)

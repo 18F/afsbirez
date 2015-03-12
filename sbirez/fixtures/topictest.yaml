@@ -14439,6 +14439,7 @@
 - fields:
     date_joined: 2015-03-07 00:57:24.820367+00:00
     email: r2d2@naboo.gov
+    name: r2d2
     groups: []
     is_active: true
     is_staff: false
@@ -14446,7 +14447,7 @@
     last_login: 2015-03-07 00:57:24.820336+00:00
     password: pbkdf2_sha256$15000$oflx16nPNOnI$4IJCuNpk/1K6PHAzoIl4A84sCfkwSuSXXX9SVYUCvBU=
     user_permissions: []
-  model: custom_user.emailuser
+  model: sbirez.sbirezuser
   pk: 2
 - fields: {agency: AirForce, description: "Since the launch of Sputnik I, the U.S.
       Air Force has been interested in monitoring Earth orbiting objects. With this

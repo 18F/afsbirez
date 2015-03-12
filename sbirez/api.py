@@ -8,7 +8,8 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer
 import marshmallow as mm
-
+from rest_framework.permissions import AllowAny
+from .permissions import IsStaffOrTargetUser
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -16,6 +17,11 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
+
+    def get_permissions(self):
+        # allow non-authenticated user to create via POST
+        return (AllowAny() if self.request.method == 'POST'
+                else IsStaffOrTargetUser()),
 
 
 class GroupViewSet(viewsets.ModelViewSet):
