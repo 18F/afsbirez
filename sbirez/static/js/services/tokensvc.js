@@ -2,7 +2,7 @@
 
 angular.module('sbirezApp').factory('TokenInterceptor', function ($q, $window, $location, $injector, AuthenticationService) {
 
-  var EXPIRATION_DELTA = 1800000 // 30 minutes, in milliseconds
+  var EXPIRATION_DELTA = 1800000; // 30 minutes, in milliseconds
   var expiration = null;
   var urlBase64Decode = function(str) {
     var output = str.replace(/-/g, '+').replace(/_/g, '/');
@@ -15,7 +15,7 @@ angular.module('sbirezApp').factory('TokenInterceptor', function ($q, $window, $
       }
     }
     return decodeURIComponent(escape(window.atob(output))); //polyfill https://github.com/davidchambers/Base64.js
-  }
+  };
   
   var decodeToken = function(token) {
     var parts = token.split('.');
@@ -27,7 +27,7 @@ angular.module('sbirezApp').factory('TokenInterceptor', function ($q, $window, $
       throw new Error('Cannot decode the token');
     }
     return JSON.parse(decoded);
-  }
+  };
 
   var getTokenExpirationDate = function(token) {
     var decoded;
@@ -38,15 +38,6 @@ angular.module('sbirezApp').factory('TokenInterceptor', function ($q, $window, $
     var d = new Date(0); // The 0 here is the key, which sets the date to the epoch
     d.setUTCSeconds(decoded.exp);
     return d;
-  };
-
-  var isTokenExpired = function(token) {
-    var d = getTokenExpirationDate(token);
-    if (!d) {
-      return false;
-    }
-    // Token expired?
-    return !(d.valueOf() > new Date().valueOf());
   };
 
   return {
