@@ -264,17 +264,48 @@ class UserTests(APITestCase):
 
 class TopicTests(APITestCase):
 
-    fixtures = ['topictest.yaml']
+    fixtures = ['topictest.json']
 
     # Check that the topics index loads
     def test_topic_view_set(self):
         response = self.client.get('/api/v1/topics/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
+    # Check that closed topics are excluded from default search
+    def test_topic_default_count(self):
+        response = self.client.get('/api/v1/topics/')
+        self.assertEqual(response.data["count"], 0)
+
+    # Check that we're getting all closed topics back when closed is True
+    def test_topic_closed_count(self):
+        response = self.client.get('/api/v1/topics/?closed=true')
+        self.assertEqual(response.data["count"], 188)
+
+    # Check that pagination is behaving itself
+    # (this may qualify as 'testing the library instead of the code')
+    def test_pagination_count(self):
+        # 20 results on first page:
+        response = self.client.get('/api/v1/topics/?closed=true')
+        self.assertEqual(len(response.data["results"]), 20)
+        # Total of ten pages:
+        response = self.client.get('/api/v1/topics/?page=10&closed=true')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        # No more than ten pages:
+        response = self.client.get('/api/v1/topics/?page=11&closed=true')
+        self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
+
     # Check that a topic detail loads
     def test_topic_detail(self):
         response = self.client.get('/api/v1/topics/19/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    # Check that topics are deleting properly
+    # TODO: Auth
+    def test_topic_detail_delete(self):
+        response = self.client.delete('/api/v1/topics/9/')
+        self.assertEqual(204, response.status_code)
+        response = self.client.delete('/api/v1/topics/9/')
+        self.assertEqual(404, response.status_code)
 
     # Check that trying to save a topic when not authenticated fails
     def test_save_topic_must_be_authenticated(self):
