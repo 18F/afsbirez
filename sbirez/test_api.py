@@ -264,7 +264,7 @@ class UserTests(APITestCase):
 
 class TopicTests(APITestCase):
 
-    fixtures = ['topictest.yaml']
+    fixtures = ['topictest.json']
 
     # Check that the topics index loads
     def test_topic_view_set(self):

@@ -2,11 +2,22 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import djorm_pgfulltext.fields
+
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sbirez', '0005_auto_20150225_1935'),
+        ('sbirez', '0008_auto_20150304_2134'),
+    ]
+
+    operations = [
+        migrations.AlterField(
+            model_name='topic',
+            name='fts',
+            field=djorm_pgfulltext.fields.VectorField(null=True, editable=False, default='', db_index=True, serialize=False),
+            preserve_default=True,
+        ),
     ]
 
     # working around some inadequacies in our django fts module.
