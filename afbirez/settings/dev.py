@@ -3,7 +3,7 @@ import os
 from .base import *
 from django.utils.crypto import get_random_string
 
-DEBUG = True 
+DEBUG = True
 TEMPLATE_DEBUG = True
 
 INTERNAL_IPS = ('127.0.0.1',)
@@ -20,3 +20,5 @@ DATABASES = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+INSTALLED_APPS.append('django_extensions')

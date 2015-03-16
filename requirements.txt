@@ -15,3 +15,4 @@ marshmallow==1.2.2
 django-debug-toolbar==1.2.2
 waitress==0.8.9
 whitenoise==1.0.6
+-r requirements/dev.txt
