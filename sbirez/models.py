@@ -65,3 +65,26 @@ class Topic(models.Model):
     objects = SearchManager(fields=None, search_field='fts',
                            auto_update_search_field=False)
 
+
+class Workflow(models.Model):
+    name = models.TextField(blank=False)
+    validation = models.TextField()
+
+
+class Question(models.Model):
+    name = models.TextField(blank=False)
+    order = models.IntegerField(blank=False)
+    parent = models.ForeignKey(Workflow, related_name='questions')
+
+    # Each question should be EITHER an actual question...
+    data_type = models.TextField(default='str')
+    required = models.BooleanField(default=False)
+    human = models.TextField(blank=True)
+    help = models.TextField(blank=True)
+    validation = models.TextField(blank=True)
+
+    # ... OR a sub-workflow
+    subworkflow = models.ForeignKey(Workflow, related_name='subworkflow_of')
+
+    class Meta:
+        ordering = ['order',]
