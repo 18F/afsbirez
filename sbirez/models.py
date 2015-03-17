@@ -5,8 +5,43 @@ from djorm_pgfulltext.models import SearchManager
 from django.conf import settings
 from custom_user.models import AbstractEmailUser
 
+class Address(models.Model):
+    street = models.TextField()
+    street2 = models.TextField(null=True, blank=True)
+    city = models.TextField()
+    state = models.TextField()
+    zip = models.TextField()
+
+class Person(models.Model):
+    name = models.TextField()
+    title = models.TextField(null=True)
+    email = models.TextField(null=True)
+    phone = models.TextField(null=True)
+    fax = models.TextField(null=True)
+
+class Firm(models.Model):
+    name = models.TextField(unique=True)
+    tax_id = models.TextField(unique=True, blank=True, null=True)
+    sbc_id = models.TextField(unique=True, blank=True, null=True)
+    duns_id = models.TextField(unique=True, blank=True, null=True)
+    cage_code = models.TextField(blank=True, null=True)
+    website = models.TextField(blank=True, null=True)
+    address = models.ForeignKey(Address, null=True)
+    point_of_contact = models.ForeignKey(Person, null=True)
+    founding_year = models.IntegerField(null=True)
+    phase1_count = models.IntegerField(null=True)
+    phase1_year = models.IntegerField(null=True)
+    phase2_count = models.IntegerField(null=True)
+    phase2_year = models.IntegerField(null=True)
+    phase2_employees = models.IntegerField(null=True)
+    current_employees = models.IntegerField(null=True)
+    patent_count = models.IntegerField(null=True)
+    total_revenue_range = models.TextField(null=True)
+    revenue_percent = models.IntegerField(null=True)
+
 class SbirezUser(AbstractEmailUser):
     name = models.TextField()
+    firm = models.ForeignKey(Firm, null=True)
 
 class Area(models.Model):
     area = models.TextField(unique=True)

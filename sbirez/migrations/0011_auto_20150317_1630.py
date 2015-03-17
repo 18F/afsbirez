@@ -8,14 +8,14 @@ import djorm_pgfulltext.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sbirez', '0009_auto_20150313_1659'),
+        ('sbirez', '0010_auto_20150312_2041'),
     ]
 
     operations = [
         migrations.CreateModel(
             name='Question',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
                 ('name', models.TextField()),
                 ('order', models.IntegerField()),
                 ('data_type', models.TextField(default='str')),
@@ -23,6 +23,7 @@ class Migration(migrations.Migration):
                 ('human', models.TextField(blank=True)),
                 ('help', models.TextField(blank=True)),
                 ('validation', models.TextField(blank=True)),
+                ('ask_if', models.TextField(blank=True)),
             ],
             options={
                 'ordering': ['order'],
@@ -32,7 +33,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Workflow',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
                 ('name', models.TextField()),
                 ('validation', models.TextField()),
             ],
@@ -49,7 +50,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='question',
             name='subworkflow',
-            field=models.ForeignKey(to='sbirez.Workflow', related_name='subworkflow_of'),
+            field=models.ForeignKey(blank=True, to='sbirez.Workflow', null=True, related_name='subworkflow_of'),
             preserve_default=True,
         ),
     ]
