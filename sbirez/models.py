@@ -82,9 +82,10 @@ class Question(models.Model):
     human = models.TextField(blank=True)
     help = models.TextField(blank=True)
     validation = models.TextField(blank=True)
+    ask_if = models.TextField(blank=True)
 
     # ... OR a sub-workflow
-    subworkflow = models.ForeignKey(Workflow, related_name='subworkflow_of')
+    subworkflow = models.ForeignKey(Workflow, related_name='subworkflow_of', null=True, blank=True)
 
     class Meta:
         ordering = ['order',]
