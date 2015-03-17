@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from sbirez.models import Topic, Reference, Phase, Keyword, Area
+from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person, Address
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('name', 'password', 'url', 'email', 'groups', 'saved_topics',)
+        fields = ('name', 'password', 'url', 'email', 'groups', 'saved_topics', 'firm')
         write_only_fields = ('password',)
 
     def create(self, validated_data):
@@ -22,9 +22,111 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.email = validated_data.get('email', instance.email)
+        instance.firm_id = validated_data.get('firm_id', instance.firm_id)
+        instance.name = validated_data.get('name', instance.name)
         instance.save()
         return instance
 
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = ('street', 'street2', 'city', 'state', 'zip')
+
+class PersonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Person
+        fields = ('name', 'title', 'email', 'phone', 'fax')
+
+class FirmSerializer(serializers.HyperlinkedModelSerializer):
+    address = AddressSerializer(required=False)
+    point_of_contact = PersonSerializer(required=False)
+
+    class Meta:
+        model = Firm
+        fields = ('name', 'tax_id', 'sbc_id', 'duns_id', 'cage_code',
+                  'website', 'address', 'point_of_contact', 'founding_year',
+                  'phase1_count', 'phase1_year', 'phase2_count', 
+                  'phase2_year', 'phase2_employees', 'current_employees',
+                  'patent_count', 'total_revenue_range', 'revenue_percent')
+
+    def update_user(self, firm_id):
+        request = self.context.get('request', None)
+        if request is not None and request.user.is_authenticated():
+            user = get_user_model().objects.get(id=request.user.id)
+            user.firm_id = firm_id
+            user.save()
+
+    def validate(self,data):
+        return data
+
+    def create(self, validated_data):
+        if ('address' in validated_data):
+            address_data = validated_data.pop('address')
+            address = Address.objects.create(**address_data)
+        else:
+            address = None
+
+        if ('point_of_contact' in validated_data):
+            point_of_contact_data = validated_data.pop('point_of_contact')
+            point_of_contact = Person.objects.create(**point_of_contact_data)
+        else:
+            point_of_contact = None
+        firm = Firm.objects.create(point_of_contact=point_of_contact, address=address, **validated_data)
+        self.update_user(firm.id)
+        return firm
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.tax_id = validated_data.get('tax_id', instance.tax_id)
+        instance.sbc_id = validated_data.get('sbc_id', instance.sbc_id)
+        instance.duns_id = validated_data.get('duns_id', instance.duns_id)
+        instance.cage_code = validated_data.get('cage_code', instance.cage_code)
+        instance.website = validated_data.get('website', instance.website)
+        instance.founding_year = validated_data.get('founding_year', instance.founding_year)
+        instance.phase1_count = validated_data.get('phase1_count', instance.phase1_count)
+        instance.phase1_year = validated_data.get('phase1_year', instance.phase1_year)
+        instance.phase2_count = validated_data.get('phase2_count', instance.phase2_count)
+        instance.phase2_year = validated_data.get('phase2_year', instance.phase2_year)
+        instance.phase2_employees = validated_data.get('phase2_employees', instance.phase2_employees)
+        instance.current_employees = validated_data.get('current_employees', instance.current_employees)
+        instance.patent_count = validated_data.get('patent_count', instance.patent_count)
+        instance.total_revenue_range = validated_data.get('total_revenue_range', instance.total_revenue_range)
+        instance.revenue_percent = validated_data.get('revenue_percent', instance.revenue_percent)
+        if ('point_of_contact' in validated_data):
+            point_of_contact_data = validated_data.pop('point_of_contact')
+            point_of_contact, created = Person.objects.get_or_create(**point_of_contact_data)
+            if ('name' in point_of_contact_data):
+                point_of_contact.name = point_of_contact_data['name']
+            if ('title' in point_of_contact_data):
+                point_of_contact.title = point_of_contact_data['title']
+            if ('email' in point_of_contact_data):
+                point_of_contact.email = point_of_contact_data['email']
+            if ('phone' in point_of_contact_data):
+                point_of_contact.phone = point_of_contact_data['phone']
+            if ('fax' in point_of_contact_data):
+                point_of_contact.fax = point_of_contact_data['fax']
+            point_of_contact.save()
+            instance.point_of_contact = point_of_contact
+
+        if ('address' in validated_data):
+            address_data = validated_data.pop('address')
+            address, created = Address.objects.get_or_create(validated_data.get('address'))
+            if ('street' in address_data):
+                address.street = address_data['street']
+            if ('street2' in address_data):
+                address.street2 = address_data['street2']
+            if ('city' in address_data):
+                address.city = address_data['city']
+            if ('state' in address_data):
+                address.state = address_data['state']
+            if ('zip' in address_data):
+                address.zip = address_data['zip']
+            address.save()
+            instance.address = address
+
+        instance.save()
+        return instance
+    
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

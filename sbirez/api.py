@@ -1,15 +1,15 @@
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from sbirez.models import Topic
+from sbirez.models import Topic, Firm
 from rest_framework import viewsets, mixins, generics, status, permissions, exceptions
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer
+from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer, FirmSerializer
 import marshmallow as mm
-from rest_framework.permissions import AllowAny
-from .permissions import IsStaffOrTargetUser
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -22,6 +22,18 @@ class UserViewSet(viewsets.ModelViewSet):
         # allow non-authenticated user to create via POST
         return (AllowAny() if self.request.method == 'POST'
                 else IsStaffOrTargetUser()),
+
+
+class FirmViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Firm.objects.all()
+    serializer_class = FirmSerializer
+
+    def get_permissions(self):
+        # allow non-authenticated user to create via POST
+        return IsStaffOrFirmRelatedUser(),
 
 
 class GroupViewSet(viewsets.ModelViewSet):
