@@ -114,9 +114,11 @@ class Question(models.Model):
     # Each question should be EITHER an actual question...
     data_type = models.TextField(default='str')
     required = models.BooleanField(default=False)
+    default = models.TextField(blank=True)
     human = models.TextField(blank=True)
     help = models.TextField(blank=True)
     validation = models.TextField(blank=True)
+    validation_msg = models.TextField(blank=True)
     ask_if = models.TextField(blank=True)
 
     # ... OR a sub-workflow
