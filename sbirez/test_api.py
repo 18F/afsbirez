@@ -1,9 +1,12 @@
 from rest_framework.test import APIRequestFactory, APIClient, APITestCase
 from rest_framework.response import Response
 from rest_framework import status
+from collections import OrderedDict
+import json
 
 from django.test import TestCase
 
+from sbirez.models import Firm
 from sbirez import api
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -262,9 +265,283 @@ class UserTests(APITestCase):
         response = Response(request)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
+class FirmTests(APITestCase):
+    firm_data = {'name':'TestCo', 'tax_id':'12345', 'sbc_id':'12345',
+         'duns_id':'12345', 'cage_code':'12345', 'website':'www.testco.com',
+         'founding_year':'1982', 'phase1_count':'1', 'phase1_year':2014,
+         'phase2_count': 1,'phase2_year': 2015, 'phase2_employees': 3,
+         'current_employees':5, 'patent_count':1,
+         'total_revenue_range':'$1000', 'revenue_percent':12,
+         'address': OrderedDict([('street', '123 Test St.'), ('street2', ''), 
+             ('city', 'Dayton'), ('state', 'OH'), ('zip', '45334')]),
+         'point_of_contact': OrderedDict([('name', 'Test User'), 
+             ('title', 'Engineer'), ('email', 'test@test.com'),
+             ('phone', '555-5555'), ('fax', '554-5555')])
+          }
+
+    def create_user_and_auth(self):
+        response = self.client.post('/api/v1/users/',
+            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'123'})
+        self.client.credentials(HTTP_AUTHORIZATION='JWT ' + response.data['token'])
+
+    # get firm without being authed
+    def test_firm_list_unauthed(self):
+        response = self.client.get('/api/v1/firms/');
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
+
+    def test_firm_get_bad_unauthed(self):
+        response = self.client.get('/api/v1/firms/123/');
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
+
+    def test_firm_good_create(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        self.assertEqual(firm.tax_id, '12345')
+        self.assertEqual(firm.sbc_id, '12345')
+        self.assertEqual(firm.duns_id, '12345')
+        self.assertEqual(firm.cage_code, '12345')
+        self.assertEqual(firm.website, 'www.testco.com')
+        self.assertEqual(firm.founding_year, 1982)
+        self.assertEqual(firm.phase1_count, 1)
+        self.assertEqual(firm.phase1_year, 2014)
+        self.assertEqual(firm.phase2_count, 1)
+        self.assertEqual(firm.phase2_year, 2015)
+        self.assertEqual(firm.phase2_employees, 3)
+        self.assertEqual(firm.current_employees, 5)
+        self.assertEqual(firm.patent_count, 1)
+        self.assertEqual(firm.total_revenue_range, '$1000')
+        self.assertEqual(firm.revenue_percent, 12)
+        self.assertEqual(firm.point_of_contact.name, 'Test User')
+        self.assertEqual(firm.point_of_contact.title, 'Engineer')
+        self.assertEqual(firm.point_of_contact.email, 'test@test.com')
+        self.assertEqual(firm.point_of_contact.phone, '555-5555')
+        self.assertEqual(firm.point_of_contact.fax, '554-5555')
+        self.assertEqual(firm.address.street, '123 Test St.')
+        self.assertEqual(firm.address.street2, '')
+        self.assertEqual(firm.address.city, 'Dayton')
+        self.assertEqual(firm.address.state, 'OH')
+        self.assertEqual(firm.address.zip, '45334')
+        
+
+    def test_firm_good_create_no_poc(self):
+        self.create_user_and_auth()
+        local_data = self.firm_data.copy()
+        local_data.pop('point_of_contact')
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(local_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        self.assertEqual(firm.point_of_contact, None)
+
+    def test_firm_good_create_no_address(self):
+        self.create_user_and_auth()
+        local_data = self.firm_data.copy()
+        local_data.pop('address')
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(local_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        self.assertEqual(firm.address, None)
+
+    def test_firm_bad_create_empty(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              {}, content_type='application/json')
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+
+    def test_firm_good_create_unauthed(self):
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
+
+    # assign user to firm
+    def test_firm_add_user(self):
+        self.create_user_and_auth()
+        user = get_user_model().objects.get(email='a@b.com')
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        user_after = get_user_model().objects.get(id=user.id)
+        self.assertEqual(user.id, user_after.id)
+        self.assertEqual(user_after.firm.id, firm.id)
+
+    def test_firm_update_good(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        local_data = self.firm_data.copy()
+        local_data['name'] = 'New Test Co.'
+        response = self.client.put('/api/v1/firms/' + str(firm.id) + '/',
+              json.dumps(local_data), content_type='application/json')
+        firm_after = Firm.objects.get(id=firm.id)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(firm.id, firm_after.id)
+        self.assertEqual(firm_after.name, 'New Test Co.')
+
+    def test_firm_update_empty(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        response = self.client.put('/api/v1/firms/' + str(firm.id) + '/',
+              {}, content_type='application/json')
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+
+    def test_firm_update_missing_fields(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        local_data = self.firm_data.copy()
+        local_data.pop('name')
+        response = self.client.put('/api/v1/firms/' + str(firm.id) + '/',
+              json.dumps(local_data), content_type='application/json')
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+
+    def test_firm_update_missing_address(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        firm = Firm.objects.get(name='TestCo')
+        local_data = self.firm_data.copy()
+        local_data.pop('address')
+        response = self.client.put('/api/v1/firms/' + str(firm.id) + '/',
+              json.dumps(local_data), content_type='application/json')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def test_firm_update_missing_poc(self): 
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        firm = Firm.objects.get(name='TestCo')
+        local_data = self.firm_data.copy()
+        local_data.pop('point_of_contact')
+        response = self.client.put('/api/v1/firms/' + str(firm.id) + '/',
+              json.dumps(local_data), content_type='application/json')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def test_firm_update_poc(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        local_data = self.firm_data.copy()
+        local_data['name'] = 'New Test Co.'
+        local_data['point_of_contact']['name'] = 'New Test User'
+        response = self.client.put('/api/v1/firms/' + str(firm.id) + '/',
+              json.dumps(local_data), content_type='application/json')
+        firm_after = Firm.objects.get(id=firm.id)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(firm.id, firm_after.id)
+        self.assertEqual(firm_after.name, 'New Test Co.')
+        self.assertEqual(firm_after.point_of_contact.name, 'New Test User')
+
+    def test_firm_update_address(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        local_data = self.firm_data.copy()
+        local_data['name'] = 'New Test Co.'
+        local_data['address']['street'] = '222 New St.'
+        response = self.client.put('/api/v1/firms/' + str(firm.id) + '/',
+              json.dumps(local_data), content_type='application/json')
+        firm_after = Firm.objects.get(id=firm.id)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(firm.id, firm_after.id)
+        self.assertEqual(firm_after.name, 'New Test Co.')
+        self.assertEqual(firm_after.address.street, '222 New St.')
+
+    def test_firm_patch_name(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        local_data = dict()
+        local_data['name'] = 'New Test Co.'
+        response = self.client.patch('/api/v1/firms/' + str(firm.id) + '/',
+              json.dumps(local_data), content_type='application/json')
+        firm_after = Firm.objects.get(id=firm.id)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(firm.id, firm_after.id)
+        self.assertEqual(firm_after.name, 'New Test Co.')
+
+    def test_firm_patch_address(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        local_data = dict()
+        local_data['address'] = OrderedDict()
+        local_data['address']['street'] = '222 New St.' 
+        response = self.client.patch('/api/v1/firms/' + str(firm.id) + '/',
+              json.dumps(local_data), content_type='application/json')
+        firm_after = Firm.objects.get(id=firm.id)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(firm.id, firm_after.id)
+        self.assertEqual(firm_after.address.street, '222 New St.')
+
+    def test_firm_patch_poc(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        local_data = dict()
+        local_data['point_of_contact'] = OrderedDict()
+        local_data['point_of_contact']['name'] = 'New User Name' 
+        response = self.client.patch('/api/v1/firms/' + str(firm.id) + '/',
+              json.dumps(local_data), content_type='application/json')
+        firm_after = Firm.objects.get(id=firm.id)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(firm.id, firm_after.id)
+        self.assertEqual(firm_after.point_of_contact.name, 'New User Name')
+
+    def test_firm_patch_poc_unauthed(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        local_data = dict()
+        local_data['point_of_contact'] = OrderedDict()
+        local_data['point_of_contact']['name'] = 'New User Name' 
+        self.client.credentials()
+        response = self.client.patch('/api/v1/firms/' + str(firm.id) + '/',
+              json.dumps(local_data), content_type='application/json')
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
+
+    def test_firm_patch_address_unauthed(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        local_data = dict()
+        local_data['address'] = OrderedDict()
+        local_data['address']['street'] = '222 New St.' 
+        self.client.credentials()
+        response = self.client.patch('/api/v1/firms/' + str(firm.id) + '/',
+              json.dumps(local_data), content_type='application/json')
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
+
+
 class TopicTests(APITestCase):
 
-    fixtures = ['topictest.yaml']
+    fixtures = ['topictest.json']
 
     # Check that the topics index loads
     def test_topic_view_set(self):
