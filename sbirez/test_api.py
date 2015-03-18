@@ -682,7 +682,7 @@ class WorkflowTests(APITestCase):
 
     fixtures = ['workflowtest.json']
 
-    # Check that the topics index loads
+    # Check that the workflow index loads
     def test_workflow_view_set(self):
         response = self.client.get('/api/v1/workflows/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -691,15 +691,74 @@ class WorkflowTests(APITestCase):
     def test_workflow_included(self):
         response = self.client.get('/api/v1/workflows/')
         self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]['name'], 'dod_proposal_info')
+        self.assertEqual(response.data["results"][0]['name'], 
+                         'dod_proposal_info')
 
     # Check that fixture result includes questions
     def test_questions_included_in_workflow(self):
         response = self.client.get('/api/v1/workflows/')
         self.assertEqual(response.data["count"], 1)
-        self.assertEqual(response.data["results"][0]['name'], 'dod_proposal_info')
+        self.assertEqual(response.data["results"][0]['name'], 
+                         'dod_proposal_info')
 
     def test_get_single_workflow(self):
-        response = self.client.get('/api/v1/workflows/1')
+        response = self.client.get('/api/v1/workflows/1/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data["name"], 'dod_proposal_info')
+
+
+class PersonTests(APITestCase):
+
+    fixtures = ['alldata.json']
+
+    # Check that the proposal index loads
+    def test_person_view_set(self):
+        response = self.client.get('/api/v1/persons/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)  
+        self.assertEqual(response.data["count"], 1)
+
+    def test_single_person_get(self):
+        response = self.client.get('/api/v1/persons/1/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)  
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data['name'], 'Leia Organa')
+        self.assertEqual(response.data['title'], 'Princess')
+
+
+class AddressTests(APITestCase):
+
+    fixtures = ['alldata.json']
+
+    # Check that the proposal index loads
+    def test_address_view_set(self):
+        response = self.client.get('/api/v1/addresses/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)  
+        self.assertEqual(response.data["count"], 1)
+
+
+class ProposalTests(APITestCase):
+
+    fixtures = ['alldata.json']
+
+    # Check that the proposal index loads
+    def test_proposal_view_set(self):
+        response = self.client.get('/api/v1/proposals/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)  
+        self.assertEqual(response.data["count"], 1)
+
+    def test_get_one_proposal(self):
+        response = self.client.get('/api/v1/proposals/1/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code) 
+        self.assertEqual(response.data["data"]["essentially_euquivalent_work"] 
+            == 'USAF ABCDEF')
+
+    def test_update_proposal(self):
+        response = self.client.get('/api/v1/proposals/1/')
+        data = response.data['data']
+        self.assertEqual(type(data), dict)  # not deserializing!
+        self.assertEqual(data['duration'], '3 yr')  
+        data['duration'] = '1 yr'
+        response = self.client.put('/api/v1/proposals/1/', {})
+        self.assertEqual(data['duration'], '1 yr')
+
+    

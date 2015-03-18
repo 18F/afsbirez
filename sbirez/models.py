@@ -4,6 +4,7 @@ from djorm_pgfulltext.fields import VectorField
 from djorm_pgfulltext.models import SearchManager
 from django.conf import settings
 from custom_user.models import AbstractEmailUser
+import jsonfield
 
 class Address(models.Model):
     street = models.TextField()
@@ -126,3 +127,12 @@ class Question(models.Model):
 
     class Meta:
         ordering = ['order',]
+
+
+class Proposal(models.Model):
+    owner = models.ForeignKey(SbirezUser, related_name='proposals')
+    firm = models.ForeignKey(Firm, related_name='proposals')
+    workflow = models.ForeignKey(Workflow, related_name='proposals')
+    topic = models.ForeignKey(Topic, related_name='proposals')
+    submitted_at = models.DateTimeField(auto_now=True)
+    data = jsonfield.JSONField()

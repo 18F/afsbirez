@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User, Group
-from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person, Address, Workflow, Question
+from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person
+from sbirez.models import Address, Workflow, Question, Proposal, Address
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
@@ -201,4 +202,17 @@ class WorkflowSerializer(serializers.ModelSerializer):
         model = Workflow
         fields = ('name', 'validation', 'questions', )
 
+
+class ProposalSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Proposal
+        fields = ('owner', 'firm', 'workflow', 'topic',
+                  'submitted_at', 'data')
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Address
 
