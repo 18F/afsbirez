@@ -135,4 +135,5 @@ class Proposal(models.Model):
     workflow = models.ForeignKey(Workflow, related_name='proposals')
     topic = models.ForeignKey(Topic, related_name='proposals')
     submitted_at = models.DateTimeField(auto_now=True)
+    dummy = models.TextField(null=True)
     data = JsonField()

@@ -203,13 +203,27 @@ class WorkflowSerializer(serializers.ModelSerializer):
         fields = ('name', 'validation', 'questions', )
 
 
+def genericValidator(proposal):
+    '''
+    Inspect the workflow's validators and apply them to
+    the proposal's data
+    '''
+    import ipdb; ipdb.set_trace()
+    for q in proposal['workflow'].questions.all():
+        print(q.validation)
+        if q.validation: # here's where we apply the validation test
+            raise serializers.ValidationError(
+                '%s: %s' % (q.name, q.validation_msg))
+
+
 class ProposalSerializer(serializers.ModelSerializer):
     data = serializers.SerializerMethodField('clean_data')
 
     class Meta:
         model = Proposal
         fields = ('owner', 'firm', 'workflow', 'topic',
-                  'submitted_at', 'data')
+                  'submitted_at', 'data', 'dummy')
+        validators = [genericValidator]
 
     def clean_data(self, obj):
         return obj.data
