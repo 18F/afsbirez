@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User, Group
-from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person, Address
+from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person
+from sbirez.models import Address, Workflow, Question, Proposal, Address
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
@@ -45,7 +46,7 @@ class FirmSerializer(serializers.HyperlinkedModelSerializer):
         model = Firm
         fields = ('name', 'tax_id', 'sbc_id', 'duns_id', 'cage_code',
                   'website', 'address', 'point_of_contact', 'founding_year',
-                  'phase1_count', 'phase1_year', 'phase2_count', 
+                  'phase1_count', 'phase1_year', 'phase2_count',
                   'phase2_year', 'phase2_employees', 'current_employees',
                   'patent_count', 'total_revenue_range', 'revenue_percent')
 
@@ -126,7 +127,7 @@ class FirmSerializer(serializers.HyperlinkedModelSerializer):
 
         instance.save()
         return instance
-    
+
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -183,4 +184,39 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
                     , 'references', 'phases', 'keywords', 'areas',
                     'saved',
                     )
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ('name', 'order', 'data_type', 'required', 'default',
+                  'human', 'help', 'validation', 'validation_msg', 'ask_if',
+                  'subworkflow')
+
+
+class WorkflowSerializer(serializers.ModelSerializer):
+
+    questions = QuestionSerializer(many=True)
+
+    class Meta:
+        model = Workflow
+        fields = ('name', 'validation', 'questions', )
+
+
+class ProposalSerializer(serializers.ModelSerializer):
+    data = serializers.SerializerMethodField('clean_data')
+
+    class Meta:
+        model = Proposal
+        fields = ('owner', 'firm', 'workflow', 'topic',
+                  'submitted_at', 'data')
+
+    def clean_data(self, obj):
+        return obj.data
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Address
 

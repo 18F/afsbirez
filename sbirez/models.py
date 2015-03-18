@@ -4,6 +4,7 @@ from djorm_pgfulltext.fields import VectorField
 from djorm_pgfulltext.models import SearchManager
 from django.conf import settings
 from custom_user.models import AbstractEmailUser
+from django_pgjson.fields import JsonField
 
 class Address(models.Model):
     street = models.TextField()
@@ -100,3 +101,38 @@ class Topic(models.Model):
     objects = SearchManager(fields=None, search_field='fts',
                            auto_update_search_field=False)
 
+
+class Workflow(models.Model):
+    name = models.TextField(blank=False)
+    validation = models.TextField()
+
+
+class Question(models.Model):
+    name = models.TextField(blank=False)
+    order = models.IntegerField(blank=False)
+    parent = models.ForeignKey(Workflow, related_name='questions')
+
+    # Each question should be EITHER an actual question...
+    data_type = models.TextField(default='str')
+    required = models.BooleanField(default=False)
+    default = models.TextField(blank=True)
+    human = models.TextField(blank=True)
+    help = models.TextField(blank=True)
+    validation = models.TextField(blank=True)
+    validation_msg = models.TextField(blank=True)
+    ask_if = models.TextField(blank=True)
+
+    # ... OR a sub-workflow
+    subworkflow = models.ForeignKey(Workflow, related_name='subworkflow_of', null=True, blank=True)
+
+    class Meta:
+        ordering = ['order',]
+
+
+class Proposal(models.Model):
+    owner = models.ForeignKey(SbirezUser, related_name='proposals')
+    firm = models.ForeignKey(Firm, related_name='proposals')
+    workflow = models.ForeignKey(Workflow, related_name='proposals')
+    topic = models.ForeignKey(Topic, related_name='proposals')
+    submitted_at = models.DateTimeField(auto_now=True)
+    data = JsonField()

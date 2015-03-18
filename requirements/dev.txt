@@ -1,0 +1,2 @@
+django_extensions  
+django-debug-toolbar==1.2.2
