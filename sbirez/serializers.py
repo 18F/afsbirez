@@ -204,11 +204,15 @@ class WorkflowSerializer(serializers.ModelSerializer):
 
 
 class ProposalSerializer(serializers.ModelSerializer):
+    data = serializers.SerializerMethodField('clean_data')
 
     class Meta:
         model = Proposal
         fields = ('owner', 'firm', 'workflow', 'topic',
                   'submitted_at', 'data')
+
+    def clean_data(self, obj):
+        return obj.data
 
 
 class AddressSerializer(serializers.ModelSerializer):

@@ -720,7 +720,6 @@ class PersonTests(APITestCase):
     def test_single_person_get(self):
         response = self.client.get('/api/v1/persons/1/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)  
-        self.assertEqual(response.data["count"], 1)
         self.assertEqual(response.data['name'], 'Leia Organa')
         self.assertEqual(response.data['title'], 'Princess')
 
@@ -733,7 +732,7 @@ class AddressTests(APITestCase):
     def test_address_view_set(self):
         response = self.client.get('/api/v1/addresses/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)  
-        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["count"], 2)
 
 
 class ProposalTests(APITestCase):
@@ -749,16 +748,21 @@ class ProposalTests(APITestCase):
     def test_get_one_proposal(self):
         response = self.client.get('/api/v1/proposals/1/')
         self.assertEqual(status.HTTP_200_OK, response.status_code) 
-        self.assertEqual(response.data["data"]["essentially_euquivalent_work"] 
-            == 'USAF ABCDEF')
+        self.assertEqual(response.data["data"]["essentially_equivalent_work"],
+            'USAF ABCDEF')
+
+    def test_proposal_data_deserialized(self):
+        response = self.client.get('/api/v1/proposals/1/')
+        data = response.data['data']
+        self.assertEqual(type(data), dict)
 
     def test_update_proposal(self):
         response = self.client.get('/api/v1/proposals/1/')
         data = response.data['data']
-        self.assertEqual(type(data), dict)  # not deserializing!
         self.assertEqual(data['duration'], '3 yr')  
         data['duration'] = '1 yr'
         response = self.client.put('/api/v1/proposals/1/', {})
+        response = self.client.get('/api/v1/proposals/1/')        
         self.assertEqual(data['duration'], '1 yr')
 
     
