@@ -272,9 +272,9 @@ class FirmTests(APITestCase):
          'phase2_count': 1,'phase2_year': 2015, 'phase2_employees': 3,
          'current_employees':5, 'patent_count':1,
          'total_revenue_range':'$1000', 'revenue_percent':12,
-         'address': OrderedDict([('street', '123 Test St.'), ('street2', ''), 
+         'address': OrderedDict([('street', '123 Test St.'), ('street2', ''),
              ('city', 'Dayton'), ('state', 'OH'), ('zip', '45334')]),
-         'point_of_contact': OrderedDict([('name', 'Test User'), 
+         'point_of_contact': OrderedDict([('name', 'Test User'),
              ('title', 'Engineer'), ('email', 'test@test.com'),
              ('phone', '555-5555'), ('fax', '554-5555')])
           }
@@ -325,7 +325,7 @@ class FirmTests(APITestCase):
         self.assertEqual(firm.address.city, 'Dayton')
         self.assertEqual(firm.address.state, 'OH')
         self.assertEqual(firm.address.zip, '45334')
-        
+
     def test_firm_good_create_no_poc(self):
         self.create_user_and_auth()
         local_data = self.firm_data.copy()
@@ -418,7 +418,7 @@ class FirmTests(APITestCase):
               json.dumps(local_data), content_type='application/json')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
-    def test_firm_update_missing_poc(self): 
+    def test_firm_update_missing_poc(self):
         self.create_user_and_auth()
         response = self.client.post('/api/v1/firms/',
               json.dumps(self.firm_data), content_type='application/json')
@@ -487,7 +487,7 @@ class FirmTests(APITestCase):
         firm = Firm.objects.get(name='TestCo')
         local_data = dict()
         local_data['address'] = OrderedDict()
-        local_data['address']['street'] = '222 New St.' 
+        local_data['address']['street'] = '222 New St.'
         response = self.client.patch('/api/v1/firms/' + str(firm.id) + '/',
               json.dumps(local_data), content_type='application/json')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -504,7 +504,7 @@ class FirmTests(APITestCase):
         firm = Firm.objects.get(name='TestCo')
         local_data = dict()
         local_data['point_of_contact'] = OrderedDict()
-        local_data['point_of_contact']['name'] = 'New User Name' 
+        local_data['point_of_contact']['name'] = 'New User Name'
         response = self.client.patch('/api/v1/firms/' + str(firm.id) + '/',
               json.dumps(local_data), content_type='application/json')
         firm_after = Firm.objects.get(id=firm.id)
@@ -520,7 +520,7 @@ class FirmTests(APITestCase):
         firm = Firm.objects.get(name='TestCo')
         local_data = dict()
         local_data['point_of_contact'] = OrderedDict()
-        local_data['point_of_contact']['name'] = 'New User Name' 
+        local_data['point_of_contact']['name'] = 'New User Name'
         self.client.credentials()
         response = self.client.patch('/api/v1/firms/' + str(firm.id) + '/',
               json.dumps(local_data), content_type='application/json')
@@ -534,7 +534,7 @@ class FirmTests(APITestCase):
         firm = Firm.objects.get(name='TestCo')
         local_data = dict()
         local_data['address'] = OrderedDict()
-        local_data['address']['street'] = '222 New St.' 
+        local_data['address']['street'] = '222 New St.'
         self.client.credentials()
         response = self.client.patch('/api/v1/firms/' + str(firm.id) + '/',
               json.dumps(local_data), content_type='application/json')
@@ -679,3 +679,92 @@ class TopicTests(APITestCase):
         response = self.client.delete('/api/v1/topics/2222/saved/', {})
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
+
+class WorkflowTests(APITestCase):
+
+    fixtures = ['workflowtest.json']
+
+    # Check that the workflow index loads
+    def test_workflow_view_set(self):
+        response = self.client.get('/api/v1/workflows/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    # Check that fixture workflow included in GET result
+    def test_workflow_included(self):
+        response = self.client.get('/api/v1/workflows/')
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]['name'], 
+                         'dod_proposal_info')
+
+    # Check that fixture result includes questions
+    def test_questions_included_in_workflow(self):
+        response = self.client.get('/api/v1/workflows/')
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["results"][0]['name'], 
+                         'dod_proposal_info')
+
+    def test_get_single_workflow(self):
+        response = self.client.get('/api/v1/workflows/1/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data["name"], 'dod_proposal_info')
+
+
+class PersonTests(APITestCase):
+
+    fixtures = ['alldata.json']
+
+    # Check that the proposal index loads
+    def test_person_view_set(self):
+        response = self.client.get('/api/v1/persons/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)  
+        self.assertEqual(response.data["count"], 1)
+
+    def test_single_person_get(self):
+        response = self.client.get('/api/v1/persons/1/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)  
+        self.assertEqual(response.data['name'], 'Leia Organa')
+        self.assertEqual(response.data['title'], 'Princess')
+
+
+class AddressTests(APITestCase):
+
+    fixtures = ['alldata.json']
+
+    # Check that the proposal index loads
+    def test_address_view_set(self):
+        response = self.client.get('/api/v1/addresses/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)  
+        self.assertEqual(response.data["count"], 2)
+
+
+class ProposalTests(APITestCase):
+
+    fixtures = ['alldata.json']
+
+    # Check that the proposal index loads
+    def test_proposal_view_set(self):
+        response = self.client.get('/api/v1/proposals/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)  
+        self.assertEqual(response.data["count"], 1)
+
+    def test_get_one_proposal(self):
+        response = self.client.get('/api/v1/proposals/1/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code) 
+        self.assertEqual(response.data["data"]["essentially_equivalent_work"],
+            'USAF ABCDEF')
+
+    def test_proposal_data_deserialized(self):
+        response = self.client.get('/api/v1/proposals/1/')
+        data = response.data['data']
+        self.assertEqual(type(data), dict)
+
+    def test_update_proposal(self):
+        response = self.client.get('/api/v1/proposals/1/')
+        data = response.data['data']
+        self.assertEqual(data['duration'], '3 yr')  
+        data['duration'] = '1 yr'
+        response = self.client.put('/api/v1/proposals/1/', {})
+        response = self.client.get('/api/v1/proposals/1/')        
+        self.assertEqual(data['duration'], '1 yr')
+
+    

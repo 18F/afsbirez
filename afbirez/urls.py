@@ -10,6 +10,10 @@ router.register(r'users', api.UserViewSet)
 router.register(r'firms', api.FirmViewSet)
 router.register(r'groups', api.GroupViewSet)
 router.register(r'topics', api.TopicViewSet, 'topics')
+router.register(r'workflows', api.WorkflowViewSet)
+router.register(r'proposals', api.ProposalViewSet)
+router.register(r'addresses', api.AddressViewSet)
+router.register(r'persons', api.PersonViewSet)
 
 
 urlpatterns = patterns('',
