@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-from django_pgjson.fields import JsonField
 import djorm_pgfulltext.fields
 from django.conf import settings
 
@@ -19,7 +18,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
                 ('submitted_at', models.DateTimeField(auto_now=True)),
-                ('data', JsonField()),
+                ('data', models.TextField(null=True)),
                 ('firm', models.ForeignKey(to='sbirez.Firm', related_name='proposals')),
                 ('owner', models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='proposals')),
                 ('topic', models.ForeignKey(to='sbirez.Topic', related_name='proposals')),
