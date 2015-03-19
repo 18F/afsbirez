@@ -764,7 +764,8 @@ class ProposalTests(APITestCase):
             'yellow')  
         
         response.data['data']['quest_thy_favorite_color'] = 'green'
-        response = self.client.put('/api/v1/proposals/1/', response.data)
+        response.data['data'] = json.dumps(response.data['data'])
+        response = self.client.put('/api/v1/proposals/2/', response.data)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         
         response = self.client.get('/api/v1/proposals/2/')  
@@ -776,27 +777,37 @@ class ProposalTests(APITestCase):
         response = self.client.get('/api/v1/proposals/2/')
         self._deserialize_data(response)
         response.data['data']['quest_thy_favorite_color'] = 'blue'
-        response = self.client.put('/api/v1/proposals/1/', response.data)
+        response.data['data'] = json.dumps(response.data['data'])
+        response = self.client.put('/api/v1/proposals/2/', response.data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertIn('Lancelot already said blue', response.data['non_field_errors'])
+        self.assertIn('quest_thy_favorite_color: Lancelot already said blue', 
+                      response.data['non_field_errors'])
 
     # omit a required field
     def test_incomplete_post_raises_error(self):
         response = self.client.post('/api/v1/proposals/', 
             {'owner': 2, 'firm': 1, 'workflow': 2, 
-             'topic': 1, 'data': """
+             'topic': 1, 'data': json.dumps(
                     {
                      "quest_thy_quest": "To seek the Grail",
-                     "quest_thy_favorite_color": "#0000FF"}"""
+                     "quest_thy_favorite_color": "#0000FF"})
             })
-        self.assertIn('Required field quest_thy_name absent', response.data['non_field_errors'])
+        self.assertIn('Required field quest_thy_name absent', 
+                      response.data['non_field_errors'])
 
     def test_post_full_proposal(self):
         response = self.client.post('/api/v1/proposals/', 
             {'owner': 2, 'firm': 1, 'workflow': 2, 
-             'topic': 1, 'data': """
+             'topic': 1, 'data': json.dumps(
                     {"quest_thy_name": "Galahad",
                      "quest_thy_quest": "To seek the Grail",
-                     "quest_thy_favorite_color": "#0000FF"}"""
+                     "quest_thy_favorite_color": "#0000FF"})
             })
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+        response = self.client.get('/api/v1/proposals/%s/' % response.data['id'])
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self._deserialize_data(response)
+        self.assertEqual(response.data['data']['quest_thy_favorite_color'], 
+            "#0000FF")
+
