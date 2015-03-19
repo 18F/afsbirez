@@ -66,10 +66,4 @@ class Migration(migrations.Migration):
             field=models.TextField(null=True, blank=True),
             preserve_default=True,
         ),
-        migrations.AlterField(
-            model_name='topic',
-            name='fts',
-            field=djorm_pgfulltext.fields.VectorField(null=True, db_index=True, default='', serialize=False, editable=False),
-            preserve_default=True,
-        ),
     ]

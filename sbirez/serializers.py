@@ -232,7 +232,7 @@ def genericValidator(proposal):
                     if not func(data, data[question.name], *args):
                         raise serializers.ValidationError(
                             '%s: %s' % (question.name, question.validation_msg))
-                        
+
 
 class ProposalSerializer(serializers.ModelSerializer):
 
