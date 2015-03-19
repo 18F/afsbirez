@@ -8,15 +8,20 @@ describe('Controller: AccountUserCtrl', function () {
   var AccountUserCtrl,
     $rootScope,
     scope,
-    UserService;
+    UserService,
+    $q;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, _$rootScope_, _UserService_) {
+  beforeEach(inject(function ($controller, _$rootScope_, _UserService_, _$q_) {
     UserService = _UserService_;
     $rootScope = _$rootScope_;
+    $q = _$q_;
     scope = $rootScope.$new();
-    spyOn(UserService, 'getUserDetails').andReturn({'id':1, 'name':'Test User'});
-    spyOn(UserService, 'addOrganization');
+    spyOn(UserService, 'getUserDetails').andCallFake(function() {
+      var deferred = $q.defer();
+      deferred.resolve({'id':1, 'name':'Test User'});
+      return deferred.promise;
+    });
     spyOn(UserService, 'updateUserDetails');
     AccountUserCtrl = $controller('AccountUserCtrl', {
       $scope: scope
@@ -35,7 +40,8 @@ describe('Controller: AccountUserCtrl', function () {
     expect(UserService.getUserDetails).toHaveBeenCalled();
   });
 
-  it('should call addOrganization on UserService when an organization is added', function() {
+  // addOrganization was removed
+  xit('should call addOrganization on UserService when an organization is added', function() {
     scope.newOrganization = 'OrgTest';
     scope.addOrganization();
     expect(scope.newOrganization).toBe('');

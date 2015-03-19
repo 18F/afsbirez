@@ -326,7 +326,6 @@ class FirmTests(APITestCase):
         self.assertEqual(firm.address.state, 'OH')
         self.assertEqual(firm.address.zip, '45334')
 
-
     def test_firm_good_create_no_poc(self):
         self.create_user_and_auth()
         local_data = self.firm_data.copy()
@@ -380,10 +379,11 @@ class FirmTests(APITestCase):
         local_data['name'] = 'New Test Co.'
         response = self.client.put('/api/v1/firms/' + str(firm.id) + '/',
               json.dumps(local_data), content_type='application/json')
-        firm_after = Firm.objects.get(id=firm.id)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(firm.id, firm_after.id)
-        self.assertEqual(firm_after.name, 'New Test Co.')
+        response = self.client.get('/api/v1/firms/' + str(firm.id) + '/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(firm.id, response.data['id'])
+        self.assertEqual(response.data['name'], 'New Test Co.')
 
     def test_firm_update_empty(self):
         self.create_user_and_auth()
@@ -440,11 +440,12 @@ class FirmTests(APITestCase):
         local_data['point_of_contact']['name'] = 'New Test User'
         response = self.client.put('/api/v1/firms/' + str(firm.id) + '/',
               json.dumps(local_data), content_type='application/json')
-        firm_after = Firm.objects.get(id=firm.id)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(firm.id, firm_after.id)
-        self.assertEqual(firm_after.name, 'New Test Co.')
-        self.assertEqual(firm_after.point_of_contact.name, 'New Test User')
+        response = self.client.get('/api/v1/firms/' + str(firm.id) + '/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(firm.id, response.data['id'])
+        self.assertEqual(response.data['name'], 'New Test Co.')
+        self.assertEqual(response.data['point_of_contact']['name'], 'New Test User')
 
     def test_firm_update_address(self):
         self.create_user_and_auth()
@@ -489,10 +490,11 @@ class FirmTests(APITestCase):
         local_data['address']['street'] = '222 New St.'
         response = self.client.patch('/api/v1/firms/' + str(firm.id) + '/',
               json.dumps(local_data), content_type='application/json')
-        firm_after = Firm.objects.get(id=firm.id)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(firm.id, firm_after.id)
-        self.assertEqual(firm_after.address.street, '222 New St.')
+        response = self.client.get('/api/v1/firms/' + str(firm.id) + '/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(firm.id, response.data['id'])
+        self.assertEqual(response.data['address']['street'], '222 New St.')
 
     def test_firm_patch_poc(self):
         self.create_user_and_auth()

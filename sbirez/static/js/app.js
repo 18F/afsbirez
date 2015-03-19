@@ -183,7 +183,7 @@ angular.module('sbirezApp', [
         access: { requiredAuthentication: true }
       })
       .state('app.account.organization', {
-        url: '/organization/:id',
+        url: '/organization',
         views: {
           'accountContent': {
             templateUrl: 'static/views/partials/accountOrganization.html',
