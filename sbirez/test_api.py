@@ -766,5 +766,13 @@ class ProposalTests(APITestCase):
         response = self.client.put('/api/v1/proposals/1/', {})
         response = self.client.get('/api/v1/proposals/1/')        
         self.assertEqual(data['duration'], '1 yr')
-
     
+    def test_post_proposal(self):
+        response = self.client.post('/api/v1/proposals/', 
+            {'owner': 2, 'firm': 1, 'workflow': 1, 'cows': 3,
+             'topic': 1, 'dummy': 'remove me', 'data': 
+                 {'essentially_equivalent_work': 'USAF FEDCBA',}
+            })
+        # actually owner should be the creator?
+        nextresponse = self.client.get('/api/v1/proposals/')
+        pass
