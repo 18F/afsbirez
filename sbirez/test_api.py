@@ -692,14 +692,14 @@ class WorkflowTests(APITestCase):
     # Check that fixture workflow included in GET result
     def test_workflow_included(self):
         response = self.client.get('/api/v1/workflows/')
-        self.assertEqual(response.data["count"], 1)
+        self.assertGreater(response.data["count"], 0)
         self.assertEqual(response.data["results"][0]['name'], 
                          'dod_proposal_info')
 
     # Check that fixture result includes questions
     def test_questions_included_in_workflow(self):
         response = self.client.get('/api/v1/workflows/')
-        self.assertEqual(response.data["count"], 1)
+        self.assertGreater(response.data["count"], 0)
         self.assertEqual(response.data["results"][0]['name'], 
                          'dod_proposal_info')
 
