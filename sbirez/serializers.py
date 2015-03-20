@@ -206,6 +206,31 @@ class WorkflowSerializer(serializers.ModelSerializer):
         fields = ('name', 'validation', 'questions', )
 
 
+def _validate_question(data, question):
+
+    if question.required and not question.subworkflow:
+        if (question.name not in data):
+            raise serializers.ValidationError(
+                'Required field %s absent' % question.name)
+        if (hasattr(data[question.name], 'strip') and
+            not data[question.name].strip()):
+            raise serializers.ValidationError(
+                'Required field %s absent' % question.name)   
+
+    if question.validation: 
+        for validation in question.validation.split(';'):
+            args = shlex.split(validation)
+            function_name = args.pop(0)
+            func = getattr(validation_helpers, function_name)
+            if question.name in data:
+                if not func(data, data[question.name], *args):
+                    raise serializers.ValidationError(
+                        '%s: %s' % (question.name, question.validation_msg))
+
+    if question.subworkflow:
+        for subquestion in question.subworkflow.questions.all():
+            _validate_question(data, subquestion)
+
 def genericValidator(proposal):
     '''
     Inspect the workflow's validators and apply them to
@@ -214,32 +239,13 @@ def genericValidator(proposal):
     data = json.loads(proposal['data'])
 
     for question in proposal['workflow'].questions.all():
-        if question.required:
-            if (question.name not in data):
-                raise serializers.ValidationError(
-                    'Required field %s absent' % question.name)
-            if (hasattr(data[question.name], 'strip') and
-                not data[question.name].strip()):
-                raise serializers.ValidationError(
-                    'Required field %s absent' % question.name)   
+        _validate_question(data, question)
 
-        if question.validation: 
-            for validation in question.validation.split(';'):
-                args = shlex.split(validation)
-                function_name = args.pop(0)
-                func = getattr(validation_helpers, function_name)
-                if question.name in data:
-                    if not func(data, data[question.name], *args):
-                        raise serializers.ValidationError(
-                            '%s: %s' % (question.name, question.validation_msg))
-                        
 
 class ProposalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Proposal
-        fields = ('owner', 'firm', 'workflow', 'topic',
-                  'submitted_at', 'data', )
         validators = [genericValidator]
 
 
