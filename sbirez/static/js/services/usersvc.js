@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sbirezApp').factory('UserService', function($http, $window, $rootScope, $location, AuthenticationService) {
+angular.module('sbirezApp').factory('UserService', function($http, $window, $rootScope, $location, $q, AuthenticationService) {
   var user = {};
   return {
     logIn: function(username, password) {
@@ -34,32 +34,29 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
         });
     },
 
-    addOrganization: function(orgName) {
-      if (user.name === null || user.name === undefined || user.name === '') {
-        this.getUserDetails();
-      }
-      user.organizations.push({'name': orgName, 'id': 1});
-      $rootScope.$broadcast('userUpdated', user);
-    },
-
     getUserDetails: function(id) {
+      var deferred = $q.defer();
       if (user.name === null || user.name === undefined || user.name === '') {
         if (id === undefined || id === null) {
           id = $window.sessionStorage.userid;
         }
-        $http.get('api/v1/users/' + id).success(function(data) {
-          user = data.user;
+        $http.get('api/v1/users/' + id + '/').success(function(data) {
+          console.log('data', data);
+          user = data;
           $rootScope.$broadcast('userUpdated', user);
-          return user;
+          deferred.resolve(data);
+        }).error(function(data, status) {
+          deferred.reject(new Error(data));
         });
       }
       else {
-        return user;
+        deferred.resolve(user);
       }
+      return deferred.promise;
     },
    
     updateUserDetails: function(id, user) {
-      $http.post('api/v1/users/' + id, user).success(function() {
+      $http.post('api/v1/users/' + id + '/', user).success(function() {
       });
     }
   };

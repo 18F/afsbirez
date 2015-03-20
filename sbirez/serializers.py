@@ -42,12 +42,12 @@ class PersonSerializer(serializers.ModelSerializer):
         fields = ('name', 'title', 'email', 'phone', 'fax')
 
 class FirmSerializer(serializers.HyperlinkedModelSerializer):
-    address = AddressSerializer(required=False)
-    point_of_contact = PersonSerializer(required=False)
+    address = AddressSerializer(required=False, many=False)
+    point_of_contact = PersonSerializer(required=False, many=False)
 
     class Meta:
         model = Firm
-        fields = ('name', 'tax_id', 'sbc_id', 'duns_id', 'cage_code',
+        fields = ('id', 'name', 'tax_id', 'sbc_id', 'duns_id', 'cage_code',
                   'website', 'address', 'point_of_contact', 'founding_year',
                   'phase1_count', 'phase1_year', 'phase2_count',
                   'phase2_year', 'phase2_employees', 'current_employees',
@@ -98,7 +98,7 @@ class FirmSerializer(serializers.HyperlinkedModelSerializer):
         instance.revenue_percent = validated_data.get('revenue_percent', instance.revenue_percent)
         if ('point_of_contact' in validated_data):
             point_of_contact_data = validated_data.pop('point_of_contact')
-            point_of_contact, created = Person.objects.get_or_create(**point_of_contact_data)
+            point_of_contact, created = Person.objects.get_or_create(id=instance.point_of_contact.id)
             if ('name' in point_of_contact_data):
                 point_of_contact.name = point_of_contact_data['name']
             if ('title' in point_of_contact_data):
@@ -114,7 +114,7 @@ class FirmSerializer(serializers.HyperlinkedModelSerializer):
 
         if ('address' in validated_data):
             address_data = validated_data.pop('address')
-            address, created = Address.objects.get_or_create(validated_data.get('address'))
+            address, created = Address.objects.get_or_create(id=instance.address.id)
             if ('street' in address_data):
                 address.street = address_data['street']
             if ('street2' in address_data):

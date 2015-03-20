@@ -21,12 +21,13 @@ describe('Controller: AccountCtrl', function () {
     });
   }));
 
-  it('should retrieve the user details from the user service at creation', function () {
+  // This controller no longer retrieves this information. It is done on the user and org page instead
+  xit('should retrieve the user details from the user service at creation', function () {
     expect(UserService.getUserDetails).toHaveBeenCalled();
     expect(scope.user).toBeDefined();
   });
 
-  it('should retrieve the user details when userUpdated event is seen', function () {
+  xit('should retrieve the user details when userUpdated event is seen', function () {
     expect(UserService.getUserDetails).toHaveBeenCalled();
     expect(scope.user).toBeDefined();
     $rootScope.$broadcast('userUpdated');
