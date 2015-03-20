@@ -1,3 +1,6 @@
+import json
+import shlex
+from sbirez import validation_helpers
 from django.contrib.auth.models import User, Group
 from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person
 from sbirez.models import Address, Workflow, Question, Proposal, Address
@@ -203,16 +206,47 @@ class WorkflowSerializer(serializers.ModelSerializer):
         fields = ('name', 'validation', 'questions', )
 
 
+def _validate_question(data, question):
+
+    if question.required and not question.subworkflow:
+        if (question.name not in data):
+            raise serializers.ValidationError(
+                'Required field %s absent' % question.name)
+        if (hasattr(data[question.name], 'strip') and
+            not data[question.name].strip()):
+            raise serializers.ValidationError(
+                'Required field %s absent' % question.name)   
+
+    if question.validation: 
+        for validation in question.validation.split(';'):
+            args = shlex.split(validation)
+            function_name = args.pop(0)
+            func = getattr(validation_helpers, function_name)
+            if question.name in data:
+                if not func(data, data[question.name], *args):
+                    raise serializers.ValidationError(
+                        '%s: %s' % (question.name, question.validation_msg))
+
+    if question.subworkflow:
+        for subquestion in question.subworkflow.questions.all():
+            _validate_question(data, subquestion)
+
+def genericValidator(proposal):
+    '''
+    Inspect the workflow's validators and apply them to
+    the proposal's data
+    '''
+    data = json.loads(proposal['data'])
+
+    for question in proposal['workflow'].questions.all():
+        _validate_question(data, question)
+
+
 class ProposalSerializer(serializers.ModelSerializer):
-    data = serializers.SerializerMethodField('clean_data')
 
     class Meta:
         model = Proposal
-        fields = ('owner', 'firm', 'workflow', 'topic',
-                  'submitted_at', 'data')
-
-    def clean_data(self, obj):
-        return obj.data
+        validators = [genericValidator]
 
 
 class AddressSerializer(serializers.ModelSerializer):

@@ -4,7 +4,7 @@ from djorm_pgfulltext.fields import VectorField
 from djorm_pgfulltext.models import SearchManager
 from django.conf import settings
 from custom_user.models import AbstractEmailUser
-from django_pgjson.fields import JsonField
+from rest_framework import serializers
 
 class Address(models.Model):
     street = models.TextField()
@@ -113,14 +113,14 @@ class Question(models.Model):
     parent = models.ForeignKey(Workflow, related_name='questions')
 
     # Each question should be EITHER an actual question...
-    data_type = models.TextField(default='str')
-    required = models.BooleanField(default=False)
-    default = models.TextField(blank=True)
-    human = models.TextField(blank=True)
-    help = models.TextField(blank=True)
-    validation = models.TextField(blank=True)
-    validation_msg = models.TextField(blank=True)
-    ask_if = models.TextField(blank=True)
+    data_type = models.TextField(null=True, default='str')
+    required = models.NullBooleanField(default=False)
+    default = models.TextField(null=True, blank=True)
+    human = models.TextField(null=True, blank=True)
+    help = models.TextField(null=True, blank=True)
+    validation = models.TextField(null=True, blank=True)
+    validation_msg = models.TextField(null=True, blank=True)
+    ask_if = models.TextField(null=True, blank=True)
 
     # ... OR a sub-workflow
     subworkflow = models.ForeignKey(Workflow, related_name='subworkflow_of', null=True, blank=True)
@@ -135,4 +135,4 @@ class Proposal(models.Model):
     workflow = models.ForeignKey(Workflow, related_name='proposals')
     topic = models.ForeignKey(Topic, related_name='proposals')
     submitted_at = models.DateTimeField(auto_now=True)
-    data = JsonField()
+    data = models.TextField(null=True, blank=True)
