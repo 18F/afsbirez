@@ -40,6 +40,9 @@ class Firm(models.Model):
     total_revenue_range = models.TextField(null=True)
     revenue_percent = models.IntegerField(null=True)
 
+    def __str__(self):
+        return self.name
+
 class SbirezUser(AbstractEmailUser):
     name = models.TextField()
     firm = models.ForeignKey(Firm, null=True)

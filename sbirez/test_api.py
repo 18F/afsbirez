@@ -13,6 +13,14 @@ from django.contrib.auth.models import Group
 
 factory = APIRequestFactory()
 
+
+def _fixture_user(self):
+    "Authenticate as pre-existing user from test fixture.  Returns user instance."
+    user_model = get_user_model()
+    user = user_model.objects.get(email='r2d2@naboo.gov') # r2's password = 'bleep'
+    self.client.force_authenticate(user=user)
+    return user
+
 class UserTests(APITestCase):
 
     def test_user_view_set(self):
@@ -591,15 +599,8 @@ class TopicTests(APITestCase):
         response = self.client.post('/api/v1/topics/19/saved/', {})
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
-    def _fixture_user(self):
-        "Authenticate as pre-existing user from test fixture.  Returns user instance."
-        user_model = get_user_model()
-        user = user_model.objects.get(email='r2d2@naboo.gov') # r2's password = 'bleep'
-        self.client.force_authenticate(user=user)
-        return user
-
     def test_save_topic_for_user(self):
-        user = self._fixture_user()
+        user = _fixture_user(self)
 
         # get a topic
         response = self.client.get('/api/v1/topics/19/')
@@ -616,12 +617,12 @@ class TopicTests(APITestCase):
 
     def test_unsave_unsaved_topic_again(self):
         # should not error even if trying to "unsave" a topic the user had not saved
-        user = self._fixture_user()
+        user = _fixture_user(self)
         response = self.client.delete('/api/v1/topics/19/saved/', {})
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
     def test_unsave_topic(self):
-        user = self._fixture_user()
+        user = _fixture_user(self)
         # save a topic
 
         response = self.client.post('/api/v1/topics/19/saved/', {})
@@ -637,7 +638,7 @@ class TopicTests(APITestCase):
 
     # Permit saved topic to be "saved" again without error
     def test_resave_topic(self):
-        user = self._fixture_user()
+        user = _fixture_user(self)
 
         # save a topic
         response = self.client.post('/api/v1/topics/19/saved/', {})
@@ -649,13 +650,13 @@ class TopicTests(APITestCase):
 
     def test_filter_for_nonexistent_saved_topics(self):
         # Filter for saved topics should not error even if this user has not saved any
-        user = self._fixture_user()
+        user = _fixture_user(self)
         response = self.client.get('/api/v1/topics/?closed=True&saved=True')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 0)
 
     def test_filter_for_saved_topics(self):
-        user = self._fixture_user()
+        user = _fixture_user(self)
 
         # save the topic
         response = self.client.post('/api/v1/topics/19/saved/', {})
@@ -669,13 +670,13 @@ class TopicTests(APITestCase):
 
     def test_save_nonexistent_topic(self):
         # should throw 404
-        user = self._fixture_user()
+        user = _fixture_user(self)
         response = self.client.post('/api/v1/topics/2222/saved/', {})
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
     def unsave_nonexistent_topic(self):
         # should throw 404
-        user = self._fixture_user()
+        user = _fixture_user(self)
         response = self.client.delete('/api/v1/topics/2222/saved/', {})
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
@@ -748,11 +749,15 @@ class ProposalTests(APITestCase):
 
     # Check that the proposal index loads
     def test_proposal_view_set(self):
+        user = _fixture_user(self)
+
         response = self.client.get('/api/v1/proposals/')
-        self.assertEqual(status.HTTP_200_OK, response.status_code)  
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data["count"], 2)
 
     def test_get_one_proposal(self):
+        user = _fixture_user(self)
+
         response = self.client.get('/api/v1/proposals/2/')
         self.assertEqual(status.HTTP_200_OK, response.status_code) 
         self._deserialize_data(response)
@@ -760,6 +765,8 @@ class ProposalTests(APITestCase):
             'Galahad')
 
     def test_good_update_proposal(self):
+        user = _fixture_user(self)
+
         response = self.client.get('/api/v1/proposals/2/')
         self._deserialize_data(response)
         self.assertEqual(response.data['data']['quest_thy_favorite_color'],
@@ -775,7 +782,9 @@ class ProposalTests(APITestCase):
         self.assertEqual(response.data['data']['quest_thy_favorite_color'], 
             'green')
 
-    def test_bad_update_proposal(self):        
+    def test_bad_update_proposal(self):
+        user = _fixture_user(self)
+
         response = self.client.get('/api/v1/proposals/2/')
         self._deserialize_data(response)
         response.data['data']['quest_thy_favorite_color'] = 'blue'
@@ -787,6 +796,8 @@ class ProposalTests(APITestCase):
 
     # omit a required field
     def test_incomplete_post_raises_error(self):
+        user = _fixture_user(self)
+
         response = self.client.post('/api/v1/proposals/', 
             {'owner': 2, 'firm': 1, 'workflow': 2, 
              'topic': 1, 'data': json.dumps(
@@ -798,6 +809,8 @@ class ProposalTests(APITestCase):
                       response.data['non_field_errors'])
 
     def test_post_full_proposal(self):
+        user = _fixture_user(self)
+
         response = self.client.post('/api/v1/proposals/', 
             {'owner': 2, 'firm': 1, 'workflow': 2, 
              'topic': 1, 'data': json.dumps(
