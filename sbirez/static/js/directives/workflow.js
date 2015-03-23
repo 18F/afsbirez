@@ -6,166 +6,195 @@ angular.module('sbirezApp').directive('workflow', function() {
     replace: true,
     scope: {
       includeSidebar: '@',
-      includeMetro: '@'
+      includeMetro: '@',
+      proposalId: '@'
     },
     templateUrl: 'static/views/partials/workflow.html',
-    controller: ['$scope', '$filter', '$window', '$location', '$http',
-      function ($scope, $filter, $window, $location, $http) {
+    controller: ['$scope', '$window', '$http', '$q', '$stateParams', 'ProposalService',
+      function ($scope, $window, $http, $q, $stateParams, ProposalService) {
 
-        $scope.stateData = {};
-        $scope.stateData.fields = [];
+        $scope.workflows = [];
+        $scope.currentWorkflow = {};
+        $scope.parentWorkflow = null;
+        $scope.startingWorkflow = null;
+        $scope.backWorkflow = null;
+        $scope.nextWorkflow = null;
+        var promises = [];
+        $scope.proposalData = {};
+        console.log('state params', $stateParams);
 
-        $http.get('api/workflowdata/1').success(function(data) {
-          $scope.stateData = data;
-        });
-
-        $http.get('api/workflows/1').success(function(data) {
-          $scope.workflow = data;
-          $scope.currentStateIndex = 1;
-          $scope.currentState = $scope.workflow.sections[0].states[0];
-          $scope.currentStateData = getStateDataById($scope.currentState.id);
-          $scope.currentSectionId = $scope.workflow.sections[0].id;
-        });
-
-        var getStateById = function(id) {
-          for (var i = 0; i < $scope.workflow.sections.length; i++) {
-            for (var j = 0; j < $scope.workflow.sections[i].states.length; j++) {
-              if ($scope.workflow.sections[i].states[j].id === id) {
-                return $scope.workflow.sections[i].states[j];
+        var getWorkflow = function(workflow_id) {
+          var deferred = $q.defer();
+          $http.get('api/v1/workflows/' + workflow_id + '/').success(function(data) {
+            data.id = workflow_id;
+            $scope.workflows.push(data);
+            var count = data.questions.length;
+            for (var i = 0; i < count; i++) {
+              if (data.questions[i].data_type === 'workflow') {
+                promises.push(getWorkflow(data.questions[i].subworkflow));
               }
             }
+            deferred.resolve(data);
+          });
+          return deferred.promise;
+        };
+
+        var buildTree = function(workflow) {
+          var workflowCount = $scope.workflows.length;
+          var count = workflow.questions.length;
+          for (var i = 0; i < count; i++) {
+            if (workflow.questions[i].data_type === 'workflow') {
+              for (var j = 0; j < workflowCount; j++) {
+                if ($scope.workflows[j].id === workflow.questions[i].subworkflow) {
+                  workflow.questions[i].workflow = $scope.workflows[j];
+                  workflow.questions[i].workflow = buildTree(workflow.questions[i].workflow);
+                  $scope.workflows[j].human = workflow.questions[i].human;
+                  break;
+                }
+              }
+            }
+          }
+          return workflow;
+        };
+
+        ProposalService.get($scope.proposalId).then(function(data) {
+          if (data.data !== null && data.data.length > 0) {
+            var parsedData = data.data.replace(/\'/g, "\"");
+            parsedData = parsedData.replace(/True/g, "true");
+            $scope.proposalData = JSON.parse(parsedData);
+            console.log('prop', data);
+            $scope.proposal = data;
+            getWorkflow($scope.proposal.workflow).then(function(data) {
+              $scope.workflow = data;
+              $scope.workflow.human = 'Coversheet Workflow';
+              $q.all(promises).then(function() {
+                $scope.workflow = buildTree($scope.workflow);
+                if ($stateParams.current !== null) {
+                  for (var i = 0; i < $scope.workflows.length; i++) {
+                    if ($scope.workflows[i].id === parseInt($stateParams.current)) {
+                      $scope.jumpTo(parseInt($stateParams.current));
+                      break;
+                    }
+                  }
+                }
+                if ($scope.currentWorkflow.id === undefined) {
+                  $scope.currentWorkflow = $scope.workflow;
+                }
+
+                $scope.startingWorkflow = $scope.workflow.id;
+                console.log('workflow!', $scope.workflow, $scope.workflows, $scope.workflows.length);
+              });
+            });
+          }
+          else {
+            $scope.proposalData = {};
+          }
+        });
+
+        // need next/previous workflow
+        // for next/previous workflow, you need to get the parent workflow,
+        // and then iterate over the questions until you find
+        var getParentWorkflow = function(workflow_id) {
+          var count = $scope.workflows.length;
+          for (var i = 0; i < count; i++) {
+            var questionCount = $scope.workflows[i].questions.length;
+            console.log('parent count', count, questionCount);
+            for (var j = 0; j < questionCount; j++) {
+              console.log('parent search', $scope.workflows[i].questions[j].data_type, $scope.workflows[i].questions[j].subworkflow, workflow_id);
+              if ($scope.workflows[i].questions[j].data_type === 'workflow' && $scope.workflows[i].questions[j].subworkflow === workflow_id) {
+                console.log('parent found!', $scope.workflows[i].id);
+                return $scope.workflows[i];
+              }
+            }
+            console.log('no parent found');
+            return null;
           }
         };
 
-        var getSectionIdByStateId = function(id) {
-          for (var i = 0; i < $scope.workflow.sections.length; i++) {
-            for (var j = 0; j < $scope.workflow.sections[i].states.length; j++) {
-              if ($scope.workflow.sections[i].states[j].id === id) {
-                return $scope.workflow.sections[i].id;
+        var getNextWorkflow = function(workflow_id) {
+          var count = $scope.workflows.length;
+          var parentWorkflow = $scope.parentWorkflow;
+          console.log('parent:', parentWorkflow);
+          var found = false;
+          var questionCount = 0;
+          while (!found && parentWorkflow !== null) {
+            found = false;
+            questionCount = parentWorkflow.questions.length;
+            for (var i = 0; i < questionCount; i++) {
+              console.log('find next', parentWorkflow.questions[i].subworkflow, workflow_id, questionCount, i);
+              if (parentWorkflow.questions[i].data_type === 'workflow' && parentWorkflow.questions[i].subworkflow === workflow_id) {
+                console.log('next found');
+                found = true;
+              }
+              else if (found && parentWorkflow.questions[i].data_type === 'workflow') {
+                console.log('nextflow', parentWorkflow.questions[i].workflow.id);
+                return parentWorkflow.questions[i].workflow.id;
               }
             }
+            if (!found) {
+              console.log('next not found');
+              workflow_id = $scope.parentWorkflow.id;
+              parentWorkflow = getParentWorkflow(workflow_id);
+            }
           }
+          // no next workflow
+          return null;
         };
 
-        var getStateDataById = function(id) {
-          if ($scope.stateData.fields) {
-            for (var i = 0; i < $scope.stateData.fields.length; i++) {
-              if ($scope.stateData.fields[i].id === id) {
-                return $scope.stateData.fields[i];
+        var getPreviousWorkflow = function(workflow_id) {
+          var count = $scope.workflows.length;
+          console.log('get prev', $scope.parentWorkflow);
+          if ($scope.parentWorkflow !== null) {
+            var questionCount = $scope.parentWorkflow.questions.length; 
+            var previousWorkflow = null;
+            for (var i = 0; i < questionCount; i++) {
+              if ($scope.parentWorkflow.questions[i].data_type === 'workflow' && $scope.parentWorkflow.questions[i].subworkflow === workflow_id) {
+                console.log('prev found', workflow_id);
+                if (previousWorkflow) {
+                  console.log('prevflow', previousWorkflow);
+                  return previousWorkflow;
+                }
+              }
+              else if ($scope.parentWorkflow.questions[i].data_type === 'workflow') {
+                console.log('prev assigned', $scope.parentWorkflow.questions[i].workflow.id);
+                previousWorkflow = $scope.parentWorkflow.questions[i].workflow.id;
               }
             }
           }
-          var newData = {id: id};
-          if (!$scope.stateData.fields) {
-            $scope.stateData.fields = [];
+          if ($scope.parentWorkflow != null)
+            return $scope.parentWorkflow.id;
+          else
+            return null;
+        };
+
+        // need jumpto functionality
+        $scope.jumpTo = function(workflow_id) {
+          var count = $scope.workflows.length;
+          for (var i = 0; i < count; i++) {
+            console.log('looking', workflow_id, $scope.workflows[i].id);
+            if (workflow_id === $scope.workflows[i].id) {
+              console.log('jumping', $scope.proposalData);
+              $scope.currentWorkflow = $scope.workflows[i];
+              $scope.parentWorkflow = getParentWorkflow(workflow_id);
+              $scope.backWorkflow = getPreviousWorkflow(workflow_id);
+              $scope.nextWorkflow = getNextWorkflow(workflow_id);
+              $stateParams.current = workflow_id;
+              break;
+            }
           }
-          $scope.stateData.fields.push(newData);
-          return $scope.stateData.fields[$scope.stateData.fields.length - 1];
         };
 
         $scope.showBackButton = function() {
-          if ($scope.workflow && $scope.workflow.sections) {
-            return $scope.currentState.id !== $scope.workflow.sections[0].states[0].id;
-          }
-          else {
-            return false;
-          }
+          return $scope.backWorkflow !== null;
         };
 
         $scope.showNextButton = function() {
-          if ($scope.workflow && $scope.workflow.sections) {
-            return $scope.currentState.nextState !== undefined && $scope.currentState.nextState !== null;
-          }
-          else {
-            return false;
-          }
+          return $scope.nextWorkflow !== null;
         };
 
-        $scope.getStateCount = function() {
-          var count = 0;
-          if ($scope.workflow && $scope.workflow.sections) {
-            for (var i = 0; i < $scope.workflow.sections.length; i++) {
-              count += $scope.workflow.sections[i].states.length;
-            }
-          }
-          return count;
-        };
-
-        $scope.backState = function() {
-          $scope.currentState = getStateById($scope.currentState.priorState);
-          $scope.currentSectionId = getSectionIdByStateId($scope.currentState.id);
-          $scope.currentStateIndex--;
-        };
-
-        var validate = function() {
-          var validated = true;
-          if ($scope.currentState.fields && $scope.currentState.fields.length) {
-            for (var i = 0; i < $scope.currentState.fields.length; i++) {
-              var currentValue = $scope.currentStateData[$scope.currentState.fields[i].id];
-              if ($scope.currentState.fields[i].required && (currentValue === undefined || currentValue.length === 0 || currentValue === false)) {
-                $scope.currentState.fields[i].invalid = true;
-                validated = false;
-              }
-              else {
-                $scope.currentState.fields[i].invalid = false;
-              }
-            }
-          }
-          $scope.currentStateData.validated = validated;
-          return validated;
-        };
-
-        $scope.nextState = function() {
-          validate();
-          $scope.currentState = getStateById($scope.currentState.nextState);
-          $scope.currentSectionId = getSectionIdByStateId($scope.currentState.id);
-          $scope.currentStateData = getStateDataById($scope.currentState.id);
-          $scope.currentStateIndex++;
-        };
-
-        $scope.changeState = function(state) {
-          validate();
-          var count = 0;
-          for (var i = 0; i < $scope.workflow.sections.length; i++) {
-            for (var j = 0; j < $scope.workflow.sections[i].states.length; j++) {
-              count++;
-              if (state === $scope.workflow.sections[i].states[j].id) {
-                $scope.currentState = $scope.workflow.sections[i].states[j];
-                $scope.currentStateIndex = count;
-                $scope.currentSectionId = $scope.workflow.sections[i].id;
-                $scope.currentStateData = getStateDataById($scope.currentState.id);
-              }
-            }
-          }
-        };
-
-        $scope.isCurrentState = function(state) {
-          return state === $scope.currentState.id;
-        };
-
-        $scope.isCurrentSection = function(section) {
-          return section === $scope.currentSectionId;
-        };
-
-        $scope.isStateCompleted = function(state) {
-          for (var i = 0; i < $scope.stateData.fields.length; i++) {
-            if ($scope.stateData.fields[i].id === state && $scope.stateData.fields[i].validated) {
-              return true;
-            }
-          }
-          return false;
-        };
-
-        $scope.getStateStatus = function(state) {
-          if ($scope.isCurrentState(state)) {
-            return 'current-state-list-item label-primary';
-          }
-          else if ($scope.isStateCompleted(state)) {
-            return 'label-info';
-          }
-          else {
-            return 'label-warning';
-          }
+        $scope.saveData = function() {
+          console.log('save', $scope.proposalData);
+          ProposalService.saveData($scope.proposalId, $scope.proposalData);
         };
       }
     ]

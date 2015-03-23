@@ -324,5 +324,15 @@ select.form-control {
 }
 
 label.question {
-    font-weight:normal
+    font-weight: normal;
+    font-size: 16px;
 }
+
+div.workflow-element {
+    padding-top: 10px;
+}
+
+/*div.workflow-element.subworkflow {
+    border-bottom: 1px solid blue;
+    border-right: 2px solid blue;
+}*/

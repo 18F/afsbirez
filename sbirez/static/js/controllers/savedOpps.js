@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('SavedOppsCtrl', function ($scope, SavedOpportunityService) {
+  .controller('SavedOppsCtrl', function ($scope, SavedOpportunityService, ProposalService) {
     $scope.data = {};
 
     SavedOpportunityService.list().then(function(data){
@@ -15,6 +15,20 @@ angular.module('sbirezApp')
         }, function(error) { 
           console.log(error);
         });
+      });
+    };
+
+    $scope.createProposal = function(opportunityId) {
+      var title = 'New Proposal';
+      var count = $scope.data.results.length;
+      for (var i = 0; i < count; i++) {
+        if ($scope.data.results[i].id === opportunityId) {
+          title = $scope.data.results[i].title;
+          break;
+        }
+      }
+      ProposalService.create(opportunityId, title).then(function(data) {
+        console.log('created proposal', data);
       });
     };
   });
