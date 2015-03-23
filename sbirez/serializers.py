@@ -215,13 +215,20 @@ def _validate_question(data, question):
         if (hasattr(data[question.name], 'strip') and
             not data[question.name].strip()):
             raise serializers.ValidationError(
-                'Required field %s absent' % question.name)   
+                'Required field %s absent' % question.name)
 
-    if question.validation: 
+    if question.validation:
         for validation in question.validation.split(';'):
             args = shlex.split(validation)
             function_name = args.pop(0)
-            func = getattr(validation_helpers, function_name)
+            try:
+                func = getattr(validation_helpers, function_name)
+            except AttributeError:
+                # validation refers to a function not found in helper library
+                # raise serializers.ValidationError(
+                #    '%s: validation function %s absent from validation_helpers.py',
+                #    question.name, function_name)
+                continue
             if question.name in data:
                 if not func(data, data[question.name], *args):
                     raise serializers.ValidationError(
@@ -230,6 +237,9 @@ def _validate_question(data, question):
     if question.subworkflow:
         for subquestion in question.subworkflow.questions.all():
             _validate_question(data, subquestion)
+
+    # TODO: gather all the validation errors
+    # TODO: allow validate-but-not-check-required, no-validate
 
 def genericValidator(proposal):
     '''
@@ -248,9 +258,13 @@ class ProposalSerializer(serializers.ModelSerializer):
         model = Proposal
         validators = [genericValidator]
 
+    # def validate(self, attrs):
+        # TODO: use self.context['request'].method (?) to toggle validation
+        # return the validated data: genericValidator(proposal=attrs)
+
 
 class AddressSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Address
 
