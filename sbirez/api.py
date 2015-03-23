@@ -12,7 +12,8 @@ from sbirez.serializers import WorkflowSerializer, AddressSerializer
 from sbirez.serializers import PersonSerializer
 import marshmallow as mm
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser
+from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser, HasProposalEditPermissions
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -122,8 +123,17 @@ class WorkflowViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ProposalViewSet(viewsets.ModelViewSet):
-    queryset = Proposal.objects.all()
     serializer_class = ProposalSerializer
+    queryset = Proposal.objects.all()
+
+    def get_queryset(self):
+        queryset = Proposal.objects.all()
+        if not self.request.user.is_staff:
+            queryset = Proposal.objects.filter(firm=self.request.user.firm)
+        return queryset
+
+    def get_permissions(self):
+        return [HasProposalEditPermissions(),]
 
 
 class AddressViewSet(viewsets.ModelViewSet):
