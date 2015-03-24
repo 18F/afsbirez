@@ -11,6 +11,8 @@ bower_js = Bundle(
     "lib/ngDialog/js/ngDialog.min.js",
     "lib/angular-ui-router/release/angular-ui-router.js",
     "lib/angular-order-object-by/src/ng-order-object-by.js",
+    "lib/marked/lib/marked.js",
+    "lib/angular-marked/angular-marked.js",
     filters="jsmin",
     output="js/bower.min.js"
 )
@@ -51,6 +53,7 @@ angular_js = Bundle(
     "js/services/searchsvc.js",
     "js/services/savedSearchsvc.js",
     "js/services/tokensvc.js",
+    "js/services/proposalsvc.js",
     filters="jsmin",
     output="js/angular.min.js"
 )

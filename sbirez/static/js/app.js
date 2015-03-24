@@ -8,7 +8,8 @@ angular.module('sbirezApp', [
   'angularFileUpload',
   'ngDialog',
   'ui.router',
-  'ngOrderObjectBy'
+  'ngOrderObjectBy',
+  'hc.marked'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider.otherwise('/');
@@ -76,7 +77,7 @@ angular.module('sbirezApp', [
         views: {
           'activityContent': {
             templateUrl: 'static/views/partials/proposal.html',
-            controller: 'ProposalListCtrl'
+            controller: ''
           }
         },
         access: { requiredAuthentication: true }
@@ -92,7 +93,7 @@ angular.module('sbirezApp', [
         access: { requiredAuthentication: true }
       })
       .state('app.activity.proposals.detail', {
-        url: '/:id',
+        url: '/:id?current',
         views: {
           '': {
             templateUrl: 'static/views/partials/proposal.details.html',
@@ -228,13 +229,13 @@ angular.module('sbirezApp', [
 
 .run(function($rootScope, $location, $state, $window, AuthenticationService) {
   $rootScope.preproduction = false;
-//  $rootScope.$on('$stateChangeError',function(event, toState, toParams, fromState, fromParams){
-//    console.log('$stateChangeError - fired when an error occurs during transition.');
-//    console.log(arguments);
-//  });
-//  $rootScope.$on('$stateChangeSuccess',function(event, toState, toParams, fromState, fromParams){
-//    console.log('$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.');
-//  });
+  $rootScope.$on('$stateChangeError',function(event, toState, toParams, fromState, fromParams){
+    console.log('$stateChangeError - fired when an error occurs during transition.');
+    console.log(arguments);
+  });
+  $rootScope.$on('$stateChangeSuccess',function(event, toState, toParams, fromState, fromParams){
+    console.log('$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.');
+  });
   $rootScope.$on('$viewContentLoaded',function(event){
     console.log('$viewContentLoaded - fired after dom rendered',event);
   });
@@ -242,9 +243,9 @@ angular.module('sbirezApp', [
     console.log('$stateNotFound '+unfoundState.to+'  - fired when a state cannot be found by its name.');
     console.log(unfoundState, fromState, fromParams);
   });
-  $rootScope.$on('$stateChangeStart',function(event, toState /*, toParams, fromState, fromParams*/){
+  $rootScope.$on('$stateChangeStart',function(event, toState, toParams/*, fromState, fromParams*/){
 //  $rootScope.$on('$stateChangeStart', function(event, nextRoute) {
-//  console.log('$stateChangeStart to '+toState.to+'- fired when the transition begins. toState,toParams : \n',toState, toParams);
+  console.log('$stateChangeStart to '+toState.to+'- fired when the transition begins. toState,toParams : \n',toState, toParams);
     if (toState !== null && toState.access !== undefined && toState.access.requiredAuthentication && !AuthenticationService.isAuthenticated && !$window.sessionStorage.token) {
       event.preventDefault();
       $state.go('home.search');

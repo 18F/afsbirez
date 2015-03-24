@@ -11,6 +11,7 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
         $window.sessionStorage.token = '';
         $window.sessionStorage.username = null;
         $window.sessionStorage.userid = null;
+        $window.sessionStorage.firmid = null;
         AuthenticationService.setAuthenticated(false);
         $location.path('/');      
     },
@@ -56,7 +57,7 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
     },
    
     updateUserDetails: function(id, user) {
-      $http.post('api/v1/users/' + id + '/', user).success(function() {
+      $http.put('api/v1/users/' + id + '/', user).success(function() {
       });
     }
   };

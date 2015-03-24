@@ -66,4 +66,10 @@ class Migration(migrations.Migration):
             field=models.TextField(null=True, blank=True),
             preserve_default=True,
         ),
+        migrations.AddField(
+            model_name='proposal',
+            name='title',
+            field=models.TextField(default='Dummy Title'),
+            preserve_default=False,
+        ),
     ]
