@@ -800,7 +800,7 @@ class ProposalTests(APITestCase):
 
         response = self.client.post('/api/v1/proposals/', 
             {'owner': 2, 'firm': 1, 'workflow': 2, 
-             'topic': 1, 'data': json.dumps(
+             'title': 'Title', 'topic': 1, 'data': json.dumps(
                     {
                      "quest_thy_quest": "To seek the Grail",
                      "quest_thy_favorite_color": "#0000FF"})
@@ -813,7 +813,7 @@ class ProposalTests(APITestCase):
 
         response = self.client.post('/api/v1/proposals/', 
             {'owner': 2, 'firm': 1, 'workflow': 2, 
-             'topic': 1, 'data': json.dumps(
+             'title': 'Title!', 'topic': 1, 'data': json.dumps(
                     {"quest_thy_name": "Galahad",
                      "quest_thy_quest": "To seek the Grail",
                      "quest_thy_favorite_color": "#0000FF"})
