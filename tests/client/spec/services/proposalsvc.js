@@ -34,7 +34,7 @@ describe('Service: ProposalService', function () {
     ProposalService.create(1, 'title');
     var propData = {
       'owner': '1',
-      'firm': 1,
+      'firm': null,
       'workflow': 6,
       'topic': 1,
       'title': 'title' 

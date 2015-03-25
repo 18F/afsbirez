@@ -33,6 +33,7 @@ describe('Controller: AdminUserCtrl', function () {
     var data ={'data': {'token':'ABC', 'username':'test', 'id':1}};
     var mockDeferred = $q.defer();
     spyOn(UserService, 'logIn').andReturn(mockDeferred.promise);
+    spyOn(UserService, 'getUserDetails').andReturn(mockDeferred.promise);
     spyOn($location, 'path');
     scope.logIn(data.data.username, '123');
     mockDeferred.resolve(data);
