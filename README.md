@@ -14,36 +14,57 @@ The SBIR-EZ (_sih-bur-easy_)project, provides a web service and user interface a
 Please file issues at the [central repository for all Air Force Small Business repo](https://github.com/18f/afsmallbiz/issues?labels=Product%3A+SBIR&page=1&state=open)
 
 ### Installation
-* Install PostGRESql
-* Install Python 3.4
+* Install Postgresql
+* Install Python 3.4.1
+* Install pip
 * Install virtualenv
-* Checkout the source code and cd into it
+
 ```
 $ git clone https://github.com/18F/afsbirez.git
 $ cd afsbirez
 ```
+
 * Make a virtualenv
+
 ```
 $ mkdir env
 $ virtualenv --no-site-packages ./env
 ```
+
+* Install project requirements
+
+```
+$ pip install -r requirements.txt
+```
+
 * Activate the virtualenv
+
 ```
 $ source env/bin/activate
 ```
-you should now see (env) on your command prompt
+
+You should now see (env) on your command prompt:
+
+```
+$ (env)[afsbirez]
+```
 
 * Install the latest [Node.js](http://nodejs.org/download/)
+
 * Update NPM to the latest version 
+
 ```
 $ npm install npm -g
 ```
+
 * Install the bower command line clients, as well as the karma test runner. 
+
 ```
 $ npm install
 ```
 
 * Install Sass and Compass gems
+
 ```
 $ gem install sass
 $ gem install compass
@@ -54,23 +75,26 @@ $ gem install compass
 $ bower install
 ```
 
-### Configure the Database
-Configure the pg_hba.conf file on your system (location varies) to allow local connections without passwords. Your hba.conf should have
-lines like the below:
+### Configure the database
+Check your pg_hba.conf file on your system (location varies) to allow local connections without passwords. 
+
+Your hba.conf should have the following lines already in place:
 ```
 local   all             all                                     trust
 host    all             all             127.0.0.1/32            trust
 ```
 
 Create a database and role with your system user name
+
 ```
-$ psql -c 'create role sbirez password 'sbirez';' -U postgres
-$ psql -c 'CREATE DATABASE sbirezdev WITH OWNER sbirez;' -U postgres
+$ psql -c 'create role afsbirez password 'afsbirez';' -U postgres
+$ psql -c 'CREATE DATABASE afsbirezdev WITH OWNER afsbirez;' -U postgres
 ```
 
-Create the database tables on 'sbirezdev'
+Create the database tables on 'afsbirezdev'
+
 ```
-$ python manage.py db upgrade
+$ python manage.py syncdb
 ```
 
 ### Running the Server using the Werkzeug built-in run_simple WSGI server. Please note that this is for
@@ -85,7 +109,7 @@ $ python manage.py runserver
 First create a postgres database and test user
 
 ```
-$ psql -c `create database sbireztest WITH OWNER sbirez;` -U postgres
+$ psql -c `create database afsbireztest WITH OWNER afsbirez;` -U postgres
 ```
 
 Next, run the tests
