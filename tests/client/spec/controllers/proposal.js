@@ -10,6 +10,8 @@ describe('Controller: ProposalCtrl', function () {
     $routeParams,
     mockDependency,
     $httpBackend,
+    $q,
+    ProposalService,
     data;
 
   data = {
@@ -29,10 +31,17 @@ describe('Controller: ProposalCtrl', function () {
     mockDependency.params = {};
     mockDependency.params.id = 1;
     
-    inject(function (_$httpBackend_, $controller, $rootScope) {
+    inject(function (_$httpBackend_, $controller, $rootScope, _$q_, _ProposalService_) {
       $httpBackend = _$httpBackend_;
       scope = $rootScope.$new();
       $routeParams = mockDependency;
+      ProposalService = _ProposalService_;
+      $q = _$q_;
+      spyOn(ProposalService, 'get').andCallFake(function() {
+        var deferred = $q.defer();
+        deferred.resolve(data);
+        return deferred.promise;
+      });
       PropCtrl = $controller('ProposalCtrl', {
         $scope: scope,
         $state: mockDependency
@@ -40,11 +49,10 @@ describe('Controller: ProposalCtrl', function () {
     });
   });
 
-  xit('should attach a proposal to the scope', function () {
-    expect(scope.data).toBeUndefined();
+  it('should attach a proposal to the scope', function () {
+    expect(scope.data).toBeDefined();
     $httpBackend.whenGET('static/views/partials/main.html').respond({});
     $httpBackend.whenGET('static/views/partials/search.html').respond({});
-    $httpBackend.expectGET('api/proposals/1').respond(data);
     $httpBackend.flush();
     expect(scope.data).toBeDefined();
   });

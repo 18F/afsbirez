@@ -2,10 +2,12 @@
   <h2>Active Proposals</h2>
   <div class="row">
     <div ng-repeat="prop in proposalList">
-        <h4><a ui-sref="app.activity.proposals.detail({id:{{prop.id}}})">{{prop.title}}</a></h4>
-        <p>Started: {{prop.submitted_at | date}}</p>
-        <p>{{prop.description}}</p>
-        <!--<div workflow ng-attr-include-sidebar="false" ng-attr-include-main="false" ng-attr-include-metro="true"></div>-->
+        <div ng-if="prop.title.length > 0">
+          <h4><a ui-sref="app.activity.proposals.detail({id:{{prop.id}}})">{{prop.title}}</a></h4>
+          <p>Started: {{prop.submitted_at | date}}</p>
+          <p>{{prop.description}}</p>
+          <!--<div workflow ng-attr-include-sidebar="false" ng-attr-include-main="false" ng-attr-include-metro="true"></div>-->
+        </div>
     </div>
   </div>
 </div>
