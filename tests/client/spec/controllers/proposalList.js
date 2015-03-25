@@ -7,18 +7,25 @@ describe('Controller: ProposalListCtrl', function () {
 
   var PropListCtrl,
     scope,
-    $httpBackend;
+    ProposalService,
+    $httpBackend,
+    $q;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function (_$httpBackend_, $controller, $rootScope) {
+  beforeEach(inject(function (_$httpBackend_, $controller, $rootScope, _$q_, _ProposalService_) {
+    ProposalService = _ProposalService_;
     $httpBackend = _$httpBackend_;
+    $q = _$q_;
     $httpBackend.whenGET('static/views/partials/main.html').respond({});
     $httpBackend.whenGET('static/views/partials/search.html').respond({});
-    $httpBackend.expectGET('api/v1/proposals/')
-      .respond({'proposals':[
+    spyOn(ProposalService, 'list').andCallFake(function() {
+      var deferred = $q.defer();
+      deferred.resolve({'results':[
         {'name':'file1','id':1},
         {'name':'file2','id':2}
       ]});
+      return deferred.promise;
+    });
     scope = $rootScope.$new();
 
     PropListCtrl = $controller('ProposalListCtrl', {
@@ -26,7 +33,7 @@ describe('Controller: ProposalListCtrl', function () {
     });
   }));
 
-  xit('should attach a list of proposals to the scope', function () {
+  it('should attach a list of proposals to the scope', function () {
     expect(scope.proposalList.length).toBe(0);
     $httpBackend.flush();
     expect(scope.proposalList.length).toBe(2);

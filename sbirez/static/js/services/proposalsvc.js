@@ -71,44 +71,108 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return deferred.promise;
   };
 
+
   return {
     create: function(opportunityId, opportunityTitle) {
-      if (!AuthenticationService.isAuthenticated) {
-        return DialogService.openLogin().then(function(data) {
-          if (data.value) {
-            return createProposal(opportunityId, opportunityTitle);
-          } else {
-            var deferred = $q.defer();
-            deferred.reject(new Error('Failed to authenticate'));
-            return deferred.promise;
-          }
-        });
+      if (typeof opportunityId === 'number') {
+        if (!AuthenticationService.isAuthenticated) {
+          return DialogService.openLogin().then(function(data) {
+            if (data.value) {
+              return createProposal(opportunityId, opportunityTitle);
+            } else {
+              var deferred = $q.defer();
+              deferred.reject(new Error('Failed to authenticate'));
+              return deferred.promise;
+            }
+          });
+        } else {
+          return createProposal(opportunityId, opportunityTitle);
+        }
       } else {
-        return createProposal(opportunityId, opportunityTitle);
+        var deferred = $q.defer();
+        deferred.reject(new Error('Invalid parameter'));
+        return deferred.promise;
       }
     },
     remove: function(opportunityId) {
       // remove opportunity from saved opps
-      if (AuthenticationService.isAuthenticated) {
-        return removeProposal(opportunityId);
+      if (typeof opportunityId === 'number') {
+        if (AuthenticationService.isAuthenticated) {
+          return removeProposal(opportunityId);
+        } else {
+          return DialogService.openLogin().then(function(data) {
+            var deferred = $q.defer();
+            deferred.reject(new Error('Failed to authenticate'));
+            return deferred.promise;
+          });
+        }
       } else {
         var deferred = $q.defer();
-        deferred.reject(new Error('Failed to authenticate'));
+        deferred.reject(new Error('Invalid parameter'));
         return deferred.promise;
       }
     },
     list: function() {
-      return getProposals();
+      if (AuthenticationService.isAuthenticated) {
+        return getProposals();
+      } else {
+        return DialogService.openLogin().then(function(data) {
+          var deferred = $q.defer();
+          deferred.reject(new Error('Failed to authenticate'));
+          return deferred.promise;
+        });
+      }
     },
     get: function(proposalId) {
-      return getProposal(proposalId);
+      if (typeof proposalId === 'number') {
+        if (AuthenticationService.isAuthenticated) {
+          return getProposal(proposalId);
+        } else {
+          return DialogService.openLogin().then(function(data) {
+            var deferred = $q.defer();
+            deferred.reject(new Error('Failed to authenticate'));
+            return deferred.promise;
+          });
+        }
+      } else {
+        var deferred = $q.defer();
+        deferred.reject(new Error('Invalid parameter'));
+        return deferred.promise;
+      }
     },
     saveData: function(proposalId, proposalData) {
-      console.log('saveData', proposalId, proposalData);
-      return saveProposalData(proposalId, {'data':proposalData});
+      if (typeof proposalId === 'number') {
+        if (AuthenticationService.isAuthenticated) {
+          return saveProposalData(proposalId, {'data':proposalData});
+        } else {
+          return DialogService.openLogin().then(function(data) {
+            var deferred = $q.defer();
+            deferred.reject(new Error('Failed to authenticate'));
+            return deferred.promise;
+          });
+        }
+      } else {
+        var deferred = $q.defer();
+        deferred.reject(new Error('Invalid parameter'));
+        return deferred.promise;
+      }
     },
     saveTitle: function(proposalId, proposalTitle) {
-      return saveProposalData(proposalId, proposalTitle);
+      if (typeof proposalId === 'number') {
+        if (AuthenticationService.isAuthenticated) {
+          return saveProposalTitle(proposalId, proposalTitle);
+        } else {
+          return DialogService.openLogin().then(function(data) {
+            var deferred = $q.defer();
+            deferred.reject(new Error('Failed to authenticate'));
+            return deferred.promise;
+          });
+        }
+      } else {
+        var deferred = $q.defer();
+        deferred.reject(new Error('Invalid parameter'));
+        return deferred.promise;
+      }
     }
   };
 });
