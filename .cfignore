@@ -31,7 +31,6 @@ env
 .idea
 bower_components
 .vagrant/
-data
 *.log
 Untitled*.ipynb
 .floo*

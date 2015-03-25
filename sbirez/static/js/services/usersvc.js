@@ -42,7 +42,6 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
           id = $window.sessionStorage.userid;
         }
         $http.get('api/v1/users/' + id + '/').success(function(data) {
-          console.log('data', data);
           user = data;
           $rootScope.$broadcast('userUpdated', user);
           deferred.resolve(data);
