@@ -27,7 +27,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     var deferred = $q.defer();
     var propData = {
       'owner': $window.sessionStorage.userid, 
-      'firm': 1,//$window.sessionStorage.firmid, 
+      'firm': parseInt($window.sessionStorage.firmid), 
       'workflow': 6, // how can I look this up? 
       'topic': opportunityId,
       'title': opportunityTitle

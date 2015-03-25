@@ -13,6 +13,9 @@ angular.module('sbirezApp')
             $window.sessionStorage.username = data.data.username;
             $window.sessionStorage.userid = data.data.id;
             AuthenticationService.setAuthenticated(true);
+            UserService.getUserDetails(data.data.id).then(function(data) {
+              $window.sessionStorage.firmid = data.firm;
+            });
             if ($scope.closeThisDialog !== undefined) {
               $scope.closeThisDialog(true);
             }

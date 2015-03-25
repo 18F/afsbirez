@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('AccountOrganizationCtrl', function ($scope, $http, $state, $q, UserService) {
+  .controller('AccountOrganizationCtrl', function ($scope, $http, $state, $q, $window, UserService) {
 
     $scope.orgId = null;
     $scope.firm = {};
@@ -12,7 +12,6 @@ angular.module('sbirezApp')
       $scope.orgId = data.firm;
       if ($scope.orgId !== null && $scope.orgId !== undefined) {
         $http.get('api/v1/firms/' + $scope.orgId + '/').success(function(data) {
-          console.log('get org', data);
           $scope.firm = data;
         });
       }
@@ -24,7 +23,8 @@ angular.module('sbirezApp')
       if ($scope.orgId === null || $scope.orgId === undefined) {
         $http.post('api/v1/firms/', $scope.firm).success(function(data) {
           $scope.firm = data;
-          $scope.orgId = data.id; 
+          $scope.orgId = data.id;
+          $window.sessionStorage.firmid = data.id;
         }).error(function(data,status) {
           console.log('update', data, status);
         });

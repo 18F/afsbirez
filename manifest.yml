@@ -6,4 +6,4 @@ applications:
 - name: sbirez 
   timeout: 180
   command: waitress-serve --port=$VCAP_APP_PORT afbirez.wsgi:application 
-#  command: python manage.py migrate && waitress-serve --port=$VCAP_APP_PORT afbirez.wsgi:application 
+  #command: python manage.py migrate && python manage.py loaddata sbirez/fixtures/alldata.json && python manage.py indextopics && waitress-serve --port=$VCAP_APP_PORT afbirez.wsgi:application 
