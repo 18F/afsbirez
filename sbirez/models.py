@@ -131,6 +131,29 @@ class Question(models.Model):
     class Meta:
         ordering = ['order',]
 
+class Element(models.Model):
+    name = models.TextField(blank=False)
+    human = models.TextField(null=True, blank=True)
+    validation = models.TextField(null=True, blank=True)
+    element_type = models.TextField(default='str')
+    # workflow, page, line_item
+    # a line item may have Names
+    order = models.IntegerField(blank=False)
+    parent = models.ForeignKey('Element', related_name='children', null=True)
+    multiplicity = models.TextField(null=True, blank=True)
+    # comma-separated list of names: collect one group for each name
+    # integer: collect up to N unnamed groups
+    # null: just collect one
+
+    required = models.NullBooleanField(default=False)
+    default = models.TextField(null=True, blank=True)
+    help = models.TextField(null=True, blank=True)
+    validation = models.TextField(null=True, blank=True)
+    validation_msg = models.TextField(null=True, blank=True)
+    ask_if = models.TextField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['order',]
 
 class Proposal(models.Model):
     owner = models.ForeignKey(SbirezUser, related_name='proposals')

@@ -1,0 +1,300 @@
+-
+  name: dod_workflow
+  element_type: workflow
+  children:
+    -
+      name: proposal_information
+      element_type: group
+      children:
+      -
+        name: proposed_cost
+        element_type: dollars
+        validation: not_more_than 150000
+        validation_msg: Must not exceed $150,000
+      -
+        name: phase_I_duration
+        element_type: timespan
+        validation: not_more_than 9 months
+        validation_msg: Must not exceed 9 months
+      -
+        name: cost_includes_dta_yn
+        element_type: bool
+        human: Does the proposed cost include Discretionary Technical Assistance (DTA)?
+      -
+        name: dta_amount
+        element_type: dollars
+        human: If yes, what is the proposed DTA amount
+        ask_if: cost_includes_dta_yn
+      -
+        name: duplication_rights_blurb
+        element_type: read_only_text
+        human: For any purpose other than to evaluate the proposal, this data except
+               proposal cover sheets shall not be disclosed outside the Government
+               and shall not be duplicated, used or disclosed in whole or in part,
+               provided that if a contract is awarded blah blah blah blah
+      -
+        name: proprietary_info_page_numbers
+        element_type: integer_spans
+        human: Proprietary Information (list page numbers)
+      -
+        name: essentially_equivalent_work_yn
+        element_type: bool
+        human: Has a proposal for essentially equivalent work been submitted
+               to other US government agencies or DoD components?
+      -
+        name: essentially_equivalent_work_info
+        element_type: med_str
+        ask_if: essentially_equivalent_work_yn
+        human:  If yes, list the name(s) of the agency or DoD component and if SBIR or STTR,
+                list Topic Number in the space below.
+      -
+        name: essentially_equivalent_contract_awarded_yn
+        element_type: bool
+        ask_if: essentially_equivalent_work_yn
+        human: Has a contract been awarded for any of the proposals listed above?
+      -
+        name: essentially_equivalent_contract_number
+        element_type: med_str
+        ask_if: essentially_equivalent_contract_awarded_yn
+        human: If yes, please provide the contract number
+      -
+        name: dfars252
+        element_type: bool
+        human: Are you submitting assertions in accordance with DFARS 252.227-7017
+               "Identification and assertions use, release, or disclosure restriction"?
+               See Section 11.5 of the solicitation.
+      -
+        name: special_research_subjects
+        element_type: bool
+        human:  Are you proposing research that utilizes human/animal subjects
+                or recombinant DNA as described in section 3.11, 3.12, and 3.13
+                of the solicitation?
+      -
+        name: technical_abstract
+        element_type: text
+        human: Technical Abstract (Limit your abstract to 200 words
+               with no classified or proprietary information)
+        validation: no_more_than 200 words
+        validation_msg: Limit your abstract to 200 words
+      -
+        name: anticipated_benefits
+        element_type: text
+        human: Anticipated Benefits/Potential Commercial Applications
+               of the Research or Development. (No classified or proprietary information)
+      -
+        name: keywords
+        element_type: long_str
+        human: List a maximum of 8 Key Words or phrases, separated by commas,
+               that describe the Project.
+        validation: no_more_than 8 comma_separated_phrases
+        validation_msg: Maximum of 8 keywords
+    -
+      name: project_team_information
+      element_type: group
+      children:
+      -
+        name: teaming_partners_yn
+        element_type: bool
+        human: Are teaming partners or subcontractors proposed?
+      -
+        name: teaming_partners
+        element_type: line_item
+        human: Check all that apply
+        ask_if: teaming_partners_yn
+        multiplicity: University, HBCU/MI, FFRDC, Nonprofit Institution,
+                      Federal Laboratory, Other Federal Facility,
+                      Small Business, Large Business, Other
+        children:
+        -
+          name: is_teaming_with
+          element_type: bool
+        -
+          name: name
+          element_type: med_str
+          ask_if: is_teaming_with
+        -
+          name: POC
+          element_type: med_str
+          ask_if: is_teaming_with
+      -
+        name: foreign_nationals
+        element_type: bool
+        human: Are you proposing to use foreign nationals
+               as defined in section 3.5 of the solicitation
+               for work under the proposed effort?
+    -
+      name: pi_info
+      element_type: group
+      human: Principal Investigator (PI)/Corporate Official (CO) Information
+      children:
+      -
+        name: pi_time_percentage
+        human: What percentage of the principal investigator's total time will be on the project?
+        element_type: integer
+      -
+        name: pi_is_woman
+        human: Is the principal investigator (identified below) a woman?
+        element_type: bool
+      -
+        name: pi_is_disadvantaged
+        human: Is the principal investigator (identified below) socially/economically disadvantaged?
+        element_type: bool
+      -
+        name: pi_is_university
+        human: Is your firm's PI,CO, or owner, a faculty member or student
+               of an institution of higher education?
+        element_type: bool
+      -
+        name: contact_info
+        element_type: line_item
+        multiplicity: Principal Investigator/Project Manager, Corporate Official (Business)
+        children:
+        -
+          name: honorific
+          human: ""
+          element_type: short_str
+          validation: one_of Dr. Mr. Mrs. Ms. Miss
+        -
+          name: name
+          element_type: med_str
+        -
+          name: title
+          element_type: med_str
+        -
+          name: phone
+          element_type: phone
+        -
+          name: fax
+          element_type: phone
+        -
+          name: email
+          element_type: email
+    -
+      name: final_proposal_info
+      element_type: group
+      children:
+      -
+        name: work_location
+        element_type: med_str
+        human: Location Where Work Will Be Performed
+      -
+        name: direct_labor
+        element_type: line_item
+        multiplicity: 8
+        children:
+        -
+          name: category
+          human: Category and/or Individual
+          element_type: med_str
+        -
+          name: hourly_rate
+          human:  Rate/Hour
+          element_type: dollars
+        -
+          name: estimated_hours
+          human: Est. Hours
+          element_type: float
+        -
+          name: phase_1_cost
+          element_type: dollars
+      -
+        name: fringe_benefit_percentage
+        element_type: percentage
+        human: "Fringe Benefits, if not included in Overhead, (rate: %)"
+      -
+        name: labor_overhead_percentage
+        element_type: percentage
+        human: "Labor Overhead (rate: %)"
+      -
+        name: direct_material_costs
+        element_type: line_item
+        multiplicity: 4
+        children:
+        -
+          name: name
+          element_type: med_str
+          human: ""
+        -
+          name: phase_1_cost
+          element_type: dollars
+      -
+        name: material_overhead_percentage
+        element_type: percentage
+        human: "Material Overhead (rate: %)"
+      -
+        name: other_direct_costs
+        element_type: line_item
+        multiplicity: 4
+        children:
+        -
+          name: name
+          element_type: med_str
+          human: ""
+        -
+          name: phase_1_cost
+          element_type: dollars
+      -
+        name: other_direct_cost_overhead
+        element_type: percentage
+        human: "Direct Cost Overhead (rate: %)"
+      -
+        name: general_admin_rate
+        element_type: percentage
+        human: "General & Administrative (rate: %)"
+      -
+        name: fee_or_profit
+        element_type: percentage
+        human: "Fee or Profit (rate: %)"
+      -
+        name: discretionary_technical_assistance
+        element_type: dollars
+      -
+        name: cost_volume_explanatory
+        element_type: text
+        human: Explanatory material related to the Cost Volume
+               (including substantiation of subcontractor costs)
+      -
+        name: cost_breakdown_official
+        human: Firm's official responsible for the cost breakdown
+        element_type: line_item
+        children:
+        -
+          name: name
+          element_type: med_str
+        -
+          name: title
+          element_type: med_str
+      -
+        name: dcaa_review
+        human: If the Defense Contracting Audit Agency (DCAA) has performed a review
+               of your projects within the past 12 months, please provide the following
+        element_type: line_item
+        children:
+        -
+          name: reviewing_office
+          element_type: med_str
+        -
+          name: individual
+          element_type: med_str
+        -
+          name: address
+          element_type: text
+        -
+          name: phone
+          element_type: phone
+      -
+        name: use_government_property_yn
+        human: Will you require the use of any government property
+               in the performance of this proposal?
+        element_type: boolean
+      -
+        name: government_property_to_use
+        human: If Yes, identify
+        element_type: big_str
+      -
+        name: payment_desired
+        human: Specify the type of payment desired
+        element_type: big_str
+        validation: one_of "partial payments (monthly) as work progresses (recommended)",
+                    "progress payments"
+
