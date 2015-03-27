@@ -29,7 +29,14 @@ angular.module('sbirezApp')
           console.log('update', data, status);
         });
       } else {
-        $http.put('api/v1/firms/' + $scope.orgId + '/', $scope.firm).success(function(data) {
+        if ($scope.firm.address === null) {
+          delete $scope.firm.address;
+        }
+        if ($scope.firm.point_of_contact === null) {
+          delete $scope.firm.point_of_contact;
+        }
+        
+        $http.patch('api/v1/firms/' + $scope.orgId + '/', $scope.firm).success(function(data) {
           $scope.firm = data;
         }).error(function(data, status) {
           console.log('update', data, status);
