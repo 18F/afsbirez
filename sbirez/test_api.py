@@ -724,12 +724,20 @@ class ElementTests(APITestCase):
         response = self.client.get('/api/v1/elements/')
         self.assertGreater(response.data["count"], 0)
         all_element_names = [n['name'] for n in response.data['results']]
-        self.assertIn('Holy Grail workflow', all_element_names)
+        self.assertIn('holy_grail_workflow', all_element_names)
 
     def test_get_single_element(self):
         response = self.client.get('/api/v1/elements/1/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data["name"], 'Holy Grail workflow')
+        self.assertEqual(response.data["name"], 'holy_grail_workflow')
+        self.assertEqual(response.data['children'][0]['human'], 'What is thy name?')
+
+    # Check that default value for `human` field working
+    def test_workflow_included(self):
+        response = self.client.get('/api/v1/elements/')
+        all_humans = [n['human'] for n in response.data['results']]
+        self.assertIn('Holy Grail Workflow', all_humans)
+
 
 
 class PersonTests(APITestCase):

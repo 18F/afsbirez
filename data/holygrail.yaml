@@ -1,5 +1,5 @@
 -
-  name: Holy Grail workflow
+  name: holy_grail_workflow
   element_type: workflow
   children:
   -
@@ -11,11 +11,13 @@
     name: subquest
     element_type: group
     children:
-    - 
+    -
       name: quest_thy_quest
+      human: What is thy quest?
       element_type: med_str
     -
       name: quest_thy_favorite_color
+      human: What is thy favorite color?
       element_type: med_str
       validation: does_not_equal blue
       validation_msg: Lancelot already said blue

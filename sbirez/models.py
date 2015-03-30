@@ -155,6 +155,13 @@ class Element(models.Model):
     class Meta:
         ordering = ['order',]
 
+    def save(self, *args, **kwargs):
+        """Human-readable should derive from ``name`` by default."""
+        if not self.human:
+            self.human = self.name.replace('_', ' ').title()
+        super(Element, self).save(*args, **kwargs)
+
+
 class Proposal(models.Model):
     owner = models.ForeignKey(SbirezUser, related_name='proposals')
     firm = models.ForeignKey(Firm, related_name='proposals')
