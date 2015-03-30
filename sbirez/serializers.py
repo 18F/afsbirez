@@ -21,6 +21,8 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = super(UserSerializer, self).create(validated_data)
         user.set_password(validated_data.get('password'))
+        # create an initial firm
+        user.firm = Firm.objects.create(name=user.name)
         user.save()
         return user
 
