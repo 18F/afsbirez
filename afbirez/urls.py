@@ -14,6 +14,7 @@ router.register(r'workflows', api.WorkflowViewSet)
 router.register(r'proposals', api.ProposalViewSet)
 router.register(r'addresses', api.AddressViewSet)
 router.register(r'persons', api.PersonViewSet)
+router.register(r'documents', api.DocumentViewSet)
 
 
 urlpatterns = patterns('',

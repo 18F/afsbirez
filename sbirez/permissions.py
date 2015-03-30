@@ -23,14 +23,14 @@ class IsStaffOrFirmRelatedUser(permissions.BasePermission):
         return request.user.is_staff or obj == request.user.firm
 
 
-class HasProposalEditPermissions(permissions.BasePermission):
+class HasObjectEditPermissions(permissions.BasePermission):
     def has_permission(self, request, view):
         # allow user to list proposals if staff
         return True
         # (request.user.is_authenticated() and view.action != 'list') or request.user.is_staff
  
-    def has_object_permission(self, request, view, proposal):
+    def has_object_permission(self, request, view, object):
         # allow logged in user to view view/edit proposals from firm
         # if a user is authed and is associated with the firm
-        return request.user.is_staff or proposal.firm == request.user.firm
+        return request.user.is_staff or object.firm == request.user.firm
 

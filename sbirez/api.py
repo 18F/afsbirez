@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from sbirez.models import Topic, Firm, Workflow, Proposal, Address, Person
+from sbirez.models import Topic, Firm, Workflow, Proposal, Address, Person, Document
 from rest_framework import viewsets, mixins, generics, status, permissions, exceptions
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
@@ -9,10 +9,10 @@ from rest_framework.reverse import reverse
 from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer
 from sbirez.serializers import FirmSerializer, ProposalSerializer
 from sbirez.serializers import WorkflowSerializer, AddressSerializer
-from sbirez.serializers import PersonSerializer
+from sbirez.serializers import PersonSerializer, DocumentSerializer
 import marshmallow as mm
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser, HasProposalEditPermissions
+from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser, HasObjectEditPermissions
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -133,7 +133,7 @@ class ProposalViewSet(viewsets.ModelViewSet):
         return queryset
 
     def get_permissions(self):
-        return [HasProposalEditPermissions(),]
+        return [HasObjectEditPermissions(),]
 
 
 class AddressViewSet(viewsets.ModelViewSet):
@@ -144,3 +144,16 @@ class AddressViewSet(viewsets.ModelViewSet):
 class PersonViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
+
+class DocumentViewSet(viewsets.ModelViewSet):
+    queryset = Document.objects.all()
+    serializer_class = DocumentSerializer
+
+    def get_queryset(self):
+        queryset = Document.objects.all()
+        if not self.request.user.is_staff:
+            queryset = Document.objects.filter(firm=self.request.user.firm)
+        return queryset
+
+    def get_permissions(self):
+        return [HasObjectEditPermissions(),]

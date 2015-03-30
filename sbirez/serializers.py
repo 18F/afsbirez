@@ -3,7 +3,7 @@ import shlex
 from sbirez import validation_helpers
 from django.contrib.auth.models import User, Group
 from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person
-from sbirez.models import Address, Workflow, Question, Proposal, Address
+from sbirez.models import Address, Workflow, Question, Proposal, Address, Document
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
@@ -268,3 +268,7 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
 
+class DocumentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Document
