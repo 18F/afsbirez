@@ -6,6 +6,7 @@ from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person
 from sbirez.models import Address, Workflow, Question, Proposal, Address, Element
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from rest_framework_recursive.fields import RecursiveField
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -210,25 +211,15 @@ class WorkflowSerializer(serializers.ModelSerializer):
 
 class ElementSerializer(serializers.ModelSerializer):
 
-    # parent = serializers.PrimaryKeyRelatedField(read_only=True)
-    # still nests
-
-    # parent = serializers.IntegerField()
-    # throws an error...
+    children = RecursiveField(many=True)
 
     class Meta:
         model = Element
-        # exclude = ('parent', )
-        # not compatible with `fields`, and simply excluding `parent`
-        # leaves `children` out
+
         fields = ('id', 'name', 'order', 'element_type',
                   'required', 'default', 'human', 'help',
                   'validation', 'validation_msg', 'ask_if',
-                  'children', 'parent', )
-        # depth = 1
-        # TODO: setting 'depth' to 1 works perfectly - except
-        # that the nested children include 'parents' despite
-        # being left out of `fields`!
+                  'children', )
 
 
 def _validate_question(data, question):

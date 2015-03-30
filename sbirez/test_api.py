@@ -730,6 +730,7 @@ class ElementTests(APITestCase):
         response = self.client.get('/api/v1/elements/1/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data["name"], 'holy_grail_workflow')
+        self.assertEqual(response.data['children'][0]['human'], 'What is thy name?')
 
     # Check that default value for `human` field working
     def test_workflow_included(self):
