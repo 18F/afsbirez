@@ -3,7 +3,7 @@ import shlex
 from sbirez import validation_helpers
 from django.contrib.auth.models import User, Group
 from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person
-from sbirez.models import Address, Workflow, Question, Proposal, Address
+from sbirez.models import Address, Workflow, Question, Proposal, Address, Element
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
@@ -204,6 +204,29 @@ class WorkflowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workflow
         fields = ('name', 'validation', 'questions', )
+
+
+class ElementSerializer(serializers.ModelSerializer):
+
+    # parent = serializers.PrimaryKeyRelatedField(read_only=True)
+    # still nests
+
+    # parent = serializers.IntegerField()
+    # throws an error...
+
+    class Meta:
+        model = Element
+        # exclude = ('parent', )
+        # not compatible with `fields`, and simply excluding `parent`
+        # leaves `children` out
+        fields = ('id', 'name', 'order', 'element_type',
+                  'required', 'default', 'human', 'help',
+                  'validation', 'validation_msg', 'ask_if',
+                  'children', 'parent', )
+        # depth = 1
+        # TODO: setting 'depth' to 1 works perfectly - except
+        # that the nested children include 'parents' despite
+        # being left out of `fields`!
 
 
 def _validate_question(data, question):
