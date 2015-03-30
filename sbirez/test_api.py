@@ -838,6 +838,51 @@ class ProposalTests(APITestCase):
         self.assertIn('Required field quest_thy_name absent',
                       response.data['non_field_errors'])
 
+    # omit multiple required fields
+    def test_very_incomplete_post_raises_multiple_errors(self):
+        user = _fixture_user(self)
+
+        response = self.client.post('/api/v1/proposals/',
+            {'workflow': 2,
+             'title': 'Title', 'topic': 1, 'data': json.dumps(
+                    {
+                     "quest_thy_quest": "To seek the Grail", })
+            })
+        self.assertIn('Required field quest_thy_name absent',
+                      response.data['non_field_errors'])
+        self.assertIn('Required field quest_thy_favorite_color absent',
+                      response.data['non_field_errors'])
+
+    # omit one field, get one wrong
+    def test_incomplete_and_wrong_post(self):
+        user = _fixture_user(self)
+
+        response = self.client.post('/api/v1/proposals/',
+            {'workflow': 2,
+             'title': 'Title', 'topic': 1, 'data': json.dumps(
+                    {
+                     "quest_thy_quest": "To seek the Grail",
+                     "quest_thy_favorite_color": "blue"})
+            })
+        self.assertIn('Required field quest_thy_name absent',
+                      response.data['non_field_errors'])
+        self.assertIn('quest_thy_favorite_color: Lancelot already said blue',
+                      response.data['non_field_errors'])
+
+    # omit a required field, but with /partial
+    def test_intentionally_incomplete_post(self):
+        user = _fixture_user(self)
+
+        response = self.client.post('/api/v1/proposals/partial/',
+            {'workflow': 2,
+             'title': 'Quest for the Holy Grail',
+             'topic': 1, 'data': json.dumps(
+                    {
+                     "quest_thy_quest": "To seek the Grail",
+                     "quest_thy_favorite_color": "#0000FF"})
+            })
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
     def test_post_full_proposal(self):
         user = _fixture_user(self)
 
@@ -855,4 +900,24 @@ class ProposalTests(APITestCase):
         self._deserialize_data(response)
         self.assertEqual(response.data['data']['quest_thy_favorite_color'],
             "#0000FF")
+
+
+
+    def test_ownership_automatically_assigned(self):
+        user = _fixture_user(self)
+
+        response = self.client.post('/api/v1/proposals/',
+            {'workflow': 2,
+             'title': 'Title!', 'topic': 1, 'data': json.dumps(
+                    {"quest_thy_name": "Galahad",
+                     "quest_thy_quest": "To seek the Grail",
+                     "quest_thy_favorite_color": "#0000FF"})
+            })
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+        response = self.client.get('/api/v1/proposals/%s/' % response.data['id'])
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self._deserialize_data(response)
+        self.assertEqual(response.data['owner'], 2)
+        self.assertEqual(response.data['firm'], 1)
 
