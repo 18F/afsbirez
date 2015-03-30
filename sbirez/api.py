@@ -13,7 +13,7 @@ from sbirez.serializers import PersonSerializer
 import marshmallow as mm
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser, HasProposalEditPermissions
-
+from .permissions import ReadOnlyUnlessStaff
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -125,6 +125,9 @@ class WorkflowViewSet(viewsets.ReadOnlyModelViewSet):
 class ElementViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Element.objects.all()
     serializer_class = ElementSerializer
+
+    def get_permissions(self):
+        return [ReadOnlyUnlessStaff(), ]
 
 
 class ProposalViewSet(viewsets.ModelViewSet):
