@@ -51,8 +51,7 @@ angular.module('sbirezApp').directive('workflow', function() {
           else {
             $scope.proposalData = {};
           }
-          //getWorkflow($scope.proposal.workflow).then(function(data) {
-          getWorkflow(155).then(function(data) {
+          getWorkflow($scope.proposal.workflow).then(function(data) {
             $scope.workflow = data;
             buildIndex($scope.workflow);
             if ($stateParams.current !== null) {
