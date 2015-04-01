@@ -65,71 +65,9 @@ class Reference(models.Model):
     reference = models.TextField()
     topic = models.ForeignKey('Topic', related_name='references')
 
-class Topic(models.Model):
-    PROGRAM_CHOICES = (
-        ("SBIR", "SBIR"),
-        ("STTR", "STTR"),
-        )
-
-    topic_number = models.TextField(unique=True)
-    solicitation_id = models.TextField()
-    url = models.TextField(unique=True)
-    title = models.TextField()
-    agency = models.TextField(blank=True, null=True)
-    program = models.CharField(max_length=10, choices=PROGRAM_CHOICES)
-    description = models.TextField()
-    objective = models.TextField()
-    pre_release_date = models.DateTimeField()
-    proposals_begin_date = models.DateTimeField()
-    proposals_end_date = models.DateTimeField()
-    fts = VectorField()
-    saved_by = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                      blank=True, null=True,
-                                      related_name='saved_topics')
-
-    @property
-    def days_to_close(self):
-        return (self.proposals_end_date - timezone.now()).days
-
-    @property
-    def status(self):
-        now = timezone.now()
-        if now > self.proposals_end_date:
-            return 'Closed'
-        elif now >= self.proposals_begin_date:
-            return 'Open'
-        else:
-            return 'Future'
-
-    objects = SearchManager(fields=None, search_field='fts',
-                           auto_update_search_field=False)
-
-
 class Workflow(models.Model):
     name = models.TextField(blank=False)
     validation = models.TextField()
-
-
-class Question(models.Model):
-    name = models.TextField(blank=False)
-    order = models.IntegerField(blank=False)
-    parent = models.ForeignKey(Workflow, related_name='questions')
-
-    # Each question should be EITHER an actual question...
-    data_type = models.TextField(null=True, default='str')
-    required = models.NullBooleanField(default=False)
-    default = models.TextField(null=True, blank=True)
-    human = models.TextField(null=True, blank=True)
-    help = models.TextField(null=True, blank=True)
-    validation = models.TextField(null=True, blank=True)
-    validation_msg = models.TextField(null=True, blank=True)
-    ask_if = models.TextField(null=True, blank=True)
-
-    # ... OR a sub-workflow
-    subworkflow = models.ForeignKey(Workflow, related_name='subworkflow_of', null=True, blank=True)
-
-    class Meta:
-        ordering = ['order',]
 
 class Element(models.Model):
     name = models.TextField(blank=False)
@@ -183,6 +121,70 @@ class Element(models.Model):
                 raise KeyError('%s not in %s' % (p, data.keys()))
         return data
 
+class Solicitation(models.Model):
+    name = models.TextField(unique=True)
+    element = models.ForeignKey(Element, related_name='element', null=True)
+    pre_release_date = models.DateTimeField()
+    proposals_begin_date = models.DateTimeField()
+    proposals_end_date = models.DateTimeField()
+
+    @property
+    def days_to_close(self):
+        return (self.proposals_end_date - timezone.now()).days
+
+
+    @property
+    def status(self):
+        now = timezone.now()
+        if now > self.proposals_end_date:
+            return 'Closed'
+        elif now >= self.proposals_begin_date:
+            return 'Open'
+        else:
+            return 'Future'
+
+class Topic(models.Model):
+    PROGRAM_CHOICES = (
+        ("SBIR", "SBIR"),
+        ("STTR", "STTR"),
+        )
+
+    topic_number = models.TextField(unique=True)
+    solicitation = models.ForeignKey(Solicitation, related_name='solicitation')
+    url = models.TextField(unique=True)
+    title = models.TextField()
+    agency = models.TextField(blank=True, null=True)
+    program = models.CharField(max_length=10, choices=PROGRAM_CHOICES)
+    description = models.TextField()
+    objective = models.TextField()
+    fts = VectorField()
+    saved_by = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                      blank=True, null=True,
+                                      related_name='saved_topics')
+
+    objects = SearchManager(fields=None, search_field='fts',
+                           auto_update_search_field=False)
+
+class Question(models.Model):
+    name = models.TextField(blank=False)
+    order = models.IntegerField(blank=False)
+    parent = models.ForeignKey(Workflow, related_name='questions')
+
+    # Each question should be EITHER an actual question...
+    data_type = models.TextField(null=True, default='str')
+    required = models.NullBooleanField(default=False)
+    default = models.TextField(null=True, blank=True)
+    human = models.TextField(null=True, blank=True)
+    help = models.TextField(null=True, blank=True)
+    validation = models.TextField(null=True, blank=True)
+    validation_msg = models.TextField(null=True, blank=True)
+    ask_if = models.TextField(null=True, blank=True)
+
+    # ... OR a sub-workflow
+    subworkflow = models.ForeignKey(Workflow, related_name='subworkflow_of', null=True, blank=True)
+
+    class Meta:
+        ordering = ['order',]
 
 class Proposal(models.Model):
     owner = models.ForeignKey(SbirezUser, related_name='proposals')

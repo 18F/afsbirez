@@ -21,13 +21,15 @@ angular.module('sbirezApp')
     $scope.createProposal = function(opportunityId) {
       var title = 'New Proposal';
       var count = $scope.data.results.length;
+      var workflow = 1;
       for (var i = 0; i < count; i++) {
         if ($scope.data.results[i].id === opportunityId) {
           title = $scope.data.results[i].title;
+          workflow = $scope.data.results[i].solicitation.element;
           break;
         }
       }
-      ProposalService.create(opportunityId, title).then(function(data) {
+      ProposalService.create(opportunityId, title, workflow).then(function(data) {
         console.log('created proposal', data);
       });
     };
