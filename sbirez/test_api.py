@@ -742,7 +742,7 @@ class ElementTests(APITestCase):
 
 class PersonTests(APITestCase):
 
-    fixtures = ['alldata.json']
+    fixtures = ['thin.json']
 
     # Check that the proposal index loads
     def test_person_view_set(self):
@@ -759,7 +759,7 @@ class PersonTests(APITestCase):
 
 class AddressTests(APITestCase):
 
-    fixtures = ['alldata.json']
+    fixtures = ['thin.json']
 
     # Check that the proposal index loads
     def test_address_view_set(self):
@@ -770,7 +770,7 @@ class AddressTests(APITestCase):
 
 class ProposalTests(APITestCase):
 
-    fixtures = ['alldata.json']
+    fixtures = ['thin.json', ]
 
     def _deserialize_data(self, response):
         """An ugly hack for the fact that the 'data' field comes back
@@ -783,7 +783,7 @@ class ProposalTests(APITestCase):
 
         response = self.client.get('/api/v1/proposals/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data["count"], 2)
+        self.assertEqual(response.data["count"], 1)
 
     def test_get_one_proposal(self):
         user = _fixture_user(self)
@@ -799,25 +799,24 @@ class ProposalTests(APITestCase):
 
         response = self.client.get('/api/v1/proposals/2/')
         self._deserialize_data(response)
-        self.assertEqual(response.data['data']['quest_thy_favorite_color'],
-            'yellow')
-
-        response.data['data']['quest_thy_favorite_color'] = 'green'
+        self.assertEqual(response.data['data']['subquest']
+                         ['quest_thy_favorite_color'], 'yellow')
+        response.data['data']['subquest']['quest_thy_favorite_color'] = 'green'
         response.data['data'] = json.dumps(response.data['data'])
         response = self.client.put('/api/v1/proposals/2/', response.data)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         response = self.client.get('/api/v1/proposals/2/')
         self._deserialize_data(response)
-        self.assertEqual(response.data['data']['quest_thy_favorite_color'],
-            'green')
+        self.assertEqual(response.data['data']['subquest']
+                         ['quest_thy_favorite_color'], 'green')
 
-    def test_bad_update_proposal(self):
+    def t_disabled_est_bad_update_proposal(self):
         user = _fixture_user(self)
 
         response = self.client.get('/api/v1/proposals/2/')
         self._deserialize_data(response)
-        response.data['data']['quest_thy_favorite_color'] = 'blue'
+        response.data['data']['subquest']['quest_thy_favorite_color'] = 'blue'
         response.data['data'] = json.dumps(response.data['data'])
         response = self.client.put('/api/v1/proposals/2/', response.data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
@@ -825,25 +824,26 @@ class ProposalTests(APITestCase):
                       response.data['non_field_errors'])
 
     # omit a required field
-    def test_incomplete_post_raises_error(self):
+    def t_disabled_est_incomplete_post_raises_error(self):
         user = _fixture_user(self)
-
         response = self.client.post('/api/v1/proposals/',
-            {'owner': 2, 'firm': 1, 'workflow': 2,
-             'title': 'Title', 'topic': 1, 'data': json.dumps(
+            {'workflow': 1,
+             'title': 'Title!', 'topic': 1, 'data': json.dumps(
                     {
-                     "quest_thy_quest": "To seek the Grail",
-                     "quest_thy_favorite_color": "#0000FF"})
-            })
+                     "subquest": {
+                         "quest_thy_quest": "To seek the Grail",
+                         "quest_thy_favorite_color":
+                             "#0000FF"}})
+             })
         self.assertIn('Required field quest_thy_name absent',
                       response.data['non_field_errors'])
 
     # omit multiple required fields
-    def test_very_incomplete_post_raises_multiple_errors(self):
+    def t_disabled_est_very_incomplete_post_raises_multiple_errors(self):
         user = _fixture_user(self)
 
         response = self.client.post('/api/v1/proposals/',
-            {'workflow': 2,
+            {'workflow': 1,
              'title': 'Title', 'topic': 1, 'data': json.dumps(
                     {
                      "quest_thy_quest": "To seek the Grail", })
@@ -854,11 +854,11 @@ class ProposalTests(APITestCase):
                       response.data['non_field_errors'])
 
     # omit one field, get one wrong
-    def test_incomplete_and_wrong_post(self):
+    def t_disabled_est_incomplete_and_wrong_post(self):
         user = _fixture_user(self)
 
         response = self.client.post('/api/v1/proposals/',
-            {'workflow': 2,
+            {'workflow': 1,
              'title': 'Title', 'topic': 1, 'data': json.dumps(
                     {
                      "quest_thy_quest": "To seek the Grail",
@@ -872,47 +872,51 @@ class ProposalTests(APITestCase):
     # omit a required field, but with /partial
     def test_intentionally_incomplete_post(self):
         user = _fixture_user(self)
-
         response = self.client.post('/api/v1/proposals/partial/',
-            {'workflow': 2,
-             'title': 'Quest for the Holy Grail',
-             'topic': 1, 'data': json.dumps(
+            {'workflow': 1,
+             'title': 'Title!', 'topic': 1, 'data': json.dumps(
                     {
-                     "quest_thy_quest": "To seek the Grail",
-                     "quest_thy_favorite_color": "#0000FF"})
-            })
+                     "subquest": {
+                         "quest_thy_quest": "To seek the Grail",
+                         "quest_thy_favorite_color":
+                             "#0000FF"}})
+             })
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
     def test_post_full_proposal(self):
         user = _fixture_user(self)
 
         response = self.client.post('/api/v1/proposals/',
-            {'owner': 2, 'firm': 1, 'workflow': 2,
+            {'owner': 2, 'firm': 1, 'workflow': 1,
              'title': 'Title!', 'topic': 1, 'data': json.dumps(
                     {"quest_thy_name": "Galahad",
-                     "quest_thy_quest": "To seek the Grail",
-                     "quest_thy_favorite_color": "#0000FF"})
-            })
+                     "subquest": {
+                         "quest_thy_quest": "To seek the Grail",
+                         "quest_thy_favorite_color":
+                             "#0000FF"}})
+             })
+
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
         response = self.client.get('/api/v1/proposals/%s/' % response.data['id'])
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self._deserialize_data(response)
-        self.assertEqual(response.data['data']['quest_thy_favorite_color'],
+        self.assertEqual(response.data['data']['subquest']['quest_thy_favorite_color'],
             "#0000FF")
-
-
 
     def test_ownership_automatically_assigned(self):
         user = _fixture_user(self)
 
         response = self.client.post('/api/v1/proposals/',
-            {'workflow': 2,
+            {'workflow': 1,
              'title': 'Title!', 'topic': 1, 'data': json.dumps(
                     {"quest_thy_name": "Galahad",
-                     "quest_thy_quest": "To seek the Grail",
-                     "quest_thy_favorite_color": "#0000FF"})
-            })
+                     "subquest": {
+                         "quest_thy_quest": "To seek the Grail",
+                         "quest_thy_favorite_color":
+                             "#0000FF"}})
+             })
+
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
         response = self.client.get('/api/v1/proposals/%s/' % response.data['id'])

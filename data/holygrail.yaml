@@ -6,6 +6,7 @@
     name: quest_thy_name
     human: What is thy name?
     element_type: med_str
+    required: True
     help: Thy moniker
   -
     name: subquest
@@ -18,6 +19,7 @@
     -
       name: quest_thy_favorite_color
       human: What is thy favorite color?
+      required: True
       element_type: med_str
       validation: does_not_equal blue
       validation_msg: Lancelot already said blue

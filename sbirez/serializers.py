@@ -208,22 +208,30 @@ class WorkflowSerializer(serializers.ModelSerializer):
         model = Workflow
         fields = ('name', 'validation', 'questions', )
 
-def _find_validation_errors(data, question, accept_partial, ):
+def _find_validation_errors(data, element, accept_partial, ):
 
     errors = []
 
-    if not accept_partial:
-        if question.required and not question.subworkflow:
-            if (question.name not in data):
-                errors.append(
-                    'Required field %s absent' % question.name)
-            elif (hasattr(data[question.name], 'strip') and
-                not data[question.name].strip()):
-                errors.append(
-                    'Required field %s absent' % question.name)
+    try:
+        val = element.lookup_in_data(data)
+    except KeyError:
+        if accept_partial:
+            return []
+        else:
+            return ['Required field %s absent' % element.name]
 
-    if question.validation:
-        for validation in question.validation.split(';'):
+    #TODO: required composite elements not supported
+    if ((not element.children.exists()) and
+        hasattr(val, 'strip') and (not val.strip())):
+        if accept_partial or (not element.required):
+            return []
+        else:
+            return ['Required field %s is blank' % element.name]
+
+    errors = []
+
+    if element.validation:
+        for validation in element.validation.split(';'):
             args = shlex.split(validation)
             function_name = args.pop(0)
             try:
@@ -232,16 +240,16 @@ def _find_validation_errors(data, question, accept_partial, ):
                 # validation refers to a function not found in helper library
                 errors.append(
                     '%s: validation function %s absent from validation_helpers.py',
-                    (question.name, function_name))
-            if question.name in data:
-                datum = data[question.name].lower()
-                if not func(data, datum, *args):
-                    errors.append(
-                        '%s: %s' % (question.name, question.validation_msg))
+                    (element.name, function_name))
 
-    if question.subworkflow:
-        for subquestion in question.subworkflow.questions.all():
-            errors.extend(_find_validation_errors(data, subquestion, accept_partial))
+            val = val.lower()
+            if not func(data, val, *args):
+                errors.append(
+                    '%s: %s' % (element.name, element.validation_msg))
+
+    if element.children.exists():
+        for subelement in element.children.all():
+            errors.extend(_find_validation_errors(data, subelement, accept_partial))
 
     return errors
 
@@ -267,8 +275,8 @@ def genericValidator(proposal, accept_partial=False):
     data = json.loads(proposal['data'])
 
     errors = []
-    for question in proposal['workflow'].questions.all():
-        errors.extend(_find_validation_errors(data, question, accept_partial=accept_partial))
+    for element in proposal['workflow'].children.all():
+        errors.extend(_find_validation_errors(data, element, accept_partial=accept_partial))
     if errors:
         raise serializers.ValidationError(errors)
 
@@ -297,14 +305,14 @@ class ProposalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Proposal
-        validators = [genericValidator]
+        #validators = [genericValidator]
 
 
 class PartialProposalSerializer(ProposalSerializer):
 
     class Meta:
         model = Proposal
-        validators = [partialPermissiveValidator]
+        #validators = [partialPermissiveValidator]
 
 
 class AddressSerializer(serializers.ModelSerializer):
