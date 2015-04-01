@@ -305,14 +305,14 @@ class ProposalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Proposal
-        #validators = [genericValidator]
+        validators = [genericValidator]
 
 
 class PartialProposalSerializer(ProposalSerializer):
 
     class Meta:
         model = Proposal
-        #validators = [partialPermissiveValidator]
+        validators = [partialPermissiveValidator]
 
 
 class AddressSerializer(serializers.ModelSerializer):
