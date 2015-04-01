@@ -1,19 +1,19 @@
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from sbirez.models import Topic, Firm, Workflow, Proposal, Address, Person
+from sbirez.models import Topic, Firm, Workflow, Proposal, Address, Person, Element
 from rest_framework import viewsets, mixins, generics, status, permissions, exceptions
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer
-from sbirez.serializers import FirmSerializer, ProposalSerializer
-from sbirez.serializers import WorkflowSerializer, AddressSerializer
+from sbirez.serializers import FirmSerializer, ProposalSerializer, PartialProposalSerializer
+from sbirez.serializers import WorkflowSerializer, AddressSerializer, ElementSerializer
 from sbirez.serializers import PersonSerializer
 import marshmallow as mm
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser, HasProposalEditPermissions
-
+from .permissions import ReadOnlyUnlessStaff
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -122,6 +122,14 @@ class WorkflowViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = WorkflowSerializer
 
 
+class ElementViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Element.objects.all()
+    serializer_class = ElementSerializer
+
+    def get_permissions(self):
+        return [ReadOnlyUnlessStaff(), ]
+
+
 class ProposalViewSet(viewsets.ModelViewSet):
     serializer_class = ProposalSerializer
     queryset = Proposal.objects.all()
@@ -134,6 +142,10 @@ class ProposalViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         return [HasProposalEditPermissions(),]
+
+
+class PartialProposalViewSet(ProposalViewSet):
+    serializer_class = PartialProposalSerializer
 
 
 class AddressViewSet(viewsets.ModelViewSet):

@@ -1,0 +1,26 @@
+-
+  name: holy_grail_workflow
+  element_type: workflow
+  children:
+  -
+    name: quest_thy_name
+    human: What is thy name?
+    element_type: med_str
+    required: True
+    help: Thy moniker
+  -
+    name: subquest
+    element_type: group
+    children:
+    -
+      name: quest_thy_quest
+      human: What is thy quest?
+      element_type: med_str
+    -
+      name: quest_thy_favorite_color
+      human: What is thy favorite color?
+      required: True
+      element_type: med_str
+      validation: does_not_equal blue
+      validation_msg: Lancelot already said blue
+

@@ -11,10 +11,11 @@ router.register(r'firms', api.FirmViewSet)
 router.register(r'groups', api.GroupViewSet)
 router.register(r'topics', api.TopicViewSet, 'topics')
 router.register(r'workflows', api.WorkflowViewSet)
+router.register(r'proposals/partial', api.PartialProposalViewSet)
 router.register(r'proposals', api.ProposalViewSet)
 router.register(r'addresses', api.AddressViewSet)
 router.register(r'persons', api.PersonViewSet)
-
+router.register(r'elements', api.ElementViewSet)
 
 urlpatterns = patterns('',
     url(r'^api/v1/topics/(?P<pk>[0-9]+)/saved/$', api.SaveTopicView.as_view()),
