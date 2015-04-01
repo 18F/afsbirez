@@ -136,8 +136,7 @@ class Element(models.Model):
     human = models.TextField(null=True, blank=True)
     validation = models.TextField(null=True, blank=True)
     element_type = models.TextField(default='str')
-    # workflow, page, line_item
-    # a line item may have Names
+    # workflow, group, line_item, read_only_text, or scalar type
     order = models.IntegerField(blank=False)
     parent = models.ForeignKey('Element', related_name='children', null=True)
     multiplicity = models.TextField(null=True, blank=True)
@@ -161,11 +160,34 @@ class Element(models.Model):
             self.human = self.name.replace('_', ' ').title()
         super(Element, self).save(*args, **kwargs)
 
+    @property
+    def qualified_name(self):
+        if self.parent:
+            return '%s.%s' % (self.parent.qualified_name, self.name)
+        else:
+            return self.name
+
+    def parentage(self):
+        if self.parent:
+            result = self.parent.parentage()
+        else:
+            result = []
+        result.append(self.name)
+        return result
+
+    def lookup_in_data(self, data):
+        for p in self.parentage()[1:]:  # [0] is the top workflow name
+            if p in data:
+                data = data[p]
+            else:
+                raise KeyError('%s not in %s' % (p, data.keys()))
+        return data
+
 
 class Proposal(models.Model):
     owner = models.ForeignKey(SbirezUser, related_name='proposals')
     firm = models.ForeignKey(Firm, related_name='proposals')
-    workflow = models.ForeignKey(Workflow, related_name='proposals')
+    workflow = models.ForeignKey(Element, related_name='proposals')
     topic = models.ForeignKey(Topic, related_name='proposals')
     submitted_at = models.DateTimeField(auto_now=True)
     title = models.TextField(blank=False)

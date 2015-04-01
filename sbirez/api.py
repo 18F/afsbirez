@@ -7,13 +7,13 @@ from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer
-from sbirez.serializers import FirmSerializer, ProposalSerializer
+from sbirez.serializers import FirmSerializer, ProposalSerializer, PartialProposalSerializer
 from sbirez.serializers import WorkflowSerializer, AddressSerializer, ElementSerializer
 from sbirez.serializers import PersonSerializer
 import marshmallow as mm
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser, HasProposalEditPermissions
-
+from .permissions import ReadOnlyUnlessStaff
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -126,6 +126,9 @@ class ElementViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Element.objects.all()
     serializer_class = ElementSerializer
 
+    def get_permissions(self):
+        return [ReadOnlyUnlessStaff(), ]
+
 
 class ProposalViewSet(viewsets.ModelViewSet):
     serializer_class = ProposalSerializer
@@ -139,6 +142,10 @@ class ProposalViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         return [HasProposalEditPermissions(),]
+
+
+class PartialProposalViewSet(ProposalViewSet):
+    serializer_class = PartialProposalSerializer
 
 
 class AddressViewSet(viewsets.ModelViewSet):
