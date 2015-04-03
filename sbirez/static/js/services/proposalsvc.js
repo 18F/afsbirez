@@ -23,12 +23,12 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return deferred.promise;
   };
 
-  var createProposal = function(opportunityId, opportunityTitle) {
+  var createProposal = function(opportunityId, opportunityTitle, workflowId) {
     var deferred = $q.defer();
     var propData = {
       'owner': $window.sessionStorage.userid, 
       'firm': parseInt($window.sessionStorage.firmid), 
-      'workflow': 6, // how can I look this up? 
+      'workflow': workflowId, 
       'topic': opportunityId,
       'title': opportunityTitle
     };
@@ -73,12 +73,12 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
 
 
   return {
-    create: function(opportunityId, opportunityTitle) {
+    create: function(opportunityId, opportunityTitle, workflowId) {
       if (typeof opportunityId === 'number') {
         if (!AuthenticationService.isAuthenticated) {
           return DialogService.openLogin().then(function(data) {
             if (data.value) {
-              return createProposal(opportunityId, opportunityTitle);
+              return createProposal(opportunityId, opportunityTitle, workflowId);
             } else {
               var deferred = $q.defer();
               deferred.reject(new Error('Failed to authenticate'));
@@ -86,7 +86,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
             }
           });
         } else {
-          return createProposal(opportunityId, opportunityTitle);
+          return createProposal(opportunityId, opportunityTitle, workflowId);
         }
       } else {
         var deferred = $q.defer();

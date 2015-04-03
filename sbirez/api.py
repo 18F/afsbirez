@@ -85,7 +85,7 @@ class TopicViewSet(viewsets.ModelViewSet):
             queryset = Topic.objects.all()
 
         if not params.get('closed'):
-            queryset = queryset.filter(proposals_end_date__gte = timezone.now())
+            queryset = queryset.filter(solicitation__proposals_end_date__gte = timezone.now())
 
         if params.get('saved'):
             # TODO: if not logged in, raise error?
