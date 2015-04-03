@@ -1,0 +1,23 @@
+<div>
+  <div class="panel panel-default">
+    <div class="panel-heading">{{element.human}}</div>
+    <div class="panel-body">
+      <div ng-if="element.multiplicity" ng-repeat="multiple in element.multiplicity">{{multiple}}
+        <div ng-repeat="subelement in element.children">
+          <div class="workflow-element" ng-if="subelement.element_type === 'str' || subelement.element_type === 'med_str' || subelement.element_type === 'short_str' || subelement.element_type === 'phone' || subelement.element_type === 'email' || subelement.element_type === 'int' || subelement.element_type === 'dollars' || subelement.element_type === 'float' || subelement.element_type === 'percentage'">
+            <div str="subelement" storage="storage[multiple][subelement.name]"></div>
+          </div>
+          <div class="workflow-element" ng-if="subelement.element_type === 'text'">
+            <div text="subelement" storage="storage[multiple][subelement.name]"></div>
+          </div>
+          <div class="workflow-element" ng-if="subelement.element_type === 'bool'">
+            <div bool="subelement" storage="storage[multiple][subelement.name]"></div>
+          </div>
+          <div class="workflow-element subworkflow" ng-if="subelement.element_type === 'workflow' || subelement.element_type === 'group'">
+            <div group="subelement" storage="storage[multiple][subelement.name]" method="jumpTo" ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
