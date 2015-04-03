@@ -3,9 +3,11 @@ import shlex
 from sbirez import validation_helpers
 from django.contrib.auth.models import User, Group
 from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person
-from sbirez.models import Address, Workflow, Question, Proposal, Address, Document
+from sbirez.models import Address, Workflow, Question, Proposal, Address
+from sbirez.models import Element, Document
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from rest_framework_recursive.fields import RecursiveField
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -207,62 +209,111 @@ class WorkflowSerializer(serializers.ModelSerializer):
         model = Workflow
         fields = ('name', 'validation', 'questions', )
 
+def _find_validation_errors(data, element, accept_partial, ):
 
-def _validate_question(data, question):
+    errors = []
 
-    if question.required and not question.subworkflow:
-        if (question.name not in data):
-            raise serializers.ValidationError(
-                'Required field %s absent' % question.name)
-        if (hasattr(data[question.name], 'strip') and
-            not data[question.name].strip()):
-            raise serializers.ValidationError(
-                'Required field %s absent' % question.name)
+    try:
+        val = element.lookup_in_data(data)
+    except KeyError:
+        if accept_partial:
+            return []
+        else:
+            return ['Required field %s absent' % element.name]
 
-    if question.validation:
-        for validation in question.validation.split(';'):
+    #TODO: required composite elements not supported
+    if ((not element.children.exists()) and
+        hasattr(val, 'strip') and (not val.strip())):
+        if accept_partial or (not element.required):
+            return []
+        else:
+            return ['Required field %s is blank' % element.name]
+
+    errors = []
+
+    if element.validation:
+        for validation in element.validation.split(';'):
             args = shlex.split(validation)
             function_name = args.pop(0)
             try:
                 func = getattr(validation_helpers, function_name)
             except AttributeError:
                 # validation refers to a function not found in helper library
-                # raise serializers.ValidationError(
-                #    '%s: validation function %s absent from validation_helpers.py',
-                #    question.name, function_name)
-                continue
-            if question.name in data:
-                if not func(data, data[question.name], *args):
-                    raise serializers.ValidationError(
-                        '%s: %s' % (question.name, question.validation_msg))
+                errors.append(
+                    '%s: validation function %s absent from validation_helpers.py',
+                    (element.name, function_name))
 
-    if question.subworkflow:
-        for subquestion in question.subworkflow.questions.all():
-            _validate_question(data, subquestion)
+            val = val.lower()
+            if not func(data, val, *args):
+                errors.append(
+                    '%s: %s' % (element.name, element.validation_msg))
 
-    # TODO: gather all the validation errors
-    # TODO: allow validate-but-not-check-required, no-validate
+    if element.children.exists():
+        for subelement in element.children.all():
+            errors.extend(_find_validation_errors(data, subelement, accept_partial))
 
-def genericValidator(proposal):
+    return errors
+
+
+class ElementSerializer(serializers.ModelSerializer):
+
+    children = RecursiveField(many=True)
+
+    class Meta:
+        model = Element
+
+        fields = ('id', 'name', 'order', 'element_type',
+                  'required', 'default', 'human', 'help',
+                  'validation', 'validation_msg', 'ask_if',
+                  'children', )
+
+
+def genericValidator(proposal, accept_partial=False):
     '''
     Inspect the workflow's validators and apply them to
     the proposal's data
     '''
     data = json.loads(proposal['data'])
 
-    for question in proposal['workflow'].questions.all():
-        _validate_question(data, question)
+    errors = []
+    for element in proposal['workflow'].children.all():
+        errors.extend(_find_validation_errors(data, element, accept_partial=accept_partial))
+    if errors:
+        raise serializers.ValidationError(errors)
+
+    return proposal
+
+
+def partialPermissiveValidator(proposal):
+    return genericValidator(proposal, accept_partial=True)
+
+
+class CurrentFirmDefault(serializers.CurrentUserDefault):
+
+    def __call__(self):
+        return self.user.firm
 
 
 class ProposalSerializer(serializers.ModelSerializer):
 
+    owner = serializers.PrimaryKeyRelatedField(
+        read_only = True,
+        default = serializers.CurrentUserDefault())
+
+    firm = serializers.PrimaryKeyRelatedField(
+        read_only = True,
+        default = CurrentFirmDefault())
+
     class Meta:
         model = Proposal
-        validators = [genericValidator]
+        #validators = [genericValidator]
 
-    # def validate(self, attrs):
-        # TODO: use self.context['request'].method (?) to toggle validation
-        # return the validated data: genericValidator(proposal=attrs)
+
+class PartialProposalSerializer(ProposalSerializer):
+
+    class Meta:
+        model = Proposal
+        #validators = [partialPermissiveValidator]
 
 
 class AddressSerializer(serializers.ModelSerializer):

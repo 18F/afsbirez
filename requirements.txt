@@ -14,4 +14,5 @@ marshmallow==1.2.2
 waitress==0.8.9
 whitenoise==1.0.6
 dateutils==0.6.6
+djangorestframework-recursive
 -r requirements/dev.txt
