@@ -107,7 +107,7 @@
         children:
         -
           name: is_teaming_with
-          element_type: bool
+          element_type: checkbox
         -
           name: name
           element_type: med_str

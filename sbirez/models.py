@@ -84,6 +84,7 @@ class Element(models.Model):
 
     Scalar types implying specific formats
     --------------------------------------
+    checkbox
     dollars
     email
     file_upload
