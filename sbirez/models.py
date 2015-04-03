@@ -70,6 +70,80 @@ class Workflow(models.Model):
     validation = models.TextField()
 
 class Element(models.Model):
+    """
+    Individual questions for a form, or nestable containers to hold
+    other elements.
+
+    ``element_type``s in use:
+
+    Simple Python types
+    -------------------
+    bool
+    float
+    int
+
+    Scalar types implying specific formats
+    --------------------------------------
+    dollars
+    email
+    file_upload
+    integer_spans    (example: "4-6, 8, 12-16")
+    percentage
+    phone
+    read_only_text
+    timespan
+    text
+
+    short_str
+    long_str
+    med_str
+
+    Composite types
+    ---------------
+    group
+    line_item
+    workflow
+
+    The ``multiplicity`` field has a special meaning.  In the submitted
+    results, a grouping element with a multiplicity should appear multiple times...
+    - as a list, if ``multiplicity`` is an integer; the integer is the number of
+    empty slots to suggest for filling
+    - as a dictionary, if ``multiplicity`` is a comma-separated list of terms;
+    the terms should be the dictionary keys, and instances of the element are the values.
+
+    For example:
+
+    name: fleet
+    multiplicity: 2
+    children:
+    -
+      name: model
+      element_type: med_str
+    -
+      name: quantity
+      element_type: integer
+
+    could produce
+
+    {"fleet": [ {"model": "X-wing", "quantity": 200},
+                {"model": "Y-wing", "quantity": 300} ]
+
+    whereas:
+
+    name: fleet
+    multiplicity: X-wing, Y-wing, A-wing
+    children:
+    -
+      name: quantity
+      element_type: integer
+
+    could produce
+
+    {"fleet" {"X-wing": {"quantity": 200},
+              "Y-wing": {"quantity": 300},
+              "A-wing": {"quantity": 100} } }
+
+    """
     name = models.TextField(blank=False)
     human = models.TextField(null=True, blank=True)
     validation = models.TextField(null=True, blank=True)
