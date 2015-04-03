@@ -62,36 +62,36 @@
       {{getKeywordList()}}
     </div>
   </div>
-  <div ng-show="data.solicitation_id" class="row">
+  <div ng-show="data.solicitation.name" class="row">
     <div class="col-md-3">
       <p class="text-right"><strong>Solicitation ID:</strong></p>
     </div>
     <div class="col-md-9">
-      {{data.solicitation_id}}
+      {{data.solicitation.name}}
     </div>
   </div>
-  <div ng-show="data.pre_release_date" class="row">
+  <div ng-show="data.solicitation.pre_release_date" class="row">
     <div class="col-md-3">
       <p class="text-right"><strong>Pre-Release Date:</strong></p>
     </div>
     <div class="col-md-9">
-      {{data.pre_release_date | date}}
+      {{data.solicitation.pre_release_date | date}}
     </div>
   </div>
-  <div ng-show="data.proposals_begin_date" class="row">
+  <div ng-show="data.solicitation.proposals_begin_date" class="row">
     <div class="col-md-3">
       <p class="text-right"><strong>Proposal Submission Begin Date:</strong></p>
     </div>
     <div class="col-md-9">
-      {{data.proposals_begin_date | date }}
+      {{data.solicitation.proposals_begin_date | date }}
     </div>
   </div>
-  <div ng-show="data.proposals_end_date" class="row">
+  <div ng-show="data.solicitation.proposals_end_date" class="row">
     <div class="col-md-3">
       <p class="text-right"><strong>Proposal Submission End Date:</strong></p>
     </div>
     <div class="col-md-9">
-      {{data.proposals_end_date | date}}
+      {{data.solicitation.proposals_end_date | date}}
     </div>
   </div>
 </div>

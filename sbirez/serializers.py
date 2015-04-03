@@ -4,7 +4,7 @@ from sbirez import validation_helpers
 from django.contrib.auth.models import User, Group
 from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person
 from sbirez.models import Address, Workflow, Question, Proposal, Address
-from sbirez.models import Element, Document
+from sbirez.models import Element, Document, Solicitation,
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_recursive.fields import RecursiveField
@@ -165,6 +165,11 @@ class ReferenceSerializer(serializers.ModelSerializer):
         model = Reference
         fields = ('reference', )
 
+class SolicitationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Solicitation 
+        fields = ('id', 'name', 'pre_release_date', 'proposals_begin_date', 
+                  'proposals_end_date', 'element', 'days_to_close', 'status')
 
 class TopicSerializer(serializers.HyperlinkedModelSerializer):
     references = ReferenceSerializer(many=True)
@@ -172,6 +177,7 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
     keywords = KeywordSerializer(many=True)
     areas = AreaSerializer(many=True)
     saved = serializers.SerializerMethodField()
+    solicitation = SolicitationSerializer()
 
     def get_saved(self, obj):
         "``True`` if current has saved this topic for later reference.  ``None`` if no current user."
@@ -184,12 +190,10 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Topic
-        fields = ('id', 'topic_number', 'solicitation_id', 'url', 'title', 'agency',
-                    'program', 'description', 'objective', 'pre_release_date',
-                    'proposals_begin_date', 'proposals_end_date', 'days_to_close',
-                    'status'
-                    , 'references', 'phases', 'keywords', 'areas',
-                    'saved',
+        fields = ('id', 'topic_number', 'url', 'title', 'agency',
+                    'program', 'description', 'objective', 
+                    'solicitation', 'references', 'phases',
+                    'keywords', 'areas', 'saved',
                     )
 
 
