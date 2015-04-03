@@ -31,7 +31,7 @@ describe('Service: ProposalService', function () {
   it('should post to the backend with the expected default values if authenticated', function() {
     $window.sessionStorage.userid = 1;
     AuthenticationService.setAuthenticated(true);
-    ProposalService.create(1, 'title');
+    ProposalService.create(1, 'title', 6);
     var propData = {
       'owner': '1',
       'firm': null,
@@ -44,7 +44,7 @@ describe('Service: ProposalService', function () {
   });
 
   it('should open the login dialog if not authenticated on create', function() {
-    ProposalService.create(1, 'title');
+    ProposalService.create(1, 'title', 1);
     $httpBackend.expectGET('static/views/partials/login.html').respond(200);
     $httpBackend.flush();
   });
