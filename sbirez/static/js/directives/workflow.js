@@ -24,36 +24,21 @@ angular.module('sbirezApp').directive('workflow', function() {
 
         var getWorkflow = function(workflow_id) {
           var deferred = $q.defer();
-          $http.get('api/v1/workflows/' + workflow_id + '/').success(function(data) {
+          $http.get('api/v1/elements/' + workflow_id + '/').success(function(data) {
             data.id = workflow_id;
-            $scope.workflows.push(data);
-            var count = data.questions.length;
-            for (var i = 0; i < count; i++) {
-              if (data.questions[i].data_type === 'workflow') {
-                promises.push(getWorkflow(data.questions[i].subworkflow));
-              }
-            }
             deferred.resolve(data);
           });
           return deferred.promise;
         };
 
-        var buildTree = function(workflow) {
-          var workflowCount = $scope.workflows.length;
-          var count = workflow.questions.length;
-          for (var i = 0; i < count; i++) {
-            if (workflow.questions[i].data_type === 'workflow') {
-              for (var j = 0; j < workflowCount; j++) {
-                if ($scope.workflows[j].id === workflow.questions[i].subworkflow) {
-                  workflow.questions[i].workflow = $scope.workflows[j];
-                  workflow.questions[i].workflow = buildTree(workflow.questions[i].workflow);
-                  $scope.workflows[j].human = workflow.questions[i].human;
-                  break;
-                }
-              }
+        var buildIndex = function(workflow) {
+          //console.log('buildIndex', workflow, $scope.workflows.length, workflow.children);
+          $scope.workflows.push(workflow);
+          if (workflow.children !== undefined) {
+            for (var i = 0; i < workflow.children.length; i++) {
+              buildIndex(workflow.children[i]);
             }
           }
-          return workflow;
         };
 
         ProposalService.get(parseInt($scope.proposalId)).then(function(data) {
@@ -68,62 +53,61 @@ angular.module('sbirezApp').directive('workflow', function() {
           }
           getWorkflow($scope.proposal.workflow).then(function(data) {
             $scope.workflow = data;
-            $scope.workflow.human = 'Coversheet Workflow';
-            $q.all(promises).then(function() {
-              $scope.workflow = buildTree($scope.workflow);
-              if ($stateParams.current !== null) {
-                for (var i = 0; i < $scope.workflows.length; i++) {
-                  if ($scope.workflows[i].id === parseInt($stateParams.current)) {
-                    $scope.jumpTo(parseInt($stateParams.current));
-                    break;
-                  }
+            buildIndex($scope.workflow);
+            if ($stateParams.current !== null) {
+              for (var i = 0; i < $scope.workflows.length; i++) {
+                if ($scope.workflows[i].id === parseInt($stateParams.current)) {
+                  $scope.jumpTo(parseInt($stateParams.current));
+                  break;
                 }
               }
-              if ($scope.currentWorkflow.id === undefined) {
-                $scope.currentWorkflow = $scope.workflow;
-              }
+            }
+            if ($scope.currentWorkflow.id === undefined) {
+              $scope.currentWorkflow = $scope.workflow;
+            }
 
-              $scope.startingWorkflow = $scope.workflow.id;
-            });
+            $scope.startingWorkflow = $scope.workflow.id;
           });
         });
 
-        // need next/previous workflow
         // for next/previous workflow, you need to get the parent workflow,
         // and then iterate over the questions until you find
         var getParentWorkflow = function(workflow_id) {
+          console.log('get parent', workflow_id, $scope.workflows);
           var count = $scope.workflows.length;
           for (var i = 0; i < count; i++) {
-            var questionCount = $scope.workflows[i].questions.length;
-            for (var j = 0; j < questionCount; j++) {
-              if ($scope.workflows[i].questions[j].data_type === 'workflow' && $scope.workflows[i].questions[j].subworkflow === workflow_id) {
+            var childCount = $scope.workflows[i].children.length;
+            console.log('get parent count', childCount, $scope.workflows[i].id);
+            for (var j = 0; j < childCount; j++) {
+              if ($scope.workflows[i].children[j].id === workflow_id) {
                 return $scope.workflows[i];
               }
             }
-            return null;
           }
+          return null;
         };
 
         var getNextWorkflow = function(workflow_id) {
           var count = $scope.workflows.length;
           var parentWorkflow = $scope.parentWorkflow;
+          console.log('parentWorkflow', parentWorkflow);
           var found = false;
-          var questionCount = 0;
+          var childCount = 0;
           while (!found && parentWorkflow !== null) {
             found = false;
-            questionCount = parentWorkflow.questions.length;
-            for (var i = 0; i < questionCount; i++) {
-              if (parentWorkflow.questions[i].data_type === 'workflow' && parentWorkflow.questions[i].subworkflow === workflow_id) {
+            childCount = parentWorkflow.children.length;
+            for (var i = 0; i < childCount; i++) {
+              if (parentWorkflow.children[i].id === workflow_id) {
                 found = true;
               }
-              else if (found && parentWorkflow.questions[i].data_type === 'workflow') {
-                return parentWorkflow.questions[i].workflow.id;
+              else if (found && (parentWorkflow.children[i].element_type === 'workflow' || parentWorkflow.children[i].element_type === 'group')) {
+                return parentWorkflow.children[i].id;
               }
             }
-            if (!found) {
-              workflow_id = $scope.parentWorkflow.id;
-              parentWorkflow = getParentWorkflow(workflow_id);
-            }
+            // haven't found at the current level, so let's go up a level and continue looking.
+            workflow_id = $scope.parentWorkflow.id;
+            parentWorkflow = getParentWorkflow(workflow_id);
+            found = false;
           }
           // no next workflow
           return null;
@@ -132,23 +116,24 @@ angular.module('sbirezApp').directive('workflow', function() {
         var getPreviousWorkflow = function(workflow_id) {
           var count = $scope.workflows.length;
           if ($scope.parentWorkflow !== null) {
-            var questionCount = $scope.parentWorkflow.questions.length; 
+            var childCount = $scope.parentWorkflow.children.length; 
             var previousWorkflow = null;
-            for (var i = 0; i < questionCount; i++) {
-              if ($scope.parentWorkflow.questions[i].data_type === 'workflow' && $scope.parentWorkflow.questions[i].subworkflow === workflow_id) {
+            for (var i = 0; i < childCount; i++) {
+              if ($scope.parentWorkflow.children[i].id === workflow_id) {
                 if (previousWorkflow) {
                   return previousWorkflow;
                 }
               }
-              else if ($scope.parentWorkflow.questions[i].data_type === 'workflow') {
-                previousWorkflow = $scope.parentWorkflow.questions[i].workflow.id;
+              else if ($scope.parentWorkflow.children[i].element_type === 'workflow' || $scope.parentWorkflow.children[i].element_type === 'group') {
+                previousWorkflow = $scope.parentWorkflow.children[i].id;
               }
             }
           }
-          if ($scope.parentWorkflow != null)
+          if ($scope.parentWorkflow != null) {
             return $scope.parentWorkflow.id;
-          else
+          } else {
             return null;
+          }
         };
 
         // need jumpto functionality
@@ -175,7 +160,7 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         $scope.saveData = function() {
-          ProposalService.saveData($scope.proposalId, $scope.proposalData);
+          ProposalService.saveData(parseInt($scope.proposalId), $scope.proposalData);
         };
       }
     ]
