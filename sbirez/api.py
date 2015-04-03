@@ -14,6 +14,8 @@ import marshmallow as mm
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser, HasObjectEditPermissions
 
+from rest_framework.permissions import IsAuthenticated
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -145,9 +147,11 @@ class PersonViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
 
+
 class DocumentViewSet(viewsets.ModelViewSet):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         queryset = Document.objects.all()
