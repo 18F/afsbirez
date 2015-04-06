@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from sbirez.models import Topic, Firm, Workflow, Proposal, Address, Person,
+from sbirez.models import Topic, Firm, Workflow, Proposal, Address, Person
 from sbirez.models import Element, Document
 from rest_framework import viewsets, mixins, generics, status, permissions, exceptions
 from rest_framework.decorators import detail_route
@@ -14,8 +14,8 @@ from sbirez.serializers import WorkflowSerializer, AddressSerializer, ElementSer
 from sbirez.serializers import PersonSerializer, DocumentSerializer
 import marshmallow as mm
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser, HasObjectEditPermissions
-from .permissions import ReadOnlyUnlessStaff
+from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser 
+from .permissions import HasObjectEditPermissions, ReadOnlyUnlessStaff
 
 class UserViewSet(viewsets.ModelViewSet):
     """
