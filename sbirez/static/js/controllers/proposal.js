@@ -6,7 +6,6 @@ angular.module('sbirezApp')
     $scope.data = {};
 
     ProposalService.get(parseInt($scope.proposalId)).then(function(data) {
-      console.log('proposal', data);
       $scope.data = data;
     });
   });

@@ -44,8 +44,8 @@ angular.module('sbirezApp')
       $scope.errorMsg = null;
       if (index < $scope.selectedFiles.length) {
         $scope.upload[index] = $upload.upload({
-          url: '/api/documents/' + id,
-          method: 'POST',
+          url: '/api/v1/documents/',
+          data: {'firm': parseInt($window.sessionStorage.firmid), 'name': $scope.selectedFiles[index].filename, 'description': $scope.selectedFiles[index].filename},
           file: $scope.selectedFiles[index]
         });
         $scope.upload[index].then(function(response) {

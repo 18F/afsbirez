@@ -30,6 +30,7 @@ angular_js = Bundle(
     "js/directives/elements/bool.js",
     "js/directives/elements/group.js",
     "js/directives/elements/lineitem.js",
+    "js/directives/elements/upload.js",
     "js/controllers/main.js",
     "js/controllers/appmain.js",
     "js/controllers/search.js",
@@ -59,6 +60,7 @@ angular_js = Bundle(
     "js/services/savedSearchsvc.js",
     "js/services/tokensvc.js",
     "js/services/proposalsvc.js",
+    "js/services/documentsvc.js",
     filters="jsmin",
     output="js/angular.min.js"
 )

@@ -17,6 +17,9 @@
       <div class="workflow-element" ng-if="element.element_type === 'line_item'">
         <div lineitem="element" storage="proposalData[element.name]"></div>
       </div>
+      <div class="workflow-element" ng-if="element.element_type === 'file_upload'">
+        <div upload="element" storage="proposalData[element.name]"></div>
+      </div>
     </div>
     <hr />
     <div class="row">
