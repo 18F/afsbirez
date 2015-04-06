@@ -86,6 +86,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'sbirez/static/'
+MEDIA_ROOT = 'sbirez/media/'
 
 STATICFILES_FINDERS = (
    "django.contrib.staticfiles.finders.FileSystemFinder",

@@ -11,6 +11,7 @@ from sbirez import api
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 
+
 factory = APIRequestFactory()
 
 
@@ -924,4 +925,36 @@ class ProposalTests(APITestCase):
         self._deserialize_data(response)
         self.assertEqual(response.data['owner'], 2)
         self.assertEqual(response.data['firm'], 1)
+
+
+class DocumentTests(APITestCase):
+
+    fixtures = ['thin.json']
+
+    def test_document_upload(self):
+        user = _fixture_user(self)
+
+        # Write the death star plans
+        plans = open('deathstarplans.txt', 'wb')
+        nobothans = bytearray("Don't shoot the exhaust port!", "UTF-8")
+        plans.write(nobothans)
+        plans.close()
+
+        # Upload the plans to R2's memory banks
+        plans = open('deathstarplans.txt', 'rb')
+        response = self.client.post('/api/v1/documents/', {
+            'name': 'Secret Death Star Plans',
+            'description': 'Many bothan spies died to bring us this information.',
+            'file': plans,
+            'firm': 1,
+            'proposals': 2})
+        plans.close()
+
+        # Confirm upload
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+        # Confirm read 
+        planid = response.data['id']
+        response = self.client.get('/api/v1/documents/' + str(planid) + '/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
 

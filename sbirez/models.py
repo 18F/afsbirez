@@ -267,5 +267,15 @@ class Proposal(models.Model):
     workflow = models.ForeignKey(Element, related_name='proposals')
     topic = models.ForeignKey(Topic, related_name='proposals')
     submitted_at = models.DateTimeField(auto_now=True)
-    title = models.TextField(blank=False)
+    title = models.TextField()
     data = models.TextField(null=True, blank=True)
+
+
+class Document(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    file = models.FileField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    firm = models.ForeignKey('Firm')
+    proposals = models.ManyToManyField('Proposal', blank=True, null=True,)
