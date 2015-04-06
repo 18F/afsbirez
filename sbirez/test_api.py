@@ -929,7 +929,7 @@ class ProposalTests(APITestCase):
 
 class DocumentTests(APITestCase):
 
-    fixtures = ['alldata.json']
+    fixtures = ['thin.json']
 
     def test_document_upload(self):
         user = _fixture_user(self)
@@ -947,7 +947,7 @@ class DocumentTests(APITestCase):
             'description': 'Many bothan spies died to bring us this information.',
             'file': plans,
             'firm': 1,
-            'proposals': 1})
+            'proposals': 2})
         plans.close()
 
         # Confirm upload
