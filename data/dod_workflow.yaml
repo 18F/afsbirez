@@ -107,7 +107,7 @@
         children:
         -
           name: is_teaming_with
-          element_type: bool
+          element_type: checkbox
         -
           name: name
           element_type: med_str
@@ -130,7 +130,7 @@
       -
         name: pi_time_percentage
         human: What percentage of the principal investigator's total time will be on the project?
-        element_type: integer
+        element_type: percentage
       -
         name: pi_is_woman
         human: Is the principal investigator (identified below) a woman?
@@ -286,7 +286,7 @@
         name: use_government_property_yn
         human: Will you require the use of any government property
                in the performance of this proposal?
-        element_type: boolean
+        element_type: bool
       -
         name: government_property_to_use
         human: If Yes, identify
