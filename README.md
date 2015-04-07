@@ -31,16 +31,16 @@ $ mkdir env
 $ virtualenv --no-site-packages ./env
 ```
 
-* Install project requirements
-
-```
-$ pip install -r requirements.txt
-```
-
 * Activate the virtualenv
 
 ```
 $ source env/bin/activate
+```
+
+* Install project requirements
+
+```
+$ pip install -r requirements.txt
 ```
 
 You should now see (env) on your command prompt:
