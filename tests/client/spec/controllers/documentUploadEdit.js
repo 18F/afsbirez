@@ -15,7 +15,7 @@ describe('Controller: DocumentUploadEditCtrl', function () {
     $httpBackend = _$httpBackend_;
     $httpBackend.whenGET('static/views/partials/main.html').respond({});
     $httpBackend.whenGET('static/views/partials/search.html').respond({});
-    $httpBackend.expectGET('api/proposals')
+    $httpBackend.expectGET('api/v1/proposals/')
       .respond({'proposals':[
         {'name':'proposal1','id':1},
         {'name':'proposal2','id':2},
@@ -107,7 +107,7 @@ describe('Controller: DocumentUploadEditCtrl', function () {
   it('should start an upload when save is called', function () {
     $httpBackend.flush();
     scope.save();
-    $httpBackend.expectPOST('api/documents').respond(200);
+    $httpBackend.expectPOST('api/v1/documents/').respond(200);
     scope.start = function() {};
     spyOn(scope, 'start').andCallFake(scope.start());
     expect(scope.start).toHaveBeenCalled();

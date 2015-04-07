@@ -11,7 +11,7 @@ angular.module('sbirezApp')
     $scope.availableProposals = [];
     $scope.selectedProposal = 'Please select a proposal';
 
-    $http.get('api/proposals').success(function(data) {
+    $http.get('api/v1/proposals/').success(function(data) {
       $scope.availableProposals = data.proposals;
     });
 
@@ -40,7 +40,7 @@ angular.module('sbirezApp')
       }
       data.changelog.push({'message': 'Added', 'dateChanged': new Date().getTime()});
       
-      $http.post('api/documents/', data).success(function(data) {
+      $http.post('api/v1/documents/', data).success(function(data) {
         $scope.start($scope.index, data.id);
       });
     };

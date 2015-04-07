@@ -269,7 +269,7 @@ class ElementSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'order', 'element_type',
                   'required', 'default', 'human', 'help',
                   'validation', 'validation_msg', 'ask_if',
-                  'children', )
+                  'multiplicity', 'children', )
 
 
 def genericValidator(proposal, accept_partial=False):

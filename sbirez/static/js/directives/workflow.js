@@ -32,7 +32,6 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         var buildIndex = function(workflow) {
-          //console.log('buildIndex', workflow, $scope.workflows.length, workflow.children);
           $scope.workflows.push(workflow);
           if (workflow.children !== undefined) {
             for (var i = 0; i < workflow.children.length; i++) {
@@ -73,11 +72,9 @@ angular.module('sbirezApp').directive('workflow', function() {
         // for next/previous workflow, you need to get the parent workflow,
         // and then iterate over the questions until you find
         var getParentWorkflow = function(workflow_id) {
-          console.log('get parent', workflow_id, $scope.workflows);
           var count = $scope.workflows.length;
           for (var i = 0; i < count; i++) {
             var childCount = $scope.workflows[i].children.length;
-            console.log('get parent count', childCount, $scope.workflows[i].id);
             for (var j = 0; j < childCount; j++) {
               if ($scope.workflows[i].children[j].id === workflow_id) {
                 return $scope.workflows[i];
@@ -90,7 +87,6 @@ angular.module('sbirezApp').directive('workflow', function() {
         var getNextWorkflow = function(workflow_id) {
           var count = $scope.workflows.length;
           var parentWorkflow = $scope.parentWorkflow;
-          console.log('parentWorkflow', parentWorkflow);
           var found = false;
           var childCount = 0;
           while (!found && parentWorkflow !== null) {

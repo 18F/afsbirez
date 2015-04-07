@@ -44,29 +44,29 @@ describe('Controller: DocumentCtrl', function () {
 
   it('should attach a document to the scope', function () {
     expect(scope.data).toBeUndefined();
-    $httpBackend.expectGET('api/documents/1').respond(data);
+    $httpBackend.expectGET('api/v1/documents/1/').respond(data);
     $httpBackend.flush();
     expect(scope.data).toBeDefined();
   });
   
   it('should post a document when save is called', function () {
-    $httpBackend.expectGET('api/documents/1').respond(data);
+    $httpBackend.expectGET('api/v1/documents/1/').respond(data);
     $httpBackend.flush();
-    $httpBackend.expectPOST('api/documents/1').respond(200, '');
+    $httpBackend.expectPOST('api/v1/documents/1/').respond(200, '');
     scope.save();
     $httpBackend.flush();
   });
 
   it('should send a delete command to the server when remove is called', function () {
-    $httpBackend.expectGET('api/documents/1').respond(data);
+    $httpBackend.expectGET('api/v1/documents/1/').respond(data);
     $httpBackend.flush();
-    $httpBackend.expectDELETE('api/documents/1').respond(200, '');
+    $httpBackend.expectDELETE('api/v1/documents/1/').respond(200, '');
     scope.remove();
     $httpBackend.flush();
   });
 
   it('should remove a keyword when removeKeyword is called with an existing keyword', function () {
-    $httpBackend.expectGET('api/documents/1').respond(data);
+    $httpBackend.expectGET('api/v1/documents/1/').respond(data);
     $httpBackend.flush();
     expect(scope.data.keywords.length).toBe(2);
     scope.removeKeyword('test');
@@ -75,7 +75,7 @@ describe('Controller: DocumentCtrl', function () {
   });
 
   it('should not remove a keyword when removeKeyword is called with a bogus keyword', function () {
-    $httpBackend.expectGET('api/documents/1').respond(data);
+    $httpBackend.expectGET('api/v1/documents/1/').respond(data);
     $httpBackend.flush();
     expect(scope.data.keywords.length).toBe(2);
     scope.removeKeyword('anothertest');
@@ -85,7 +85,7 @@ describe('Controller: DocumentCtrl', function () {
   });
 
   it('should add a keyword when addKeyword is called with a new keyword', function () {
-    $httpBackend.expectGET('api/documents/1').respond(data);
+    $httpBackend.expectGET('api/v1/documents/1/').respond(data);
     $httpBackend.flush();
     expect(scope.data.keywords.length).toBe(2);
     scope.newKeyword = 'anothertest';
@@ -97,7 +97,7 @@ describe('Controller: DocumentCtrl', function () {
   });
 
   it('should not add a keyword when addKeyword is called with an existing new keyword', function () {
-    $httpBackend.expectGET('api/documents/1').respond(data);
+    $httpBackend.expectGET('api/v1/documents/1/').respond(data);
     $httpBackend.flush();
     expect(scope.data.keywords.length).toBe(2);
     scope.newKeyword = 'test';
