@@ -3,175 +3,224 @@
   element_type: workflow
   children:
     -
-      name: proposal_information
+      name: dod_coversheet
       element_type: group
+      human: Coversheet
       children:
       -
-        name: proposed_cost
-        element_type: dollars
-        validation: not_more_than 150000
-        validation_msg: Must not exceed $150,000
-      -
-        name: phase_I_duration
-        element_type: timespan
-        validation: not_more_than 9 months
-        validation_msg: Must not exceed 9 months
-      -
-        name: cost_includes_dta_yn
-        element_type: bool
-        human: Does the proposed cost include Discretionary Technical Assistance (DTA)?
-      -
-        name: dta_amount
-        element_type: dollars
-        human: If yes, what is the proposed DTA amount
-        ask_if: cost_includes_dta_yn
-      -
-        name: duplication_rights_blurb
-        element_type: read_only_text
-        human: For any purpose other than to evaluate the proposal, this data except
-               proposal cover sheets shall not be disclosed outside the Government
-               and shall not be duplicated, used or disclosed in whole or in part,
-               provided that if a contract is awarded blah blah blah blah
-      -
-        name: proprietary_info_page_numbers
-        element_type: integer_spans
-        human: Proprietary Information (list page numbers)
-      -
-        name: essentially_equivalent_work_yn
-        element_type: bool
-        human: Has a proposal for essentially equivalent work been submitted
-               to other US government agencies or DoD components?
-      -
-        name: essentially_equivalent_work_info
-        element_type: med_str
-        ask_if: essentially_equivalent_work_yn
-        human:  If yes, list the name(s) of the agency or DoD component and if SBIR or STTR,
-                list Topic Number in the space below.
-      -
-        name: essentially_equivalent_contract_awarded_yn
-        element_type: bool
-        ask_if: essentially_equivalent_work_yn
-        human: Has a contract been awarded for any of the proposals listed above?
-      -
-        name: essentially_equivalent_contract_number
-        element_type: med_str
-        ask_if: essentially_equivalent_contract_awarded_yn
-        human: If yes, please provide the contract number
-      -
-        name: dfars252
-        element_type: bool
-        human: Are you submitting assertions in accordance with DFARS 252.227-7017
-               "Identification and assertions use, release, or disclosure restriction"?
-               See Section 11.5 of the solicitation.
-      -
-        name: special_research_subjects
-        element_type: bool
-        human:  Are you proposing research that utilizes human/animal subjects
-                or recombinant DNA as described in section 3.11, 3.12, and 3.13
-                of the solicitation?
-      -
-        name: technical_abstract
-        element_type: text
-        human: Technical Abstract (Limit your abstract to 200 words
-               with no classified or proprietary information)
-        validation: no_more_than 200 words
-        validation_msg: Limit your abstract to 200 words
-      -
-        name: anticipated_benefits
-        element_type: text
-        human: Anticipated Benefits/Potential Commercial Applications
-               of the Research or Development. (No classified or proprietary information)
-      -
-        name: keywords
-        element_type: long_str
-        human: List a maximum of 8 Key Words or phrases, separated by commas,
-               that describe the Project.
-        validation: no_more_than 8 comma_separated_phrases
-        validation_msg: Maximum of 8 keywords
-    -
-      name: project_team_information
-      element_type: group
-      children:
-      -
-        name: teaming_partners_yn
-        element_type: bool
-        human: Are teaming partners or subcontractors proposed?
-      -
-        name: teaming_partners
-        element_type: line_item
-        human: Check all that apply
-        ask_if: teaming_partners_yn
-        multiplicity: University, HBCU/MI, FFRDC, Nonprofit Institution,
-                      Federal Laboratory, Other Federal Facility,
-                      Small Business, Large Business, Other
+        name: proposal_information
+        element_type: group
         children:
         -
-          name: is_teaming_with
-          element_type: checkbox
+          name: proposed_cost
+          element_type: dollars
+          validation: not_more_than 150000
+          validation_msg: Must not exceed $150,000
         -
-          name: name
-          element_type: med_str
-          ask_if: is_teaming_with
+          name: phase_I_duration
+          element_type: timespan
+          validation: not_more_than 9 months
+          validation_msg: Must not exceed 9 months
         -
-          name: POC
+          name: cost_includes_dta_yn
+          element_type: bool
+          human: Does the proposed cost include Discretionary Technical Assistance (DTA)?
+        -
+          name: dta_amount
+          element_type: dollars
+          human: If yes, what is the proposed DTA amount
+          ask_if: cost_includes_dta_yn
+        -
+          name: duplication_rights_blurb
+          element_type: read_only_text
+          human: For any purpose other than to evaluate the proposal, this data except
+                 proposal cover sheets shall not be disclosed outside the Government
+                 and shall not be duplicated, used or disclosed in whole or in part,
+                 provided that if a contract is awarded blah blah blah blah
+        -
+          name: proprietary_info_page_numbers
+          element_type: integer_spans
+          human: Proprietary Information (list page numbers)
+        -
+          name: essentially_equivalent_work_yn
+          element_type: bool
+          human: Has a proposal for essentially equivalent work been submitted
+                 to other US government agencies or DoD components?
+        -
+          name: essentially_equivalent_work_info
           element_type: med_str
-          ask_if: is_teaming_with
+          ask_if: essentially_equivalent_work_yn
+          human:  If yes, list the name(s) of the agency or DoD component and if SBIR or STTR,
+                  list Topic Number in the space below.
+        -
+          name: essentially_equivalent_contract_awarded_yn
+          element_type: bool
+          ask_if: essentially_equivalent_work_yn
+          human: Has a contract been awarded for any of the proposals listed above?
+        -
+          name: essentially_equivalent_contract_number
+          element_type: med_str
+          ask_if: essentially_equivalent_contract_awarded_yn
+          human: If yes, please provide the contract number
+        -
+          name: dfars252
+          element_type: bool
+          human: Are you submitting assertions in accordance with DFARS 252.227-7017
+                 "Identification and assertions use, release, or disclosure restriction"?
+                 See Section 11.5 of the solicitation.
+        -
+          name: special_research_subjects
+          element_type: bool
+          human:  Are you proposing research that utilizes human/animal subjects
+                  or recombinant DNA as described in section 3.11, 3.12, and 3.13
+                  of the solicitation?
+        -
+          name: technical_abstract
+          element_type: text
+          human: Technical Abstract (Limit your abstract to 200 words
+                 with no classified or proprietary information)
+          validation: no_more_than 200 words
+          validation_msg: Limit your abstract to 200 words
+        -
+          name: anticipated_benefits
+          element_type: text
+          human: Anticipated Benefits/Potential Commercial Applications
+                 of the Research or Development. (No classified or proprietary information)
+        -
+          name: keywords
+          element_type: long_str
+          human: List a maximum of 8 Key Words or phrases, separated by commas,
+                 that describe the Project.
+          validation: no_more_than 8 comma_separated_phrases
+          validation_msg: Maximum of 8 keywords
       -
-        name: foreign_nationals
-        element_type: bool
-        human: Are you proposing to use foreign nationals
-               as defined in section 3.5 of the solicitation
-               for work under the proposed effort?
-    -
-      name: pi_info
-      element_type: group
-      human: Principal Investigator (PI)/Corporate Official (CO) Information
-      children:
-      -
-        name: pi_time_percentage
-        human: What percentage of the principal investigator's total time will be on the project?
-        element_type: percentage
-      -
-        name: pi_is_woman
-        human: Is the principal investigator (identified below) a woman?
-        element_type: bool
-      -
-        name: pi_is_disadvantaged
-        human: Is the principal investigator (identified below) socially/economically disadvantaged?
-        element_type: bool
-      -
-        name: pi_is_university
-        human: Is your firm's PI,CO, or owner, a faculty member or student
-               of an institution of higher education?
-        element_type: bool
-      -
-        name: contact_info
-        element_type: line_item
-        multiplicity: Principal Investigator/Project Manager, Corporate Official (Business)
+        name: project_team_information
+        element_type: group
         children:
         -
-          name: honorific
-          human: ""
-          element_type: short_str
-          validation: one_of Dr. Mr. Mrs. Ms. Miss
+          name: teaming_partners_yn
+          element_type: bool
+          human: Are teaming partners or subcontractors proposed?
         -
-          name: name
-          element_type: med_str
+          name: teaming_partners
+          element_type: line_item
+          human: Check all that apply
+          ask_if: teaming_partners_yn
+          multiplicity: University, HBCU/MI, FFRDC, Nonprofit Institution,
+                        Federal Laboratory, Other Federal Facility,
+                        Small Business, Large Business, Other
+          children:
+          -
+            name: is_teaming_with
+            element_type: bool
+          -
+            name: name
+            element_type: med_str
+            ask_if: is_teaming_with
+          -
+            name: POC
+            element_type: med_str
+            ask_if: is_teaming_with
         -
-          name: title
-          element_type: med_str
+          name: foreign_nationals
+          element_type: bool
+          human: Are you proposing to use foreign nationals
+                 as defined in section 3.5 of the solicitation
+                 for work under the proposed effort?
+      -
+        name: pi_info
+        element_type: group
+        human: Principal Investigator (PI)/Corporate Official (CO) Information
+        children:
         -
-          name: phone
-          element_type: phone
+          name: pi_time_percentage
+          human: What percentage of the principal investigator's total time will be on the project?
+          element_type: integer
         -
-          name: fax
-          element_type: phone
+          name: pi_is_woman
+          human: Is the principal investigator (identified below) a woman?
+          element_type: bool
         -
-          name: email
-          element_type: email
+          name: pi_is_disadvantaged
+          human: Is the principal investigator (identified below) socially/economically disadvantaged?
+          element_type: bool
+        -
+          name: pi_is_university
+          human: Is your firm's PI,CO, or owner, a faculty member or student
+                 of an institution of higher education?
+          element_type: bool
+        -
+          name: ccr_contact_info
+          element_type: line_item
+          multiplicity: Principal Investigator/Project Manager, Corporate Official (Business)
+          children:
+          -
+            name: honorific
+            human: ""
+            element_type: short_str
+            validation: one_of Dr. Mr. Mrs. Ms. Miss
+          -
+            name: name
+            element_type: med_str
+          -
+            name: title
+            element_type: med_str
+          -
+            name: phone
+            element_type: phone
+          -
+            name: fax
+            element_type: phone
+          -
+            name: email
+            element_type: email
     -
-      name: final_proposal_info
+      name: dod_technicalvolume
+      human: Technical Volume
+      element_type: workflow
+      children:
+        -
+          name: reviewed_requirement_group
+          element_type: group
+          human: Requirements Review
+          children:
+          -
+            name: reviewed_requirement 
+            element_type: bool
+            human: Have you reviewed all the requirements in the Air Force and DoD Solicitation instructions?
+        -
+          name: document_format 
+          element_type: group
+          human: Technical Volume Formatting
+          children:
+          -
+            name: is_pdf 
+            element_type: bool
+            human: Is the Technical Volume a single Portable Document Format (PDF) file, including graphics?
+          -
+            name: was_virus_scanned 
+            element_type: bool
+            human: Did you virus scan the document?
+          -
+            name: is_20_pages
+            element_type: bool
+            human: Is the document less than or equal to twenty pages in length?
+          -
+            name: is_font_and_paper_correct 
+            element_type: bool
+            human: Is the font 10 pt. or larger on 8-1/2" x 11" paper with one-inch margins?
+          -
+            name: contains_header 
+            element_type: bool 
+            human: Does it contain a header with the company name, topic number, and proposal number? This header can exist in the margin.
+          -
+            name: tech_volume_upload 
+            element_type: file_upload 
+            human: Upload Technical Volume          
+    -
+      name: dod_cost_volume 
       element_type: group
+      human: Cost Volume
       children:
       -
         name: work_location
@@ -286,7 +335,7 @@
         name: use_government_property_yn
         human: Will you require the use of any government property
                in the performance of this proposal?
-        element_type: bool
+        element_type: boolean
       -
         name: government_property_to_use
         human: If Yes, identify
@@ -297,4 +346,37 @@
         element_type: big_str
         validation: one_of "partial payments (monthly) as work progresses (recommended)",
                     "progress payments"
-
+    -
+      name: dod_company_commercialization_report
+      element_type: group
+      human: Company Commercialization Report
+      children:
+      -
+        name: ccr_contact_info
+        element_type: line_item
+        multiplicity: Principal Investigator/Project Manager, Corporate Official (Business)
+        children:
+        -
+          name: honorific
+          human: ""
+          element_type: short_str
+          validation: one_of Dr. Mr. Mrs. Ms. Miss
+        -
+          name: name
+          element_type: med_str
+        -
+          name: title
+          element_type: med_str
+        -
+          name: phone
+          element_type: phone
+        -
+          name: fax
+          element_type: phone
+        -
+          name: email
+          element_type: email
+      -
+        name: brief_narrative
+        element_type: long_str
+        human: Brief Narrative describing commercialization track record
