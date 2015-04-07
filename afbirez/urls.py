@@ -19,6 +19,9 @@ router.register(r'elements', api.ElementViewSet)
 
 urlpatterns = patterns('',
     url(r'^api/v1/topics/(?P<pk>[0-9]+)/saved/$', api.SaveTopicView.as_view()),
+    url(r'^api/v1/proposals/(?P<pk>[0-9]+)/partial/$', api.PartialProposalViewSet.as_view(
+        actions={'patch': 'partial_update', 'put': 'update', 'delete': 'destroy', }
+        )),
 
     # api navigation
     url(r'^api/v1/', include(router.urls)),

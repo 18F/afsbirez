@@ -897,7 +897,7 @@ class ProposalTests(APITestCase):
              })
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
-        response = self.client.patch('/api/v1/proposals/partial/%d/' %
+        response = self.client.patch('/api/v1/proposals/%d/partial/' %
                                      response.data['id'],
             {
              'data': json.dumps(
@@ -921,7 +921,7 @@ class ProposalTests(APITestCase):
              'title': 'Title!', 'topic': 1, 'data': json.dumps({})})
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
-        response = self.client.patch('/api/v1/proposals/partial/%d/' %
+        response = self.client.patch('/api/v1/proposals/%d/partial/' %
                                      response.data['id'],
             {
              'data': json.dumps(

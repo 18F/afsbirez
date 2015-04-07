@@ -165,7 +165,11 @@ class ProposalViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         return [HasProposalEditPermissions(),]
 
-    def update(self, request, *args, **kwargs):
+
+class PartialProposalViewSet(ProposalViewSet):
+    serializer_class = PartialProposalSerializer
+
+    def partial_update(self, request, *args, **kwargs):
         if 'data' in request.data:
             try:
                 instance = self.get_object()
@@ -174,11 +178,7 @@ class ProposalViewSet(viewsets.ModelViewSet):
                 request.data['data'] = json.dumps(data)
             except AttributeError:
                 pass
-        return super(ProposalViewSet, self).update(request, *args, **kwargs)
-
-
-class PartialProposalViewSet(ProposalViewSet):
-    serializer_class = PartialProposalSerializer
+        return super(PartialProposalViewSet, self).partial_update(request, *args, **kwargs)
 
 
 class AddressViewSet(viewsets.ModelViewSet):
