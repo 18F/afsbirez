@@ -275,8 +275,13 @@ def genericValidator(proposal, accept_partial=False):
     data = json.loads(proposal['data'])
 
     errors = []
-    for element in proposal['workflow'].children.all():
-        errors.extend(_find_validation_errors(data, element, accept_partial=accept_partial))
+    if 'workflow' in proposal:
+        for element in proposal['workflow'].children.all():
+            errors.extend(_find_validation_errors(data, element, accept_partial=accept_partial))
+    else:
+        if not accept_partial:
+            errors.append(object)
+            errors.append('no workflow specified for proposal')
     if errors:
         raise serializers.ValidationError(errors)
 

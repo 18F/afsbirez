@@ -883,6 +883,59 @@ class ProposalTests(APITestCase):
              })
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
+    # patch a deliberately incomplete proposal with /partial/
+    def test_intentionally_incomplete_patch(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/partial/',
+            {'workflow': 1,
+             'title': 'Title!', 'topic': 1, 'data': json.dumps(
+                    {
+                     "subquest": {
+                         "quest_thy_quest": "To seek the Grail",
+                         "quest_thy_favorite_color":
+                             "#0000FF"}})
+             })
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+        response = self.client.patch('/api/v1/proposals/partial/%d/' %
+                                     response.data['id'],
+            {
+             'data': json.dumps(
+                    {
+                     "subquest": {
+                         "quest_thy_quest": "Grail-thingie.  Get.", }})
+             })
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self._deserialize_data(response)
+        self.assertEqual(response.data['data']['subquest']['quest_thy_quest'],
+                         'Grail-thingie.  Get.')
+        self.assertEqual(response.data['data']['subquest']
+                         ['quest_thy_favorite_color'], "#0000FF")
+        self.assertEqual(response.data['title'], 'Title!')
+
+    # patch a subquest-less proposal with /partial/
+    def test_intentionally_incomplete_patch_missing_component(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/partial/',
+            {'workflow': 1,
+             'title': 'Title!', 'topic': 1, 'data': json.dumps({})})
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+        response = self.client.patch('/api/v1/proposals/partial/%d/' %
+                                     response.data['id'],
+            {
+             'data': json.dumps(
+                    {
+                     "subquest": {
+                         "quest_thy_quest": "Grail-thingie.  Get.", }})
+             })
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self._deserialize_data(response)
+        self.assertEqual(response.data['data']['subquest']['quest_thy_quest'],
+                         'Grail-thingie.  Get.')
+        self.assertEqual(response.data['title'], 'Title!')
+
+
     def test_post_full_proposal(self):
         user = _fixture_user(self)
 
