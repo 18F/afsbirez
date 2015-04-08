@@ -31,16 +31,16 @@ $ mkdir env
 $ virtualenv --no-site-packages ./env
 ```
 
-* Install project requirements
-
-```
-$ pip install -r requirements.txt
-```
-
 * Activate the virtualenv
 
 ```
 $ source env/bin/activate
+```
+
+* Install project requirements
+
+```
+$ pip install -r requirements.txt
 ```
 
 You should now see (env) on your command prompt:
@@ -51,13 +51,13 @@ $ (env)[afsbirez]
 
 * Install the latest [Node.js](http://nodejs.org/download/)
 
-* Update NPM to the latest version 
+* Update NPM to the latest version
 
 ```
 $ npm install npm -g
 ```
 
-* Install the bower command line clients, as well as the karma test runner. 
+* Install the bower command line clients, as well as the karma test runner.
 
 ```
 $ npm install
@@ -76,7 +76,7 @@ $ bower install
 ```
 
 ### Configure the database
-Check your pg_hba.conf file on your system (location varies) to allow local connections without passwords. 
+Check your pg_hba.conf file on your system (location varies) to allow local connections without passwords.
 
 Your hba.conf should have the following lines already in place:
 ```
@@ -104,7 +104,7 @@ $ python manage.py syncdb
 $ python manage.py runserver
 ```
 
-### Running Tests
+### Running Python Tests
 
 First create a postgres database and test user
 
@@ -115,6 +115,26 @@ $ psql -c `create database afsbireztest WITH OWNER afsbirez;` -U postgres
 Next, run the tests
 ```
 $ python manage.py test
+```
+
+### Running Javascript Tests
+
+Install Karma globally
+
+```
+npm install -g karma-cli
+```
+
+Run tests
+
+```
+karma start
+```
+
+Run tests in multiple browsers
+
+```
+karma start --browsers Firefox,Chrome
 ```
 
 ### License: Public Domain
