@@ -812,7 +812,7 @@ class ProposalTests(APITestCase):
         self.assertEqual(response.data['data']['subquest']
                          ['quest_thy_favorite_color'], 'green')
 
-    def t_disabled_est_bad_update_proposal(self):
+    def test_bad_update_proposal(self):
         user = _fixture_user(self)
 
         response = self.client.get('/api/v1/proposals/2/')
@@ -825,7 +825,7 @@ class ProposalTests(APITestCase):
                       response.data['non_field_errors'])
 
     # omit a required field
-    def t_disabled_est_incomplete_post_raises_error(self):
+    def test_incomplete_post_raises_error(self):
         user = _fixture_user(self)
         response = self.client.post('/api/v1/proposals/',
             {'workflow': 1,
@@ -840,14 +840,14 @@ class ProposalTests(APITestCase):
                       response.data['non_field_errors'])
 
     # omit multiple required fields
-    def t_disabled_est_very_incomplete_post_raises_multiple_errors(self):
+    def test_very_incomplete_post_raises_multiple_errors(self):
         user = _fixture_user(self)
 
         response = self.client.post('/api/v1/proposals/',
             {'workflow': 1,
              'title': 'Title', 'topic': 1, 'data': json.dumps(
-                    {
-                     "quest_thy_quest": "To seek the Grail", })
+                    {"subquest":
+                     {"quest_thy_quest": "To seek the Grail", }})
             })
         self.assertIn('Required field quest_thy_name absent',
                       response.data['non_field_errors'])
@@ -855,15 +855,15 @@ class ProposalTests(APITestCase):
                       response.data['non_field_errors'])
 
     # omit one field, get one wrong
-    def t_disabled_est_incomplete_and_wrong_post(self):
+    def test_incomplete_and_wrong_post(self):
         user = _fixture_user(self)
 
         response = self.client.post('/api/v1/proposals/',
             {'workflow': 1,
              'title': 'Title', 'topic': 1, 'data': json.dumps(
-                    {
+                    {"subquest": {
                      "quest_thy_quest": "To seek the Grail",
-                     "quest_thy_favorite_color": "blue"})
+                     "quest_thy_favorite_color": "blue"}})
             })
         self.assertIn('Required field quest_thy_name absent',
                       response.data['non_field_errors'])
@@ -883,6 +883,59 @@ class ProposalTests(APITestCase):
                              "#0000FF"}})
              })
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    # patch a deliberately incomplete proposal with /partial/
+    def test_intentionally_incomplete_patch(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/partial/',
+            {'workflow': 1,
+             'title': 'Title!', 'topic': 1, 'data': json.dumps(
+                    {
+                     "subquest": {
+                         "quest_thy_quest": "To seek the Grail",
+                         "quest_thy_favorite_color":
+                             "#0000FF"}})
+             })
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+        response = self.client.patch('/api/v1/proposals/%d/partial/' %
+                                     response.data['id'],
+            {
+             'data': json.dumps(
+                    {
+                     "subquest": {
+                         "quest_thy_quest": "Grail-thingie.  Get.", }})
+             })
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self._deserialize_data(response)
+        self.assertEqual(response.data['data']['subquest']['quest_thy_quest'],
+                         'Grail-thingie.  Get.')
+        self.assertEqual(response.data['data']['subquest']
+                         ['quest_thy_favorite_color'], "#0000FF")
+        self.assertEqual(response.data['title'], 'Title!')
+
+    # patch a subquest-less proposal with /partial/
+    def test_intentionally_incomplete_patch_missing_component(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/partial/',
+            {'workflow': 1,
+             'title': 'Title!', 'topic': 1, 'data': json.dumps({})})
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+        response = self.client.patch('/api/v1/proposals/%d/partial/' %
+                                     response.data['id'],
+            {
+             'data': json.dumps(
+                    {
+                     "subquest": {
+                         "quest_thy_quest": "Grail-thingie.  Get.", }})
+             })
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self._deserialize_data(response)
+        self.assertEqual(response.data['data']['subquest']['quest_thy_quest'],
+                         'Grail-thingie.  Get.')
+        self.assertEqual(response.data['title'], 'Title!')
+
 
     def test_post_full_proposal(self):
         user = _fixture_user(self)

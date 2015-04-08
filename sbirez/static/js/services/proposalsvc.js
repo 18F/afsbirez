@@ -33,7 +33,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       'title': opportunityTitle
     };
       
-    $http.post(PROPOSAL_URI, propData).success(function(data) {
+    $http.post(PROPOSAL_URI + 'partial/', propData).success(function(data) {
       deferred.resolve(data);
     }).error(function(data, status) {
       deferred.reject(new Error(data));
@@ -53,7 +53,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
 
   var saveProposalData = function(proposalId, proposalData) {
     var deferred = $q.defer();
-    $http.patch(PROPOSAL_URI + proposalId + '/', proposalData).success(function(data) {
+    $http.patch(PROPOSAL_URI + proposalId + '/partial/', proposalData).success(function(data) {
       deferred.resolve(data);
     }).error(function(data, status) {
       deferred.reject(new Error(data));
@@ -63,7 +63,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
 
   var saveProposalTitle = function(proposalId, proposalTitle) {
     var deferred = $q.defer();
-    $http.patch(PROPOSAL_URI + proposalId + '/', {'title':proposalTitle}).success(function(data) {
+    $http.patch(PROPOSAL_URI + proposalId + '/partial/', {'title':proposalTitle}).success(function(data) {
       deferred.resolve(data);
     }).error(function(data, status) {
       deferred.reject(new Error(data));

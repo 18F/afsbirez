@@ -1,3 +1,6 @@
+import collections
+import json
+
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.contrib.auth import get_user_model
@@ -132,6 +135,25 @@ class ElementViewSet(viewsets.ReadOnlyModelViewSet):
         return [ReadOnlyUnlessStaff(), ]
 
 
+def nested_update(orig_dict, new_dict):
+    """
+    update ``orig_dict`` with ``new_dict``, and recurse
+    into nested dicts
+    Thanks to
+    http://stackoverflow.com/a/18394648/86209
+    """
+
+    for (key, val) in new_dict.items():
+        if isinstance(val, collections.Mapping):
+            tmp = nested_update(orig_dict.get(key, { }), val)
+            orig_dict[key] = tmp
+        elif isinstance(val, list):
+            orig_dict[key] = (orig_dict[key] + val)
+        else:
+            orig_dict[key] = new_dict[key]
+    return orig_dict
+
+
 class ProposalViewSet(viewsets.ModelViewSet):
     serializer_class = ProposalSerializer
     queryset = Proposal.objects.all()
@@ -148,6 +170,17 @@ class ProposalViewSet(viewsets.ModelViewSet):
 
 class PartialProposalViewSet(ProposalViewSet):
     serializer_class = PartialProposalSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        if 'data' in request.data:
+            try:
+                instance = self.get_object()
+                data = json.loads(instance.data)
+                data = nested_update(data, json.loads(request.data['data']))
+                request.data['data'] = json.dumps(data)
+            except AttributeError:
+                pass
+        return super(PartialProposalViewSet, self).partial_update(request, *args, **kwargs)
 
 
 class AddressViewSet(viewsets.ModelViewSet):
