@@ -39,7 +39,7 @@ describe('Service: ProposalService', function () {
       'topic': 1,
       'title': 'title' 
     };
-    $httpBackend.expect('POST', 'api/v1/proposals/', propData).respond(200);
+    $httpBackend.expect('POST', 'api/v1/proposals/partial/', propData).respond(200);
     $httpBackend.flush();
   });
 
@@ -140,7 +140,7 @@ describe('Service: ProposalService', function () {
     AuthenticationService.setAuthenticated(true);
     var data = {'field_1': '123', 'field_2': '234'};
     ProposalService.saveData(1, data);
-    $httpBackend.expect('PATCH', 'api/v1/proposals/1/', {'data': data}).respond(200);
+    $httpBackend.expect('PATCH', 'api/v1/proposals/1/partial/', {'data': data}).respond(200);
     $httpBackend.flush();
   });
 
@@ -170,7 +170,7 @@ describe('Service: ProposalService', function () {
     AuthenticationService.setAuthenticated(true);
     var title = 'Title';
     ProposalService.saveTitle(1, title);
-    $httpBackend.expect('PATCH', 'api/v1/proposals/1/', {'title': title}).respond(200);
+    $httpBackend.expect('PATCH', 'api/v1/proposals/1/partial/', {'title': title}).respond(200);
     $httpBackend.flush();
   });
 
