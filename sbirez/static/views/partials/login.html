@@ -8,37 +8,37 @@
         <div class="form-group col-md-12">
           <label for="inputNewName" class="sr-only">Full Name:</label>
           <input type="text" class="form-control" id="inputNewName" placeholder="Full name" ng-model="signup.name">
+          <div ng-show="errorSignupName" class="text-danger"><p class="errortext">{{errorSignupName}}</p></div>
         </div>
       </div>
       <div class="row">
         <div class="form-group col-md-12">
           <label for="inputNewEmail" class="sr-only">Email:</label>
           <input type="text" class="form-control" id="inputNewEmail" placeholder="Email" ng-model="signup.email">
+          <div ng-show="errorSignupEmail" class="text-danger"><p class="errortext">{{errorSignupEmail}}</p></div>
         </div>
       </div>
       <div class="row">
         <div class="form-group col-md-12">
           <label for="inputPassword" class="sr-only">Password:</label>
           <input type="password" class="form-control" id="inputPassword" placeholder="Password" ng-model="signup.password">
+          <div ng-show="errorSignupPassword" class="text-danger"><p class="errortext">{{errorSignupPassword}}</p></div>
         </div>
       </div>
-      <div ng-show="errorMsg" class="text-danger"><p>{{errorMsg}}</p></div>
+      <div ng-show="errorMsg" class="text-danger"><p class="errortext">{{errorMsg}}</p></div>
       <div ng-show="successMsg" class="text-info"><p>{{successMsg}}</p></div>
       <div class="row">
         <div ng-hide="successMsg" class="form-group col-md-12">
-          <button type="button" class="btn btn-default" ng-click="signUp(signup.name, signup.email, signup.password)">Create Account</button>
+          <button type="submit" class="btn btn-default" ng-click="signUp(signup.name, signup.email, signup.password)">Create Account</button>
           <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
         </div>
         <div ng-show="successMsg" class="form-group col-md-12">
-          <button type="submit" class="btn btn-default" ng-click="cancel()">OK</button>
+          <button type="button" class="btn btn-default" ng-click="logIn(signup.email, signup.password)">Login</button>
         </div>
       </div>
       <div class="row">
         <div ng-hide="successMsg" class="col-md-12">
           <a href="#" ng-click="setMode('login')">Already have an account? Sign in.</a>
-        </div>
-        <div ng-show="successMsg" class="col-md-12">
-          <a href="#" ng-click="setMode('login')">Log in here.</a>
         </div>
       </div>
      </form>
@@ -50,15 +50,17 @@
         <div class="form-group col-md-12">
           <label for="inputUsername" class="sr-only">Email:</label>
           <input type="text" class="form-control" id="inputUsername" placeholder="Email" ng-model="signup.email">
+          <div ng-show="errorLoginEmail" class="text-danger"><p class="errortext">{{errorLoginEmail}}</p></div>
         </div>
       </div>
       <div class="row">
         <div class="form-group col-md-12">
           <label for="inputPassword" class="sr-only">Password:</label>
           <input type="password" class="form-control" id="inputPassword" placeholder="Password" ng-model="signup.password">
+          <div ng-show="errorLoginPassword" class="text-danger"><p class="errortext">{{errorLoginPassword}}</p></div>
         </div>
       </div>
-      <div ng-show="errorMsg" class="text-danger"><p>{{errorMsg}}</p></div>
+      <div ng-show="errorMsg" class="text-danger"><p class="errortext">{{errorMsg}}</p></div>
       <div class="row">
         <div class="form-group col-md-12">
           <button type="submit" class="btn btn-default" ng-click="logIn(signup.email, signup.password)">Login</button>
@@ -85,7 +87,7 @@
         <label for="inputUsername" class="sr-only">Email:</label>
         <input type="text" class="form-control" id="inputUsername" placeholder="Email" ng-model="signup.email">
       </div>
-      <div ng-show="errorMsg" class="text-danger"><p>{{errorMsg}}</p></div>
+      <div ng-show="errorMsg" class="text-danger"><p class="errortext">{{errorMsg}}</p></div>
       <div ng-show="successMsg" class="text-info"><p>{{successMsg}}</p></div>
       <div ng-hide="successMsg" class="form-group">
         <button type="submit" class="btn btn-default" ng-click="resetPassword(signup.email)">Reset</button>
