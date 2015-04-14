@@ -3,11 +3,9 @@
   <div class="list-group">
     <a class="list-group-item" ui-sref="app.activity.documents.detail({id: {{doc.id}}})" ng-repeat="doc in docList">
       <h4 class="list-group-item-heading">
-        {{doc.name}} {{doc.uploaded | date:'dd/MM/yyyy HH:mm:ss Z' }}
+        {{doc.name}} {{doc.created_at | date}}
       </h4>
       <p class="list-group-item-text">{{doc.description}}</p>
-      <span class="label label-default" ng-repeat="keyword in doc.keywords">{{keyword}}</span>
     </a>
   </div>
-  <div ng-include src="'static/views/partials/documentUpload.html'"></div>
 </div>

@@ -1,16 +1,14 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('DocumentListCtrl', function ($scope, $rootScope, $http, $upload, $window) {
-    $scope.jwt = $window.sessionStorage.token;
+  .controller('DocumentListCtrl', function ($scope, $rootScope, $http, $upload, $window, DocumentService) {
     $scope.docList = [];
-    $http.get('api/v1/documents/').success(function(list) {
-      console.log(list);
-      $scope.docList = list.files;
+    DocumentService.list().then(function(data) {
+      $scope.docList = data.results;
     });
     $rootScope.$on('fileAdded', function() {
-      $http.get('api/v1/documents/').success(function(list) {
-        $scope.docList = list.files;
+      DocumentService.list().then(function(data) {
+        $scope.docList = data.results;
       });
     });
   });

@@ -21,7 +21,6 @@ angular.module('sbirezApp').directive('workflow', function() {
         $scope.nextWorkflow = null;
         var promises = [];
         $scope.proposalData = {};
-
         var getWorkflow = function(workflow_id) {
           var deferred = $q.defer();
           $http.get('api/v1/elements/' + workflow_id + '/').success(function(data) {
@@ -156,7 +155,7 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         $scope.saveData = function() {
-          ProposalService.saveData(parseInt($scope.proposalId), $scope.proposalData);
+          ProposalService.saveData(parseInt($scope.proposalId), JSON.stringify($scope.proposalData));
         };
       }
     ]

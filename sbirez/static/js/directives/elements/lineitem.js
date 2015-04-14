@@ -6,7 +6,8 @@ angular.module('sbirezApp').directive('lineitem', function() {
     replace: true,
     scope: {
       lineitem: '=',
-      storage: '='
+      storage: '=',
+      proposal: '@'
     },
     templateUrl: 'static/views/partials/elements/lineitem.html',
     controller: ['$scope', 
