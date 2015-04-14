@@ -4,7 +4,7 @@ from sbirez import validation_helpers
 from django.contrib.auth.models import User, Group
 from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person
 from sbirez.models import Address, Workflow, Question, Proposal, Address
-from sbirez.models import Element, Document, Solicitation
+from sbirez.models import Element, Document, DocumentVersion, Solicitation
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_recursive.fields import RecursiveField
@@ -167,8 +167,8 @@ class ReferenceSerializer(serializers.ModelSerializer):
 
 class SolicitationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Solicitation 
-        fields = ('id', 'name', 'pre_release_date', 'proposals_begin_date', 
+        model = Solicitation
+        fields = ('id', 'name', 'pre_release_date', 'proposals_begin_date',
                   'proposals_end_date', 'element', 'days_to_close', 'status')
 
 class TopicSerializer(serializers.HyperlinkedModelSerializer):
@@ -191,7 +191,7 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Topic
         fields = ('id', 'topic_number', 'url', 'title', 'agency',
-                    'program', 'description', 'objective', 
+                    'program', 'description', 'objective',
                     'solicitation', 'references', 'phases',
                     'keywords', 'areas', 'saved',
                     )
@@ -330,7 +330,17 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
 
+
 class DocumentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Document
+        fields = ('id', 'name', 'description', 'created_at',
+                  'updated_at', 'firm', 'proposals', 'file')
+
+
+class DocumentVersionSerializer(serializers.ModelField):
+
+    class Meta:
+        model = DocumentVersion
+

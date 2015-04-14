@@ -1,3 +1,5 @@
+import hashlib
+
 from django.db import models
 from django.utils import timezone
 from djorm_pgfulltext.fields import VectorField
@@ -274,8 +276,26 @@ class Proposal(models.Model):
 class Document(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
-    file = models.FileField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     firm = models.ForeignKey('Firm')
     proposals = models.ManyToManyField('Proposal', blank=True, null=True,)
+
+    @property
+    def file(self):
+        return self.versions.last() and self.versions.last().file
+
+
+class DocumentVersion(models.Model):
+    document = models.ForeignKey(Document, related_name='versions')  # order by created_at
+    note = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    file = models.FileField()
+
+    @property
+    def hash(self):
+        return hashlib.md5(self.file.read()).hexdigest()
+
+    class Meta:
+        ordering = ['updated_at',]

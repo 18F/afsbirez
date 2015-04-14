@@ -984,7 +984,7 @@ class DocumentTests(APITestCase):
 
     fixtures = ['thin.json']
 
-    def test_document_upload(self):
+    def _upload_death_star_plans(self):
         user = _fixture_user(self)
 
         # Write the death star plans
@@ -1003,11 +1003,28 @@ class DocumentTests(APITestCase):
             'proposals': 2})
         plans.close()
 
+        return response
+
+    def test_document_upload(self):
+        response = self._upload_death_star_plans()
+
         # Confirm upload
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
-        # Confirm read 
+        # Confirm read
         planid = response.data['id']
         response = self.client.get('/api/v1/documents/' + str(planid) + '/')
+        import ipdb; ipdb.set_trace()
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
+
+    def test_authorization_required(self):
+        response = self.client.get('/api/v1/documents/', )
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
+
+    def test_list_documents(self):
+        self._upload_death_star_plans()
+        import ipdb; ipdb.set_trace()
+        response = self.client.get('/api/v1/documents/', )
+
+        pass
