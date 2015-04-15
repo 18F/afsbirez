@@ -10,8 +10,8 @@ angular.module('sbirezApp').directive('workflow', function() {
       proposalId: '@'
     },
     templateUrl: 'static/views/partials/workflow.html',
-    controller: ['$scope', '$window', '$http', '$q', '$stateParams', 'ProposalService',
-      function ($scope, $window, $http, $q, $stateParams, ProposalService) {
+    controller: ['$scope', '$http', '$q', '$stateParams', '$location', 'ProposalService',
+      function ($scope, $http, $q, $stateParams, $location, ProposalService) {
 
         $scope.workflows = [];
         $scope.currentWorkflow = {};
@@ -21,7 +21,6 @@ angular.module('sbirezApp').directive('workflow', function() {
         $scope.nextWorkflow = null;
         var promises = [];
         $scope.proposalData = {};
-
         var getWorkflow = function(workflow_id) {
           var deferred = $q.defer();
           $http.get('api/v1/elements/' + workflow_id + '/').success(function(data) {
@@ -141,7 +140,8 @@ angular.module('sbirezApp').directive('workflow', function() {
               $scope.parentWorkflow = getParentWorkflow(workflow_id);
               $scope.backWorkflow = getPreviousWorkflow(workflow_id);
               $scope.nextWorkflow = getNextWorkflow(workflow_id);
-              $stateParams.current = workflow_id;
+              $location.search('current', workflow_id);
+              //$stateParams.current = workflow_id;
               break;
             }
           }
@@ -156,7 +156,7 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         $scope.saveData = function() {
-          ProposalService.saveData(parseInt($scope.proposalId), $scope.proposalData);
+          ProposalService.saveData(parseInt($scope.proposalId), JSON.stringify($scope.proposalData));
         };
       }
     ]

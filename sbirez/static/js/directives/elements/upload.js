@@ -6,13 +6,13 @@ angular.module('sbirezApp').directive('upload', function() {
     replace: true,
     scope: {
       upload: '=',
-      storage: '='
+      storage: '=',
+      proposal: '@'
     },
     templateUrl: 'static/views/partials/elements/upload.html',
     controller: ['$scope', 'DocumentService',
       function ($scope, DocumentService) {
         $scope.element = $scope.upload;
-
         var fileId = null;
         if ($scope.storage !== undefined) {
           fileId = parseInt($scope.storage);
@@ -39,6 +39,7 @@ angular.module('sbirezApp').directive('upload', function() {
           DocumentService.upload($scope.selectedFiles[index],
             $scope.selectedFiles[index].filename,
             $scope.selectedFiles[index].description,
+            $scope.proposal,
             function(val) {console.log('progress', val);
           }).then(function(data) {
             $scope.storage = data.id;

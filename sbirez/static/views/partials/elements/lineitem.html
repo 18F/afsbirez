@@ -17,7 +17,7 @@
             <div group="subelement" storage="storage[multiple][subelement.name]" method="jumpTo" ></div>
           </div>
           <div class="workflow-element" ng-if="subelement.element_type === 'file_upload'">
-            <div upload="subelement" storage="storage[multiple][subelement.name]"></div>
+            <div upload="subelement" proposalId="{{proposalId}}" storage="storage[multiple][subelement.name]"></div>
           </div>
         </div>
       </div>
