@@ -29,3 +29,4 @@ Untitled*.ipynb
 *.wpu
 .ipynb_checkpoints/
 *.egg-info/
+sbirez/media/*
