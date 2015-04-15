@@ -11,6 +11,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'sbirez/static/lib/jquery/dist/jquery.min.js',
       'sbirez/static/lib/angular/angular.js',
       'sbirez/static/lib/angular-mocks/angular-mocks.js',
       'sbirez/static/lib/angular-resource/angular-resource.js',
@@ -24,10 +25,25 @@ module.exports = function(config) {
       'sbirez/static/lib/angular-order-object-by/src/ng-order-object-by.js',
       'sbirez/static/lib/marked/lib/marked.js',
       'sbirez/static/lib/angular-marked/angular-marked.js',
-      'sbirez/static/js/*.js',
-      'sbirez/static/js/**/*.js',
-      'tests/client/spec/**/*.js'
+      'sbirez/static/js/app.js',
+      'sbirez/static/js/controllers/*.js',
+      'sbirez/static/js/services/*.js',
+      'sbirez/static/js/directives/*.js',
+      'sbirez/static/js/filters/*.js',
+      'tests/client/spec/**/*.js',
+
+      'sbirez/static/views/partials/workflow.html',
+      'sbirez/static/views/partials/elements/*.html'
     ],
+
+    ngHtml2JsPreprocessor: {
+      // strip this from the file path
+      stripPrefix: 'sbirez/',
+    }, 
+    preprocessors : {
+      'sbirez/static/views/partials/workflow.html': 'ng-html2js',
+      'sbirez/static/views/partials/elements/*.html': 'ng-html2js'
+    },
 
     // list of files / patterns to exclude
     exclude: ['sbirez/static/js/vendor/*.js'],
