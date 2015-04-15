@@ -1,11 +1,12 @@
 import collections
 import json
+import hashlib
 
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from sbirez.models import Topic, Firm, Workflow, Proposal, Address, Person
-from sbirez.models import Element, Document
+from sbirez.models import Element, Document, DocumentVersion
 from rest_framework import viewsets, mixins, generics, status, permissions, exceptions
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
@@ -14,10 +15,10 @@ from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer
 
 from sbirez.serializers import FirmSerializer, ProposalSerializer, PartialProposalSerializer
 from sbirez.serializers import WorkflowSerializer, AddressSerializer, ElementSerializer
-from sbirez.serializers import PersonSerializer, DocumentSerializer
+from sbirez.serializers import PersonSerializer, DocumentSerializer, DocumentVersionSerializer
 import marshmallow as mm
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser 
+from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser
 from .permissions import HasObjectEditPermissions, ReadOnlyUnlessStaff
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -205,4 +206,33 @@ class DocumentViewSet(viewsets.ModelViewSet):
         return queryset
 
     def get_permissions(self):
-        return [HasObjectEditPermissions(),]
+        return [IsAuthenticated(), HasObjectEditPermissions(),]
+
+    def create(self, request):
+        result = super(DocumentViewSet, self).create(request)
+        ver = DocumentVersion(file=request.data['file'],
+                              document_id=result.data['id'])
+        ver.save()
+        return result
+
+    def update(self, request, *posargs, **kwargs):
+        try:
+            file = request.data.pop('file', None)
+        except (KeyError, AttributeError):
+            file = None
+        result = super(DocumentViewSet, self).update(request, *posargs, **kwargs)
+        if file:
+            ver = DocumentVersion(file=file[0], document_id = result.data['id'])
+            ver.save()
+        # re-querying seems awful, but otherwise the result contains obsolete data
+        # from before the new version was attached
+        result = self.retrieve(request, pk=result.data['id'])
+        return result
+
+
+class DocumentVersionViewSet(viewsets.ModelViewSet):
+    queryset = DocumentVersion.objects.all()
+    serializer_class = DocumentVersionSerializer
+    permission_classes = (IsAuthenticated,)
+
+
