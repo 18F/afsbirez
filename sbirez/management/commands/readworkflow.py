@@ -21,7 +21,6 @@ class Command(BaseCommand):
             order += 1
 
     def handle(self, *args, **options):
-        #import ipdb; ipdb.set_trace()
         with open(args[0]) as infile:
             allelements = yaml.load(infile)
         order = 1

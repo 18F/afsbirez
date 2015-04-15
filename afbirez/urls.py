@@ -16,6 +16,7 @@ router.register(r'proposals', api.ProposalViewSet)
 router.register(r'addresses', api.AddressViewSet)
 router.register(r'persons', api.PersonViewSet)
 router.register(r'documents', api.DocumentViewSet)
+router.register(r'documentversions', api.DocumentVersionViewSet)
 router.register(r'elements', api.ElementViewSet)
 
 

@@ -215,6 +215,21 @@ class DocumentViewSet(viewsets.ModelViewSet):
         ver.save()
         return result
 
+    def update(self, request, *posargs, **kwargs):
+        try:
+            file = request.data.pop('file', None)
+        except (KeyError, AttributeError):
+            file = None
+        result = super(DocumentViewSet, self).update(request, *posargs, **kwargs)
+        if file:
+            ver = DocumentVersion(file=file[0], document_id = result.data['id'])
+            ver.save()
+        # re-querying seems awful, but otherwise the result contains obsolete data
+        # from before the new version was attached
+        result = self.retrieve(request, pk=result.data['id'])
+        return result
+
+
 class DocumentVersionViewSet(viewsets.ModelViewSet):
     queryset = DocumentVersion.objects.all()
     serializer_class = DocumentVersionSerializer

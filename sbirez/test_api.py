@@ -980,33 +980,34 @@ class ProposalTests(APITestCase):
         self.assertEqual(response.data['firm'], 1)
 
 
+def _upload_death_star_plans(test_instance):
+    user = _fixture_user(test_instance)
+
+    # Write the death star plans
+    plans = open('deathstarplans.txt', 'wb')
+    nobothans = bytearray("Don't shoot the exhaust port!", "UTF-8")
+    plans.write(nobothans)
+    plans.close()
+
+    # Upload the plans to R2's memory banks
+    plans = open('deathstarplans.txt', 'rb')
+    response = test_instance.client.post('/api/v1/documents/', {
+        'name': 'Secret Death Star Plans',
+        'description': 'Many bothan spies died to bring us this information.',
+        'file': plans,
+        'firm': 1,
+        'proposals': 2})
+    plans.close()
+
+    return response
+
+
 class DocumentTests(APITestCase):
 
     fixtures = ['thin.json']
 
-    def _upload_death_star_plans(self):
-        user = _fixture_user(self)
-
-        # Write the death star plans
-        plans = open('deathstarplans.txt', 'wb')
-        nobothans = bytearray("Don't shoot the exhaust port!", "UTF-8")
-        plans.write(nobothans)
-        plans.close()
-
-        # Upload the plans to R2's memory banks
-        plans = open('deathstarplans.txt', 'rb')
-        response = self.client.post('/api/v1/documents/', {
-            'name': 'Secret Death Star Plans',
-            'description': 'Many bothan spies died to bring us this information.',
-            'file': plans,
-            'firm': 1,
-            'proposals': 2})
-        plans.close()
-
-        return response
-
     def test_document_upload(self):
-        response = self._upload_death_star_plans()
+        response = _upload_death_star_plans(self)
 
         # Confirm upload
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
@@ -1014,8 +1015,28 @@ class DocumentTests(APITestCase):
         # Confirm read
         planid = response.data['id']
         response = self.client.get('/api/v1/documents/' + str(planid) + '/')
-        import ipdb; ipdb.set_trace()
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertIn('deathstarplans', response.data['file'])
+
+    def test_patch_file(self):
+        response = _upload_death_star_plans(self)
+        doc_url = '/api/v1/documents/%d/' % response.data['id']
+        response = self.client.patch(doc_url)
+
+        # create a new file to upload
+        plans = open('newdeathstarplans.txt', 'wb')
+        vuln = bytearray("small exhaust port just above the main port",
+                         "UTF-8")
+        plans.write(vuln)
+        plans.close()
+
+        plans = open('newdeathstarplans.txt', 'rb')
+        response = self.client.patch(doc_url, {
+            'file': plans, })
+        plans.close()
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertIn('newdeathstarplans', response.data['file'])
+        self.assertEqual(len(response.data['versions']), 2)
 
 
     def test_authorization_required(self):
@@ -1023,8 +1044,23 @@ class DocumentTests(APITestCase):
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
     def test_list_documents(self):
-        self._upload_death_star_plans()
-        import ipdb; ipdb.set_trace()
+        _upload_death_star_plans(self)
         response = self.client.get('/api/v1/documents/', )
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        doc_names = [doc['name'] for doc in response.data['results']]
+        self.assertIn('Secret Death Star Plans', doc_names)
 
-        pass
+
+class DocumentVersionTests(APITestCase):
+
+    fixtures = ['thin.json']
+
+    def test_get_document_version(self):
+        response = _upload_death_star_plans(self)
+        response = self.client.get('/api/v1/documents/%d/' %
+                                   response.data['id'], )
+        id = response.data['versions'][0]
+        response = self.client.get('/api/v1/documentversions/%d/' % id)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertIn('deathstarplans', response.data['file'])
+

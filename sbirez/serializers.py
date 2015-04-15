@@ -331,16 +331,26 @@ class AddressSerializer(serializers.ModelSerializer):
         model = Address
 
 
+class DocumentVersionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DocumentVersion
+
+
 class DocumentSerializer(serializers.ModelSerializer):
+
+    # versions = DocumentVersionSerializer(read_only=True, required=False)
+    # nested serializers don't work for read-write?
+
+    versions = serializers.PrimaryKeyRelatedField(
+        many=True, read_only=True)
+
+    file = serializers.FileField()
 
     class Meta:
         model = Document
         fields = ('id', 'name', 'description', 'created_at',
-                  'updated_at', 'firm', 'proposals', 'file')
-
-
-class DocumentVersionSerializer(serializers.ModelField):
-
-    class Meta:
-        model = DocumentVersion
+                  'updated_at', 'firm', 'proposals',
+                  'versions', 'file',
+                  )
 
