@@ -1,18 +1,19 @@
-Django==1.8
-psycopg2==2.6
-ddlgenerator >=0.1.9
 cssmin==0.2.0
-jsmin==2.1.1
+dateutils==0.6.6
+ddlgenerator==0.1.9
+Django==1.8
 django-assets==0.10
-djangorestframework
-djangorestframework-jwt==1.2.0
-django-rest-auth==0.3.4
-dj-database-url==0.3.0
-git+https://github.com/djangonauts/djorm-ext-pgfulltext.git
 django-custom-user==0.5
+django-rest-auth==0.3.4
+djangorestframework==3.1.1
+djangorestframework-hstore==1.2
+djangorestframework-jwt==1.2.0
+djangorestframework-recursive==0.1.0
+dj-database-url==0.3.0
+djorm-ext-pgfulltext==0.9.3
+jsmin==2.1.1
 marshmallow==1.2.2
+psycopg2==2.6
 waitress==0.8.9
 whitenoise==1.0.6
-dateutils==0.6.6
-djangorestframework-recursive
 -r requirements/dev.txt
