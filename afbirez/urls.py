@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 
 from rest_framework import routers
-from sbirez import api
+from sbirez import api, models
 
 router = routers.DefaultRouter()
 router.register(r'users', api.UserViewSet)
@@ -43,6 +43,12 @@ urlpatterns = patterns('',
     url(r'^password-reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         TemplateView.as_view(template_name="password_reset_confirm.html"),
         name='password_reset_confirm'),
+
+    # permit downloads of uploaded files
+    url(r'^api/v1/documents/(?P<pk>[0-9]+)/file/$',
+        api.FileDownloadView.as_view(model=models.Document, file_field='file')),
+    url(r'^api/v1/documentversions/(?P<pk>[0-9]+)/file/$',
+        api.FileDownloadView.as_view(model=models.DocumentVersion, file_field='file')),
 
     # jwt authentication endpoint
     url(r'^auth/', 'rest_framework_jwt.views.obtain_jwt_token'),

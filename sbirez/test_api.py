@@ -1018,6 +1018,16 @@ class DocumentTests(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertIn('deathstarplans', response.data['file'])
 
+    def test_document_download(self):
+        response = _upload_death_star_plans(self)
+        response = self.client.get('/api/v1/documents/%d/' % response.data['id'])
+        document_number = response.data['id']
+        version_number = response.data['versions'][0]
+        response = self.client.get('/api/v1/documents/%d/file/' % document_number)
+        self.assertEqual(response.get_mime_type(), 'text/plain')
+        response = self.client.get('/api/v1/documentversions/%d/file/' % version_number)
+        self.assertEqual(response.get_mime_type(), 'text/plain')
+
     def test_patch_file(self):
         response = _upload_death_star_plans(self)
         doc_url = '/api/v1/documents/%d/' % response.data['id']

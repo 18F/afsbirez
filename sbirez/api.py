@@ -12,6 +12,7 @@ from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer
+from django_downloadview import ObjectDownloadView
 
 from sbirez.serializers import FirmSerializer, ProposalSerializer, PartialProposalSerializer
 from sbirez.serializers import WorkflowSerializer, AddressSerializer, ElementSerializer
@@ -228,6 +229,12 @@ class DocumentViewSet(viewsets.ModelViewSet):
         # from before the new version was attached
         result = self.retrieve(request, pk=result.data['id'])
         return result
+
+
+class FileDownloadView(ObjectDownloadView):
+
+    def get(self, request, pk):
+        return super(FileDownloadView, self).get(request)
 
 
 class DocumentVersionViewSet(viewsets.ModelViewSet):
