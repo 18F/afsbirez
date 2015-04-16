@@ -8,6 +8,7 @@
     "karma": "~0.10.9",
     "karma-firefox-launcher": "~0.1.3",
     "karma-jasmine": "~0.1.5",
+    "karma-ng-html2js-preprocessor": "*",
     "should": "~2.1.0"
   }
 }
