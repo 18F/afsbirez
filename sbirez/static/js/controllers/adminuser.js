@@ -6,6 +6,8 @@ angular.module('sbirezApp')
       var mode = 'login';
 
       $scope.logIn = function logIn(username, password) {
+        $scope.errorLoginEmail = '';
+        $scope.errorLoginPassword = '';
         $scope.errorMsg = '';
         if (username !== undefined && password !== undefined) {
           UserService.logIn(username, password).then(function(data) {
@@ -29,6 +31,12 @@ angular.module('sbirezApp')
             if (status && status.data && status.data.non_field_errors) {
               $scope.errorMsg = status.data.non_field_errors[0];
             } else {
+              if (status.data.email) {
+                $scope.errorLoginEmail = status.data.email[0];
+              }
+              if (status.data.password) {
+                $scope.errorLoginPassword = status.data.password[0];
+              }
               $scope.errorMsg = 'Unable to log in.';
             }
           });
@@ -39,6 +47,9 @@ angular.module('sbirezApp')
 
       $scope.signUp = function signUp(name, email, password) {
         $scope.errorMsg = '';
+        $scope.errorSignupName = '';
+        $scope.errorSignupEmail = '';
+        $scope.errorSignupPassword = '';
         if (name !== undefined && email !== undefined && password !== undefined) {
           UserService.createUser(name, email, password).then(function(data) {
             $scope.successMsg = 'User created successfully. Log in to continue.';
@@ -46,6 +57,15 @@ angular.module('sbirezApp')
             if (status && status.data && status.data.non_field_errors) {
               $scope.errorMsg = status.data.non_field_errors[0];
             } else {
+              if (status.data.name) {
+                $scope.errorSignupName = status.data.name[0];
+              }
+              if (status.data.email) {
+                $scope.errorSignupEmail = status.data.email[0];
+              }
+              if (status.data.password) {
+                $scope.errorSignupPassword = status.data.password[0];
+              }
               $scope.errorMsg = 'Unable to sign up.';
             }
           });

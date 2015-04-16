@@ -30,7 +30,8 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       'firm': parseInt($window.sessionStorage.firmid), 
       'workflow': workflowId, 
       'topic': opportunityId,
-      'title': opportunityTitle
+      'title': opportunityTitle,
+      'data': {} 
     };
       
     $http.post(PROPOSAL_URI + 'partial/', propData).success(function(data) {
@@ -53,7 +54,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
 
   var saveProposalData = function(proposalId, proposalData) {
     var deferred = $q.defer();
-    $http.patch(PROPOSAL_URI + proposalId + '/partial/', proposalData).success(function(data) {
+    $http.patch(PROPOSAL_URI + proposalId + '/partial/', {'data':proposalData}).success(function(data) {
       deferred.resolve(data);
     }).error(function(data, status) {
       deferred.reject(new Error(data));
@@ -143,7 +144,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     saveData: function(proposalId, proposalData) {
       if (typeof proposalId === 'number') {
         if (AuthenticationService.isAuthenticated) {
-          return saveProposalData(proposalId, {'data':proposalData});
+          return saveProposalData(proposalId, proposalData);
         } else {
           return DialogService.openLogin().then(function(data) {
             var deferred = $q.defer();

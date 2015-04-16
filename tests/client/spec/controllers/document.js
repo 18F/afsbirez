@@ -10,6 +10,10 @@ describe('Controller: DocumentCtrl', function () {
     $state,
     mockDependency,
     $httpBackend,
+    $window,
+    $q,
+    AuthenticationService,
+    DocumentService,
     data;
 
   data = {
@@ -29,12 +33,21 @@ describe('Controller: DocumentCtrl', function () {
     mockDependency.params = {};
     mockDependency.params.id = 1;
     
-    inject(function (_$httpBackend_, $controller, $rootScope) {
+    inject(function (_$httpBackend_, $controller, $rootScope, _$window_, _$q_, _AuthenticationService_, _DocumentService_) {
       $httpBackend = _$httpBackend_;
+      $window = _$window_;
       $httpBackend.whenGET('static/views/partials/main.html').respond({});
       $httpBackend.whenGET('static/views/partials/search.html').respond({});
       scope = $rootScope.$new();
+      AuthenticationService = _AuthenticationService_;
+      DocumentService = _DocumentService_;
       $state = mockDependency;
+      $q = _$q_;
+      spyOn(DocumentService, 'get').andCallFake(function() {
+        var deferred = $q.defer();
+        deferred.resolve(data);
+        return deferred.promise;
+      });
       DocCtrl = $controller('DocumentCtrl', {
         $scope: scope,
         $state: mockDependency
@@ -43,67 +56,33 @@ describe('Controller: DocumentCtrl', function () {
   });
 
   it('should attach a document to the scope', function () {
+    $window.sessionStorage.userid = 1;
+    AuthenticationService.setAuthenticated(true);
+    scope.documentId = 1;
     expect(scope.data).toBeUndefined();
-    $httpBackend.expectGET('api/v1/documents/1/').respond(data);
     $httpBackend.flush();
     expect(scope.data).toBeDefined();
   });
   
   it('should post a document when save is called', function () {
-    $httpBackend.expectGET('api/v1/documents/1/').respond(data);
+    $window.sessionStorage.userid = 1;
+    AuthenticationService.setAuthenticated(true);
     $httpBackend.flush();
-    $httpBackend.expectPOST('api/v1/documents/1/').respond(200, '');
+    $httpBackend.expectPATCH('api/v1/documents/1/').respond(200, '');
     scope.save();
     $httpBackend.flush();
   });
 
   it('should send a delete command to the server when remove is called', function () {
-    $httpBackend.expectGET('api/v1/documents/1/').respond(data);
+    $window.sessionStorage.userid = 1;
+    AuthenticationService.setAuthenticated(true);
     $httpBackend.flush();
     $httpBackend.expectDELETE('api/v1/documents/1/').respond(200, '');
     scope.remove();
+    $httpBackend.expectGET('static/views/partials/appmain.html').respond(200, '');
+    $httpBackend.expectGET('static/views/partials/activity.html').respond(200, '');
+    $httpBackend.expectGET('static/views/partials/document.html').respond(200, '');
+    $httpBackend.expectGET('static/views/partials/documentList.html').respond(200, '');
     $httpBackend.flush();
-  });
-
-  it('should remove a keyword when removeKeyword is called with an existing keyword', function () {
-    $httpBackend.expectGET('api/v1/documents/1/').respond(data);
-    $httpBackend.flush();
-    expect(scope.data.keywords.length).toBe(2);
-    scope.removeKeyword('test');
-    expect(scope.data.keywords.length).toBe(1);
-    expect(scope.data.keywords[0]).toBe('resume');
-  });
-
-  it('should not remove a keyword when removeKeyword is called with a bogus keyword', function () {
-    $httpBackend.expectGET('api/v1/documents/1/').respond(data);
-    $httpBackend.flush();
-    expect(scope.data.keywords.length).toBe(2);
-    scope.removeKeyword('anothertest');
-    expect(scope.data.keywords.length).toBe(2);
-    expect(scope.data.keywords[0]).toBe('resume');
-    expect(scope.data.keywords[1]).toBe('test');
-  });
-
-  it('should add a keyword when addKeyword is called with a new keyword', function () {
-    $httpBackend.expectGET('api/v1/documents/1/').respond(data);
-    $httpBackend.flush();
-    expect(scope.data.keywords.length).toBe(2);
-    scope.newKeyword = 'anothertest';
-    scope.addKeyword();
-    expect(scope.data.keywords.length).toBe(3);
-    expect(scope.data.keywords[0]).toBe('resume');
-    expect(scope.data.keywords[1]).toBe('test');
-    expect(scope.data.keywords[2]).toBe('anothertest');
-  });
-
-  it('should not add a keyword when addKeyword is called with an existing new keyword', function () {
-    $httpBackend.expectGET('api/v1/documents/1/').respond(data);
-    $httpBackend.flush();
-    expect(scope.data.keywords.length).toBe(2);
-    scope.newKeyword = 'test';
-    scope.addKeyword();
-    expect(scope.data.keywords.length).toBe(2);
-    expect(scope.data.keywords[0]).toBe('resume');
-    expect(scope.data.keywords[1]).toBe('test');
   });
 });

@@ -16,16 +16,16 @@ class Command(BaseCommand):
                      setweight(to_tsvector(string_agg(coalesce(k.keyword, ''), ' ')), 'A')
                      AS weights
               FROM sbirez_topic t
-              JOIN sbirez_area_topics ta ON (t.id = ta.topic_id)
-              JOIN sbirez_area a ON (ta.area_id = a.id)
-              JOIN sbirez_keyword_topics tk ON (t.id = tk.topic_id)
-              JOIN sbirez_keyword k ON (tk.keyword_id = k.id)
+              LEFT JOIN sbirez_area_topics ta ON (t.id = ta.topic_id)
+              LEFT JOIN sbirez_area a ON (ta.area_id = a.id)
+              LEFT JOIN sbirez_keyword_topics tk ON (t.id = tk.topic_id)
+              LEFT JOIN sbirez_keyword k ON (tk.keyword_id = k.id)
               GROUP BY t.id)
             UPDATE sbirez_topic
             SET fts = (SELECT weights FROM subq
                        WHERE  sbirez_topic.id = subq.id);\
 ''')
-        transaction.set_dirty()        
+        #transaction.set_dirty()        
         transaction.commit()
 
 

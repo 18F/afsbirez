@@ -6,6 +6,21 @@ angular.module('sbirezApp')
 
     SavedOpportunityService.list().then(function(data){
       $scope.data = data;
+      if (data.results && data.results.length > 0) {
+        ProposalService.list().then(function(proposals) {
+          if (proposals.results) {
+            $scope.proposals = proposals;
+            for (var i = 0; i < $scope.proposals.results.length; i++) {
+              for (var j = 0; j < $scope.data.results.length; j++) {
+                if ($scope.proposals.results[i].topic === $scope.data.results[j].id) {
+                  $scope.data.results[j].proposal_id = proposals.results[i].id;
+                  break;
+                }
+              }
+            }
+          }
+        });
+      }
     });
 
     $scope.removeOpportunity = function(opportunityId) {
@@ -30,7 +45,14 @@ angular.module('sbirezApp')
         }
       }
       ProposalService.create(opportunityId, title, workflow).then(function(data) {
-        console.log('created proposal', data);
+        var count = $scope.data.results.length;
+        var workflow = 1;
+        for (var i = 0; i < count; i++) {
+          if ($scope.data.results[i].id === opportunityId) {
+            $scope.data.results[i].proposal_id = data.id;
+            break;
+          }
+        }
       });
     };
   });

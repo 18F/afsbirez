@@ -94,6 +94,7 @@ angular.module('sbirezApp', [
       })
       .state('app.activity.proposals.detail', {
         url: '/:id?current',
+        reloadOnSearch: false,
         views: {
           '': {
             templateUrl: 'static/views/partials/proposal.details.html',

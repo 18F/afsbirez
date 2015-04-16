@@ -1,54 +1,35 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('DocumentCtrl', function ($scope, $http, $state, $window) {
-    $scope.newKeyword = '';
+  .controller('DocumentCtrl', function ($scope, $http, $state, $window, $location, DocumentService, ProposalService) {
     $scope.documentId = $state.params.id;
     $scope.jwt = $window.sessionStorage.token;
     $scope.errorMsg = '';
     $scope.updated = false;
+    $scope.proposals = [];
 
-    $http.get('api/v1/documents/' + $scope.documentId + '/').success(function(data) {
+    DocumentService.get(parseInt($scope.documentId)).then(function(data) {
       $scope.data = data;
+      for (var i = 0; i < $scope.data.proposals.length; i++) {
+        ProposalService.get($scope.data.proposals[i]).then(function(data) {
+          $scope.proposals.push(data);
+        });
+      }
     });
 
     $scope.save = function() {
-      $scope.data.changelog.push({'message': 'Properties changed.', 'dateChanged': new Date().getTime()});
-      $http.post('api/v1/documents/' + $scope.documentId + '/', $scope.data).success(function() {
+      DocumentService.saveData(parseInt($scope.documentId), {'description':$scope.data.description}).then(function(data) {
         $scope.updated = true;
-      }).error(function(message) {
-        $scope.errorMsg = message.message;
+      }, function(data, status) {
+        $scope.errorMsg = data;
         $scope.updated = false;
       });
     };
 
     $scope.remove = function() {
-      $http.delete('api/v1/documents/' + $scope.documentId + '/').success(function() {
+      DocumentService.remove(parseInt($scope.documentId)).then(function(data) {
         console.log('file removed...need to redirect.');
+        $location.path('/app/documents');
       });
-    };
-
-    $scope.removeKeyword = function(keyword) {
-      for (var i = $scope.data.keywords.length - 1; i >= 0; i--) {
-        if ($scope.data.keywords[i] === keyword) {
-          $scope.data.keywords.splice(i, 1);
-        }
-      }
-    };
-
-    $scope.addKeyword = function() {
-      var found = false;
-      for (var i = $scope.data.keywords.length - 1; i >= 0; i--) {
-        if ($scope.data.keywords[i] === $scope.newKeyword) {
-          found = true;
-          break;
-        }
-      }
-
-      if (found === false) {
-        $scope.data.keywords.push($scope.newKeyword);
-      }
-
-      $scope.newKeyword = '';
     };
   });

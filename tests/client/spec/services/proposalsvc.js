@@ -37,7 +37,8 @@ describe('Service: ProposalService', function () {
       'firm': null,
       'workflow': 6,
       'topic': 1,
-      'title': 'title' 
+      'title': 'title',
+      'data':{}
     };
     $httpBackend.expect('POST', 'api/v1/proposals/partial/', propData).respond(200);
     $httpBackend.flush();

@@ -12,7 +12,8 @@ describe('Controller: SavedOppsCtrl', function () {
     mockDependency,
     $httpBackend,
     data,
-    emptyData;
+    emptyData,
+    propData;
 
   emptyData = {
     'title': '',
@@ -22,10 +23,26 @@ describe('Controller: SavedOppsCtrl', function () {
   };
 
   data = {
-    'title': 'The title.',
-    pre_release_date:'',
-    proposals_begin_date:'',
-    proposals_end_date:''
+    'results': [{
+        'title': 'The title.',
+        'id':123,
+        'pre_release_date':'',
+        'proposals_begin_date':'',
+        'proposals_end_date':''
+      },{
+        'title': 'The 2nd title.',
+        'id':456,
+        'pre_release_date':'',
+        'proposals_begin_date':'',
+        'proposals_end_date':''
+      }]
+  };
+
+  propData = {
+    'results': [{
+      'id': 2,
+      'topic': 123
+    }]
   };
 
   beforeEach(function(){
@@ -55,7 +72,10 @@ describe('Controller: SavedOppsCtrl', function () {
     AuthenticationService.setAuthenticated(true);
     expect(scope.data).toEqual({});
     $httpBackend.expectGET('api/v1/topics/?closed=true&saved=true').respond(data);
+    $httpBackend.expectGET('api/v1/proposals/').respond(propData);
     $httpBackend.flush();
+    expect(scope.proposals).toBeDefined();
+    expect(scope.data.results[0].proposal_id).toBe(2);
   });
 
   it('page should not load if not logged in', function () {
@@ -67,10 +87,10 @@ describe('Controller: SavedOppsCtrl', function () {
   it('clicking the remove button should remove a topic if logged in', function () {
     AuthenticationService.setAuthenticated(true);
     expect(scope.data).toEqual({});
-    $httpBackend.expectGET('api/v1/topics/?closed=true&saved=true').respond({});
+    $httpBackend.expectGET('api/v1/topics/?closed=true&saved=true').respond(data);
+    $httpBackend.expectGET('api/v1/proposals/').respond({});
     $httpBackend.flush();
     scope.removeOpportunity(1);
     $httpBackend.expectDELETE('api/v1/topics/1/saved').respond(200);
-    //expect(scope.errorMsg).toEqual('The topic you are looking for does not exist.');
   });
 });

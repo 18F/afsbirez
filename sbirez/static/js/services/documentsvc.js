@@ -23,13 +23,14 @@ angular.module('sbirezApp').factory('DocumentService', function($http, $window, 
     return deferred.promise;
   };
 
-  var uploadDocument = function(selectedFile, fileName, fileDescription, progressCB) {
+  var uploadDocument = function(selectedFile, fileName, fileDescription, proposalId, progressCB) {
     var deferred = $q.defer();
     $upload.upload({
       url: '/api/v1/documents/',
-      data: {'firm': parseInt($window.sessionStorage.firmid),
-             'name': fileName,
-             'description': fileDescription},
+      fields: {'firm': parseInt($window.sessionStorage.firmid),
+               'name': fileName,
+               'description': fileDescription,
+               'proposals': proposalId},
       file: selectedFile
     }).progress(function(evt) {
       progressCB(Math.min(100, parseInt(100.0 * evt.loaded / evt.total)));
@@ -51,12 +52,22 @@ angular.module('sbirezApp').factory('DocumentService', function($http, $window, 
     return deferred.promise;
   };
 
+  var saveDocumentData = function(documentId, documentData) {
+    var deferred = $q.defer();
+    $http.patch(DOCUMENT_URI + documentId + '/', documentData).success(function(data) {
+      deferred.resolve(data);
+    }).error(function(data, status) {
+      deferred.reject(new Error(data));
+    });
+    return deferred.promise;
+  };
+
   return {
-    upload: function(selectedFile, fileName, fileDescription, progressCB) {
+    upload: function(selectedFile, fileName, fileDescription, proposalId, progressCB) {
       if (!AuthenticationService.isAuthenticated) {
         return DialogService.openLogin().then(function(data) {
           if (data.value) {
-            return uploadDocument(selectedFile, fileName, fileDescription, progressCB);
+            return uploadDocument(selectedFile, fileName, fileDescription, proposalId, progressCB);
           } else {
             var deferred = $q.defer();
             deferred.reject(new Error('Failed to authenticate'));
@@ -64,11 +75,10 @@ angular.module('sbirezApp').factory('DocumentService', function($http, $window, 
           }
         });
       } else {
-        return uploadDocument(selectedFile, fileName, fileDescription, progressCB);
+        return uploadDocument(selectedFile, fileName, fileDescription, proposalId, progressCB);
       }
     },
     remove: function(documentId) {
-      // remove opportunity from saved opps
       if (typeof documentId === 'number') {
         if (AuthenticationService.isAuthenticated) {
           return removeDocument(documentId);
@@ -100,6 +110,23 @@ angular.module('sbirezApp').factory('DocumentService', function($http, $window, 
       if (typeof documentId === 'number') {
         if (AuthenticationService.isAuthenticated) {
           return getDocument(documentId);
+        } else {
+          return DialogService.openLogin().then(function(data) {
+            var deferred = $q.defer();
+            deferred.reject(new Error('Failed to authenticate'));
+            return deferred.promise;
+          });
+        }
+      } else {
+        var deferred = $q.defer();
+        deferred.reject(new Error('Invalid parameter'));
+        return deferred.promise;
+      }
+    },
+    saveData: function(documentId, documentData) {
+      if (typeof documentId === 'number') {
+        if (AuthenticationService.isAuthenticated) {
+          return saveDocumentData(documentId, documentData);
         } else {
           return DialogService.openLogin().then(function(data) {
             var deferred = $q.defer();
