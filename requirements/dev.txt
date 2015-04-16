@@ -1,2 +1,2 @@
-django_extensions  
+django-extensions==1.5.2
 django-debug-toolbar==1.2.2
