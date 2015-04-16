@@ -6,7 +6,7 @@ angular.module('sbirezApp')
     $scope.data = {};
 
     $scope.saveOpportunity = function() {
-      SavedOpportunityService.save($scope.topicId).then(function(data) {
+      SavedOpportunityService.save($scope.topicId).then(function() {
         $scope.data.saved = true;
       }, function(error) {
         console.log(error);

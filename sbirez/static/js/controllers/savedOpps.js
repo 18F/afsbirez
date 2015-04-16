@@ -46,7 +46,6 @@ angular.module('sbirezApp')
       }
       ProposalService.create(opportunityId, title, workflow).then(function(data) {
         var count = $scope.data.results.length;
-        var workflow = 1;
         for (var i = 0; i < count; i++) {
           if ($scope.data.results[i].id === opportunityId) {
             $scope.data.results[i].proposal_id = data.id;

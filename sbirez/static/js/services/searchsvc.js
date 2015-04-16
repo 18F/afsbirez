@@ -43,7 +43,7 @@ angular.module('sbirezApp').factory('SearchService', function($http, $window, $q
         numFound = data.count;
         itemCount = data.results.length;
         deferred.resolve(results);
-      }).error(function(data, status) {
+      }).error(function(data) {
         deferred.reject(new Error(data));
       });
       return deferred.promise;

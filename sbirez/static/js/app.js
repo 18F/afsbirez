@@ -169,7 +169,6 @@ angular.module('sbirezApp', [
         views: {
           'tabContent': {
             templateUrl: 'static/views/partials/account.html',
-            controller: 'AccountCtrl'
           }
         },
         access: { requiredAuthentication: true }

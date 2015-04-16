@@ -51,7 +51,7 @@ angular.module('sbirezApp')
         $scope.errorSignupEmail = '';
         $scope.errorSignupPassword = '';
         if (name !== undefined && email !== undefined && password !== undefined) {
-          UserService.createUser(name, email, password).then(function(data) {
+          UserService.createUser(name, email, password).then(function() {
             $scope.successMsg = 'User created successfully. Log in to continue.';
           }, function(status) {
             if (status && status.data && status.data.non_field_errors) {
