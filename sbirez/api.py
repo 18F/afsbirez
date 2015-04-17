@@ -12,6 +12,7 @@ from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer
+from django_downloadview import ObjectDownloadView
 
 from sbirez.serializers import FirmSerializer, ProposalSerializer, PartialProposalSerializer
 from sbirez.serializers import WorkflowSerializer, AddressSerializer, ElementSerializer
@@ -197,7 +198,7 @@ class PersonViewSet(viewsets.ModelViewSet):
 class DocumentViewSet(viewsets.ModelViewSet):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, HasObjectEditPermissions, )
 
     def get_queryset(self):
         queryset = Document.objects.all()
@@ -205,34 +206,44 @@ class DocumentViewSet(viewsets.ModelViewSet):
             queryset = Document.objects.filter(firm=self.request.user.firm)
         return queryset
 
-    def get_permissions(self):
-        return [IsAuthenticated(), HasObjectEditPermissions(),]
+    def create(self, request, *args, **kwargs):
+        data = dict(request.data.items())
+        data['firm'] = request.user.firm_id
 
-    def create(self, request):
-        result = super(DocumentViewSet, self).create(request)
+        # cut-and-pasted from rest_framework.mixins.CreateModelMixin, because I can't
+        # find a way to make it accept an edit to request.data
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        result = Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
         ver = DocumentVersion(file=request.data['file'],
                               document_id=result.data['id'])
         ver.save()
         return result
 
     def update(self, request, *posargs, **kwargs):
-        try:
-            file = request.data.pop('file', None)
-        except (KeyError, AttributeError):
-            file = None
+        # TODO: What if you try to update the `firm`?
+
         result = super(DocumentViewSet, self).update(request, *posargs, **kwargs)
-        if file:
-            ver = DocumentVersion(file=file[0], document_id = result.data['id'])
+        if 'file' in request.data:
+            ver = DocumentVersion(file=request.data['file'], document_id = result.data['id'])
             ver.save()
+
         # re-querying seems awful, but otherwise the result contains obsolete data
         # from before the new version was attached
         result = self.retrieve(request, pk=result.data['id'])
         return result
 
 
+class FileDownloadView(ObjectDownloadView, generics.GenericAPIView):
+
+    permission_classes = (IsStaffOrFirmRelatedUser, )
+
+
 class DocumentVersionViewSet(viewsets.ModelViewSet):
     queryset = DocumentVersion.objects.all()
     serializer_class = DocumentVersionSerializer
     permission_classes = (IsAuthenticated,)
-
 

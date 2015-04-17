@@ -23,7 +23,9 @@ class IsStaffOrTargetUser(permissions.BasePermission):
 class IsStaffOrFirmRelatedUser(permissions.BasePermission):
     def has_permission(self, request, view):
         # allow user to list all firms if staff
-        return (request.user.is_authenticated() and view.action != 'list') or request.user.is_staff
+        return (request.user.is_authenticated()
+                and (not hasattr(view, 'action') or view.action != 'list')
+                ) or request.user.is_staff
 
     def has_object_permission(self, request, view, obj):
         # allow logged in user to view view/edit own firm
@@ -37,7 +39,7 @@ class HasObjectEditPermissions(permissions.BasePermission):
         # allow user to list proposals if staff
         return True
         # (request.user.is_authenticated() and view.action != 'list') or request.user.is_staff
- 
+
     def has_object_permission(self, request, view, object):
         # allow logged in user to view view/edit proposals from firm
         # if a user is authed and is associated with the firm

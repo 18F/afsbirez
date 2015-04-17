@@ -335,6 +335,8 @@ class DocumentVersionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DocumentVersion
+        fields = ('id', 'document', 'note',
+                  'created_at', 'updated_at', 'hash', )
 
 
 class DocumentSerializer(serializers.ModelSerializer):
@@ -345,12 +347,10 @@ class DocumentSerializer(serializers.ModelSerializer):
     versions = serializers.PrimaryKeyRelatedField(
         many=True, read_only=True)
 
-    file = serializers.FileField()
-
     class Meta:
         model = Document
         fields = ('id', 'name', 'description', 'created_at',
                   'updated_at', 'firm', 'proposals',
-                  'versions', 'file',
+                  'versions',
                   )
 
