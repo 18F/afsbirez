@@ -51,7 +51,7 @@ REST_FRAMEWORK = {
     'PAGINATE_BY_PARAM': 'page_size',
     'MAX_PAGINATE_BY': 200,
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'sbirez.utils.JSONWebTokenAuthenticationFlex',
         'rest_framework.authentication.TokenAuthentication',
     ),
 }
