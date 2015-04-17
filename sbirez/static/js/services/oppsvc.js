@@ -3,7 +3,6 @@
 angular.module('sbirezApp').factory('SavedOpportunityService', function($http, $window, $q, DialogService, AuthenticationService) {
 
   var SAVEDTOPIC_URI = 'api/v1/topics/';
-  var results = {};
 
   var getOpportunities = function() {
     var deferred = $q.defer();
@@ -17,7 +16,7 @@ angular.module('sbirezApp').factory('SavedOpportunityService', function($http, $
     var deferred = $q.defer();
     $http.post(SAVEDTOPIC_URI + opportunityId + '/saved/').success(function(data) {
       deferred.resolve(data);
-    }).error(function(data, status) {
+    }).error(function(data) {
       deferred.reject(new Error(data));
     });
     return deferred.promise;
@@ -27,7 +26,7 @@ angular.module('sbirezApp').factory('SavedOpportunityService', function($http, $
     var deferred = $q.defer();
     $http.delete(SAVEDTOPIC_URI + opportunityId + '/saved/').success(function(data) {
       deferred.resolve(data);
-    }).error(function(data, status) {
+    }).error(function(data) {
       deferred.reject(new Error(data));
     });
     return deferred.promise;
@@ -50,13 +49,18 @@ angular.module('sbirezApp').factory('SavedOpportunityService', function($http, $
       }
     },
     remove: function(opportunityId) {
-      // remove opportunity from saved opps
-      if (AuthenticationService.isAuthenticated) {
-        return removeOpportunity(opportunityId);
+      if (!AuthenticationService.isAuthenticated) {
+        return DialogService.openLogin().then(function(data) {
+          if (data.value) {
+            return removeOpportunity(opportunityId);
+          } else {
+            var deferred = $q.defer();
+            deferred.reject(new Error('Failed to authenticate'));
+            return deferred.promise;
+          }
+        });
       } else {
-        var deferred = $q.defer();
-        deferred.reject(new Error('Failed to authenticate'));
-        return deferred.promise;
+        return removeOpportunity(opportunityId);
       }
     },
     list: function() {

@@ -45,7 +45,7 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
           user = data;
           $rootScope.$broadcast('userUpdated', user);
           deferred.resolve(data);
-        }).error(function(data, status) {
+        }).error(function(data) {
           deferred.reject(new Error(data));
         });
       }

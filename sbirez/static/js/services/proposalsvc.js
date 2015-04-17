@@ -3,7 +3,6 @@
 angular.module('sbirezApp').factory('ProposalService', function($http, $window, $q, DialogService, AuthenticationService) {
 
   var PROPOSAL_URI = 'api/v1/proposals/';
-  var results = {};
 
   var getProposals = function() {
     var deferred = $q.defer();
@@ -17,7 +16,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     var deferred = $q.defer();
     $http.get(PROPOSAL_URI + proposalId + '/').success(function(data) {
       deferred.resolve(data);
-    }).error(function(data, status) {
+    }).error(function(data) {
       deferred.reject(new Error(data));
     });
     return deferred.promise;
@@ -36,7 +35,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       
     $http.post(PROPOSAL_URI + 'partial/', propData).success(function(data) {
       deferred.resolve(data);
-    }).error(function(data, status) {
+    }).error(function(data) {
       deferred.reject(new Error(data));
     });
     return deferred.promise;
@@ -46,7 +45,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     var deferred = $q.defer();
     $http.delete(PROPOSAL_URI + proposalId + '/').success(function(data) {
       deferred.resolve(data);
-    }).error(function(data, status) {
+    }).error(function(data) {
       deferred.reject(new Error(data));
     });
     return deferred.promise;
@@ -56,7 +55,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     var deferred = $q.defer();
     $http.patch(PROPOSAL_URI + proposalId + '/partial/', {'data':proposalData}).success(function(data) {
       deferred.resolve(data);
-    }).error(function(data, status) {
+    }).error(function(data) {
       deferred.reject(new Error(data));
     });
     return deferred.promise;
@@ -66,7 +65,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     var deferred = $q.defer();
     $http.patch(PROPOSAL_URI + proposalId + '/partial/', {'title':proposalTitle}).success(function(data) {
       deferred.resolve(data);
-    }).error(function(data, status) {
+    }).error(function(data) {
       deferred.reject(new Error(data));
     });
     return deferred.promise;
@@ -102,9 +101,13 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
           return removeProposal(opportunityId);
         } else {
           return DialogService.openLogin().then(function(data) {
-            var deferred = $q.defer();
-            deferred.reject(new Error('Failed to authenticate'));
-            return deferred.promise;
+            if (data.value) {
+              return removeProposal(opportunityId);
+            } else {
+              var deferred = $q.defer();
+              deferred.reject(new Error('Failed to authenticate'));
+              return deferred.promise;
+            }
           });
         }
       } else {
@@ -118,9 +121,13 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
         return getProposals();
       } else {
         return DialogService.openLogin().then(function(data) {
-          var deferred = $q.defer();
-          deferred.reject(new Error('Failed to authenticate'));
-          return deferred.promise;
+          if (data.value) {
+            return getProposals();
+          } else {
+            var deferred = $q.defer();
+            deferred.reject(new Error('Failed to authenticate'));
+            return deferred.promise;
+          }
         });
       }
     },
@@ -130,9 +137,13 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
           return getProposal(proposalId);
         } else {
           return DialogService.openLogin().then(function(data) {
-            var deferred = $q.defer();
-            deferred.reject(new Error('Failed to authenticate'));
-            return deferred.promise;
+            if (data.value) {
+              return getProposal(proposalId);
+            } else {
+              var deferred = $q.defer();
+              deferred.reject(new Error('Failed to authenticate'));
+              return deferred.promise;
+            }
           });
         }
       } else {
@@ -147,9 +158,13 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
           return saveProposalData(proposalId, proposalData);
         } else {
           return DialogService.openLogin().then(function(data) {
-            var deferred = $q.defer();
-            deferred.reject(new Error('Failed to authenticate'));
-            return deferred.promise;
+            if (data.value) {
+              return saveProposalData(proposalId, proposalData);
+            } else {
+              var deferred = $q.defer();
+              deferred.reject(new Error('Failed to authenticate'));
+              return deferred.promise;
+            }
           });
         }
       } else {
@@ -164,9 +179,13 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
           return saveProposalTitle(proposalId, proposalTitle);
         } else {
           return DialogService.openLogin().then(function(data) {
-            var deferred = $q.defer();
-            deferred.reject(new Error('Failed to authenticate'));
-            return deferred.promise;
+            if (data.value) {
+              return saveProposalTitle(proposalId, proposalTitle);
+            } else {
+              var deferred = $q.defer();
+              deferred.reject(new Error('Failed to authenticate'));
+              return deferred.promise;
+            }
           });
         }
       } else {

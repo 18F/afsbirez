@@ -14,7 +14,9 @@ angular.module('sbirezApp').factory('TokenInterceptor', function ($q, $window, $
         throw 'Illegal base64url string!';
       }
     }
+/* jshint ignore:start */
     return decodeURIComponent(escape(window.atob(output))); //polyfill https://github.com/davidchambers/Base64.js
+/* jshint ignore:end */
   };
   
   var decodeToken = function(token) {
@@ -62,7 +64,7 @@ angular.module('sbirezApp').factory('TokenInterceptor', function ($q, $window, $
             expiration = getTokenExpirationDate($window.sessionStorage.token);
           }, function(error) {
             // don't immediately log the user out - could have been a server hiccup or something.
-            console.log('Failed to refresh the token.');
+            console.log('Failed to refresh the token', error);
           });
         }
       }

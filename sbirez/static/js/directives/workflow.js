@@ -19,7 +19,6 @@ angular.module('sbirezApp').directive('workflow', function() {
         $scope.startingWorkflow = null;
         $scope.backWorkflow = null;
         $scope.nextWorkflow = null;
-        var promises = [];
         $scope.proposalData = {};
         var getWorkflow = function(workflow_id) {
           var deferred = $q.defer();
@@ -42,8 +41,8 @@ angular.module('sbirezApp').directive('workflow', function() {
         ProposalService.get(parseInt($scope.proposalId)).then(function(data) {
           $scope.proposal = data;
           if (data.data !== null && data.data.length > 0) {
-            var parsedData = data.data.replace(/\'/g, "\"");
-            parsedData = parsedData.replace(/True/g, "true");
+            var parsedData = data.data.replace(/\'/g, '\"');
+            parsedData = parsedData.replace(/True/g, 'true');
             $scope.proposalData = JSON.parse(parsedData);
           }
           else {
@@ -84,7 +83,6 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         var getNextWorkflow = function(workflow_id) {
-          var count = $scope.workflows.length;
           var parentWorkflow = $scope.parentWorkflow;
           var found = false;
           var childCount = 0;
@@ -109,7 +107,6 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         var getPreviousWorkflow = function(workflow_id) {
-          var count = $scope.workflows.length;
           if ($scope.parentWorkflow !== null) {
             var childCount = $scope.parentWorkflow.children.length; 
             var previousWorkflow = null;
@@ -124,7 +121,7 @@ angular.module('sbirezApp').directive('workflow', function() {
               }
             }
           }
-          if ($scope.parentWorkflow != null) {
+          if ($scope.parentWorkflow !== null) {
             return $scope.parentWorkflow.id;
           } else {
             return null;
