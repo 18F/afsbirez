@@ -980,8 +980,9 @@ class ProposalTests(APITestCase):
         self.assertEqual(response.data['firm'], 1)
 
 
-def _upload_death_star_plans(test_instance):
-    user = _fixture_user(test_instance)
+def _upload_death_star_plans(test_instance, login=True):
+    if login:
+        user = _fixture_user(test_instance)
 
     # Write the death star plans
     plans = open('deathstarplans.txt', 'wb')
@@ -995,7 +996,6 @@ def _upload_death_star_plans(test_instance):
         'name': 'Secret Death Star Plans',
         'description': 'Many bothan spies died to bring us this information.',
         'file': plans,
-        'firm': 1,
         'proposals': 2})
     plans.close()
 
@@ -1016,7 +1016,13 @@ class DocumentTests(APITestCase):
         planid = response.data['id']
         response = self.client.get('/api/v1/documents/' + str(planid) + '/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertIn('deathstarplans', response.data['file'])
+        self.assertEqual(response.data['firm'], 1)
+        response = self.client.get('/api/v1/documents/%d/file/' % planid)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def test_document_upload_requires_auth(self):
+        response = _upload_death_star_plans(self, login=False)
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
     def test_document_download(self):
         response = _upload_death_star_plans(self)
@@ -1027,6 +1033,15 @@ class DocumentTests(APITestCase):
         self.assertEqual(response.get_mime_type(), 'text/plain')
         response = self.client.get('/api/v1/documentversions/%d/file/' % version_number)
         self.assertEqual(response.get_mime_type(), 'text/plain')
+
+    def test_document_download_requires_auth(self):
+        response = _upload_death_star_plans(self)
+        # Undo the authentication that was used to upload the plans
+        self.client.force_authenticate(user=None)
+        response = self.client.get('/api/v1/documents/%d/file/' % response.data['id'])
+        # He says that he is the property of Obi-Wan Kenobi, a resident of these parts,
+        # and it's a private message for him.
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
     def test_patch_file(self):
         response = _upload_death_star_plans(self)
@@ -1045,9 +1060,7 @@ class DocumentTests(APITestCase):
             'file': plans, })
         plans.close()
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertIn('newdeathstarplans', response.data['file'])
         self.assertEqual(len(response.data['versions']), 2)
-
 
     def test_authorization_required(self):
         response = self.client.get('/api/v1/documents/', )
@@ -1072,5 +1085,4 @@ class DocumentVersionTests(APITestCase):
         id = response.data['versions'][0]
         response = self.client.get('/api/v1/documentversions/%d/' % id)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertIn('deathstarplans', response.data['file'])
 
