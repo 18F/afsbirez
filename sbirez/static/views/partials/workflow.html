@@ -1,6 +1,6 @@
 <div>
   <div class="row">
-    <h2>{{currentWorkflow.human}}</h2>
+    <p class="header-text">{{currentWorkflow.human}}</p>
     <div ng-repeat="element in currentWorkflow.children">
       <div class="workflow-element" ng-if="element.element_type === 'str' || element.element_type === 'med_str' || element.element_type === 'short_str' || element.element_type === 'phone' || element.element_type === 'email' || element.element_type === 'int'  || element.element_type === 'dollars' || element.element_type === 'float' || element.element_type === 'percentage'">
         <div str="element" storage="proposalData[element.name]"></div>
