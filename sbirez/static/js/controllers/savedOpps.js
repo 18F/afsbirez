@@ -25,11 +25,13 @@ angular.module('sbirezApp')
 
     $scope.removeOpportunity = function(opportunityId) {
       SavedOpportunityService.remove(opportunityId).then(function() {
-        SavedOpportunityService.list().then(function(data) {
-          $scope.data = data;
-        }, function(error) { 
-          console.log(error);
-        });
+        for (var i = 0; i < $scope.data.results.length; i++) {
+          console.log('da', $scope.data.results[i],opportunityId );
+          if ($scope.data.results[i].id === opportunityId) {
+            $scope.data.results.splice(i,1);
+            break;
+          }
+        }
       });
     };
 

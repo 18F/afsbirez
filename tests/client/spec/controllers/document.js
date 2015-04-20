@@ -18,13 +18,11 @@ describe('Controller: DocumentCtrl', function () {
 
   data = {
     'name': 'filename',
-    'uploaded': new Date().getTime(),
+    'created_at': new Date().getTime(),
     'size': 1000,
-    'proposals': [{'id': 1, 'name': 'prop123'}, {'id':2, 'name': 'prop2'}],
+    'proposals': [1,2], 
+    'versions': [1,2], 
     'keywords':['resume', 'test'],
-    'changelog': [
-      {'message':'File uploaded', 'dateChanged': new Date().getTime()}
-    ],
     'description': 'This is a description of the file.'
   };
 
@@ -60,6 +58,10 @@ describe('Controller: DocumentCtrl', function () {
     AuthenticationService.setAuthenticated(true);
     scope.documentId = 1;
     expect(scope.data).toBeUndefined();
+    $httpBackend.expectGET('api/v1/proposals/1/').respond(200);
+    $httpBackend.expectGET('api/v1/proposals/2/').respond(200);
+    $httpBackend.expectGET('api/v1/documentversions/1/').respond(200);
+    $httpBackend.expectGET('api/v1/documentversions/2/').respond(200);
     $httpBackend.flush();
     expect(scope.data).toBeDefined();
   });
@@ -67,6 +69,10 @@ describe('Controller: DocumentCtrl', function () {
   it('should post a document when save is called', function () {
     $window.sessionStorage.userid = 1;
     AuthenticationService.setAuthenticated(true);
+    $httpBackend.expectGET('api/v1/proposals/1/').respond(200);
+    $httpBackend.expectGET('api/v1/proposals/2/').respond(200);
+    $httpBackend.expectGET('api/v1/documentversions/1/').respond(200);
+    $httpBackend.expectGET('api/v1/documentversions/2/').respond(200);
     $httpBackend.flush();
     $httpBackend.expectPATCH('api/v1/documents/1/').respond(200, '');
     scope.save();
@@ -76,6 +82,10 @@ describe('Controller: DocumentCtrl', function () {
   it('should send a delete command to the server when remove is called', function () {
     $window.sessionStorage.userid = 1;
     AuthenticationService.setAuthenticated(true);
+    $httpBackend.expectGET('api/v1/proposals/1/').respond(200);
+    $httpBackend.expectGET('api/v1/proposals/2/').respond(200);
+    $httpBackend.expectGET('api/v1/documentversions/1/').respond(200);
+    $httpBackend.expectGET('api/v1/documentversions/2/').respond(200);
     $httpBackend.flush();
     $httpBackend.expectDELETE('api/v1/documents/1/').respond(200, '');
     scope.remove();

@@ -13,14 +13,18 @@ angular.module('sbirezApp').directive('upload', function() {
     controller: ['$scope', 'DocumentService',
       function ($scope, DocumentService) {
         $scope.element = $scope.upload;
-        var fileId = null;
-        if ($scope.storage !== undefined) {
-          fileId = parseInt($scope.storage);
-          if (fileId) {
-            DocumentService.get(fileId).then(function(data) {
+        $scope.fileId = null;
+        if ($scope.storage !== undefined && $scope.storage !== null) {
+          $scope.fileId = parseInt($scope.storage);
+          if ($scope.fileId) {
+            DocumentService.get($scope.fileId).then(function(data) {
               $scope.selectedFiles = [];
               $scope.selectedFiles[0] = data;
               $scope.selectedFiles[0].filename = data.name;
+            }, function() {
+              $scope.fileId = null;
+              $scope.selectedFiles = [];
+              $scope.storage = null;
             });
           }
         }
@@ -35,14 +39,16 @@ angular.module('sbirezApp').directive('upload', function() {
           }
         };
 
-        $scope.start = function(index, id) {
+        $scope.start = function(index) {
           DocumentService.upload($scope.selectedFiles[index],
             $scope.selectedFiles[index].filename,
             $scope.selectedFiles[index].description,
             $scope.proposal,
+            $scope.fileId,
             function(val) {console.log('progress', val);
           }).then(function(data) {
             $scope.storage = data.id;
+            $scope.progress[index] = 0;
           });
         };
       }
