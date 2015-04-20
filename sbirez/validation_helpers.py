@@ -26,7 +26,7 @@ from doctest import testmod, NORMALIZE_WHITESPACE
 import re
 import shlex
 
-from quantity_helpers import to_integer, to_decimal, to_days, to_months
+from sbirez.quantity_helpers import to_integer, to_decimal, to_days, to_months
 
 # for custom validators to call
 
