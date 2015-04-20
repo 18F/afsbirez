@@ -5,7 +5,7 @@ import hashlib
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from sbirez.models import Topic, Firm, Workflow, Proposal, Address, Person
+from sbirez.models import Topic, Firm, Proposal, Address, Person
 from sbirez.models import Element, Document, DocumentVersion
 from rest_framework import viewsets, mixins, generics, status, permissions, exceptions
 from rest_framework.decorators import detail_route
@@ -15,7 +15,7 @@ from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer
 from django_downloadview import ObjectDownloadView
 
 from sbirez.serializers import FirmSerializer, ProposalSerializer, PartialProposalSerializer
-from sbirez.serializers import WorkflowSerializer, AddressSerializer, ElementSerializer
+from sbirez.serializers import AddressSerializer, ElementSerializer
 from sbirez.serializers import PersonSerializer, DocumentSerializer, DocumentVersionSerializer
 import marshmallow as mm
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -122,11 +122,6 @@ class SaveTopicView(generics.GenericAPIView):
             topic.saved_by.remove(request.user.id)
         # Returning 204 even if the item never was saved in the first place (is this correct?)
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class WorkflowViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Workflow.objects.all()
-    serializer_class = WorkflowSerializer
 
 
 class ElementViewSet(viewsets.ReadOnlyModelViewSet):
