@@ -67,10 +67,6 @@ class Reference(models.Model):
     reference = models.TextField()
     topic = models.ForeignKey('Topic', related_name='references')
 
-class Workflow(models.Model):
-    name = models.TextField(blank=False)
-    validation = models.TextField()
-
 class Element(models.Model):
     """
     Individual questions for a form, or nestable containers to hold
@@ -242,26 +238,6 @@ class Topic(models.Model):
     objects = SearchManager(fields=None, search_field='fts',
                            auto_update_search_field=False)
 
-class Question(models.Model):
-    name = models.TextField(blank=False)
-    order = models.IntegerField(blank=False)
-    parent = models.ForeignKey(Workflow, related_name='questions')
-
-    # Each question should be EITHER an actual question...
-    data_type = models.TextField(null=True, default='str')
-    required = models.NullBooleanField(default=False)
-    default = models.TextField(null=True, blank=True)
-    human = models.TextField(null=True, blank=True)
-    help = models.TextField(null=True, blank=True)
-    validation = models.TextField(null=True, blank=True)
-    validation_msg = models.TextField(null=True, blank=True)
-    ask_if = models.TextField(null=True, blank=True)
-
-    # ... OR a sub-workflow
-    subworkflow = models.ForeignKey(Workflow, related_name='subworkflow_of', null=True, blank=True)
-
-    class Meta:
-        ordering = ['order',]
 
 class Proposal(models.Model):
     owner = models.ForeignKey(SbirezUser, related_name='proposals')
