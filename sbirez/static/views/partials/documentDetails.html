@@ -1,17 +1,23 @@
 <div ng-if="data.name">
-  <h2>{{data.name}}</h2>
-  <a ng-href="api/documents/{{data.id}}?file&jwt={{jwt}}" target="_blank">Download</a>  
+  <p class="header-text">{{data.name}}</p>
+  <a ng-href="api/v1/documents/{{data.id}}/file/?jwt={{jwt}}" target="_self">Download</a>
   <form ng-submit="save()">
     <p ng-show="errorMsg" class="bg-danger">{{errorMsg}}</p>
     <p ng-show="updated" class="bg-success">Document successfully updated.</p>
-    <p>Uploaded: {{data.created_at | date}}</p>
+    <p>Last Updated: {{data.updated_at | date:'medium' }}</p>
+    <p>Description:</p>
     <textarea ng-model="data.description" class="form-control" placeholder="Please add a description of the file."></textarea>
-    <h2>Attached to Proposals</h2>
-      <div ng-repeat="proposal in proposals">
-        <a href="/app/proposals/{{proposal.id}}">{{proposal.title}}</a>
-      </div>
-    <button type="submit" class="btn btn-primary">Save</button>
-    <button type="button" class="btn btn-warning" ng-click="remove()">Remove</button>
+    <p class="topic-header-text">Attached to Proposals</p>
+    <div ng-repeat="proposal in proposals | orderObjectBy:'updated_at'">
+      <a href="/app/proposals/{{proposal.id}}">{{proposal.title}}</a>
+    </div>
+    <p class="topic-header-text">Versions</p>
+    <div ng-repeat="version in versions | orderObjectBy:'id'">
+      <p>{{version.updated_at | date:'medium' }} <a ng-href="api/v1/documentversions/{{version.id}}/file/?jwt={{jwt}}" target="_self">Download</a> {{version.note}}</p>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    <button type="button" class="btn" ng-click="remove()">Remove File</button>
   </form>
 </div>
 <div ng-if="!data.name">

@@ -1,11 +1,18 @@
 <div>
-  <h2>Documents</h2>
-  <div class="list-group">
-    <a class="list-group-item" ui-sref="app.activity.documents.detail({id: {{doc.id}}})" ng-repeat="doc in docList">
-      <h4 class="list-group-item-heading">
-        {{doc.name}} {{doc.created_at | date}}
-      </h4>
-      <p class="list-group-item-text">{{doc.description}}</p>
-    </a>
-  </div>
+  <p class="header-text">Documents</p>
+  <p>You currently have <strong>{{docList.length}} documents.</strong></p>
+  <table class="table table-hover">
+    <tr>
+      <th>Name</th>
+      <th>Modified</th>
+      <th>Description</th>
+    <tr>
+    <tbody>
+      <tr ng-repeat="doc in docList">
+        <td><a ui-sref="app.activity.documents.detail({id: {{doc.id}}})">{{doc.name}}</a></td>
+        <td>{{doc.description}}</td>
+        <td>{{doc.updated_at | date:'medium'}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

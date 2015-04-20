@@ -7,27 +7,41 @@ angular.module('sbirezApp')
     $scope.errorMsg = '';
     $scope.updated = false;
     $scope.proposals = [];
+    $scope.versions = [];
+
+    var pushProposal = function(data) {
+      $scope.proposals.push(data);
+    };
+
+    var pushVersion = function(data) {
+      $scope.versions.push(data);
+    };
 
     DocumentService.get(parseInt($scope.documentId)).then(function(data) {
       $scope.data = data;
-      for (var i = 0; i < $scope.data.proposals.length; i++) {
-        ProposalService.get($scope.data.proposals[i]).then(function(data) {
-          $scope.proposals.push(data);
-        });
+      if ($scope.data.proposals !== undefined) {
+        for (var i = 0; i < $scope.data.proposals.length; i++) {
+          ProposalService.get($scope.data.proposals[i]).then(pushProposal);
+        }
+      }
+      if ($scope.data.versions !== undefined) {
+        for (var j = 0; j < $scope.data.versions.length; j++) {
+          DocumentService.getVersion($scope.data.versions[j]).then(pushVersion);
+        }
       }
     });
 
     $scope.save = function() {
-      DocumentService.saveData(parseInt($scope.documentId), {'description':$scope.data.description}).then(function(data) {
+      DocumentService.saveData(parseInt($scope.documentId), {'description':$scope.data.description}).then(function() {
         $scope.updated = true;
-      }, function(data, status) {
+      }, function(data) {
         $scope.errorMsg = data;
         $scope.updated = false;
       });
     };
 
     $scope.remove = function() {
-      DocumentService.remove(parseInt($scope.documentId)).then(function(data) {
+      DocumentService.remove(parseInt($scope.documentId)).then(function() {
         console.log('file removed...need to redirect.');
         $location.path('/app/documents');
       });
