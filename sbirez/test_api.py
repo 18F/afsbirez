@@ -682,35 +682,6 @@ class TopicTests(APITestCase):
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
 
-class WorkflowTests(APITestCase):
-
-    fixtures = ['workflowtest.json']
-
-    # Check that the workflow index loads
-    def test_workflow_view_set(self):
-        response = self.client.get('/api/v1/workflows/')
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-    # Check that fixture workflow included in GET result
-    def test_workflow_included(self):
-        response = self.client.get('/api/v1/workflows/')
-        self.assertGreater(response.data["count"], 0)
-        self.assertEqual(response.data["results"][0]['name'],
-                         'dod_proposal_info')
-
-    # Check that fixture result includes questions
-    def test_questions_included_in_workflow(self):
-        response = self.client.get('/api/v1/workflows/')
-        self.assertGreater(response.data["count"], 0)
-        self.assertEqual(response.data["results"][0]['name'],
-                         'dod_proposal_info')
-
-    def test_get_single_workflow(self):
-        response = self.client.get('/api/v1/workflows/1/')
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data["name"], 'dod_proposal_info')
-
-
 class ElementTests(APITestCase):
 
     fixtures = ['elements.json', ]
