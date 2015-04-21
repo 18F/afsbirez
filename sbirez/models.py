@@ -7,6 +7,7 @@ from djorm_pgfulltext.models import SearchManager
 from django.conf import settings
 from custom_user.models import AbstractEmailUser
 from rest_framework import serializers
+from django_pgjson.fields import JsonField
 
 class Address(models.Model):
     street = models.TextField()
@@ -270,7 +271,7 @@ class Proposal(models.Model):
     topic = models.ForeignKey(Topic, related_name='proposals')
     submitted_at = models.DateTimeField(auto_now=True)
     title = models.TextField()
-    data = models.TextField(null=True, blank=True)
+    data = JsonField(null=True, blank=True)
 
 
 class Document(models.Model):

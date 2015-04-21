@@ -773,11 +773,6 @@ class ProposalTests(APITestCase):
 
     fixtures = ['thin.json', ]
 
-    def _deserialize_data(self, response):
-        """An ugly hack for the fact that the 'data' field comes back
-           serialized."""
-        response.data['data'] = json.loads(response.data['data'])
-
     # Check that the proposal index loads
     def test_proposal_view_set(self):
         user = _fixture_user(self)
@@ -791,7 +786,6 @@ class ProposalTests(APITestCase):
 
         response = self.client.get('/api/v1/proposals/2/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self._deserialize_data(response)
         self.assertEqual(response.data["data"]["quest_thy_name"],
             'Galahad')
 
@@ -799,7 +793,6 @@ class ProposalTests(APITestCase):
         user = _fixture_user(self)
 
         response = self.client.get('/api/v1/proposals/2/')
-        self._deserialize_data(response)
         self.assertEqual(response.data['data']['subquest']
                          ['quest_thy_favorite_color'], 'yellow')
         response.data['data']['subquest']['quest_thy_favorite_color'] = 'green'
@@ -808,7 +801,6 @@ class ProposalTests(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         response = self.client.get('/api/v1/proposals/2/')
-        self._deserialize_data(response)
         self.assertEqual(response.data['data']['subquest']
                          ['quest_thy_favorite_color'], 'green')
 
@@ -816,7 +808,6 @@ class ProposalTests(APITestCase):
         user = _fixture_user(self)
 
         response = self.client.get('/api/v1/proposals/2/')
-        self._deserialize_data(response)
         response.data['data']['subquest']['quest_thy_favorite_color'] = 'blue'
         response.data['data'] = json.dumps(response.data['data'])
         response = self.client.put('/api/v1/proposals/2/', response.data)
@@ -907,7 +898,6 @@ class ProposalTests(APITestCase):
                          "quest_thy_quest": "Grail-thingie.  Get.", }})
              })
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self._deserialize_data(response)
         self.assertEqual(response.data['data']['subquest']['quest_thy_quest'],
                          'Grail-thingie.  Get.')
         self.assertEqual(response.data['data']['subquest']
@@ -931,7 +921,6 @@ class ProposalTests(APITestCase):
                          "quest_thy_quest": "Grail-thingie.  Get.", }})
              })
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self._deserialize_data(response)
         self.assertEqual(response.data['data']['subquest']['quest_thy_quest'],
                          'Grail-thingie.  Get.')
         self.assertEqual(response.data['title'], 'Title!')
@@ -954,7 +943,6 @@ class ProposalTests(APITestCase):
 
         response = self.client.get('/api/v1/proposals/%s/' % response.data['id'])
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self._deserialize_data(response)
         self.assertEqual(response.data['data']['subquest']['quest_thy_favorite_color'],
             "#0000FF")
 
@@ -975,7 +963,6 @@ class ProposalTests(APITestCase):
 
         response = self.client.get('/api/v1/proposals/%s/' % response.data['id'])
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self._deserialize_data(response)
         self.assertEqual(response.data['owner'], 2)
         self.assertEqual(response.data['firm'], 1)
 

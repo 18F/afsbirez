@@ -277,12 +277,12 @@ def genericValidator(proposal, accept_partial=False):
     Inspect the workflow's validators and apply them to
     the proposal's data
     '''
-    data = json.loads(proposal['data'])
 
     errors = []
     if 'workflow' in proposal:
         for element in proposal['workflow'].children.all():
-            errors.extend(_find_validation_errors(data, element, accept_partial=accept_partial))
+            errors.extend(_find_validation_errors(proposal['data'], element,
+                                                  accept_partial=accept_partial))
     else:
         if not accept_partial:
             errors.append(object)
@@ -303,6 +303,15 @@ class CurrentFirmDefault(serializers.CurrentUserDefault):
         return self.user.firm
 
 
+class JsonField(serializers.CharField):
+
+    def to_representation(self, obj):
+        return obj
+
+    def to_internal_value(self, data):
+        return json.loads(data)
+
+
 class ProposalSerializer(serializers.ModelSerializer):
 
     owner = serializers.PrimaryKeyRelatedField(
@@ -313,9 +322,16 @@ class ProposalSerializer(serializers.ModelSerializer):
         read_only = True,
         default = CurrentFirmDefault())
 
+    data = JsonField()
+
     class Meta:
         model = Proposal
         validators = [genericValidator]
+        """
+        fields = ('id', 'submitted_at', 'data', 'firm_id',
+                  'owner_id', 'topic_id', 'workflow_id', 'title',
+                  'owner', 'firm')
+        """
 
 
 class PartialProposalSerializer(ProposalSerializer):

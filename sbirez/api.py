@@ -177,8 +177,7 @@ class PartialProposalViewSet(ProposalViewSet):
         if 'data' in request.data:
             try:
                 instance = self.get_object()
-                data = json.loads(instance.data)
-                data = nested_update(data, json.loads(request.data['data']))
+                data = nested_update(instance.data, json.loads(request.data['data']))
                 request.data['data'] = json.dumps(data)
             except AttributeError:
                 pass
