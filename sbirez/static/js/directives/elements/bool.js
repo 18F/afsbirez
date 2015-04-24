@@ -6,7 +6,8 @@ angular.module('sbirezApp').directive('bool', function() {
     replace: true,
     scope: {
       bool: '=',
-      storage: '='
+      storage: '=',
+      validationstorage: '='
     },
     templateUrl: 'static/views/partials/elements/bool.html',
     controller: ['$scope', 

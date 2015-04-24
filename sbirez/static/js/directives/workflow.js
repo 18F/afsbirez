@@ -10,8 +10,8 @@ angular.module('sbirezApp').directive('workflow', function() {
       proposalId: '@'
     },
     templateUrl: 'static/views/partials/workflow.html',
-    controller: ['$scope', '$http', '$q', '$stateParams', '$location', 'ProposalService',
-      function ($scope, $http, $q, $stateParams, $location, ProposalService) {
+    controller: ['$scope', '$http', '$q', '$stateParams', '$location', 'ProposalService', 'ValidationService',
+      function ($scope, $http, $q, $stateParams, $location, ProposalService, ValidationService) {
 
         $scope.workflows = [];
         $scope.currentWorkflow = {};
@@ -20,6 +20,7 @@ angular.module('sbirezApp').directive('workflow', function() {
         $scope.backWorkflow = null;
         $scope.nextWorkflow = null;
         $scope.proposalData = {};
+        $scope.validationData = {};
         var getWorkflow = function(workflow_id) {
           var deferred = $q.defer();
           $http.get('api/v1/elements/' + workflow_id + '/').success(function(data) {
@@ -153,8 +154,13 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         $scope.saveData = function() {
+          console.log('saved Data', $scope.proposalData);
           ProposalService.saveData(parseInt($scope.proposalId), JSON.stringify($scope.proposalData));
         };
+
+        $scope.validate = function() {
+          var response = ValidationService.validate($scope.currentWorkflow, $scope.proposalData, $scope.validationData, false);
+        }
       }
     ]
   };

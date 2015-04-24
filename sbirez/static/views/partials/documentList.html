@@ -1,11 +1,26 @@
 <div>
-  <h2>Documents</h2>
-  <div class="list-group">
-    <a class="list-group-item" ui-sref="app.activity.documents.detail({id: {{doc.id}}})" ng-repeat="doc in docList">
-      <h4 class="list-group-item-heading">
-        {{doc.name}} {{doc.created_at | date}}
-      </h4>
-      <p class="list-group-item-text">{{doc.description}}</p>
-    </a>
-  </div>
+  <p class="header-text">Documents</p>
+  <p>You currently have <strong>{{docList.length}} documents.</strong></p>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th><a href="#" ng-click="sortType = 'name'; sortReverse = !sortReverse">Name
+          <span ng-show="sortType == 'name' && !sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+          <span ng-show="sortType == 'name' && sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+        </th>
+        <th><a href="#" ng-click="sortType = 'updated_at'; sortReverse = !sortReverse">Modified
+          <span ng-show="sortType == 'updated_at' && !sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+          <span ng-show="sortType == 'updated_at' && sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+        </th>
+        <th>Description</th>
+      <tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="doc in docList | orderBy:sortType:sortReverse">
+        <td><a ui-sref="app.activity.documents.detail({id: {{doc.id}}})">{{doc.name}}</a></td>
+        <td>{{doc.updated_at | date:'medium'}}</td>
+        <td>{{doc.description}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

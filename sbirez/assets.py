@@ -58,6 +58,7 @@ angular_js = Bundle(
     "js/services/tokensvc.js",
     "js/services/proposalsvc.js",
     "js/services/documentsvc.js",
+    "js/services/validationsvc.js",
     filters="jsmin",
     output="js/angular.min.js"
 )

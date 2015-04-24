@@ -7,7 +7,8 @@ angular.module('sbirezApp').directive('upload', function() {
     scope: {
       upload: '=',
       storage: '=',
-      proposal: '@'
+      proposal: '@',
+      validationstorage: '='
     },
     templateUrl: 'static/views/partials/elements/upload.html',
     controller: ['$scope', 'DocumentService',

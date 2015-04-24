@@ -6,12 +6,14 @@ angular.module('sbirezApp').directive('text', function() {
     replace: true,
     scope: {
       text: '=',
-      storage: '='
+      storage: '=',
+      validationstorage: '='
     },
     templateUrl: 'static/views/partials/elements/text.html',
     controller: ['$scope',
       function ($scope) {
         $scope.element = $scope.text;
+        $scope.validationstorage = '';
       }
     ]
   };
