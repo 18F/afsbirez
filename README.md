@@ -26,9 +26,13 @@ $ cd afsbirez
 
 * Make a virtualenv
 
+The directory hosting the virtualenv can be anywhere
+you want; keeping it here within the `afsbirez` directory
+aids in clarity.
+ 
 ```
 $ mkdir env
-$ virtualenv --no-site-packages ./env
+$ virtualenv-3.4 ./env
 ```
 
 * Activate the virtualenv
@@ -76,7 +80,13 @@ $ bower install
 ```
 
 ### Configure the database
-Check your pg_hba.conf file on your system (location varies) to allow local connections without passwords.
+Check your pg_hba.conf file on your system to allow local connections without passwords.  pg_hba.conf location varies from system to system; to find yours,
+you can use
+
+```
+psql -t -P format=unaligned -c 'show hba_file' template1
+
+```
 
 Your hba.conf should have the following lines already in place:
 ```
@@ -87,11 +97,11 @@ host    all             all             127.0.0.1/32            trust
 Create a database and role with your system user name
 
 ```
-$ psql -c 'create role afsbirez password 'afsbirez';' -U postgres
-$ psql -c 'CREATE DATABASE afsbirezdev WITH OWNER afsbirez;' -U postgres
+$ psql -c "create user afsbirez with superuser password 'afsbirez';" -U postgres
+$ psql -c 'CREATE DATABASE afsbirez WITH OWNER afsbirez;' -U postgres
 ```
 
-Create the database tables on 'afsbirezdev'
+Create the database tables on 'afsbirez'
 
 ```
 $ python manage.py syncdb
@@ -106,13 +116,6 @@ $ python manage.py runserver
 
 ### Running Python Tests
 
-First create a postgres database and test user
-
-```
-$ psql -c `create database afsbireztest WITH OWNER afsbirez;` -U postgres
-```
-
-Next, run the tests
 ```
 $ python manage.py test
 ```
