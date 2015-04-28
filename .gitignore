@@ -30,3 +30,4 @@ Untitled*.ipynb
 .ipynb_checkpoints/
 *.egg-info/
 sbirez/media/*
+afbirez/settings/credentials.py
