@@ -1,10 +1,10 @@
 <div class="str-question">
   <label class="question" for="{{element.name}}"><div marked="element.human"></div></label>
-  <div ng-show="options.length === 0"><input id="{{element.name}}" class="form-control" ng-model="storage" type="text"></input></div>
+  <div ng-show="options.length === 0">
+    <input id="{{element.name}}" class="form-control" ng-model="storage" type="text"></input>
+  </div>
   <div ng-show="options.length > 0">
-    <select id="{{element.name}}" class="form-control" ng-model="storage">
-      <option ng-repeat="opt in options" value="{{opt}}">{{opt}}</option>
-    </select>
+    <select id="{{element.name}}" class="form-control" ng-options="opt as opt for opt in options" ng-model="storage"></select>
   </div>
   <div ng-show="validationstorage" class="text-danger"><p class="errortext">{{validationstorage}}</p></div>
 </div>

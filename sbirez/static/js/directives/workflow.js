@@ -159,6 +159,7 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         $scope.validate = function() {
+          $scope.validationData = {};
           var response = ValidationService.validate($scope.currentWorkflow, $scope.proposalData, $scope.validationData, false);
         }
       }

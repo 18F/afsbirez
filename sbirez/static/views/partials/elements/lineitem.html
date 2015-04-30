@@ -2,22 +2,25 @@
   <div class="panel panel-default">
     <div class="panel-heading">{{element.human}}</div>
     <div class="panel-body">
-      <div ng-if="element.multiplicity" ng-repeat="multiple in element.multiplicity">{{multiple.value}}
+      <div ng-if="element.multiplicity" ng-repeat="multiple in element.multiplicity">
         <div ng-repeat="subelement in element.children">
-          <div class="workflow-element" ng-if="subelement.element_type === 'str' || subelement.element_type === 'med_str' || subelement.element_type === 'short_str' || subelement.element_type === 'phone' || subelement.element_type === 'email' || subelement.element_type === 'int' || subelement.element_type === 'dollars' || subelement.element_type === 'float' || subelement.element_type === 'percentage'">
-            <div str="subelement" validationstorage="validationData[multiple.token][subelement.name]" storage="storage[multiple.token][subelement.name]"></div>
+          <div class="workflow-element" ng-if="subelement.element_type === 'str' || subelement.element_type === 'long_str' || subelement.element_type === 'med_str' || subelement.element_type === 'short_str' || subelement.element_type === 'phone' || subelement.element_type === 'email' || subelement.element_type === 'int' || subelement.element_type === 'dollars' || subelement.element_type === 'float' || subelement.element_type === 'percentage'">
+            <div str="subelement" validationstorage="validationData[multiple.token][subelement.name]" storage="storage[multiple.token][subelement.name]" multiplename="multiple.value"></div>
           </div>
           <div class="workflow-element" ng-if="subelement.element_type === 'text'">
-            <div text="subelement" validationstorage="validationData[multiple.token][subelement.name]" storage="storage[multiple.token][subelement.name]"></div>
+            <div text="subelement" validationstorage="validationData[multiple.token][subelement.name]" storage="storage[multiple.token][subelement.name]" multiplename="multiple.value"></div>
           </div>
           <div class="workflow-element" ng-if="subelement.element_type === 'bool'">
-            <div bool="subelement" validationstorage="validationData[multiple.token][subelement.name]" storage="storage[multiple.token][subelement.name]"></div>
+            <div bool="subelement" validationstorage="validationData[multiple.token][subelement.name]" storage="storage[multiple.token][subelement.name]" multiplename="multiple.value"></div>
+          </div>
+          <div class="workflow-element" ng-if="subelement.element_type === 'checkbox'">
+            <div checkbox="subelement" validationstorage="validationData[multiple.token][subelement.name]" storage="storage[multiple.token][subelement.name]" multiplename="multiple.value"></div>
           </div>
           <div class="workflow-element subworkflow" ng-if="subelement.element_type === 'workflow' || subelement.element_type === 'group'">
             <div group="subelement" storage="storage[multiple.token][subelement.name]" method="jumpTo" ></div>
           </div>
           <div class="workflow-element" ng-if="subelement.element_type === 'file_upload'">
-            <div upload="subelement" proposalId="{{proposalId}}" validationstorage="validationData[multiple.token][subelement.name]" storage="storage[multiple.token][subelement.name]"></div>
+            <div upload="subelement" proposalId="{{proposalId}}" validationstorage="validationData[multiple.token][subelement.name]" storage="storage[multiple.token][subelement.name]" multiplename="multiple.value"></div>
           </div>
         </div>
       </div>

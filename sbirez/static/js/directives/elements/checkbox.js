@@ -1,19 +1,19 @@
 'use strict';
 
-angular.module('sbirezApp').directive('bool', function() {
+angular.module('sbirezApp').directive('checkbox', function() {
   return {
     restrict: 'A',
     replace: true,
     scope: {
-      bool: '=',
+      checkbox: '=',
       storage: '=',
       validationstorage: '=',
       multiplename: '=?'
     },
-    templateUrl: 'static/views/partials/elements/bool.html',
+    templateUrl: 'static/views/partials/elements/checkbox.html',
     controller: ['$scope', 
       function ($scope) {
-        $scope.element = $scope.bool;
+        $scope.element = $scope.checkbox;
         $scope.fieldName = $scope.element.human
         if ($scope.multiplename !== undefined && $scope.element.human.indexOf('%multiple%') > -1) {
           $scope.fieldName = $scope.element.human.replace('%multiple%', $scope.multiplename);

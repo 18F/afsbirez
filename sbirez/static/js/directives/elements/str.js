@@ -7,13 +7,19 @@ angular.module('sbirezApp').directive('str', function() {
     scope: {
       str: '=',
       storage: '=',
-      validationstorage: '='
+      validationstorage: '=',
+      multiplename: '=?'
     },
     templateUrl: 'static/views/partials/elements/str.html',
     controller: ['$scope',
       function ($scope) {
         $scope.element = $scope.str;
+        $scope.fieldName = $scope.element.human;
         $scope.options = [];
+
+        if ($scope.multiplename !== undefined && $scope.fieldName.indexOf('%multiple%') > -1) {
+          $scope.fieldName = $scope.fieldName.replace('%multiple%', $scope.multiplename);
+        }
 
         if ($scope.element.validation) {
           var validationElements = $scope.element.validation.split(' ');

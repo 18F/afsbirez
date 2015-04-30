@@ -181,7 +181,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
           validationResults[element.name] = 'Field is required';
           console.log('Field is required');
         } else {
-          console.log('validation skipped', element.validation, data[element.id]);
+          console.log('validation skipped', element.validation, element.name);
         }
 
         if (element.element_type === 'line_item' && element.multiplicity.length > 0) {
@@ -193,6 +193,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
           }
         }
       }
+      console.log('Validation Results', validationResults);
       return validationResults.length === 0;
     }
   };
