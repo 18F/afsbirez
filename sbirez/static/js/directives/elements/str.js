@@ -6,16 +6,43 @@ angular.module('sbirezApp').directive('str', function() {
     replace: true,
     scope: {
       str: '=',
-      storage: '=',
-      validationstorage: '=',
-      multiplename: '=?'
+      multiplename: '=?',
+      multipletoken: '=?'
     },
     templateUrl: 'static/views/partials/elements/str.html',
-    controller: ['$scope',
-      function ($scope) {
+    controller: ['$scope', 'ProposalService',
+      function ($scope, ProposalService) {
         $scope.element = $scope.str;
         $scope.fieldName = $scope.element.human;
         $scope.options = [];
+        $scope.visible = true;
+        $scope.validationstorage = '';
+        console.log('str element', $scope.element, $scope.multiplename);
+
+        var validationCallback = function(data) {
+          $scope.validationstorage = data;
+        };
+
+        var askIfCallback = function(data) {
+          $scope.visible = data;
+        };
+
+        $scope.storage = ProposalService.register($scope.element,
+                                 validationCallback,
+                                 $scope.element.ask_if !== null ? askIfCallback : null,
+                                 $scope.multipletoken);
+        if ($scope.storage.length === undefined) {
+          $scope.storage = '';
+        }
+
+        $scope.fieldName = $scope.element.human;
+        if ($scope.multiplename !== undefined && $scope.element.human.indexOf('%multiple%') > -1) {
+          $scope.fieldName = $scope.element.human.replace('%multiple%', $scope.multiplename);
+        }
+
+        $scope.apply = function() {
+          ProposalService.apply($scope.element, $scope.storage, $scope.multipletoken);
+        };
 
         if ($scope.multiplename !== undefined && $scope.fieldName.indexOf('%multiple%') > -1) {
           $scope.fieldName = $scope.fieldName.replace('%multiple%', $scope.multiplename);

@@ -391,7 +391,7 @@
           element_type: bool
           required: True
         -
-          name: ccr_contact_info
+          name: pico_contact_info
           element_type: line_item
           multiplicity: Principal Investigator/Project Manager, Corporate Official (Business)
           children:
@@ -622,7 +622,6 @@
       -
         name: ccr_contact_info
         element_type: line_item
-        multiplicity: Principal Investigator/Project Manager, Corporate Official (Business)
         children:
         -
           name: honorific

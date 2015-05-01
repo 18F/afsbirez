@@ -6,20 +6,14 @@ angular.module('sbirezApp').directive('lineitem', function() {
     replace: true,
     scope: {
       lineitem: '=',
-      storage: '=',
-      proposal: '@',
-      validationstorage: '='
+      proposal: '@'
     },
     templateUrl: 'static/views/partials/elements/lineitem.html',
     controller: ['$scope', 
       function ($scope) {
         var count = 0;
         var iter = 0;
-        $scope.validationstorage = {};
         $scope.element = $scope.lineitem;
-        if ($scope.storage === undefined) {
-          $scope.storage = {};
-        }
 
         if ($scope.element.multiplicity === null) {
           $scope.element.multiplicity = [];

@@ -6,7 +6,6 @@ angular.module('sbirezApp').directive('group', function() {
     replace: true,
     scope: {
       group: '=',
-      storage: '=',
       method: '='
     },
     templateUrl: 'static/views/partials/elements/group.html',

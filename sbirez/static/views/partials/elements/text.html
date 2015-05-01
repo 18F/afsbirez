@@ -1,4 +1,4 @@
 <div class="text-question">
   <label class="question" for="{{element.name}}"><div marked="element.human"></div></label>
-  <textarea id="{{element.name}}" class="form-control" ng-model="storage"></textarea>
+  <textarea id="{{element.name}}" class="form-control" ng-change="apply()" ng-model="storage"></textarea>
 </div>
