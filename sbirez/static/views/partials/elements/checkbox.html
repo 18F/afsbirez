@@ -1,0 +1,6 @@
+<div class="checkbox-question checkbox">
+  <label class="question" for="{{element.name}}">
+    <input type="checkbox" ng-model="storage" ng-change="apply()" id="{{element.name}}"><div marked="fieldName"></div> 
+  </label>
+  <div ng-show="validationstorage" class="text-danger"><p class="errortext">{{validationstorage}}</p></div>
+</div>

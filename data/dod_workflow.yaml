@@ -8,6 +8,222 @@
       human: Coversheet
       children:
       -
+        name: eligibility
+        element_type: group
+        children:
+        -
+          name: release_to_edc
+          human: Does your firm allow for the release of its contact information
+                 to Economic Development Organizations?
+          element_type: bool
+          required: True
+        -
+          name: small_business
+          human: Are you a small business as described in section 3.15 of the solicitation
+                 with no more than 500 employees including affiliates?
+          element_type: bool
+          required: True
+        -
+          name: ownership_control_requirements
+          human: Does your business concern meet the ownership and control requirements in
+                 13 CFR 121.702?
+          element_type: bool
+          required: True
+        -
+          name: majority_owned_by_corp
+          human: Is 50% or more of your firm owned or managed by a corporate entity?
+          element_type: bool
+          required: True
+        -
+          name: two_thirds_work_requirement
+          human: At a minimum, will two-thirds of the research and/or analytical work in
+                 Phase I be carried out by your small business as described in section 4.2
+                 of the solicitation?
+          element_type: bool
+          required: True
+        -
+          name: pi_primary_employment
+          human: Is primary employment of the principal investigator with your firm (identified
+                 below) as described in section 4.2 of the solicitation?
+          element_type: bool
+          required: True
+        -
+          name: fraud_conviction
+          human: Has your firm been convicted of a fraud related crime involving SBIR and/or
+                 STTR funds or found civilly liable for a fraud related violation involving
+                 Federal funds?
+          element_type: bool
+          required: True
+        -
+          name: fraud_conviction_company
+          human: "If yes, provide the name of the associated company:"
+          element_type: med_str
+          ask_if: fraud_conviction
+        -
+          name: pi_fraud_conviction
+          human: Has your firm's Principal Investigator (PI) or Corporate Official (CO) listed
+                 below, or owner been convicted of a fraud-related crime involving SBIR and/or
+                 STTR funds or found civilly liable for a fraud-related violation involving
+                 Federal funds?
+          element_type: bool
+          required: True
+        -
+          name: pi_fraud_conviction_name
+          human: "If yes, please provide the individual's name (First, Middle, Last):"
+          element_type: med_str
+          ask_if: pi_fraud_conviction
+        -
+          name: performance_benchmarks
+          human: Has your firm met the performance benchmarks in section 3.1 of the solicitation
+                 and listed by the SBA on their website as eligible to participate?
+          element_type: bool
+          required: True
+        -
+          name: registered_venture_capital
+          human: Is your firm registered in the SBA's venture capital database as majority-owned
+                 by venture capital operating companies, hedge funds, or private equity firms?
+          element_type: bool
+          required: True
+        -
+          name: single_venture_capital_owned
+          human: Is your firm more than 50% owned by a single Venture Capital Owned Company (VCOC),
+                 hedge fund, or private equity firm?
+          element_type: bool
+          required: True
+        -
+          name: multiple_venture_capital_owned
+          human: Is your firm more than 50% owned by multiple business concerns that are VCOCs,
+                 hedge funds, or private equity firms?
+          element_type: bool
+          required: True
+        -
+          name: eligibility_note
+          human: "Note: IAW Section 4.2 of the solicitation, firms that do not meet all eligibility
+                 requirements will not receive award. IAW Section 4.4 of the solicitation, small
+                 businesses that are owned in majority part by multiple VCOCs, hedge funds, or
+                 private equity funds are ineligible to submit proposals for opportunities in
+                 this solicitation."
+          element_type: read_only_text
+      -
+        name: business_information
+        element_type: group
+        children:
+        -
+          name: employee_count
+          human: Number of employees including all affiliates (average for preceding 12 months)
+          element_type: integer
+          required: true
+        -
+          name: firm_affiliated
+          human: Is your firm affiliated as set forth in 13 CFR 121.103?
+          element_type: bool
+          required: true
+        -
+          name: firm_affiliated_info
+          human: If yes, please provide the information below
+          element_type: line_item
+          ask_if: firm_affiliated
+          children:
+          -
+            name: firm_affiliated_name
+            human: Affiliate Firm
+            element_type: med_str
+          -
+            name: firm_affiliated_address
+            human: Affiliate Mail Address
+            element_type: med_str
+          -
+            name: firm_affiliated_state
+            human: Affiliate State or Province
+            element_type: med_str
+          -
+            name: firm_affiliated_zip
+            human: Affiliate Zip
+            element_type: med_str
+          -
+            name: firm_affiliated_employeecount
+            human: Number of Employees of Affiliate
+            element_type: integer
+        -
+          name: disadvantaged_small_business
+          human: As defined by the SBA, are you a socially or economically disadvantaged small business?
+          element_type: bool
+          required: True
+        -
+          name: women_owned_small_business
+          human: As defined by the SBA, are you a Woman-Owned small business (WOSB)?
+          element_type: bool
+          required: True
+        -
+          name: hubzone_small_business
+          human: As defined by the SBA, are you a certified HUBZone small business concern?
+          element_type: bool
+          required: True
+        -
+          name: service_disabled_vet_small_business
+          human: As defined by the SBA, are you a Service-Disabled Veteran-Owned small business (SDVOSB)?
+          element_type: bool
+          required: True
+        -
+          name: dcaa_review
+          human: Has the Defense Contracting Audit Agency (DCAA) or other agreed upon agency,
+                 performed a review of your accounts or records in connection with government
+                 contracts or subcontracts within the past 12 months?
+          element_type: bool
+          required: True
+        -
+          name: dcaa_review_info
+          human: If yes, please provide the following information
+          element_type: line_item
+          ask_if: dcaa_review
+          children:
+          -
+            name: dcaa_review_name
+            human: Agency Name
+            element_type: med_str
+          -
+            name: dcaa_review_address
+            human: Address
+            element_type: med_str
+          -
+            name: dcaa_review_city
+            human: City
+            element_type: med_str
+          -
+            name: dcaa_review_state
+            human: State
+            element_type: med_str
+          -
+            name: dcaa_review_zipcode
+            human: Zip Code
+            element_type: med_str
+          -
+            name: dcaa_review_auditor
+            human: Auditor
+            element_type: med_str
+          -
+            name: dcaa_review_phone
+            human: Phone
+            element_type: phone
+          -
+            name: dcaa_review_email
+            human: Email
+            element_type: email
+          -
+            name: dcaa_review_agency_requesting_review
+            human: Agency for which the review was performed
+            element_type: med_str
+        -
+          name: dcaa_review_info_no
+          human: If no, please provide the date for when such a review was last performed
+          element_type: timespan
+          ask_if: not dcaa_review 
+        -
+          name: dcaa_review_info_never
+          human: or if never reviewed, check here
+          element_type: checkbox
+          ask_if: not dcaa_review
+      -
         name: proposal_information
         element_type: group
         children:
@@ -16,15 +232,18 @@
           element_type: dollars
           validation: not_more_than 150000
           validation_msg: Must not exceed $150,000
+          required: True
         -
           name: phase_I_duration
           element_type: timespan
           validation: not_more_than 9 months
           validation_msg: Must not exceed 9 months
+          required: True
         -
           name: cost_includes_dta_yn
           element_type: bool
           human: Does the proposed cost include Discretionary Technical Assistance (DTA)?
+          required: True
         -
           name: dta_amount
           element_type: dollars
@@ -36,7 +255,16 @@
           human: For any purpose other than to evaluate the proposal, this data except
                  proposal cover sheets shall not be disclosed outside the Government
                  and shall not be duplicated, used or disclosed in whole or in part,
-                 provided that if a contract is awarded blah blah blah blah
+                 provided that if a contract is awarded to this proposer as a result
+                 of or in connection with the submission of this data, the Government
+                 shall have the right to duplicate, use or disclose the data to the
+                 extent provided in the funding agreement. This restriction does not
+                 limit the Government's right to use information contained in the data
+                 if it is obtained from another source without restriction. This
+                 restriction does not apply to routine handling of proposals for
+                 administrative purposes by Government support contractors as indicated
+                 in Section 5.3 of the solicitation. The data subject to this restriction
+                 is contained on the pages of the proposal listed on the line below. 
         -
           name: proprietary_info_page_numbers
           element_type: integer_spans
@@ -46,6 +274,7 @@
           element_type: bool
           human: Has a proposal for essentially equivalent work been submitted
                  to other US government agencies or DoD components?
+          required: True
         -
           name: essentially_equivalent_work_info
           element_type: med_str
@@ -57,6 +286,7 @@
           element_type: bool
           ask_if: essentially_equivalent_work_yn
           human: Has a contract been awarded for any of the proposals listed above?
+          required: True
         -
           name: essentially_equivalent_contract_number
           element_type: med_str
@@ -68,12 +298,14 @@
           human: Are you submitting assertions in accordance with DFARS 252.227-7017
                  "Identification and assertions use, release, or disclosure restriction"?
                  See Section 11.5 of the solicitation.
+          required: True
         -
           name: special_research_subjects
           element_type: bool
           human:  Are you proposing research that utilizes human/animal subjects
                   or recombinant DNA as described in section 3.11, 3.12, and 3.13
                   of the solicitation?
+          required: True
         -
           name: technical_abstract
           element_type: text
@@ -81,11 +313,13 @@
                  with no classified or proprietary information)
           validation: no_more_than 200 words
           validation_msg: Limit your abstract to 200 words
+          required: True
         -
           name: anticipated_benefits
           element_type: text
           human: Anticipated Benefits/Potential Commercial Applications
                  of the Research or Development. (No classified or proprietary information)
+          required: True
         -
           name: keywords
           element_type: long_str
@@ -112,7 +346,8 @@
           children:
           -
             name: is_teaming_with
-            element_type: bool
+            human: %multiple%
+            element_type: checkbox 
           -
             name: name
             element_type: med_str
@@ -120,6 +355,7 @@
           -
             name: POC
             element_type: med_str
+            human: POC
             ask_if: is_teaming_with
         -
           name: foreign_nationals
@@ -127,6 +363,7 @@
           human: Are you proposing to use foreign nationals
                  as defined in section 3.5 of the solicitation
                  for work under the proposed effort?
+          required: True
       -
         name: pi_info
         element_type: group
@@ -136,21 +373,25 @@
           name: pi_time_percentage
           human: What percentage of the principal investigator's total time will be on the project?
           element_type: integer
+          required: True
         -
           name: pi_is_woman
           human: Is the principal investigator (identified below) a woman?
           element_type: bool
+          required: True
         -
           name: pi_is_disadvantaged
           human: Is the principal investigator (identified below) socially/economically disadvantaged?
           element_type: bool
+          required: True
         -
           name: pi_is_university
           human: Is your firm's PI,CO, or owner, a faculty member or student
                  of an institution of higher education?
           element_type: bool
+          required: True
         -
-          name: ccr_contact_info
+          name: pico_contact_info
           element_type: line_item
           multiplicity: Principal Investigator/Project Manager, Corporate Official (Business)
           children:
@@ -177,7 +418,7 @@
     -
       name: dod_technicalvolume
       human: Technical Volume
-      element_type: workflow
+      element_type: group 
       children:
         -
           name: reviewed_requirement_group
@@ -187,7 +428,9 @@
           -
             name: reviewed_requirement 
             element_type: bool
-            human: Have you reviewed all the requirements in the Air Force and DoD Solicitation instructions?
+            human: Have you reviewed all the requirements in the Air Force and 
+                   DoD Solicitation instructions?
+            required: True
         -
           name: document_format 
           element_type: group
@@ -196,27 +439,35 @@
           -
             name: is_pdf 
             element_type: bool
-            human: Is the Technical Volume a single Portable Document Format (PDF) file, including graphics?
+            human: Is the Technical Volume a single Portable Document Format 
+                   (PDF) file, including graphics?
+            required: True
           -
             name: was_virus_scanned 
             element_type: bool
             human: Did you virus scan the document?
+            required: True
           -
             name: is_20_pages
             element_type: bool
             human: Is the document less than or equal to twenty pages in length?
+            required: True
           -
             name: is_font_and_paper_correct 
             element_type: bool
             human: Is the font 10 pt. or larger on 8-1/2" x 11" paper with one-inch margins?
+            required: True
           -
             name: contains_header 
             element_type: bool 
-            human: Does it contain a header with the company name, topic number, and proposal number? This header can exist in the margin.
+            human: Does it contain a header with the company name, topic number, and
+                   proposal number? This header can exist in the margin.
+            required: True
           -
             name: tech_volume_upload 
             element_type: file_upload 
             human: Upload Technical Volume          
+            required: True
     -
       name: dod_cost_volume 
       element_type: group
@@ -226,6 +477,7 @@
         name: work_location
         element_type: med_str
         human: Location Where Work Will Be Performed
+        required: True
       -
         name: direct_labor
         element_type: line_item
@@ -249,11 +501,13 @@
       -
         name: fringe_benefit_percentage
         element_type: percentage
+        required: True
         human: "Fringe Benefits, if not included in Overhead, (rate: %)"
       -
         name: labor_overhead_percentage
         element_type: percentage
         human: "Labor Overhead (rate: %)"
+        required: True
       -
         name: direct_material_costs
         element_type: line_item
@@ -286,22 +540,27 @@
         name: other_direct_cost_overhead
         element_type: percentage
         human: "Direct Cost Overhead (rate: %)"
+        required: True
       -
         name: general_admin_rate
         element_type: percentage
         human: "General & Administrative (rate: %)"
+        required: True
       -
         name: fee_or_profit
         element_type: percentage
         human: "Fee or Profit (rate: %)"
+        required: True
       -
         name: discretionary_technical_assistance
         element_type: dollars
+        required: True
       -
         name: cost_volume_explanatory
         element_type: text
         human: Explanatory material related to the Cost Volume
                (including substantiation of subcontractor costs)
+        required: True
       -
         name: cost_breakdown_official
         human: Firm's official responsible for the cost breakdown
@@ -335,7 +594,8 @@
         name: use_government_property_yn
         human: Will you require the use of any government property
                in the performance of this proposal?
-        element_type: boolean
+        required: True
+        element_type: bool
       -
         name: government_property_to_use
         human: If Yes, identify
@@ -343,9 +603,17 @@
       -
         name: payment_desired
         human: Specify the type of payment desired
-        element_type: big_str
+        element_type: big_str 
+        required: True
         validation: one_of "partial payments (monthly) as work progresses (recommended)",
                     "progress payments"
+      -
+        name: false_statements
+        human: Knowingly and willfully making any false, ficticious, or fraudulent
+               statements or representations may be a felony under the Federal Criminal
+               False Statement Act (18 USC Sec 1001), punishable by a fine of up to 
+               $10,000, up to five years in prison, or both.
+        element_type: read_only_text
     -
       name: dod_company_commercialization_report
       element_type: group
@@ -354,7 +622,7 @@
       -
         name: ccr_contact_info
         element_type: line_item
-        multiplicity: Principal Investigator/Project Manager, Corporate Official (Business)
+        human: Contact Info
         children:
         -
           name: honorific
@@ -378,5 +646,6 @@
           element_type: email
       -
         name: brief_narrative
-        element_type: long_str
+        element_type: text 
         human: Brief Narrative describing commercialization track record
+        required: True
