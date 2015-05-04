@@ -50,6 +50,10 @@ angular.module('sbirezApp').directive('upload', function() {
               $scope.selectedFiles = [];
               $scope.selectedFiles[0] = data;
               $scope.selectedFiles[0].filename = data.name;
+            }, function() {
+              $scope.fileId = null;
+              $scope.selectedFiles = [];
+              $scope.storage = null;
             });
           }
         }
@@ -64,11 +68,12 @@ angular.module('sbirezApp').directive('upload', function() {
           }
         };
 
-        $scope.start = function(index, id) {
+        $scope.start = function(index) {
           DocumentService.upload($scope.selectedFiles[index],
             $scope.selectedFiles[index].filename,
             $scope.selectedFiles[index].description,
             $scope.proposal,
+            $scope.fileId,
             function(val) {console.log('progress', val);
           }).then(function(data) {
             $scope.storage = data.id;

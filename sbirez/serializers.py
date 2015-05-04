@@ -3,7 +3,7 @@ import shlex
 from sbirez import validation_helpers
 from django.contrib.auth.models import User, Group
 from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person
-from sbirez.models import Address, Workflow, Question, Proposal, Address
+from sbirez.models import Address, Proposal, Address
 from sbirez.models import Element, Document, DocumentVersion, Solicitation
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
@@ -196,22 +196,6 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
                     'keywords', 'areas', 'saved',
                     )
 
-
-class QuestionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Question
-        fields = ('name', 'order', 'data_type', 'required', 'default',
-                  'human', 'help', 'validation', 'validation_msg', 'ask_if',
-                  'subworkflow')
-
-
-class WorkflowSerializer(serializers.ModelSerializer):
-
-    questions = QuestionSerializer(many=True)
-
-    class Meta:
-        model = Workflow
-        fields = ('name', 'validation', 'questions', )
 
 def _find_validation_errors(data, element, accept_partial, ):
 

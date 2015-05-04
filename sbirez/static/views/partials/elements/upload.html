@@ -11,9 +11,6 @@
           <label class="question" for="filedesc">Description:</label>
           <input id="filedesc" class="form-control" ng-model="f.description" type="text"></input>
           <button type="button" ng-click="start($index)" ng-show="progress[$index] < 0">Upload</button>
-          <span class="progress" ng-show="progress[$index] >= 0">
-            <div style="width:{{progress[$index]}}%">{{progress[$index]}}%</div>
-          </span>
         </div>
       </div>
     </div>
