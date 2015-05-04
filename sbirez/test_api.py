@@ -1069,3 +1069,20 @@ class DocumentVersionTests(APITestCase):
         response = self.client.get('/api/v1/documentversions/%d/' % id)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
+
+class PasswordHandlingTests(APITestCase):
+
+    # how should the API react to nonexistent email addresses?
+
+    def test_reset_nonexistent_user(self):
+        response = self.client.post('/rest-auth/password/reset/',
+                                    {'email': 'catherine.devlin+1@gmail.com'})
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def test_reset_bad_email_address(self):
+        response = self.client.post('/rest-auth/password/reset/',
+                                    {'email': '  this is not an email address  '})
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual('Enter a valid email address.', response.data['email'][0])
+
+
