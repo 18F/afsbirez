@@ -23,7 +23,7 @@ angular.module('sbirezApp').directive('upload', function() {
         };
 
         var askIfCallback = function(data) {
-          $scope.visible = data;
+          $scope.visible = (data === true || data === 'true');
         };
 
         $scope.storage = ProposalService.register($scope.element,

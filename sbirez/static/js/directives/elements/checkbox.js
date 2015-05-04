@@ -21,12 +21,11 @@ angular.module('sbirezApp').directive('checkbox', function() {
         $scope.validationstorage = '';
 
         var validationCallback = function(data) {
-          console.log('valid cb', data);
           $scope.validationstorage = data;
         };
 
         var askIfCallback = function(data) {
-          console.log('ask if!', data);
+          $scope.visible = (data === true || data === 'true');
         };
 
         $scope.storage = ProposalService.register($scope.element,

@@ -17,14 +17,13 @@ angular.module('sbirezApp').directive('str', function() {
         $scope.options = [];
         $scope.visible = true;
         $scope.validationstorage = '';
-        console.log('str element', $scope.element, $scope.multiplename);
 
         var validationCallback = function(data) {
           $scope.validationstorage = data;
         };
 
         var askIfCallback = function(data) {
-          $scope.visible = data;
+          $scope.visible = (data === true || data === 'true');
         };
 
         $scope.storage = ProposalService.register($scope.element,

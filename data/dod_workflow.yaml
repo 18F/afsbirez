@@ -622,6 +622,7 @@
       -
         name: ccr_contact_info
         element_type: line_item
+        human: Contact Info
         children:
         -
           name: honorific

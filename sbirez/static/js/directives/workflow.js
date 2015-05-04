@@ -31,7 +31,6 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         ProposalService.load(parseInt($scope.proposalId)).then(function() {
-          console.log('state params', $stateParams.current);
           $scope.jumpTo($stateParams.current !== null ? $stateParams.current : null);
         });
 
@@ -44,7 +43,6 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         $scope.saveData = function() {
-          console.log('saved Data', $scope.proposalData);
           ProposalService.saveData();
         };
 

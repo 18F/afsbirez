@@ -9,11 +9,12 @@ angular.module('sbirezApp').directive('lineitem', function() {
       proposal: '@'
     },
     templateUrl: 'static/views/partials/elements/lineitem.html',
-    controller: ['$scope', 
-      function ($scope) {
+    controller: ['$scope', 'ProposalService',
+      function ($scope, ProposalService) {
         var count = 0;
         var iter = 0;
         $scope.element = $scope.lineitem;
+        $scope.visible = true;
 
         if ($scope.element.multiplicity === null) {
           $scope.element.multiplicity = [];
@@ -41,6 +42,14 @@ angular.module('sbirezApp').directive('lineitem', function() {
             $scope.element.multiplicity[iter].token = token;
           }
         }
+
+        var askIfCallback = function(data) {
+          $scope.visible = (data === true || data === 'true');
+        };
+        $scope.storage = ProposalService.register($scope.element,
+                                 null,
+                                 $scope.element.ask_if !== null ? askIfCallback : null,
+                                 $scope.multipletoken);
       }
     ]
   };
