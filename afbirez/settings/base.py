@@ -93,3 +93,5 @@ STATICFILES_FINDERS = (
    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
    "django_assets.finders.AssetsFinder"
 )
+
+DEFAULT_FROM_EMAIL='catherine.devlin@gsa.gov'

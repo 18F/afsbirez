@@ -15,6 +15,8 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 from .base import *
+from .credentials import EMAIL_HOST, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
+
 import dj_database_url
 
 # Quick-start development settings - unsuitable for production
@@ -24,10 +26,15 @@ import dj_database_url
 SECRET_KEY = 'w^nc2bs303zk7&_!!-n@ip_+6tb+f8o5ln#kmxzh#=k9@1f2x#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False 
+DEBUG = False
 
 TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = ['sbirez.cf.18f.us']
 
 DATABASES = {"default": dj_database_url.config()}
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+# store email credentials in `credentials.py` (outside version control)
