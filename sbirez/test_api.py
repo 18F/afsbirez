@@ -274,6 +274,18 @@ class UserTests(APITestCase):
         response = Response(request)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
+    # post two users with same name / avoid default firm creation error
+    def test_two_users_same_name(self):
+        self.client.post('/api/v1/users/',
+            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+        response = self.client.post('/api/v1/users/',
+            {'name':'abc', 'password':'123', 'email':'a+1@b.com', 'groups':[]})
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        user = get_user_model().objects.get(email='a+1@b.com')
+        self.assertEqual(user.email, 'a+1@b.com')
+        self.assertIn('abc', user.firm.name)
+
+
 class FirmTests(APITestCase):
     firm_data = {'name':'TestCo', 'tax_id':'12345', 'sbc_id':'12345',
          'duns_id':'12345', 'cage_code':'12345', 'website':'www.testco.com',

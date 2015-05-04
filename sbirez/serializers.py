@@ -23,8 +23,13 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = super(UserSerializer, self).create(validated_data)
         user.set_password(validated_data.get('password'))
-        # create an initial firm
-        user.firm = Firm.objects.create(name=user.name)
+        # create an initial firm with a unique name
+        firm_name = user.name
+        disambiguator = 1
+        while Firm.objects.filter(name=firm_name).exists():
+            firm_name = '%s (%d)' % (user.name, disambiguator)
+            disambiguator += 1
+        user.firm = Firm.objects.create(name=firm_name)
         user.save()
         return user
 
