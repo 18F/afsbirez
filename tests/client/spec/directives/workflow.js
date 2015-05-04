@@ -160,7 +160,7 @@ describe('Directive: WorkflowDirective', function () {
     $httpBackend.expectGET('api/v1/elements/1/').respond(elementData);
     $httpBackend.flush();
     // validate title
-    var title = formElement.find('p');
+    var title = formElement.find('h2');
     expect(title.text()).toBe('Test Workflow');
 
     // validate that the child elements create workflow elements
