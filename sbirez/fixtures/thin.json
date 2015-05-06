@@ -407,7 +407,7 @@
     },
     {
         "fields": {
-            "data": "{\"quest_thy_name\": \"Galahad\", \"subquest\": {\"quest_thy_quest\": \"To seek the Grail\", \"quest_thy_favorite_color\": \"yellow\"}}",
+            "data": {"quest_thy_name": "Galahad", "subquest": {"quest_thy_quest": "To seek the Grail", "quest_thy_favorite_color": "yellow"}},
             "firm": 1,
             "owner": 2,
             "submitted_at": "2015-03-17T19:26:44.365Z",
