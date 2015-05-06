@@ -30,7 +30,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = ['sbirez.cf.18f.us']
+ALLOWED_HOSTS = ['sbirez.cf.18f.us', 'sbirez.18f.gov']
 
 DATABASES = {"default": dj_database_url.config()}
 

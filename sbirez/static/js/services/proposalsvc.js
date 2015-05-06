@@ -293,6 +293,9 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
   var validateWorkflow = function() {
     validationData = {};
     validationData[workflow.name] = {};
+    if (proposalData[workflow.name] === undefined) {
+      proposalData[workflow.name] = {};
+    }
     ValidationService.validate(workflow, proposalData[workflow.name], validationData, true);
     for (var index = 0; index < validationCallbacks.length; index++) {
       // check to see if the state was already set

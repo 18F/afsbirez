@@ -197,7 +197,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
 
         if (element.element_type === 'line_item' && element.multiplicity && element.multiplicity.length > 0) {
           for (var j = 0; j < element.multiplicity.length; j++) {
-            console.log('validate lineitem', element.multiplicity, element.multiplicity[j].token, validationResults[element.name], data[element.name]);
+            //console.log('validate lineitem', element.multiplicity, element.multiplicity[j].token, validationResults[element.name], data[element.name]);
             if (data[element.multiplicity[j].token] !== undefined) {
               validationResults[workflow.name][element.multiplicity[j].token] = {};
               validationResults[workflow.name][element.multiplicity[j].token][element.name] = {};
@@ -210,10 +210,13 @@ angular.module('sbirezApp').factory('ValidationService', function() {
           if (validationResults[workflow.name][element.name] === undefined) {
             validationResults[workflow.name][element.name] = {};
           }
+          if (data[element.name] === undefined) {
+            data[element.name] = {};
+          }
           this.validate(element, data[element.name], validationResults[workflow.name], true);
         }
       }
-      console.log('Validation Results', validationResults);
+      //console.log('Validation Results', validationResults);
       return validationResults === undefined ? true : validationResults.length === 0;
     }
   };
