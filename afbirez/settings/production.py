@@ -34,7 +34,7 @@ ALLOWED_HOSTS = ['sbirez.cf.18f.us']
 
 DATABASES = {"default": dj_database_url.config()}
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DJMAIL_REAL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 # store email credentials in `credentials.py` (outside version control)

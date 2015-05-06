@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer
 from django_downloadview import ObjectDownloadView
+from djmail import template_mail
 
 from sbirez.serializers import FirmSerializer, ProposalSerializer, PartialProposalSerializer
 from sbirez.serializers import AddressSerializer, ElementSerializer
@@ -21,6 +22,8 @@ import marshmallow as mm
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser
 from .permissions import HasObjectEditPermissions, ReadOnlyUnlessStaff
+
+mails = template_mail.MagicMailBuilder()
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -151,6 +154,8 @@ def nested_update(orig_dict, new_dict):
     return orig_dict
 
 
+mails = template_mail.MagicMailBuilder()
+
 class ProposalViewSet(viewsets.ModelViewSet):
     serializer_class = ProposalSerializer
     queryset = Proposal.objects.all()
@@ -163,6 +168,12 @@ class ProposalViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         return [HasObjectEditPermissions(),]
+
+    @detail_route(methods=['post',])
+    def submit(self):
+        import ipdb; ipdb.set_trace()
+        email = mails.submit_notification('catherine.devlin@gsa.gov', {})
+        email.send()
 
 
 class PartialProposalViewSet(ProposalViewSet):
