@@ -346,7 +346,7 @@
           children:
           -
             name: is_teaming_with
-            human: %multiple%
+            human: "%multiple%"
             element_type: checkbox 
           -
             name: name
@@ -393,6 +393,7 @@
         -
           name: pico_contact_info
           element_type: line_item
+          human: Contact Info
           multiplicity: Principal Investigator/Project Manager, Corporate Official (Business)
           children:
           -
