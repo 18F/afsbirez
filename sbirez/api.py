@@ -170,10 +170,12 @@ class ProposalViewSet(viewsets.ModelViewSet):
         return [HasObjectEditPermissions(),]
 
     @detail_route(methods=['post',])
-    def submit(self):
-        import ipdb; ipdb.set_trace()
-        email = mails.submit_notification('catherine.devlin@gsa.gov', {})
+    def submit(self, request, pk):
+        prop = self.get_object()
+        email = mails.submit_notification(prop.owner.email,
+                                          {'proposal': prop})
         email.send()
+        return Response({'status': 'Submission completed'})
 
 
 class PartialProposalViewSet(ProposalViewSet):
