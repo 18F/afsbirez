@@ -24,6 +24,11 @@ from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser
 from .permissions import HasObjectEditPermissions, ReadOnlyUnlessStaff
 
 mails = template_mail.MagicMailBuilder()
+# To send new types of emails from views, simply call
+# `mails.my_new_email_name(target_email_address, {dict for template substitution})
+# and write files `sbirez/templates/emails/my_new_email_name-body-text.html`
+# (or `sbirez/templates/emails/my_new_email_name-body-html.html`)
+# and `sbirez/templates/emails/my_new_email_name-subject.html`
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -153,8 +158,6 @@ def nested_update(orig_dict, new_dict):
             orig_dict[key] = new_dict[key]
     return orig_dict
 
-
-mails = template_mail.MagicMailBuilder()
 
 class ProposalViewSet(viewsets.ModelViewSet):
     serializer_class = ProposalSerializer
