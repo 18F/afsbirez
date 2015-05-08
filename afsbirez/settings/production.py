@@ -1,7 +1,7 @@
 """
 TODO: CONFIGURE
 
-Production settings for afbirez project.
+Production settings for afsbirez project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
