@@ -44,7 +44,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       'workflow': workflowId, 
       'topic': opportunityId,
       'title': opportunityTitle,
-      'data': {} 
+      'data': '{}' 
     };
       
     $http.post(PROPOSAL_URI + 'partial/', propData).success(function(data) {
@@ -67,7 +67,6 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
 
   var saveProposalData = function() {
     var deferred = $q.defer();
-    //console.log('savePropData', proposalData);
     $http.patch(PROPOSAL_URI + proposal.id + '/partial/', {'data':JSON.stringify(proposalData)}).success(function(data) {
       deferred.resolve(data);
     }).error(function(data) {
@@ -102,23 +101,13 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     //console.log('loadProposal', proposalId);
     $http.get(PROPOSAL_URI + proposalId + '/').success(function(data) {
       proposal = data;
-      //console.log('get proposal', data);
       $http.get('api/v1/elements/' + proposal.workflow + '/').success(function(data) {
         workflow = data;
         buildIndex(workflow, null);
         workflowLength = workflows.length;
-        //console.log('loadProposal', workflows, workflowLength);
         deferred.resolve(data);
       });
-      if (data.data !== null && data.data.length > 0) {
-        var parsedData = data.data.replace(/\'/g, '\"');
-        parsedData = parsedData.replace(/True/g, 'true');
-        proposalData = JSON.parse(parsedData);
-        //console.log('load data', proposalData);
-      }
-      else {
-        proposalData = {};
-      }
+      proposalData = proposal.data;
     });
     return deferred.promise;
   };
