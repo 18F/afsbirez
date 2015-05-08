@@ -1,5 +1,5 @@
 """
-WSGI config for afbirez project.
+WSGI config for afsbirez project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -8,7 +8,7 @@ https://docs.djangoproject.com/en/1.7/howto/deployment/wsgi/
 """
 
 import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "afbirez.settings.production")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "afsbirez.settings.production")
 
 from whitenoise.django import DjangoWhiteNoise
 
