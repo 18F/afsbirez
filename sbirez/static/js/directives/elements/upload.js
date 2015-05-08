@@ -73,7 +73,7 @@ angular.module('sbirezApp').directive('upload', function() {
             $scope.selectedFiles[index].filename,
             $scope.selectedFiles[index].description,
             $scope.proposal,
-            $scope.fileId,
+            fileId,
             function(val) {console.log('progress', val);
           }).then(function(data) {
             $scope.storage = data.id;
