@@ -95,3 +95,5 @@ STATICFILES_FINDERS = (
 )
 
 DEFAULT_FROM_EMAIL='catherine.devlin@gsa.gov'
+
+EMAIL_BACKEND="djmail.backends.default.EmailBackend"

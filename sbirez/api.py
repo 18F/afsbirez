@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer
 from django_downloadview import ObjectDownloadView
+from djmail import template_mail
 
 from sbirez.serializers import FirmSerializer, ProposalSerializer, PartialProposalSerializer
 from sbirez.serializers import AddressSerializer, ElementSerializer
@@ -21,6 +22,13 @@ import marshmallow as mm
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser
 from .permissions import HasObjectEditPermissions, ReadOnlyUnlessStaff
+
+mails = template_mail.MagicMailBuilder()
+# To send new types of emails from views, simply call
+# `mails.my_new_email_name(target_email_address, {dict for template substitution})
+# and write files `sbirez/templates/emails/my_new_email_name-body-text.html`
+# (or `sbirez/templates/emails/my_new_email_name-body-html.html`)
+# and `sbirez/templates/emails/my_new_email_name-subject.html`
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -163,6 +171,14 @@ class ProposalViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         return [HasObjectEditPermissions(),]
+
+    @detail_route(methods=['post',])
+    def submit(self, request, pk):
+        prop = self.get_object()
+        email = mails.submit_notification(prop.owner.email,
+                                          {'proposal': prop})
+        email.send()
+        return Response({'status': 'Submission completed'})
 
 
 class PartialProposalViewSet(ProposalViewSet):

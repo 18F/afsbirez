@@ -5,6 +5,7 @@ from collections import OrderedDict
 import json
 
 from django.test import TestCase
+import django.core.mail
 
 from sbirez.models import Firm
 from sbirez import api
@@ -948,6 +949,18 @@ class ProposalTests(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data['owner'], 2)
         self.assertEqual(response.data['firm'], 1)
+
+    # test that submitting a proposal sends an email
+    def test_email_upon_submission(self):
+        user = _fixture_user(self)
+
+        initial_emails_in_memory = len(django.core.mail.outbox)
+        response = self.client.post('/api/v1/proposals/2/submit/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(len(django.core.mail.outbox), initial_emails_in_memory + 1)
+        message = django.core.mail.outbox[-1]
+        self.assertIn('submitted', message.subject)
+        self.assertIn('Title', message.body)
 
 
 def _upload_death_star_plans(test_instance, login=True):
