@@ -95,6 +95,38 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     }
   };
 
+  var buildMultiplicities = function() {
+    var count;
+    var iter;
+    for (var i = 0; i < workflowLength; i++) {
+      if (workflows[i].element_type === 'line_item') {
+        if (workflows[i].multiplicity === null) {
+          workflows[i].multiplicity = [];
+          workflows[i].multiplicity[0] = {};
+          workflows[i].multiplicity[0].token = 0;
+          workflows[i].multiplicity[0].value = 0;
+        }
+        else if (isFinite(workflows[i].multiplicity)) {
+          count = parseInt(workflows[i].multiplicity);
+          workflows[i].multiplicity = [];
+          for (iter = 0; iter < count; iter++) {
+            workflows[i].multiplicity[iter] = {'token': iter, 'value': iter};
+          }
+        }
+        else if (typeof workflows[i].multiplicity === 'string') {
+          workflows[i].multiplicity = workflows[i].multiplicity.split(', ');
+          count = workflows[i].multiplicity.length;
+          for (iter = 0; iter < count; iter++) {
+            var value = workflows[i].multiplicity[iter];
+            var token = workflows[i].multiplicity[iter].replace(/[^\w]|_/g, '_');
+            workflows[i].multiplicity[iter] = {'token': token, 'value': value};
+          }
+        }
+        //console.log('mult', workflows[i].multiplicity);
+      }
+    }
+  };
+
   var loadProposal = function(proposalId) {
     // retrieves workflow and data
     var deferred = $q.defer();
@@ -105,6 +137,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
         workflow = data;
         buildIndex(workflow, null);
         workflowLength = workflows.length;
+        buildMultiplicities();
         deferred.resolve(data);
       });
       proposalData = proposal.data;
@@ -187,7 +220,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       }
     }
     return order;
-  }
+  };
 
   var getDataIndex = function(order, leaveOne, source) {
     var data = source;
@@ -203,18 +236,18 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       //console.log('data', data);
     }
     return data;
-  }
+  };
 
   var registerElement = function(element, validationCallback, askIfCallback, multipleToken) {
     // return data, and set validation & ask_if callbacks
     // find or create the proposal data in the correct spot, taking into account the multipleToken, if present.
     var order = getOrder(element, multipleToken);
     var data = getDataIndex(order, false, proposalData);
-
+    var fieldName;
     //console.log('order', order, data, element.name, multipleToken);    
     // if there is a validation callback, add it to the validation structure
     if (validationCallback !== null && validationCallback !== undefined) {
-      var fieldName = element.name;
+      fieldName = element.name;
       if (multipleToken !== null && multipleToken !== undefined) {
         fieldName += '_' + multipleToken;
       }
@@ -236,7 +269,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     // if there is an ask if callback, add it to the askif structure
     if (askIfCallback !== null && askIfCallback !== undefined && element.ask_if !== null && element.ask_if !== undefined) {
       var askIfSplit = element.ask_if.split(' ');
-      var fieldName = askIfSplit[askIfSplit.length - 1];
+      fieldName = askIfSplit[askIfSplit.length - 1];
       if (multipleToken !== null && multipleToken !== undefined) {
         fieldName += '_' + multipleToken;
       }
@@ -285,11 +318,12 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     if (proposalData[workflow.name] === undefined) {
       proposalData[workflow.name] = {};
     }
-    ValidationService.validate(workflow, proposalData[workflow.name], validationData, true);
+    console.log('proposalData', proposalData);
+    ValidationService.validate(workflow, proposalData[workflow.name], validationData[workflow.name], true);
     for (var index = 0; index < validationCallbacks.length; index++) {
       // check to see if the state was already set
       var message = getDataIndex(validationCallbacks[index].order, false, validationData);
-      if (typeof message === 'object' && message.length === undefined) {
+      if (typeof message === 'object' && message !== null && message.length === undefined) {
         message = '';
       }
       validationCallbacks[index].cb(message);

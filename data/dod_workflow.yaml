@@ -59,6 +59,7 @@
           human: "If yes, provide the name of the associated company:"
           element_type: med_str
           ask_if: fraud_conviction
+          required: True
         -
           name: pi_fraud_conviction
           human: Has your firm's Principal Investigator (PI) or Corporate Official (CO) listed
@@ -72,6 +73,7 @@
           human: "If yes, please provide the individual's name (First, Middle, Last):"
           element_type: med_str
           ask_if: pi_fraud_conviction
+          required: True
         -
           name: performance_benchmarks
           human: Has your firm met the performance benchmarks in section 3.1 of the solicitation
@@ -112,12 +114,12 @@
           name: employee_count
           human: Number of employees including all affiliates (average for preceding 12 months)
           element_type: integer
-          required: true
+          required: True
         -
           name: firm_affiliated
           human: Is your firm affiliated as set forth in 13 CFR 121.103?
           element_type: bool
-          required: true
+          required: True
         -
           name: firm_affiliated_info
           human: If yes, please provide the information below
@@ -128,22 +130,27 @@
             name: firm_affiliated_name
             human: Affiliate Firm
             element_type: med_str
+            required: True
           -
             name: firm_affiliated_address
             human: Affiliate Mail Address
             element_type: med_str
+            required: True
           -
             name: firm_affiliated_state
             human: Affiliate State or Province
             element_type: med_str
+            required: True
           -
             name: firm_affiliated_zip
             human: Affiliate Zip
             element_type: med_str
+            required: True
           -
             name: firm_affiliated_employeecount
             human: Number of Employees of Affiliate
             element_type: integer
+            required: True
         -
           name: disadvantaged_small_business
           human: As defined by the SBA, are you a socially or economically disadvantaged small business?
@@ -181,38 +188,47 @@
             name: dcaa_review_name
             human: Agency Name
             element_type: med_str
+            required: True
           -
             name: dcaa_review_address
             human: Address
             element_type: med_str
+            required: True
           -
             name: dcaa_review_city
             human: City
             element_type: med_str
+            required: True
           -
             name: dcaa_review_state
             human: State
             element_type: med_str
+            required: True
           -
             name: dcaa_review_zipcode
             human: Zip Code
             element_type: med_str
+            required: True
           -
             name: dcaa_review_auditor
             human: Auditor
             element_type: med_str
+            required: True
           -
             name: dcaa_review_phone
             human: Phone
             element_type: phone
+            required: True
           -
             name: dcaa_review_email
             human: Email
             element_type: email
+            required: True
           -
             name: dcaa_review_agency_requesting_review
             human: Agency for which the review was performed
             element_type: med_str
+            required: True
         -
           name: dcaa_review_info_no
           human: If no, please provide the date for when such a review was last performed
@@ -249,6 +265,7 @@
           element_type: dollars
           human: If yes, what is the proposed DTA amount
           ask_if: cost_includes_dta_yn
+          required: True
         -
           name: duplication_rights_blurb
           element_type: read_only_text
@@ -281,6 +298,7 @@
           ask_if: essentially_equivalent_work_yn
           human:  If yes, list the name(s) of the agency or DoD component and if SBIR or STTR,
                   list Topic Number in the space below.
+          required: True
         -
           name: essentially_equivalent_contract_awarded_yn
           element_type: bool
@@ -292,6 +310,7 @@
           element_type: med_str
           ask_if: essentially_equivalent_contract_awarded_yn
           human: If yes, please provide the contract number
+          required: True
         -
           name: dfars252
           element_type: bool
@@ -352,11 +371,13 @@
             name: name
             element_type: med_str
             ask_if: is_teaming_with
+            required: True
           -
             name: POC
             element_type: med_str
             human: POC
             ask_if: is_teaming_with
+            required: True
         -
           name: foreign_nationals
           element_type: bool
@@ -404,18 +425,22 @@
           -
             name: name
             element_type: med_str
+            required: True
           -
             name: title
             element_type: med_str
+            required: True
           -
             name: phone
             element_type: phone
+            required: True
           -
             name: fax
             element_type: phone
           -
             name: email
             element_type: email
+            required: True
     -
       name: dod_technicalvolume
       human: Technical Volume
@@ -488,17 +513,21 @@
           name: category
           human: Category and/or Individual
           element_type: med_str
+          required: True
         -
           name: hourly_rate
           human:  Rate/Hour
           element_type: dollars
+          required: True
         -
           name: estimated_hours
           human: Est. Hours
           element_type: float
+          required: True
         -
           name: phase_1_cost
           element_type: dollars
+          required: True
       -
         name: fringe_benefit_percentage
         element_type: percentage
@@ -570,9 +599,11 @@
         -
           name: name
           element_type: med_str
+          required: True
         -
           name: title
           element_type: med_str
+          required: True
       -
         name: dcaa_review
         human: If the Defense Contracting Audit Agency (DCAA) has performed a review
@@ -582,15 +613,19 @@
         -
           name: reviewing_office
           element_type: med_str
+          required: True
         -
           name: individual
           element_type: med_str
+          required: True
         -
           name: address
           element_type: text
+          required: True
         -
           name: phone
           element_type: phone
+          required: True
       -
         name: use_government_property_yn
         human: Will you require the use of any government property
@@ -600,6 +635,7 @@
       -
         name: government_property_to_use
         human: If Yes, identify
+        ask_if: use_government_property_yn
         element_type: big_str
       -
         name: payment_desired
@@ -633,12 +669,14 @@
         -
           name: name
           element_type: med_str
+          required: True
         -
           name: title
           element_type: med_str
         -
           name: phone
           element_type: phone
+          required: True
         -
           name: fax
           element_type: phone

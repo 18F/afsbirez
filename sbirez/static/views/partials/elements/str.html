@@ -1,5 +1,5 @@
 <div class="str-question">
-  <label class="question" ng-show="visible" for="{{element.name}}"><div marked="element.human"></div></label>
+  <label class="question" ng-show="visible" for="{{element.name}}"><div marked="fieldName"></div></label>
   <div ng-show="visible && options.length === 0">
     <input id="{{element.name}}" class="form-control" ng-change="apply()" ng-model="storage" type="text"></input>
   </div>
