@@ -75,6 +75,16 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return deferred.promise;
   };
 
+  var saveCompleteData = function() {
+    var deferred = $q.defer();
+    $http.patch(PROPOSAL_URI + proposal.id + '/', {'data':JSON.stringify(proposalData)}).success(function(data) {
+      deferred.resolve(data);
+    }).error(function(data) {
+      deferred.reject(new Error(data));
+    });
+    return deferred.promise;
+  };
+
   var saveProposalTitle = function(proposalId, proposalTitle) {
     var deferred = $q.defer();
     $http.patch(PROPOSAL_URI + proposalId + '/partial/', {'title':proposalTitle}).success(function(data) {
@@ -409,6 +419,21 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
         var deferred = $q.defer();
         deferred.reject(new Error('Invalid parameter'));
         return deferred.promise;
+      }
+    },
+    complete: function() {
+      if (AuthenticationService.isAuthenticated) {
+        return saveCompleteData();
+      } else {
+        return DialogService.openLogin().then(function(data) {
+          if (data.value) {
+            return saveCompleteData();
+          } else {
+            var deferred = $q.defer();
+            deferred.reject(new Error('Failed to authenticate'));
+            return deferred.promise;
+          }
+        });
       }
     },
     saveData: function() {

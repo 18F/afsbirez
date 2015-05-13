@@ -50,11 +50,10 @@ angular.module('sbirezApp').directive('str', function() {
         if ($scope.element.validation) {
           var validationElements = $scope.element.validation.split(' ');
           if (validationElements[0] === 'one_of' && validationElements.length > 2) {
-            var command = validationElements[0];
             validationElements.splice(0,1);
             if (validationElements[0].startsWith('"')) {
               var options = validationElements.join(' ');
-              validationElements = options.split(',')
+              validationElements = options.split(',');
               for (var i = 0; i < validationElements.length; i++) {
                 validationElements[i] = validationElements[i].trim();
                 validationElements[i] = validationElements[i].slice(1, validationElements[i].length - 1);

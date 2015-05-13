@@ -13,7 +13,7 @@ angular.module('sbirezApp').directive('checkbox', function() {
     controller: ['$scope', 'ProposalService',
       function ($scope, ProposalService) {
         $scope.element = $scope.checkbox;
-        $scope.fieldName = $scope.element.human
+        $scope.fieldName = $scope.element.human;
         if ($scope.multiplename !== undefined && $scope.element.human.indexOf('%multiple%') > -1) {
           $scope.fieldName = $scope.element.human.replace('%multiple%', $scope.multiplename);
         }

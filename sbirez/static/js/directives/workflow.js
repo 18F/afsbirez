@@ -10,8 +10,8 @@ angular.module('sbirezApp').directive('workflow', function() {
       proposalId: '@'
     },
     templateUrl: 'static/views/partials/workflow.html',
-    controller: ['$scope', '$http', '$q', '$stateParams', '$location', 'ProposalService', 'ValidationService',
-      function ($scope, $http, $q, $stateParams, $location, ProposalService, ValidationService) {
+    controller: ['$scope', '$http', '$q', '$stateParams', '$location', 'ProposalService', 
+      function ($scope, $http, $q, $stateParams, $location, ProposalService) {
 
         //$scope.workflows = [];
         $scope.currentWorkflow = {};
@@ -43,13 +43,11 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         $scope.saveData = function() {
-          ProposalService.saveData();
+          ProposalService.complete();
         };
 
         $scope.validate = function() {
-        ProposalService.validate();
-        //  $scope.validationData = {};
-        //  var response = ValidationService.validate($scope.currentWorkflow, $scope.proposalData, $scope.validationData, false);
+          ProposalService.validate();
         };
       }
     ]
