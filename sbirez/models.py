@@ -180,19 +180,34 @@ class Element(models.Model):
             return self.name
 
     def parentage(self):
+        """
+        Returns a list of each element in the workflow's hierarchy
+        above (and including) this one.
+        """
         if self.parent:
             result = self.parent.parentage()
         else:
             result = []
-        result.append(self.name)
+        result.append(self)
         return result
 
     def lookup_in_data(self, data):
+        """
+        Searches a dictionary representing proposal data for the value of this
+        element.  Returns a list, which will contain only one element, unless the
+        element is a child of an element with multiplicity.
+        """
+        import ipdb; ipdb.set_trace()
+        # data = [data, ]
         for p in self.parentage()[1:]:  # [0] is the top workflow name
-            if p in data:
-                data = data[p]
+            values = data.get(p.name) # [d.get(p.name) for d in data]
+            if (not values) or (values == [None, ] * len(values)):
+                raise KeyError('%s not in %s' % (p, [d.keys() for d in data]))
+            if p.multiplicity:
+                # data = [v.values() for v in values]
+                data = values.values()
             else:
-                raise KeyError('%s not in %s' % (p, data.keys()))
+                data = values
         return data
 
 class Solicitation(models.Model):

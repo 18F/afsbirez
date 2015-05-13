@@ -207,19 +207,16 @@ def _find_validation_errors(data, element, accept_partial, ):
     errors = []
 
     try:
-        val = element.lookup_in_data(data)
+        vals = element.lookup_in_data(data)
+        # TODO: line item with multiplicity is simply not being returned
     except KeyError:
-        if accept_partial:
+        if accept_partial or not element.required:
             return []
         else:
             return ['Required field %s absent' % element.name]
 
-    #TODO: required composite elements not supported
-    if ((not element.children.exists()) and
-        hasattr(val, 'strip') and (not val.strip())):
-        if accept_partial or (not element.required):
-            return []
-        else:
+    if not vals:
+        if element.required and not accept_partial:
             return ['Required field %s is blank' % element.name]
 
     errors = []
@@ -236,10 +233,11 @@ def _find_validation_errors(data, element, accept_partial, ):
                     '%s: validation function %s absent from validation_helpers.py',
                     (element.name, function_name))
 
-            val = val.lower()
-            if not func(data, val, *args):
-                errors.append(
-                    '%s: %s' % (element.name, element.validation_msg))
+            for val in vals:
+                val = val.lower()
+                if not func(data, val, *args):
+                    errors.append(
+                        '%s: %s' % (element.name, element.validation_msg))
 
     if element.children.exists():
         for subelement in element.children.all():
@@ -266,6 +264,8 @@ def genericValidator(proposal, accept_partial=False):
     Inspect the workflow's validators and apply them to
     the proposal's data
     '''
+
+    import ipdb; ipdb.set_trace()
 
     errors = []
     if 'workflow' in proposal:

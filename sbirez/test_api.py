@@ -950,6 +950,45 @@ class ProposalTests(APITestCase):
         self.assertEqual(response.data['firm'], 1)
 
 
+class ProposalValidationTests(APITestCase):
+
+    fixtures = ['lessthin.json', ]
+
+    def test_validation(self):
+        user = _fixture_user(self)
+        data = {
+             'workflow': 1,
+             'title': 'Title!', 'topic': 1, 'data': json.dumps(
+                 {"quest_thy_name": "Galahad",
+                  "knights": {
+                      "Galahad": {
+                          "is_courageous": True,
+                          "how_courageous_exactly": 9,
+                          },
+                      "Robin": {
+                          "is_courageous": False,
+                          },
+                      },
+                  "minstrels": {
+                      "0": {
+                          "name": "Phil",
+                          "instrument": "phlute",
+                          },
+                      "1": {
+                          "name": "Sasha",
+                          "instrument": "sackbut",
+                          },
+                      }
+                 })
+             }
+
+        response = self.client.post('/api/v1/proposals/', data)
+
+        import ipdb; ipdb.set_trace()
+
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+
 def _upload_death_star_plans(test_instance, login=True):
     if login:
         user = _fixture_user(test_instance)
