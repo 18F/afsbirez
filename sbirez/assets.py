@@ -21,6 +21,7 @@ angular_js = Bundle(
     "js/app.js",
     "js/filters/truncate.js",
     "js/directives/workflow.js",
+    "js/directives/topic.js",
     "js/directives/pagination.js",
     "js/directives/backbutton.js",
     "js/directives/header.js",

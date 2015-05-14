@@ -4,11 +4,7 @@
 </div>
 <div ng-repeat="topic in data.results" class="row">
   <div class="col-md-9">
-    <p class="topic-header-text"><a href="topic/{{topic.id}}">{{topic.topic_number}}: {{topic.title}}</a></p>
-    <p>{{topic.description|truncate:500}}<span ng-if="topic.description.length > 500"><a href="topic/{{topic.id}}" title="More about {{topic.topic_number}}">More >>></a></span></p>
-    <button class="btn btn-default btn-sm" ng-click="removeOpportunity(topic.id)" title="Remove {{topic.topic_number}}" type="button">Remove Topic</button>
-      <button ng-show="topic.proposal_id" class="btn btn-disabled btn-sm" ui-sref="app.activity.proposals.report({id: topic.proposal_id})" title="Goto Proposal for {{topic.topic_number}}" type="button">View Proposal</button>
-      <button ng-hide="topic.proposal_id" class="btn btn-default btn-sm" ng-click="createProposal(topic.id)" title="Create Proposal for {{topic.topic_number}}" type="button">Create Proposal</button>
+    <div topic="topic" remove-option="true" create-option="true"></div>
     <hr />
   </div>
 </div>

@@ -60,15 +60,8 @@
   <br/>
   <div ng-repeat="topic in results.results" class="row">
     <div class="col-md-9">
-      <p class="topic-header-text"><a href="topic/{{topic.id}}">{{topic.topic_number}}: {{topic.title}}</a></p>
-      <p>{{topic.description|truncate:500}}<span ng-if="topic.description.length > 500"><a href="topic/{{topic.id}}" title="More about {{topic.topic_number}}">More >>></a></span></p>
-      <div ng-hide="topic.saved">
-        <button class="btn btn-default btn-sm" ng-click="saveOpportunity(topic.id)" title="Save {{topic.topic_number}} for later" type="button">Save for later</button>
-      </div>
-      <div ng-show="topic.saved">
-        <button class="btn btn-disabled btn-sm" disabled title="{{topic.topic_number}} is saved" type="button">Saved</button>
-      </div>
-    <hr />
+      <div topic="topic" save-option="true"></div>
+      <hr />
     </div>
   </div>
   <div class="row">

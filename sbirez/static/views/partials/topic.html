@@ -1,0 +1,15 @@
+<div ng-show="topic.id"> 
+  <p class="topic-header-text"><a href="#" ui-sref="topic({id:topic.id})">{{topic.topic_number}}: {{topic.title}}</a></p>
+  <p>{{topic.description|truncate:500}}<span ng-if="topic.description.length > 500"><a href="#" ui-sref="topic({id:topic.id})" title="More about {{topic.topic_number}}">More >>></a></span></p>
+  <div ng-if="saveOption">
+    <button ng-hide="topic.saved" ng-click="saveOpportunity()" title="Save {{topic.topic_number}} for later" type="button">Save for later</button>
+    <button ng-show="topic.saved" disabled title="{{topic.topic_number}} is saved" type="button">Saved</button>
+  </div>
+  <div ng-if="removeOption">
+    <button ng-show="removeOption" ng-click="removeOpportunity()" title="Remove {{topic.topic_number}}" type="button">Remove Topic</button>
+  </div>
+  <div ng-if="createOption">
+    <button ng-show="topic.proposal_id" ui-sref="app.activity.proposals.report({id: topic.proposal_id})" title="Goto Proposal for {{topic.topic_number}}" type="button">View Proposal</button>
+    <button ng-hide="topic.proposal_id" ng-click="createProposal()" title="Create Proposal for {{topic.topic_number}}" type="button">Create Proposal</button>
+  </div>
+</div>

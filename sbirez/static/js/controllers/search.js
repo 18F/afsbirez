@@ -2,7 +2,7 @@
 
 angular.module('sbirezApp')
   .controller('SearchCtrl', function ($scope, $http, $window,
-               SearchService, SavedOpportunityService, SavedSearchService) {
+               SearchService, SavedSearchService) {
     $scope.jwt = $window.sessionStorage.token;
    
     var loadState = function() {
@@ -21,19 +21,6 @@ angular.module('sbirezApp')
 
     $scope.simpleMode = ($scope.searchTerm === '');
     $scope.simpleModeIcebox = true;
-
-    $scope.saveOpportunity = function(opportunityId) {
-      SavedOpportunityService.save(opportunityId).then(function() {
-        for (var index = 0; index < $scope.itemCount; index++) {
-          if ($scope.results.results[index].id === opportunityId) {
-            $scope.results.results[index].saved = true;
-            break;
-          }
-        }
-      }, function(error) {
-        console.log(error);
-      });
-    };
 
     $scope.saveSearch = function() {
       SavedSearchService.save($scope.searchTerm);
