@@ -15,6 +15,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
   var workflowLength = 0;
   var previousWorkflow = null;
   var nextWorkflow = null;
+  var loadingPromise = null;
 
   var PROPOSAL_URI = 'api/v1/proposals/';
   var TOPIC_URI = 'api/v1/topics/';
@@ -150,7 +151,11 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
 
   var loadProposal = function(proposalId) {
     // retrieves workflow and data
-    var deferred = $q.defer();
+    //var deferred = $q.defer();
+    if (loadingPromise === null) {
+      loadingPromise = $q.defer();
+    }
+    console.log('prop id', proposal.id, proposalId);
     if (proposal.id !== proposalId) {
       $http.get(PROPOSAL_URI + proposalId + '/').success(function(data) {
         proposal = data;
@@ -159,18 +164,23 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
           buildIndex(workflow, null);
           workflowLength = workflows.length;
           buildMultiplicities();
-          $http.get(TOPIC_URI + proposal.topic + '/').success(function(data) {
-            proposal.topic = data;
-            deferred.resolve(proposal);
-          });
+          if (typeof proposal.topic === 'object' && proposal.topic.id === undefined) {
+            $http.get(TOPIC_URI + proposal.topic + '/').success(function(data) {
+              proposal.topic = data;
+              loadingPromise.resolve(proposal);
+            });
+          }
+          else {
+            loadingPromise.resolve(proposal);
+          }
         });
         proposalData = proposal.data;
       });
     } else {
       console.log('already loaded proposal');
-      deferred.resolve(proposal);
+      loadingPromise.resolve(proposal);
     }
-    return deferred.promise;
+    return loadingPromise.promise;
   };
 
   var unloadProposal = function() {
