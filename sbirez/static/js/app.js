@@ -22,7 +22,8 @@ angular.module('sbirezApp', [
         controller: 'MainCtrl'
       })
       .state('home.search', {
-        url: '',
+        url: '?q',
+        reloadOnSearch: true,
         views: {
           'tabContent': {
             templateUrl: 'static/views/partials/search.html',
@@ -62,7 +63,7 @@ angular.module('sbirezApp', [
         access: { requiredAuthentication: true }
       })
       .state('app.activity.search', {
-        url: '/search',
+        url: '/search?q',
         views: {
           'activityContent': {
             templateUrl: 'static/views/partials/search.html',
@@ -244,7 +245,9 @@ angular.module('sbirezApp', [
     //console.log(arguments);
   });
   $rootScope.$on('$stateChangeSuccess',function(event, toState, toParams, fromState, fromParams){
-    //console.log('$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.');
+    console.log('$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.', event, toState);
+    $rootScope.controller = toState.name.replace(/\./g, '_');
+    console.log($rootScope.controller);
   });
   $rootScope.$on('$viewContentLoaded',function(event){
     //console.log('$viewContentLoaded - fired after dom rendered',event);
