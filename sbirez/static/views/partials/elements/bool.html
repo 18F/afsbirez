@@ -1,10 +1,16 @@
-<div class="bool-question">
-  <label class="question" for="{{element.name}}"><div marked="fieldName"></div></label>
-    <label class="radio-inline">
-      <input type="radio" ng-model="storage" id="{{element.name}}-yes" ng-click="apply()" value="true"> Yes
+<section class="fieldset fieldset-radio">
+  <h1><div marked="fieldName"></div></h1>
+  <div class="field field-radio">
+    <label>
+      <input type="radio" ng-model="storage" id="{{element.name}}-yes" ng-click="apply()" value="true"> 
+      <span class="label-text">Yes</span>
     </label>
-    <label class="radio-inline">
-      <input type="radio" ng-model="storage" id="{{element.name}}-no" ng-click="apply()" value="false"> No
+  </div>
+  <div class="field field-radio">
+    <label>
+      <input type="radio" ng-model="storage" id="{{element.name}}-no" ng-click="apply()" value="true"> 
+      <span class="label-text">No</span>
     </label>
+  </div>
   <div ng-show="validationstorage" class="text-danger"><p class="errortext">{{validationstorage}}</p></div>
-</div>
+</section>

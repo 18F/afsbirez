@@ -1,9 +1,19 @@
-<div id="header" class="header">
-  <ul id="header-nav" class="nav nav-pills pull-right">
-    <li id="header-nav-{{item.title | lowercase }}" ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
-      <a name="{{item.title}}" ng-show="item.click" ng-href='#' ng-click="item.click()">{{item.title}}</a>
-      <a name="{{item.title}}" ng-show="item.link" ng-href="{{item.link}}">{{item.title}}</a>
-    </li>
-  </ul>
-  <p class="header-text text-muted">SBIR-EZ</p>
-</div>
+<header id="header" role="banner" class="header banner">
+  <div class="wrap">
+    <h1><a class="home" href="/">SBIR-EZ</a></h1>
+    <form action="" method="post">
+      <div class="field">
+        <label>
+          <span class="label-text">Query</span>
+          <input type="search" id="query" name="query" value="" />
+        </label>
+      </div>
+      <footer>
+        <button type="submit">Search</button>
+      </footer>
+    </form>
+    <nav class="primary">
+      <a class="{{item.title}}" ng-repeat="item in menu" ng-click="item.click()" ng-href="">{{item.title}}</a>
+    </nav>
+  </div>
+</header>
