@@ -17,6 +17,17 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
   var nextWorkflow = null;
 
   var PROPOSAL_URI = 'api/v1/proposals/';
+  var TOPIC_URI = 'api/v1/topics/';
+
+  var getTopic = function(topicId) {
+    var deferred = $q.defer();
+    $http.get(TOPIC_URI + topicId + '/').success(function(data) {
+      deferred.resolve(data);
+    }).error(function(data) {
+      deferred.reject(new Error(data));
+    });
+    return deferred.promise;
+  }
 
   var getProposals = function() {
     var deferred = $q.defer();
@@ -140,18 +151,25 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
   var loadProposal = function(proposalId) {
     // retrieves workflow and data
     var deferred = $q.defer();
-    //console.log('loadProposal', proposalId);
-    $http.get(PROPOSAL_URI + proposalId + '/').success(function(data) {
-      proposal = data;
-      $http.get('api/v1/elements/' + proposal.workflow + '/').success(function(data) {
-        workflow = data;
-        buildIndex(workflow, null);
-        workflowLength = workflows.length;
-        buildMultiplicities();
-        deferred.resolve(data);
+    if (proposal.id !== proposalId) {
+      $http.get(PROPOSAL_URI + proposalId + '/').success(function(data) {
+        proposal = data;
+        $http.get('api/v1/elements/' + proposal.workflow + '/').success(function(data) {
+          workflow = data;
+          buildIndex(workflow, null);
+          workflowLength = workflows.length;
+          buildMultiplicities();
+          $http.get(TOPIC_URI + proposal.topic + '/').success(function(data) {
+            proposal.topic = data;
+            deferred.resolve(proposal);
+          });
+        });
+        proposalData = proposal.data;
       });
-      proposalData = proposal.data;
-    });
+    } else {
+      console.log('already loaded proposal');
+      deferred.resolve(proposal);
+    }
     return deferred.promise;
   };
 
@@ -473,6 +491,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       }
     },
     load: function(proposalId) {
+      console.log('propservice load');
       if (AuthenticationService.isAuthenticated) {
         return loadProposal(proposalId);
       } else {
@@ -503,6 +522,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       }
     },
     getWorkflow: function(elementId) {
+      console.log('propservice getWorkflow');
       //console.log('getWorkflow', elementId);
       if (AuthenticationService.isAuthenticated) {
         return getWorkflowElement(elementId);

@@ -1,6 +1,7 @@
 -
   name: dod_workflow
   element_type: workflow
+  human: DoD Workflow 
   children:
     -
       name: dod_coversheet

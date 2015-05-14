@@ -49,6 +49,7 @@ angular_js = Bundle(
     "js/controllers/document.js",
     "js/controllers/proposalList.js",
     "js/controllers/proposal.js",
+    "js/controllers/proposalReport.js",
     "js/controllers/adminuser.js",
     "js/controllers/topic.js",
     "js/services/authsvc.js",

@@ -1,0 +1,27 @@
+<p class="topic-header-text">{{proposal.title}}</p>
+<p ng-if="proposal.submitted_at">Started: {{proposal.submitted_at | date}}</p>
+<h2>Progress report</h2>
+<p>SBIR proposals are comprised of four parts, listed below. We'll help you submit your proposal by filling out the necessary paperwork, one step at a time.</p>
+<ul>
+  <li ng-repeat="element in workflow.children">
+    <a href="#" ui-sref="app.activity.proposals.detail({id: proposalId, current: element.id})">
+      {{element.human}}
+    </a>
+    <ul ng-if="element.children.length > 0">
+      <li ng-if="child.element_type === 'group'" ng-repeat="child in element.children">
+        <a href="#" ui-sref="app.activity.proposals.detail({id: proposalId, current: child.id})">
+          {{child.human}}
+        </a>
+      </li>
+    </ul>
+  </li>
+</ul>
+<button type="button" id="start" ui-sref="app.activity.proposals.detail({id: proposalId, current: goodStartWorkflow})">Get started</button>
+<button type="button" id="validate_state" ng-click="validate()">Verify this proposal</button>
+<hr />
+<p>{{ proposal.title }}</p>
+<p>{{ proposal.topic.topic_number }}</p>
+<p>{{ proposal.topic.objective }}</p>
+<a href="#" ui-sref="topic({id:proposal.topic.id})">View details</a>
+<a href="#" ui-sref="topic({id:proposal.topic.id})">Remove from my topics</a>
+

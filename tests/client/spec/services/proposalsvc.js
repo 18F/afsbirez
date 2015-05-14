@@ -71,7 +71,6 @@ describe('Service: ProposalService', function () {
     $httpBackend.flush();
   });
 
-  
   it('should open a login dialog if not authed on remove', function() {
     AuthenticationService.setAuthenticated(false);
     var response = ProposalService.remove(1);
@@ -135,6 +134,32 @@ describe('Service: ProposalService', function () {
     $httpBackend.flush();
   });
 
+  // complete
+  it('should post a proposal if one loaded and the user is authenticated', function() {
+    $window.sessionStorage.userid = 1;
+    AuthenticationService.setAuthenticated(true);
+    //ProposalService.get(1);
+    //$httpBackend.expectGET('api/v1/proposals/1/').respond(200);
+    //$httpBackend.flush();
+  });
+
+  it('should return an error if no proposal is loaded and the user is authenticated', function() {
+    $window.sessionStorage.userid = 1;
+    AuthenticationService.setAuthenticated(true);
+    //ProposalService.get(1);
+    //$httpBackend.expectGET('api/v1/proposals/1/').respond(200);
+    //$httpBackend.flush();
+  });
+  
+  it('should open a login dialog if not authed', function() {
+    $window.sessionStorage.userid = 1;
+    AuthenticationService.setAuthenticated(true);
+    //ProposalService.get(1);
+    //$httpBackend.expectGET('api/v1/proposals/1/').respond(200);
+    //$httpBackend.flush();
+  });
+
+
   // saveData
   xit('should save data if authenticated', function() {
     $window.sessionStorage.userid = 1;
@@ -150,18 +175,6 @@ describe('Service: ProposalService', function () {
     var data = {'field_1': '123', 'field_2': '234'};
     ProposalService.saveData(1, data);
     $httpBackend.expectGET('static/views/partials/login.html').respond(200);
-    $httpBackend.flush();
-  });
-
-  xit('should return an error on saveData if the opportunity id is non-numeric', function() {
-    $window.sessionStorage.userid = 1;
-    AuthenticationService.setAuthenticated(true);
-    var goodHandler = jasmine.createSpy('success');
-    var errorHandler = jasmine.createSpy('error');
-
-    var promise = ProposalService.saveData('title', {}).then(goodHandler, errorHandler);
-    $rootScope.$digest();
-    expect(errorHandler).toHaveBeenCalled();
     $httpBackend.flush();
   });
 
@@ -194,4 +207,12 @@ describe('Service: ProposalService', function () {
     expect(errorHandler).toHaveBeenCalled();
     $httpBackend.flush();
   });
+
+  // load
+  // unload
+  // getWorkflow
+  // register
+  // apply
+  // validate
+
 });

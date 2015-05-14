@@ -103,6 +103,16 @@ angular.module('sbirezApp', [
         },
         access: { requiredAuthentication: true }
       })
+      .state('app.activity.proposals.report', {
+        url: '/report/:id',
+        views: {
+          '': {
+            templateUrl: 'static/views/partials/proposal.report.html',
+            controller: 'ProposalReportCtrl'
+          }
+        },
+        access: { requiredAuthentication: true }
+      })
       .state('app.activity.documents', {
         url: '/documents',
         abstract: true,

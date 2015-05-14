@@ -24,6 +24,9 @@ angular.module('sbirezApp').directive('workflow', function() {
 
         $scope.jumpTo = function(workflow_id) {
           var data = ProposalService.getWorkflow(workflow_id);
+          if (workflow_id === undefined) {
+            $scope.startingWorkflow = data.current.id;
+          }
           $scope.currentWorkflow = data.current;
           $scope.backWorkflow = data.previous;
           $scope.nextWorkflow = data.next;
@@ -31,7 +34,7 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         ProposalService.load(parseInt($scope.proposalId)).then(function() {
-          $scope.jumpTo($stateParams.current !== null ? $stateParams.current : null);
+          $scope.jumpTo($stateParams.current !== undefined ? $stateParams.current : undefined);
         });
 
         $scope.showBackButton = function() {
