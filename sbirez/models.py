@@ -68,6 +68,7 @@ class Reference(models.Model):
     reference = models.TextField()
     topic = models.ForeignKey('Topic', related_name='references')
 
+
 class Element(models.Model):
     """
     Individual questions for a form, or nestable containers to hold
@@ -197,17 +198,21 @@ class Element(models.Model):
         element.  Returns a list, which will contain only one element, unless the
         element is a child of an element with multiplicity.
         """
-        import ipdb; ipdb.set_trace()
-        # data = [data, ]
-        for p in self.parentage()[1:]:  # [0] is the top workflow name
-            values = data.get(p.name) # [d.get(p.name) for d in data]
-            if (not values) or (values == [None, ] * len(values)):
-                raise KeyError('%s not in %s' % (p, [d.keys() for d in data]))
-            if p.multiplicity:
-                # data = [v.values() for v in values]
-                data = values.values()
-            else:
-                data = values
+
+        parent = None
+        data = [data, ]
+        for p in self.parentage()[1:]:  # skip [0], it's the top workflow name
+            next_level_data = []
+            for datum in data:
+                value = datum.get(p.name)
+                if p.multiplicity:
+                    values = list(value.values())
+                else:
+                    values = [value, ]
+                if (not values) or (values == [None, ] * len(values)):
+                    raise KeyError('%s not in %s' % (p, [d.keys() for d in data]))
+                next_level_data.extend(values)
+            data = next_level_data
         return data
 
 class Solicitation(models.Model):

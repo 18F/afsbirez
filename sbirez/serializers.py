@@ -208,7 +208,6 @@ def _find_validation_errors(data, element, accept_partial, ):
 
     try:
         vals = element.lookup_in_data(data)
-        # TODO: line item with multiplicity is simply not being returned
     except KeyError:
         if accept_partial or not element.required:
             return []
@@ -264,8 +263,6 @@ def genericValidator(proposal, accept_partial=False):
     Inspect the workflow's validators and apply them to
     the proposal's data
     '''
-
-    import ipdb; ipdb.set_trace()
 
     errors = []
     if 'workflow' in proposal:
