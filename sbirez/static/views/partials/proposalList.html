@@ -10,10 +10,10 @@
     </thead>
     <tbody>
       <tr ng-repeat="prop in proposalList">
-        <td><a ui-sref="app.activity.proposals.report({id:{{prop.id}}})">{{prop.title}}</a></td>
+        <td><a ui-sref="app.proposals.report({id:{{prop.id}}})">{{prop.title}}</a></td>
         <td>{{prop.submitted_at | date:'medium'}}</td>
         <td>
-          <button class="btn btn-default btn-sm" ui-sref="app.activity.proposals.report({id: prop.id})" title="Edit Proposal" type="button">Edit</button>
+          <button class="btn btn-default btn-sm" ui-sref="app.proposals.report({id: prop.id})" title="Edit Proposal" type="button">Edit</button>
         </td>
       </tr>
     </tbody>

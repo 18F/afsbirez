@@ -5,7 +5,7 @@ angular.module('sbirezApp').factory('SavedSearchService', function($http, $windo
     save: function(query) {
       if (!AuthenticationService.isAuthenticated) {
         var intention = {};
-        intention.name = 'app.activity.savedSearches';
+        intention.name = 'app.savedSearches';
         intention.data = {};
         intention.data.query = query;
         DialogService.openLogin(intention);

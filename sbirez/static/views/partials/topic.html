@@ -13,7 +13,7 @@
       <button ng-show="removeOption" ng-click="removeOpportunity()" title="Remove {{topic.topic_number}}" type="button">Remove Topic</button>
     </div>
     <div ng-if="createOption">
-      <button ng-show="topic.proposal_id" ui-sref="app.activity.proposals.report({id: topic.proposal_id})" title="Goto Proposal for {{topic.topic_number}}" type="button">View Proposal</button>
+      <button ng-show="topic.proposal_id" ui-sref="app.proposals.report({id: topic.proposal_id})" title="Goto Proposal for {{topic.topic_number}}" type="button">View Proposal</button>
       <button ng-hide="topic.proposal_id" ng-click="createProposal()" title="Create Proposal for {{topic.topic_number}}" type="button">Create Proposal</button>
     </div>
   </nav>

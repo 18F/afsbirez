@@ -50,7 +50,11 @@ angular.module('sbirezApp').directive('header', function() {
         $scope.search = function() {
           if(AuthenticationService.isAuthenticated &&
              ($window.sessionStorage.token !== null && $window.sessionStorage.token !== undefined && $window.sessionStorage.token !== '')) {
-            $state.go('app.activity.search', {'q': $scope.query});
+            SearchService.search(1, $scope.query, 10).then(function(data) {
+              $state.go('app.search');
+            }, function(error) {
+              console.log(error);
+            });
           } else {
             SearchService.search(1, $scope.query, 10).then(function(data) {
               $state.go('home.search', {}, {'reload':true});
