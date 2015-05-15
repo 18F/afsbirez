@@ -11,14 +11,21 @@ angular.module('sbirezApp').factory('SearchService', function($http, $window, $q
   return {
     search: function(page, searchTerm, itemsPerPage) {
       var deferred = $q.defer();
+      console.log('val', itemCount, itemsPerPage);
       if (typeof page === 'number' && page === Math.floor(page) && page >= 0) {
         page = page;
       }
-      else if (page === 'next') {
+      else if (page === 'next' && currentPage < (numFound / itemsPerPage)) {
         page = currentPage + 1;
       }
-      else if (page === 'prev') {
+      else if (page === 'next') {
+        page = currentPage;
+      }
+      else if (page === 'prev' && currentPage > 1) {
         page = currentPage - 1;
+      }
+      else if (page === 'prev') {
+        page = currentPage;
       }
       else {
         page = 1;
