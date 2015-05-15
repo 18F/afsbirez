@@ -47,7 +47,7 @@ angular.module('sbirezApp', [
         views: {
           '': {
             templateUrl: 'static/views/partials/appmain.html',
-            controller: 'AppMainCtrl'
+            controller: ''
           }
         }
       })
@@ -57,7 +57,7 @@ angular.module('sbirezApp', [
         views: {
           'tabContent': {
             templateUrl: 'static/views/partials/activity.html',
-            controller: 'ActivityCtrl'
+            controller: ''
           }
         },
         access: { requiredAuthentication: true }
@@ -245,9 +245,9 @@ angular.module('sbirezApp', [
     //console.log(arguments);
   });
   $rootScope.$on('$stateChangeSuccess',function(event, toState, toParams, fromState, fromParams){
-    console.log('$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.', event, toState);
+    //console.log('$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.', event, toState);
     $rootScope.controller = toState.name.replace(/\./g, '_');
-    console.log($rootScope.controller);
+    //console.log($rootScope.controller);
   });
   $rootScope.$on('$viewContentLoaded',function(event){
     //console.log('$viewContentLoaded - fired after dom rendered',event);
