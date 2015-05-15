@@ -1,10 +1,7 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('SearchCtrl', function ($scope, $http, $window, $stateParams,
-               SearchService, SavedSearchService) {
-    $scope.jwt = $window.sessionStorage.token;
-  
+  .controller('SearchCtrl', function ($scope, SearchService) {
  
     var loadState = function() {
       var state = SearchService.loadState();
@@ -15,12 +12,7 @@ angular.module('sbirezApp')
       $scope.results = state.results;
     };
 
-    if ($stateParams.q === undefined) {
-      loadState();
-    } else {
-      $scope.searchTerm = $stateParams.q; 
-      $scope.search(1);
-    }
+    loadState();
 
     var SOLICITATIONS_PER_PAGE = 10;
     $scope.itemsPerPage = SOLICITATIONS_PER_PAGE;
@@ -28,9 +20,7 @@ angular.module('sbirezApp')
     $scope.simpleMode = ($scope.searchTerm === '');
     $scope.simpleModeIcebox = true;
 
-    $scope.saveSearch = function() {
-      SavedSearchService.save($scope.searchTerm);
-    };
+    SearchService.registerObserverCallback(loadState);
 
     $scope.search = function(page) {
       SearchService.search(page, $scope.searchTerm, $scope.itemsPerPage).then(function(data) {
