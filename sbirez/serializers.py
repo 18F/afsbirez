@@ -202,49 +202,6 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
                     )
 
 
-def _find_validation_errors(data, element, accept_partial, ):
-
-    errors = []
-
-    try:
-        vals = element.lookup_in_data(data)
-    except KeyError:
-        if accept_partial or not element.required:
-            return []
-        else:
-            return ['Required field %s absent' % element.name]
-
-    if not vals:
-        if element.required and not accept_partial:
-            return ['Required field %s is blank' % element.name]
-
-    errors = []
-
-    if element.validation:
-        for validation in element.validation.split(';'):
-            args = shlex.split(validation)
-            function_name = args.pop(0)
-            try:
-                func = getattr(validation_helpers, function_name)
-            except AttributeError:
-                # validation refers to a function not found in helper library
-                errors.append(
-                    '%s: validation function %s absent from validation_helpers.py',
-                    (element.name, function_name))
-
-            for val in vals:
-                val = val.lower()
-                if not func(data, val, *args):
-                    errors.append(
-                        '%s: %s' % (element.name, element.validation_msg))
-
-    if element.children.exists():
-        for subelement in element.children.all():
-            errors.extend(_find_validation_errors(data, subelement, accept_partial))
-
-    return errors
-
-
 class ElementSerializer(serializers.ModelSerializer):
 
     children = RecursiveField(many=True)
@@ -265,14 +222,16 @@ def genericValidator(proposal, accept_partial=False):
     '''
 
     errors = []
+
+    import ipdb; ipdb.set_trace()
     if 'workflow' in proposal:
         for element in proposal['workflow'].children.all():
-            errors.extend(_find_validation_errors(proposal['data'], element,
-                                                  accept_partial=accept_partial))
+            errors.extend(element.validation_errors(proposal['data'],
+                                                    proposal['data'],
+                                                    accept_partial=accept_partial))
     else:
-        if not accept_partial:
-            errors.append(object)
-            errors.append('no workflow specified for proposal')
+        errors = ['proposal has no specified workflow, cannot validate']
+
     if errors:
         raise serializers.ValidationError(errors)
 
@@ -313,11 +272,6 @@ class ProposalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Proposal
         validators = [genericValidator]
-        """
-        fields = ('id', 'submitted_at', 'data', 'firm_id',
-                  'owner_id', 'topic_id', 'workflow_id', 'title',
-                  'owner', 'firm')
-        """
 
 
 class PartialProposalSerializer(ProposalSerializer):

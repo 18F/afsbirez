@@ -50,4 +50,10 @@
     -
       name: instrument
       element_type: med_str
+    -
+      name: kg
+      human: weight in kg
+      required: True
+      element_type: float
+      validation: not_less_than 0
 
