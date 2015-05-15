@@ -16,10 +16,11 @@ angular.module('sbirezApp').factory('SearchService', function($http, $q, Proposa
 
     search: function(page, searchTerm, itemsPerPage) {
       var deferred = $q.defer();
+      console.log('search', page, numFound, itemsPerPage);
       if (typeof page === 'number' && page === Math.floor(page) && page >= 0) {
         page = page;
       }
-      else if (page === 'next' && currentPage < (numFound / itemsPerPage)) {
+      else if (page === 'next' && (numFound === 0 || currentPage < (numFound / itemsPerPage))) {
         page = currentPage + 1;
       }
       else if (page === 'next') {
