@@ -1,63 +1,3 @@
-@-webkit-keyframes ngdialog-flyin {
-  0% {
-    opacity: 0;
-    -webkit-transform: translateY(-40px);
-    transform: translateY(-40px);
-  }
-
-  100% {
-    opacity: 1;
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-  }
-}
-
-@keyframes ngdialog-flyin {
-  0% {
-    opacity: 0;
-    -webkit-transform: translateY(-40px);
-    -ms-transform: translateY(-40px);
-    transform: translateY(-40px);
-  }
-
-  100% {
-    opacity: 1;
-    -webkit-transform: translateY(0);
-    -ms-transform: translateY(0);
-    transform: translateY(0);
-  }
-}
-
-@-webkit-keyframes ngdialog-flyout {
-  0% {
-    opacity: 1;
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-  }
-
-  100% {
-    opacity: 0;
-    -webkit-transform: translateY(-40px);
-    transform: translateY(-40px);
-  }
-}
-
-@keyframes ngdialog-flyout {
-  0% {
-    opacity: 1;
-    -webkit-transform: translateY(0);
-    -ms-transform: translateY(0);
-    transform: translateY(0);
-  }
-
-  100% {
-    opacity: 0;
-    -webkit-transform: translateY(-40px);
-    -ms-transform: translateY(-40px);
-    transform: translateY(-40px);
-  }
-}
-
 .ngdialog.ngdialog-theme-login {
   padding-bottom: 160px;
   padding-top: 160px;
@@ -112,14 +52,4 @@
 .ngdialog.ngdialog-theme-login .ngdialog-close:hover:before,
 .ngdialog.ngdialog-theme-login .ngdialog-close:active:before {
   color: #777;
-}
-
-.signup-form {
-  padding-left:1em;
-  padding-right:1em;
-}
-
-.login-form {
-  padding-left:1em;
-  padding-right:1em;
 }

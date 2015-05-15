@@ -415,7 +415,8 @@ header.banner form div.field input:active {
 /* @end */
 
 main{ padding-bottom: 2em; }
-main div.wrap > h1 {
+
+h1.search-results-heading {
     font-size: 36px;
     font-family: 'franklin-gothic-urw-cond', sans-serif;
     margin-top: 24px;
@@ -432,12 +433,6 @@ article.topic{
     color: #333;
 }
 
-article.topic:last-of-type{
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
 article.topic a.topic-content{
     display: block;
     text-decoration: none;
@@ -451,6 +446,7 @@ article.topic a.topic-content:hover h1{
 article.topic h1{
     font-family: georgia;
     font-size: 21px;
+    line-height: 24px;
     font-weight: 100;
     display: inline-block;
     vertical-align: middle;
@@ -794,9 +790,6 @@ header.proposal-banner ol li a:hover{color: #555; }
 
 }
 
-
-
-
 /* @end */
 
 /* @group body.topic */
@@ -808,11 +801,6 @@ article.topic{
     color: #333;
 }
 
-article.topic:last-of-type{
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
 
 article.topic a.topic-content{
     display: block;

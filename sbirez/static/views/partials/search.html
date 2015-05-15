@@ -1,40 +1,10 @@
 <div ng-controller="SearchCtrl">
-  <form ng-submit="search()">
-    <div class="row search-control">
-      <div class="form-inline">
-        <div class="form-group">
-          <div class="input-group">
-            <label for="searchbox" class="sr-only">Enter a search term here</label>
-            <input type="text" id="searchbox" title="Enter a search term here" ng-model="searchTerm" placeholder="Enter a search term" class="form-control input-lg">
-            <span class="input-group-btn">
-              <button class="btn btn-default btn-lg" type="submit">Search</button>
-            </span>
-          </div>
-        </div>
-        <div class="form-group">
-          <div ng-hide="simpleModeIcebox">
-            <button class="btn btn-default" type="button">Advanced Search Options</button>
-          </div>
-          <div ng-hide="simpleMode">
-            <button class="btn btn-default btn-lg" ng-click="clear()" type="button">Start Over</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div>
-        <div ng-show="results && results.results && numFound > 0">
-          <p>{{numFound}} Results</p>
-        </div>
-        <div ng-show="results && results.results && numFound === 0">
-          <p>No Results Found</p>
-        </div>
-      </div>
-      <div ng-hide="simpleModeIcebox">
-        <p class="text-right"><em><a href="#" ng-click="saveSearch()">Save this search >>></a></em></p>
-      </div>
-    </div>
-  </form>
+  <div ng-show="results && results.results && numFound > 0">
+    <h1 class="search-results-heading">{{numFound}} Results for SEARCHTERM</h1>
+  </div>
+  <div ng-show="results && results.results && numFound === 0">
+    <h1 class="search-results-heading">No results found</h1>
+  </div>
   <div ng-repeat="topic in results.results">
     <div topic="topic" ng-show="topic.id" id="topic.topic_number" save-option="true" create-option="true"></div>
   </div>

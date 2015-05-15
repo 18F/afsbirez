@@ -5,16 +5,16 @@
     <p class="entry-summary">{{topic.description|truncate:500}}</p>
   </a>
   <nav>
-    <div ng-if="saveOption">
+    <span ng-if="saveOption">
       <button ng-hide="topic.saved" ng-click="saveOpportunity()" title="Save {{topic.topic_number}} for later" type="button">Add to my topics</button>
-      <button ng-show="topic.saved" disabled title="{{topic.topic_number}} is saved" type="button">Saved</button>
-    </div>
-    <div ng-if="removeOption">
-      <button ng-show="removeOption" ng-click="removeOpportunity()" title="Remove {{topic.topic_number}}" type="button">Remove Topic</button>
-    </div>
-    <div ng-if="createOption">
+      <button ng-show="topic.saved" title="Remove {{topic.topic_number}}" type="button" class="button-remove">Remove from my topics</button>
+    </span>
+    <span ng-if="removeOption">
+      <button ng-show="removeOption" ng-click="removeOpportunity()" title="Remove {{topic.topic_number}}" type="button" class="button-remove">Remove from my topics</button>
+    </span>
+    <span ng-if="createOption">
       <button ng-show="topic.proposal_id" ui-sref="app.proposals.report({id: topic.proposal_id})" title="Goto Proposal for {{topic.topic_number}}" type="button">View Proposal</button>
       <button ng-hide="topic.proposal_id" ng-click="createProposal()" title="Create Proposal for {{topic.topic_number}}" type="button">Create Proposal</button>
-    </div>
+    </span>
   </nav>
 </article>
