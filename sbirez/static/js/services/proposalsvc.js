@@ -155,7 +155,6 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     if (loadingPromise === null) {
       loadingPromise = $q.defer();
     }
-    console.log('prop id', proposal.id, proposalId);
     if (proposal.id !== proposalId) {
       $http.get(PROPOSAL_URI + proposalId + '/').success(function(data) {
         proposal = data;
@@ -356,7 +355,6 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     if (proposalData[workflow.name] === undefined) {
       proposalData[workflow.name] = {};
     }
-    console.log('proposalData', proposalData);
     ValidationService.validate(workflow, proposalData[workflow.name], validationData[workflow.name], true);
     for (var index = 0; index < validationCallbacks.length; index++) {
       // check to see if the state was already set
@@ -501,7 +499,6 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       }
     },
     load: function(proposalId) {
-      console.log('propservice load');
       if (AuthenticationService.isAuthenticated) {
         return loadProposal(proposalId);
       } else {
@@ -532,8 +529,6 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       }
     },
     getWorkflow: function(elementId) {
-      console.log('propservice getWorkflow');
-      //console.log('getWorkflow', elementId);
       if (AuthenticationService.isAuthenticated) {
         return getWorkflowElement(elementId);
       } else {

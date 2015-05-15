@@ -135,7 +135,7 @@ describe('Service: ProposalService', function () {
   });
 
   // complete
-  it('should post a proposal if one loaded and the user is authenticated', function() {
+  xit('should post a proposal if one loaded and the user is authenticated', function() {
     $window.sessionStorage.userid = 1;
     AuthenticationService.setAuthenticated(true);
     //ProposalService.get(1);
@@ -143,7 +143,7 @@ describe('Service: ProposalService', function () {
     //$httpBackend.flush();
   });
 
-  it('should return an error if no proposal is loaded and the user is authenticated', function() {
+  xit('should return an error if no proposal is loaded and the user is authenticated', function() {
     $window.sessionStorage.userid = 1;
     AuthenticationService.setAuthenticated(true);
     //ProposalService.get(1);
@@ -151,7 +151,7 @@ describe('Service: ProposalService', function () {
     //$httpBackend.flush();
   });
   
-  it('should open a login dialog if not authed', function() {
+  xit('should open a login dialog if not authed', function() {
     $window.sessionStorage.userid = 1;
     AuthenticationService.setAuthenticated(true);
     //ProposalService.get(1);
