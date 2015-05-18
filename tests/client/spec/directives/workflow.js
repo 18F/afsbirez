@@ -171,7 +171,7 @@ describe('Directive: WorkflowDirective', function () {
     expect(elements.eq(2).children(0).attr('bool')).toBeDefined();
 
     // validate that there is a save button
-    var saveButton = formElement.find('button#validate_state');
+    var saveButton = formElement.find('button#save_exit');
     expect(saveButton.length).toBe(1);
   });
 

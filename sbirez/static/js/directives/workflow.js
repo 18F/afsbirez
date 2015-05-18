@@ -5,17 +5,13 @@ angular.module('sbirezApp').directive('workflow', function() {
     restrict: 'A',
     replace: true,
     scope: {
-      includeSidebar: '@',
-      includeMetro: '@',
       proposalId: '@'
     },
     templateUrl: 'static/views/partials/workflow.html',
-    controller: ['$scope', '$http', '$q', '$stateParams', '$location', 'ProposalService', 
-      function ($scope, $http, $q, $stateParams, $location, ProposalService) {
+    controller: ['$scope', '$stateParams', '$state', '$location', 'ProposalService', 
+      function ($scope, $stateParams, $state, $location, ProposalService) {
 
-        //$scope.workflows = [];
         $scope.currentWorkflow = {};
-        //$scope.parentWorkflow = null;
         $scope.startingWorkflow = null;
         $scope.backWorkflow = null;
         $scope.nextWorkflow = null;
@@ -52,6 +48,21 @@ angular.module('sbirezApp').directive('workflow', function() {
         $scope.validate = function() {
           ProposalService.validate();
         };
+
+        $scope.saveAndContinue = function(next) { 
+          $scope.saveData();
+          $scope.jumpTo(next);
+        };
+
+        $scope.exit = function() {
+          $state.go('app.proposals.report',{id: $scope.proposalId});
+        };
+
+        $scope.saveAndExit = function(next) { 
+          $scope.saveData();
+          $scope.exit();
+        };
+
       }
     ]
   };

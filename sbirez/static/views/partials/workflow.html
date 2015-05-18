@@ -10,12 +10,8 @@
     <div lineitem="element" ng-if="element.element_type === 'line_item'" proposal="{{proposalId}}"></div>
     <div upload="element" ng-if="element.element_type === 'file_upload'" proposal="{{proposalId}}"></div>
   </div>
-  <hr />
-  <div class="row">
-    <button type="button" id="start" ng-if="currentWorkflow.id !== startingWorkflow" ng-click="jumpTo(startingWorkflow)">Get started</button>
-    <button ng-if="showBackButton()" type="button" id="prior_state" ng-click="jumpTo(backWorkflow)">Back</button>
-    <button ng-if="showNextButton()" type="button" id="next_state" ng-click="jumpTo(nextWorkflow)">Save and continue</button>
-    <button type="button" id="save_state" ng-if="currentWorkflow.id !== startingWorkflow" ng-click="saveData()">Save</button>
-    <button type="button" id="validate_state" ng-click="validate()">Verify this proposal</button>
-  </div>
+  <!-- <button ng-if="showBackButton()" type="button" id="prior_state" ng-click="jumpTo(backWorkflow)">Back</button>-->
+  <button ng-if="showNextButton()" type="button" id="next_state" ng-click="saveAndContinue(nextWorkflow)">Save and continue</button>
+  <a href="#" id="cancel" ng-click="exit()">Cancel</a>
+  <button type="button" id="save_exit" ng-click="saveAndExit()">Save and return to the proposal progress report</button>
 </div>
