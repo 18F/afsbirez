@@ -952,7 +952,7 @@ class ProposalTests(APITestCase):
         self.assertEqual(response.data['firm'], 1)
 
 
-class ProposalValidationTxsts(APITestCase):
+class ProposalValidationTests(APITestCase):
 
     fixtures = ['thin.json', ]
 
@@ -986,6 +986,7 @@ class ProposalValidationTxsts(APITestCase):
 
     def test_correct_submission_is_valid(self):
         user = _fixture_user(self)
+        import ipdb; ipdb.set_trace()
         response = self.client.post('/api/v1/proposals/', self.data)
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
@@ -996,6 +997,7 @@ class ProposalValidationTxsts(APITestCase):
         del(data["data"]["minstrels"]["0"]["kg"])
         data["data"] = json.dumps(data["data"])
 
+        import ipdb; ipdb.set_trace()
         response = self.client.post('/api/v1/proposals/', data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(response.data, {'non_field_errors': ['kg not found']})
@@ -1007,6 +1009,7 @@ class ProposalValidationTxsts(APITestCase):
         data["data"]["minstrels"]["0"]["kg"] = -22
         data["data"] = json.dumps(data["data"])
 
+        import ipdb; ipdb.set_trace()
         response = self.client.post('/api/v1/proposals/', data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(response.data, {'non_field_errors': ['kg: failed not_less_than']})
@@ -1019,6 +1022,7 @@ class ProposalValidationTxsts(APITestCase):
         del(data["data"]["knights"]["Galahad"]["how_courageous_exactly"])
         data["data"] = json.dumps(data["data"])
 
+        import ipdb; ipdb.set_trace()
         response = self.client.post('/api/v1/proposals/', data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(response.data,

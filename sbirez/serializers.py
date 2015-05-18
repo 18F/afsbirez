@@ -214,46 +214,63 @@ class ElementSerializer(serializers.ModelSerializer):
                   'validation', 'validation_msg', 'ask_if',
                   'multiplicity', 'children', )
 
+
 class ProposalValidator(object):
 
-    def __init__(self, base):
+    accept_partial = False
+
+    def __init__(self, accept_partial=False):
+        self.accept_partial = accept_partial
+
+    def __call__(self, proposal):
+
         import ipdb; ipdb.set_trace()
-        self.base = base
 
-    def __call__(self, value):
-        import ipdb; ipdb.set_trace()
-        pass
+        errors = []
 
-    def set_context(self, x):
-        # TODO: docs are wrong, set_contexts is called without args
-        import ipdb; ipdb.set_trace()
-        pass
+        if 'workflow' in proposal:
+            workflow = proposal['workflow']
+        else:
+            raise serializers.ValidationError(['no workflow supplied'])
 
-def genericValidator(proposal, accept_partial=False):
-    '''
-    Inspect the workflow's validators and apply them to
-    the proposal's data
-    '''
-
-    errors = []
-
-    import ipdb; ipdb.set_trace()
-    if 'workflow' in proposal:
-        for element in proposal['workflow'].children.all():
+        for element in workflow.children.all():
             errors.extend(element.validation_errors(proposal['data'],
                                                     proposal['data'],
-                                                    accept_partial=accept_partial))
-    else:
-        errors = ['proposal has no specified workflow, cannot validate']
+                                                    accept_partial=self.accept_partial))
 
-    if errors:
-        raise serializers.ValidationError(errors)
+        if errors:
+            raise serializers.ValidationError(errors)
 
-    return proposal
+        return proposal
+
+    def set_context(self, serializer):
+        self.serializer = serializer
 
 
-def partialPermissiveValidator(proposal):
-    return genericValidator(proposal, accept_partial=True)
+class PartialProposalValidator(ProposalValidator):
+
+    accept_partial = True
+
+    def __call__(self, proposal):
+
+        import ipdb; ipdb.set_trace()
+
+        if 'workflow' in proposal:
+            workflow = proposal['workflow']
+        else:
+            path = self.serializer.context['request'].get_full_path()
+            workflow = Element.objects.get(pk=1)
+
+        for element in workflow.children.all():
+            errors.extend(element.validation_errors(proposal['data'],
+                                                    proposal['data'],
+                                                    accept_partial=self.accept_partial))
+
+        if errors:
+            raise serializers.ValidationError(errors)
+
+        return proposal
+
 
 
 class CurrentFirmDefault(serializers.CurrentUserDefault):
@@ -285,16 +302,14 @@ class ProposalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Proposal
-        import ipdb; ipdb.set_trace()
-        validators = [genericValidator]
+        validators = [ProposalValidator()]
 
 
 class PartialProposalSerializer(ProposalSerializer):
 
     class Meta:
         model = Proposal
-        # validators = [partialPermissiveValidator]
-        validators = [ProposalValidator(None)]
+        validators = [PartialProposalValidator()]
 
 
 class AddressSerializer(serializers.ModelSerializer):
