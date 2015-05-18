@@ -1,10 +1,8 @@
-<p class="header-text">Saved Opportunities</p>
-<div ng-show="data.results && data.results.count === 0">
-  <p>No Saved Opportunities Found</p>
-</div>
-<div ng-repeat="topic in data.results" class="row">
-  <div class="col-md-9">
-    <div topic="topic" remove-option="true" create-option="true"></div>
-    <hr />
+<main class="h-feed">
+  <div class="wrap">
+    <h1 class="search-results-heading">My topics</h1>
+    <div ng-repeat="topic in data.results">
+      <div topic="topic" remove-option="true" create-option="true"></div>
+    </div>
   </div>
-</div>
+</main>

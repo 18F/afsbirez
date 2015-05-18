@@ -1,64 +1,52 @@
-<div class="wrap">
-  <div ng-show="errorMsg"> 
-    <h2 class="text-center text-danger">{{errorMsg}}</h2>
-    <p class="text-center"><a href="/">Search</a> for topics from our <a href="/">Home</a> page.</a>
-  </div>
-
-  <div>
-    <h1>{{data.title}}</h1>
-    <h2>{{data.program}} {{data.topic_number}}</h2>
-    <center><a href="{{data.url}}">{{data.url}}</a></center>
-    <div ng-hide="data.saved">
-      <button class="btn btn-default btn-sm pull-right" ng-click="saveOpportunity()" title="Save {{topic.topic_number}} for later" type="button">Save for later</button>
+<main class="topic">
+  <div class="wrap">
+    <div ng-show="errorMsg"> 
+      <h2 class="text-center text-danger">{{errorMsg}}</h2>
+      <p class="text-center"><a href="/">Search</a> for topics from our <a href="/">Home</a> page.</a>
     </div>
-    <div ng-show="data.saved">
-      <button class="btn btn-disabled btn-sm pull-right" disabled title="{{topic.topic_number}} is saved" type="button">Saved</button>
-    </div>
-    <p ng-show="data.objective">{{data.objective}}</p>
-    <div ng-show="data.areas">
+    <header>
+      <h1>{{data.title}}</h1>
+      <h2>{{data.program}} {{data.topic_number}}</h2>
+      <nav>
+        <form action="proposal_progress_report.php"><button>Start a proposal</button></form>
+        <form><button class="button-remove">Remove from my topics</button></form>
+      </nav>
+    </header>
+    <section ng-show="data.objective" class="topic-objective">
+      <h1>Objective</h1>
+      <p>{{data.objective}}</p>
+    </section>
+    <section class="topic-area">
       <h1>Research &amp; Technical Areas</h1>
-      <ul>
-        <li ng-repeat="area in data.areas">{{area.area}}</li>
-      </ul>
-    </div>
-    <div ng-show="data.acquisition_program">
-      <h1>Acquisition Program:</h1>
-        <p>{{data.acquisition_program}}</p>
-    </div>
-    <div ng-show="data.description">
+      <p ng-repeat="area in data.areas">{{area.area}}</p>
+    </section>
+    <section class="topic-description">
       <h1>Description</h1>
       <p>{{data.description}}</p>
-    </div>
-    <div ng-show="data.phases && data.phases.length > 0" class="row">
       <p ng-repeat="phaseObj in data.phases | orderObjectBy:'phase'">{{phaseObj.phase}}</p>
-    </div>
-    <div ng-show="data.references && data.references.length > 0" class="row">
-      <h1>References:</h1>
-      <p ng-repeat="referenceObj in data.references | orderObjectBy:'reference'">{{referenceObj.reference}}</p>
-    </div>
-    <div ng-show="data.keywords && data.keywords.length > 0" class="row">
-      <div class="col-md-3">
-        <p class="text-right"><strong>Keywords:</strong></p>
-      </div>
-      <div class="col-md-9">
-        {{getKeywordList()}}
-      </div>
-    </div>
-    <div ng-show="data.solicitation.name">
-      <h1>Solicitation ID:</h1>
-      {{data.solicitation.name}}
-    </div>
-    <div ng-show="data.solicitation.pre_release_date">
-      <h1>Pre-Release Date</h1>
-      {{data.solicitation.pre_release_date | date}}
-    </div>
-    <div ng-show="data.solicitation.proposals_begin_date">
-      <h1>Proposal Submission Begin Date:</h1>
-      {{data.solicitation.proposals_begin_date | date }}
-    </div>
-    <div ng-show="data.solicitation.proposals_end_date" class="row">
-      <h1>Proposal Submission End Date:</h1>
-      {{data.solicitation.proposals_end_date | date}}
+    </section>
+    <section class="topic-references">
+      <h1>References</h1>
+      <ol>
+        <li ng-repeat="referenceObj in data.references | orderObjectBy:'reference'">{{referenceObj.reference}}</li>
+      </ol>
+    </section>
+    <section class="topic-keywords">
+      <h1>Keywords</h1>
+      <p>{{getKeywordList()}}</p>
+    </section>
+    <dl>
+      <dt>Solicitation ID:</dt>        
+      <dd>{{data.solicitation.name}}</dd>
+      <dt>Pre-Release Date:</dt>
+      <dd>{{data.solicitation.pre_release_date | date}}</dd>
+      <dt>Proposal Submission Begin Date:</dt>
+      <dd>{{data.solicitation.proposals_begin_date | date }}</dd>
+      <dt>Proposal Submission End Date:</dt>
+      <dd>{{data.solicitation.proposals_end_date | date }}</dd>
+    </dl>
+	    <div ng-hide="data.saved">
+	      <button class="btn btn-default btn-sm pull-right" ng-click="saveOpportunity()" title="Save {{topic.topic_number}} for later" type="button">Save for later</button>
     </div>
   </div>
 </div>
