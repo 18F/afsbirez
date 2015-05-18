@@ -1,4 +1,5 @@
 import hashlib
+import shlex
 
 from django.db import models
 from django.utils import timezone
@@ -8,6 +9,8 @@ from django.conf import settings
 from custom_user.models import AbstractEmailUser
 from rest_framework import serializers
 from django_pgjson.fields import JsonField
+
+from sbirez import validation_helpers
 
 class Address(models.Model):
     street = models.TextField()
@@ -67,6 +70,7 @@ class Phase(models.Model):
 class Reference(models.Model):
     reference = models.TextField()
     topic = models.ForeignKey('Topic', related_name='references')
+
 
 class Element(models.Model):
     """
@@ -180,20 +184,79 @@ class Element(models.Model):
             return self.name
 
     def parentage(self):
+        """
+        Returns a list of each element in the workflow's hierarchy
+        above (and including) this one.
+        """
         if self.parent:
             result = self.parent.parentage()
         else:
             result = []
-        result.append(self.name)
+        result.append(self)
         return result
 
-    def lookup_in_data(self, data):
-        for p in self.parentage()[1:]:  # [0] is the top workflow name
-            if p in data:
-                data = data[p]
-            else:
-                raise KeyError('%s not in %s' % (p, data.keys()))
-        return data
+    def _actually_required(self, accept_partial, datum):
+        return (    self.required
+                and not accept_partial
+                and ((not self.ask_if) or datum.get(self.ask_if)))
+
+    def validation_errors(self, top_level, data, accept_partial):
+        """
+        Assemble a list of all errors found when this element's validation is
+        applied to `top_level` data.
+
+        Args:
+            top_level: The proposal's entire data submission
+            data: The segment of proposal data corresponding to this element and
+                  its descendants
+            accept_partial: If ``True``, then missing elements won't trigger errors
+                            even when ``.required == True``
+        Returns:
+            List of strings describing errors
+        """
+
+        errors = []
+
+        if hasattr(data, 'keys'): # then it's a dict
+            data = [data, ]
+
+        for datum in data:
+            try:
+                found = datum[self.name]
+            except KeyError:
+                if self._actually_required(accept_partial, datum):
+                    errors.append('Required field %s not found' % self.name)
+                continue
+
+            if (found is None) and self._actually_required(accept_partial, datum):
+                errors.append('%s is blank' % self.name)
+                return errors
+
+            if self.validation:
+                for validation in self.validation.split(';'):
+                    args = shlex.split(validation)
+                    function_name = args.pop(0)
+                    try:
+                        func = getattr(validation_helpers, function_name)
+                    except AttributeError:
+                        # validation refers to a function not found in helper library
+                        errors.append(
+                            '%s: validation function %s absent from validation_helpers.py',
+                            (self.name, function_name))
+                    if not func(top_level, found, *args):
+                        errors.append(
+                            '%s: %s' % (self.name, self.validation_msg or
+                                                   "failed %s" % function_name))
+
+            if self.multiplicity:
+                # then the keys are not relevant, and we just want to validate values
+                found = list(found.values())
+
+            for child_element in self.children.all():
+                errors.extend(child_element.validation_errors(top_level, found, accept_partial))
+
+        return errors
+
 
 class Solicitation(models.Model):
     name = models.TextField(unique=True)

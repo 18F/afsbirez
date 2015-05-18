@@ -1,4 +1,5 @@
 import json
+import re
 import shlex
 from sbirez import validation_helpers
 from django.contrib.auth.models import User, Group
@@ -8,6 +9,7 @@ from sbirez.models import Element, Document, DocumentVersion, Solicitation
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_recursive.fields import RecursiveField
+from .utils import nested_update
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -202,52 +204,6 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
                     )
 
 
-def _find_validation_errors(data, element, accept_partial, ):
-
-    errors = []
-
-    try:
-        val = element.lookup_in_data(data)
-    except KeyError:
-        if accept_partial:
-            return []
-        else:
-            return ['Required field %s absent' % element.name]
-
-    #TODO: required composite elements not supported
-    if ((not element.children.exists()) and
-        hasattr(val, 'strip') and (not val.strip())):
-        if accept_partial or (not element.required):
-            return []
-        else:
-            return ['Required field %s is blank' % element.name]
-
-    errors = []
-
-    if element.validation:
-        for validation in element.validation.split(';'):
-            args = shlex.split(validation)
-            function_name = args.pop(0)
-            try:
-                func = getattr(validation_helpers, function_name)
-            except AttributeError:
-                # validation refers to a function not found in helper library
-                errors.append(
-                    '%s: validation function %s absent from validation_helpers.py',
-                    (element.name, function_name))
-
-            val = val.lower()
-            if not func(data, val, *args):
-                errors.append(
-                    '%s: %s' % (element.name, element.validation_msg))
-
-    if element.children.exists():
-        for subelement in element.children.all():
-            errors.extend(_find_validation_errors(data, subelement, accept_partial))
-
-    return errors
-
-
 class ElementSerializer(serializers.ModelSerializer):
 
     children = RecursiveField(many=True)
@@ -261,29 +217,46 @@ class ElementSerializer(serializers.ModelSerializer):
                   'multiplicity', 'children', )
 
 
-def genericValidator(proposal, accept_partial=False):
-    '''
-    Inspect the workflow's validators and apply them to
-    the proposal's data
-    '''
+class ProposalValidator(object):
 
-    errors = []
-    if 'workflow' in proposal:
-        for element in proposal['workflow'].children.all():
-            errors.extend(_find_validation_errors(proposal['data'], element,
-                                                  accept_partial=accept_partial))
-    else:
-        if not accept_partial:
-            errors.append(object)
-            errors.append('no workflow specified for proposal')
-    if errors:
-        raise serializers.ValidationError(errors)
+    accept_partial = False
 
-    return proposal
+    def __call__(self, proposal):
+
+        errors = []
+
+        if self.serializer.context['request'].method == 'PATCH':
+            # fill missing items from existing proposal
+            request = self.serializer.context['request']
+            path = request.get_full_path()
+            pk = re.search(r'proposals/(\d+)/', path).group(1)
+            existing = Proposal.objects.get(pk=pk)
+            proposal['workflow'] = proposal.get('workflow') or existing.workflow
+            data = nested_update(existing.data, proposal['data'])
+        else:
+            data = proposal['data']
+
+        if 'workflow' in proposal:
+            workflow = proposal['workflow']
+        else:
+            raise serializers.ValidationError(['no workflow supplied'])
+
+        for element in workflow.children.all():
+            errors.extend(element.validation_errors(data, data,
+                                                    accept_partial=self.accept_partial))
+
+        if errors:
+            raise serializers.ValidationError(errors)
+
+        return proposal
+
+    def set_context(self, serializer):
+        self.serializer = serializer
 
 
-def partialPermissiveValidator(proposal):
-    return genericValidator(proposal, accept_partial=True)
+class PartialProposalValidator(ProposalValidator):
+
+    accept_partial = True
 
 
 class CurrentFirmDefault(serializers.CurrentUserDefault):
@@ -315,19 +288,14 @@ class ProposalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Proposal
-        validators = [genericValidator]
-        """
-        fields = ('id', 'submitted_at', 'data', 'firm_id',
-                  'owner_id', 'topic_id', 'workflow_id', 'title',
-                  'owner', 'firm')
-        """
+        validators = [ProposalValidator()]
 
 
 class PartialProposalSerializer(ProposalSerializer):
 
     class Meta:
         model = Proposal
-        validators = [partialPermissiveValidator]
+        validators = [PartialProposalValidator()]
 
 
 class AddressSerializer(serializers.ModelSerializer):

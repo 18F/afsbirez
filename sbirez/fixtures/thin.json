@@ -407,6 +407,132 @@
     },
     {
         "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "line_item",
+            "help": null,
+            "human": "Knights",
+            "multiplicity": "Lancelot, Galahad, Robin",
+            "name": "knights",
+            "order": 3,
+            "parent": 1,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 6
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "bool",
+            "help": null,
+            "human": "Is Courageous",
+            "multiplicity": null,
+            "name": "is_courageous",
+            "order": 1,
+            "parent": 6,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 7
+    },
+    {
+        "fields": {
+            "ask_if": "is_courageous",
+            "default": null,
+            "element_type": "int",
+            "help": null,
+            "human": "On a scale of 1 to 10, how courageous?",
+            "multiplicity": null,
+            "name": "how_courageous_exactly",
+            "order": 2,
+            "parent": 6,
+            "required": true,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 8
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "line_item",
+            "help": null,
+            "human": "Minstrels",
+            "multiplicity": "3",
+            "name": "minstrels",
+            "order": 4,
+            "parent": 1,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 9
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "med_str",
+            "help": null,
+            "human": "Name",
+            "multiplicity": null,
+            "name": "name",
+            "order": 1,
+            "parent": 9,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 10
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "med_str",
+            "help": null,
+            "human": "Instrument",
+            "multiplicity": null,
+            "name": "instrument",
+            "order": 2,
+            "parent": 9,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 11
+     },
+     {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "med_str",
+            "help": null,
+            "human": "weight in kg",
+            "multiplicity": null,
+            "name": "kg",
+            "order": 3,
+            "parent": 9,
+            "required": true,
+            "validation": "not_less_than 0",
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 12
+    },
+    {
+        "fields": {
             "data": {"quest_thy_name": "Galahad", "subquest": {"quest_thy_quest": "To seek the Grail", "quest_thy_favorite_color": "yellow"}},
             "firm": 1,
             "owner": 2,
