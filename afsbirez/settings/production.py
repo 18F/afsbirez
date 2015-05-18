@@ -1,7 +1,7 @@
 """
 TODO: CONFIGURE
 
-Production settings for afbirez project.
+Production settings for afsbirez project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -15,7 +15,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 from .base import *
-from .credentials import EMAIL_HOST, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
+from .credentials import EMAIL_HOST, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, DJANGO_SECRET_KEY
 
 import dj_database_url
 
@@ -23,7 +23,7 @@ import dj_database_url
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'w^nc2bs303zk7&_!!-n@ip_+6tb+f8o5ln#kmxzh#=k9@1f2x#'
+SECRET_KEY = DJANGO_SECRET_KEY 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False

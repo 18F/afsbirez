@@ -23,4 +23,37 @@
       element_type: med_str
       validation: does_not_equal blue
       validation_msg: Lancelot already said blue
+  -
+    name: knights
+    element_type: line_item
+    required: False
+    multiplicity: Lancelot, Galahad, Robin
+    children:
+    -
+      name: is_courageous
+      element_type: bool
+    -
+      name: how_courageous_exactly
+      human: On a scale of 1 to 10, how courageous?
+      ask_if: is_courageous
+      required: True
+      element_type: int
+  -
+    name: minstrels
+    element_type: line_item
+    required: False
+    multiplicity: 3
+    children:
+    -
+      name: name
+      element_type: med_str
+    -
+      name: instrument
+      element_type: med_str
+    -
+      name: kg
+      human: weight in kg
+      required: True
+      element_type: float
+      validation: not_less_than 0
 

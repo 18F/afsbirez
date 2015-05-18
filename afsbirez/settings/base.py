@@ -1,5 +1,5 @@
 """
-Django settings for afbirez project.
+Django settings for afsbirez project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -65,9 +65,9 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
 }
 
-ROOT_URLCONF = 'afbirez.urls'
+ROOT_URLCONF = 'afsbirez.urls'
 
-WSGI_APPLICATION = 'afbirez.wsgi.application'
+WSGI_APPLICATION = 'afsbirez.wsgi.application'
 
 AUTH_USER_MODEL = 'sbirez.SbirezUser'
 

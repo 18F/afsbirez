@@ -2,6 +2,7 @@ from rest_framework.test import APIRequestFactory, APIClient, APITestCase
 from rest_framework.response import Response
 from rest_framework import status
 from collections import OrderedDict
+from copy import deepcopy
 import json
 
 from django.test import TestCase
@@ -811,7 +812,7 @@ class ProposalTests(APITestCase):
                          "quest_thy_favorite_color":
                              "#0000FF"}})
              })
-        self.assertIn('Required field quest_thy_name absent',
+        self.assertIn('Required field quest_thy_name not found',
                       response.data['non_field_errors'])
 
     # omit multiple required fields
@@ -824,9 +825,9 @@ class ProposalTests(APITestCase):
                     {"subquest":
                      {"quest_thy_quest": "To seek the Grail", }})
             })
-        self.assertIn('Required field quest_thy_name absent',
+        self.assertIn('Required field quest_thy_name not found',
                       response.data['non_field_errors'])
-        self.assertIn('Required field quest_thy_favorite_color absent',
+        self.assertIn('Required field quest_thy_favorite_color not found',
                       response.data['non_field_errors'])
 
     # omit one field, get one wrong
@@ -840,7 +841,7 @@ class ProposalTests(APITestCase):
                      "quest_thy_quest": "To seek the Grail",
                      "quest_thy_favorite_color": "blue"}})
             })
-        self.assertIn('Required field quest_thy_name absent',
+        self.assertIn('Required field quest_thy_name not found',
                       response.data['non_field_errors'])
         self.assertIn('quest_thy_favorite_color: Lancelot already said blue',
                       response.data['non_field_errors'])
@@ -961,6 +962,112 @@ class ProposalTests(APITestCase):
         message = django.core.mail.outbox[-1]
         self.assertIn('submitted', message.subject)
         self.assertIn('Title', message.body)
+
+
+class ProposalValidationTests(APITestCase):
+
+    fixtures = ['thin.json', ]
+
+    data = {
+         'workflow': 1,
+         'title': 'Title!', 'topic': 1, 'data': json.dumps(
+             {"quest_thy_name": "Galahad",
+              "knights": {
+                  "Galahad": {
+                      "is_courageous": True,
+                      "how_courageous_exactly": 9,
+                      },
+                  "Robin": {
+                      "is_courageous": False,
+                      },
+                  },
+              "minstrels": {
+                  "0": {
+                      "name": "Phil",
+                      "instrument": "phlute",
+                      "kg": 77.1,
+                      },
+                  "1": {
+                      "name": "Sasha",
+                      "instrument": "sackbut",
+                      "kg": 55,
+                      },
+                  }
+             })
+         }
+
+    def test_correct_submission_is_valid(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/', self.data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def test_missing_required(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        del(data["data"]["minstrels"]["0"]["kg"])
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Required field kg not found']})
+
+    def test_validation_violated(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["kg"] = -22
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['kg: failed not_less_than']})
+
+    def test_two_validation_failures(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["kg"] = -22
+        del(data["data"]["knights"]["Galahad"]["how_courageous_exactly"])
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data,
+                         {'non_field_errors': ['Required field how_courageous_exactly not found',
+                                               'kg: failed not_less_than']})
+
+    def test_correct_patch_is_valid(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/', self.data)
+        patch_data = {"data": json.dumps({"minstrels": {"0": {"kg": 95}}})}
+        response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def test_incorrect_patch_is_invalid(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/', self.data)
+        patch_data = {"data": json.dumps({"minstrels": {"0": {"kg": -95}}})}
+        response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual({'non_field_errors': ['kg: failed not_less_than']}, response.data)
+
+    def test_patch_add_complete_is_valid(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/', self.data)
+        patch_data = {"data": json.dumps({"knights": {"2": {"is_courageous": True,
+                                                            "how_courageous_exactly": 8}}})}
+        response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def test_patch_add_incomplete_is_invalid(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/', self.data)
+        patch_data = {"data": json.dumps({"knights": {"2": {"is_courageous": True}}})}
+        response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual({'non_field_errors': ['Required field how_courageous_exactly not found']},
+                         response.data)
 
 
 def _upload_death_star_plans(test_instance, login=True):

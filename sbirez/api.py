@@ -1,4 +1,3 @@
-import collections
 import json
 import hashlib
 
@@ -22,6 +21,7 @@ import marshmallow as mm
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser
 from .permissions import HasObjectEditPermissions, ReadOnlyUnlessStaff
+from .utils import nested_update
 
 mails = template_mail.MagicMailBuilder()
 # To send new types of emails from views, simply call
@@ -138,25 +138,6 @@ class ElementViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_permissions(self):
         return [ReadOnlyUnlessStaff(), ]
-
-
-def nested_update(orig_dict, new_dict):
-    """
-    update ``orig_dict`` with ``new_dict``, and recurse
-    into nested dicts
-    Thanks to
-    http://stackoverflow.com/a/18394648/86209
-    """
-
-    for (key, val) in new_dict.items():
-        if isinstance(val, collections.Mapping):
-            tmp = nested_update(orig_dict.get(key, { }), val)
-            orig_dict[key] = tmp
-        elif isinstance(val, list):
-            orig_dict[key] = (orig_dict[key] + val)
-        else:
-            orig_dict[key] = new_dict[key]
-    return orig_dict
 
 
 class ProposalViewSet(viewsets.ModelViewSet):
