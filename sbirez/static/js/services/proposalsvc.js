@@ -161,7 +161,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
           buildIndex(workflow, null);
           workflowLength = workflows.length;
           buildMultiplicities();
-          if (typeof proposal.topic === 'object' && proposal.topic.id === undefined) {
+          if (typeof proposal.topic !== 'object' && proposal.topic.id === undefined) {
             $http.get(TOPIC_URI + proposal.topic + '/').success(function(data) {
               proposal.topic = data;
               loadingPromise.resolve(proposal);
