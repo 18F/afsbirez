@@ -79,7 +79,7 @@ combined_css = Bundle(
     "css/ngdialog-theme-intromessage.css",
     "css/ngdialog-theme-logout.css",
     combined_sass,
-    # filters="cssmin",
+    filters="cssmin",
     output="css/sbirez.min.css"
 )
 

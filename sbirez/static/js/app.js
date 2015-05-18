@@ -46,7 +46,7 @@ angular.module('sbirezApp', [
         access: {requiredAuthentication: true},
         views: {
           '': {
-            templateUrl: 'static/views/partials/main.html',
+            templateUrl: 'static/views/partials/appmain.html',
             controller: ''
           }
         }
