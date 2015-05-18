@@ -41,16 +41,9 @@ angular.module('sbirezApp').directive('workflow', function() {
           return $scope.nextWorkflow !== null;
         };
 
-        $scope.saveData = function() {
-          ProposalService.complete();
-        };
-
-        $scope.validate = function() {
-          ProposalService.validate();
-        };
-
         $scope.saveAndContinue = function(next) { 
-          $scope.saveData();
+          ProposalService.validate();
+          ProposalService.saveData();
           $scope.jumpTo(next);
         };
 
@@ -59,7 +52,8 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         $scope.saveAndExit = function(next) { 
-          $scope.saveData();
+          ProposalService.validate();
+          ProposalService.saveData();
           $scope.exit();
         };
 

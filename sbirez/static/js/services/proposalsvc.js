@@ -152,10 +152,8 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
   var loadProposal = function(proposalId) {
     // retrieves workflow and data
     //var deferred = $q.defer();
-    if (loadingPromise === null) {
-      loadingPromise = $q.defer();
-    }
     if (proposal.id !== proposalId) {
+      loadingPromise = $q.defer();
       $http.get(PROPOSAL_URI + proposalId + '/').success(function(data) {
         proposal = data;
         $http.get('api/v1/elements/' + proposal.workflow + '/').success(function(data) {

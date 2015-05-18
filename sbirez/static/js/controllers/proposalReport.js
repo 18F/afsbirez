@@ -23,7 +23,6 @@ angular.module('sbirezApp')
 
     ProposalService.load(parseInt($scope.proposalId)).then(function(data) {
       $scope.proposal = data;
-      console.log('workflow', $scope.proposal);
       $scope.workflow = ProposalService.getWorkflow(parseInt($scope.proposal.workflow)).current;
       $scope.goodStartWorkflow = goodStartElement().id;
     });
