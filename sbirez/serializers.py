@@ -1,4 +1,5 @@
 import json
+import re
 import shlex
 from sbirez import validation_helpers
 from django.contrib.auth.models import User, Group
@@ -8,6 +9,7 @@ from sbirez.models import Element, Document, DocumentVersion, Solicitation
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_recursive.fields import RecursiveField
+from .utils import nested_update
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -219,14 +221,20 @@ class ProposalValidator(object):
 
     accept_partial = False
 
-    def __init__(self, accept_partial=False):
-        self.accept_partial = accept_partial
-
     def __call__(self, proposal):
 
-        import ipdb; ipdb.set_trace()
-
         errors = []
+
+        if self.serializer.context['request'].method == 'PATCH':
+            # fill missing items from existing proposal
+            request = self.serializer.context['request']
+            path = request.get_full_path()
+            pk = re.search(r'proposals/(\d+)/', path).group(1)
+            existing = Proposal.objects.get(pk=pk)
+            proposal['workflow'] = proposal.get('workflow') or existing.workflow
+            data = nested_update(existing.data, proposal['data'])
+        else:
+            data = proposal['data']
 
         if 'workflow' in proposal:
             workflow = proposal['workflow']
@@ -234,8 +242,7 @@ class ProposalValidator(object):
             raise serializers.ValidationError(['no workflow supplied'])
 
         for element in workflow.children.all():
-            errors.extend(element.validation_errors(proposal['data'],
-                                                    proposal['data'],
+            errors.extend(element.validation_errors(data, data,
                                                     accept_partial=self.accept_partial))
 
         if errors:
@@ -253,7 +260,7 @@ class PartialProposalValidator(ProposalValidator):
 
     def __call__(self, proposal):
 
-        import ipdb; ipdb.set_trace()
+        errors = []
 
         if 'workflow' in proposal:
             workflow = proposal['workflow']

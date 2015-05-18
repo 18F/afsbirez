@@ -873,7 +873,6 @@ class ProposalTests(APITestCase):
              })
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
-        import ipdb; ipdb.set_trace()
         response = self.client.patch('/api/v1/proposals/%d/partial/' %
                                      response.data['id'],
             {
@@ -986,7 +985,6 @@ class ProposalValidationTests(APITestCase):
 
     def test_correct_submission_is_valid(self):
         user = _fixture_user(self)
-        import ipdb; ipdb.set_trace()
         response = self.client.post('/api/v1/proposals/', self.data)
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
@@ -997,10 +995,9 @@ class ProposalValidationTests(APITestCase):
         del(data["data"]["minstrels"]["0"]["kg"])
         data["data"] = json.dumps(data["data"])
 
-        import ipdb; ipdb.set_trace()
         response = self.client.post('/api/v1/proposals/', data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
-        self.assertEqual(response.data, {'non_field_errors': ['kg not found']})
+        self.assertEqual(response.data, {'non_field_errors': ['Required field kg not found']})
 
     def test_validation_violated(self):
         user = _fixture_user(self)
@@ -1009,7 +1006,6 @@ class ProposalValidationTests(APITestCase):
         data["data"]["minstrels"]["0"]["kg"] = -22
         data["data"] = json.dumps(data["data"])
 
-        import ipdb; ipdb.set_trace()
         response = self.client.post('/api/v1/proposals/', data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(response.data, {'non_field_errors': ['kg: failed not_less_than']})
@@ -1022,13 +1018,50 @@ class ProposalValidationTests(APITestCase):
         del(data["data"]["knights"]["Galahad"]["how_courageous_exactly"])
         data["data"] = json.dumps(data["data"])
 
-        import ipdb; ipdb.set_trace()
         response = self.client.post('/api/v1/proposals/', data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(response.data,
-                         {'non_field_errors': ['how_courageous_exactly not found',
+                         {'non_field_errors': ['Required field how_courageous_exactly not found',
                                                'kg: failed not_less_than']})
 
+    def test_correct_patch_is_valid(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/', self.data)
+        patch_data = {"data": json.dumps({"minstrels": {"0": {"kg": 95}}})}
+        response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def test_incorrect_patch_is_invalid(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/', self.data)
+        patch_data = {"data": json.dumps({"minstrels": {"0": {"kg": -95}}})}
+        response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def test_incorrect_patch_is_invalid(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/', self.data)
+        patch_data = {"data": json.dumps({"minstrels": {"0": {"kg": -95}}})}
+        response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual({'non_field_errors': ['kg: failed not_less_than']}, response.data)
+
+    def test_patch_add_complete_is_valid(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/', self.data)
+        patch_data = {"data": json.dumps({"knights": {"2": {"is_courageous": True,
+                                                            "how_courageous_exactly": 8}}})}
+        response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def test_patch_add_incomplete_is_invalid(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/', self.data)
+        patch_data = {"data": json.dumps({"knights": {"2": {"is_courageous": True}}})}
+        response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual({'non_field_errors': ['Required field how_courageous_exactly not found']},
+                         response.data)
 
 
 def _upload_death_star_plans(test_instance, login=True):
