@@ -214,6 +214,20 @@ class ElementSerializer(serializers.ModelSerializer):
                   'validation', 'validation_msg', 'ask_if',
                   'multiplicity', 'children', )
 
+class ProposalValidator(object):
+
+    def __init__(self, base):
+        import ipdb; ipdb.set_trace()
+        self.base = base
+
+    def __call__(self, value):
+        import ipdb; ipdb.set_trace()
+        pass
+
+    def set_context(self, x):
+        # TODO: docs are wrong, set_contexts is called without args
+        import ipdb; ipdb.set_trace()
+        pass
 
 def genericValidator(proposal, accept_partial=False):
     '''
@@ -271,6 +285,7 @@ class ProposalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Proposal
+        import ipdb; ipdb.set_trace()
         validators = [genericValidator]
 
 
@@ -278,7 +293,8 @@ class PartialProposalSerializer(ProposalSerializer):
 
     class Meta:
         model = Proposal
-        validators = [partialPermissiveValidator]
+        # validators = [partialPermissiveValidator]
+        validators = [ProposalValidator(None)]
 
 
 class AddressSerializer(serializers.ModelSerializer):
