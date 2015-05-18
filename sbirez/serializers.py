@@ -258,27 +258,6 @@ class PartialProposalValidator(ProposalValidator):
 
     accept_partial = True
 
-    def __call__(self, proposal):
-
-        errors = []
-
-        if 'workflow' in proposal:
-            workflow = proposal['workflow']
-        else:
-            path = self.serializer.context['request'].get_full_path()
-            workflow = Element.objects.get(pk=1)
-
-        for element in workflow.children.all():
-            errors.extend(element.validation_errors(proposal['data'],
-                                                    proposal['data'],
-                                                    accept_partial=self.accept_partial))
-
-        if errors:
-            raise serializers.ValidationError(errors)
-
-        return proposal
-
-
 
 class CurrentFirmDefault(serializers.CurrentUserDefault):
 

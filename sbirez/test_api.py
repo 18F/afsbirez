@@ -1036,13 +1036,6 @@ class ProposalValidationTests(APITestCase):
         response = self.client.post('/api/v1/proposals/', self.data)
         patch_data = {"data": json.dumps({"minstrels": {"0": {"kg": -95}}})}
         response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-    def test_incorrect_patch_is_invalid(self):
-        user = _fixture_user(self)
-        response = self.client.post('/api/v1/proposals/', self.data)
-        patch_data = {"data": json.dumps({"minstrels": {"0": {"kg": -95}}})}
-        response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual({'non_field_errors': ['kg: failed not_less_than']}, response.data)
 
