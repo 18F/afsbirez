@@ -79,7 +79,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
 
   var saveProposalData = function() {
     var deferred = $q.defer();
-    $http.patch(PROPOSAL_URI + proposal.id + '/', {'data':JSON.stringify(proposalData)}).success(function(data) {
+    $http.patch(PROPOSAL_URI + proposal.id + '/partial/', {'data':JSON.stringify(proposalData)}).success(function(data) {
       deferred.resolve(data);
     }).error(function(data) {
       deferred.reject(new Error(data));
