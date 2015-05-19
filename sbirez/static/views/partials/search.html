@@ -1,79 +1,14 @@
-<div ng-controller="SearchCtrl">
-  <form ng-submit="search()">
-    <div class="row search-control">
-      <div class="form-inline">
-        <div class="form-group col-md-9">
-          <div class="input-group col-md-12">
-            <label for="searchbox" class="sr-only">Enter a search term here</label>
-            <input type="text" id="searchbox" title="Enter a search term here" ng-model="searchTerm" placeholder="Enter a search term" class="form-control input-lg">
-            <span class="input-group-btn">
-              <button class="btn btn-default btn-lg" type="submit">Search</button>
-            </span>
-          </div>
-        </div>
-        <div class="form-group">
-          <div ng-hide="simpleModeIcebox" class="col-md-3">
-            <button class="btn btn-default" type="button">Advanced Search Options</button>
-          </div>
-          <div ng-hide="simpleMode" class="col-md-2">
-            <button class="btn btn-default btn-lg" ng-click="clear()" type="button">Start Over</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <br/>
-    <div class="row">
-      <div class="col-md-2">
-        <div ng-show="results && results.results && numFound > 0">
-          <p>{{numFound}} Results</p>
-        </div>
-        <div ng-show="results && results.results && numFound === 0">
-          <p>No Results Found</p>
-        </div>
-      </div>
-      <div ng-hide="simpleModeIcebox" class="col-md-3 col-md-offset-7">
-        <p class="text-right"><em><a href="#" ng-click="saveSearch()">Save this search >>></a></em></p>
-      </div>
-    </div>
-    <div ng-hide="simpleModeIcebox" class="row">
-      <div class="col-md-6">
-        <div class="btn-group" data-toggle="buttons">
-          <label class="btn btn-default btn-sm active">
-            <input type="radio">All Opportunities
-          </label>
-          <label class="btn btn-default btn-sm">
-            <input type="radio">Open Opportunities
-          </label>
-          <label class="btn btn-default btn-sm">
-            <input type="radio">Pre-Releases
-          </label>
-        </div>
-      </div>
-      <div class="col-md-2 col-md-offset-1">
-        <select class="form-control">
-          <option>Newest first</option>
-          <option>Closing soon first</option>
-        </select>
-      </div>
-    </div>
-  </form>
-  <br/>
-  <div ng-repeat="topic in results.results" class="row">
-    <div class="col-md-9">
-      <p class="topic-header-text"><a href="topic/{{topic.id}}">{{topic.topic_number}}: {{topic.title}}</a></p>
-      <p>{{topic.description|truncate:500}}<span ng-if="topic.description.length > 500"><a href="topic/{{topic.id}}" title="More about {{topic.topic_number}}">More >>></a></span></p>
-      <div ng-hide="topic.saved">
-        <button class="btn btn-default btn-sm" ng-click="saveOpportunity(topic.id)" title="Save {{topic.topic_number}} for later" type="button">Save for later</button>
-      </div>
-      <div ng-show="topic.saved">
-        <button class="btn btn-disabled btn-sm" disabled title="{{topic.topic_number}} is saved" type="button">Saved</button>
-      </div>
-    <hr />
-    </div>
+<div ng-controller="SearchCtrl" class="wrap">
+  <div ng-show="results && results.results && numFound > 0">
+    <h1 class="search-results-heading">{{numFound}} Results for {{searchTerm}}</h1>
   </div>
-  <div class="row">
-    <div ng-if="results.results && numFound > itemCount" class="col-md-9">
-      <pagination ng-attr-current-page="{{currentPage}}" ng-attr-item-count="{{numFound}}" ng-attr-items-per-page="{{itemsPerPage}}" ng-attr-method="search" />
-    </div>
+  <div ng-show="results && results.results && numFound === 0">
+    <h1 class="search-results-heading">No results found</h1>
+  </div>
+  <div ng-repeat="topic in results.results">
+    <div topic="topic" ng-show="topic.id" id="topic.topic_number" save-option="true" create-option="true"></div>
+  </div>
+  <div ng-if="results.results && numFound > itemCount">
+    <pagination ng-attr-current-page="{{currentPage}}" ng-attr-item-count="{{numFound}}" ng-attr-items-per-page="{{itemsPerPage}}" ng-attr-method="search" />
   </div>
 </div>

@@ -84,7 +84,7 @@ describe('Controller: SavedOppsCtrl', function () {
     $httpBackend.flush();
   });
 
-  it('clicking the remove button should remove a topic if logged in', function () {
+  xit('clicking the remove button should remove a topic if logged in', function () {
     AuthenticationService.setAuthenticated(true);
     expect(scope.data).toEqual({});
     $httpBackend.expectGET('api/v1/topics/?closed=true&saved=true').respond(data);

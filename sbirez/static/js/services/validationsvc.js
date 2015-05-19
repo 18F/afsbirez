@@ -141,7 +141,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
 
   var oneOf = function(value, params) {
     return params.indexOf(value) !== -1;
-  }
+  };
 
   var processValidation = function(validationString, value) {
     var commands = validationString.split(' ');
@@ -172,48 +172,71 @@ angular.module('sbirezApp').factory('ValidationService', function() {
       return false;
     }
   };
+
+  var isSet = function(data, elementName) {
+    return !(data === undefined ||
+             data[elementName] === null ||
+             data[elementName] === undefined ||
+             data[elementName] === '' ||
+             (typeof data[elementName] === 'object' && data[elementName].length === undefined));
+  };
+
+  var processRequired = function(element, workflow, data) {
+    if (element.ask_if && isSet(data, element.ask_if)) {
+      return isSet(data, element.name);
+    } else if (!element.ask_if) { 
+      return (isSet(data, element.name)); 
+    }
+    else {
+      return true;
+    }
+  };
  
   return {
-    validate: function(workflow, data, validationResults, nested) {
-      validationResults[workflow.name] = {};
+    validate: function(workflow, data, validationResults) {
       var length = workflow.children.length;
-      //console.log('validate top', workflow, length, data, validationResults);
       for (var i = 0; i < length; i++) {
         var element = workflow.children[i];
-        //console.log('field', element.name);
         if (element.validation !== null && data && data[element.name]) {
           if (!processValidation(element.validation, data[element.name])) {
-            validationResults[workflow.name][element.name] = element.validation_msg;
+            validationResults[element.name] = element.validation_msg;
           } else {
             //console.log('validation passed', element.name); 
           }
         }
-        else if (element.required === true && (data === undefined || data[element.name] === null || data[element.name] === undefined || data[element.name] === '' || (typeof data[element.name] === 'object' && data[element.name].length === undefined))) {
-          validationResults[workflow.name][element.name] = 'Field is required';
-          //console.log('Field is required', element.name);
-//        } else {
-//          console.log('validation skipped', element.validation, element.name);
+        else if (element.required === true) {
+          if (!processRequired(element, workflow, data)) {
+            validationResults[element.name] = 'Field is required';
+            //console.log('Field is required', element.name);
+          }
         }
 
         if (element.element_type === 'line_item' && element.multiplicity && element.multiplicity.length > 0) {
           for (var j = 0; j < element.multiplicity.length; j++) {
-            //console.log('validate lineitem', element.multiplicity, element.multiplicity[j].token, validationResults[element.name], data[element.name]);
-            if (data[element.multiplicity[j].token] !== undefined) {
-              validationResults[workflow.name][element.multiplicity[j].token] = {};
-              validationResults[workflow.name][element.multiplicity[j].token][element.name] = {};
-              this.validate(element, data[element.multiplicity[j].token][element.name], validationResults[workflow.name][element.multiplicity[j].token]);
+            if (data[element.name] === undefined) {
+              data[element.name] = {};
             }
+            if (data[element.name][element.multiplicity[j].token] === undefined) {
+              data[element.name][element.multiplicity[j].token] = {};
+            }
+            if (validationResults[element.name] === undefined) {
+              validationResults[element.name] = {};
+            }
+            if (validationResults[element.name][element.multiplicity[j].token] === undefined) {
+              validationResults[element.name][element.multiplicity[j].token] = {};
+            }
+            this.validate(element, data[element.name][element.multiplicity[j].token], validationResults[element.name][element.multiplicity[j].token]);
           }
         }
         if (element.children.length > 0 && element.element_type === 'group' || element.element_type === 'workflow') {
           //console.log('validate precall', element.name);
-          if (validationResults[workflow.name][element.name] === undefined) {
-            validationResults[workflow.name][element.name] = {};
+          if (validationResults[element.name] === undefined) {
+            validationResults[element.name] = {};
           }
           if (data[element.name] === undefined) {
             data[element.name] = {};
           }
-          this.validate(element, data[element.name], validationResults[workflow.name], true);
+          this.validate(element, data[element.name], validationResults[element.name], true);
         }
       }
       //console.log('Validation Results', validationResults);

@@ -17,7 +17,7 @@
     </thead>
     <tbody>
       <tr ng-repeat="doc in docList | orderBy:sortType:sortReverse">
-        <td><a ui-sref="app.activity.documents.detail({id: {{doc.id}}})">{{doc.name}}</a></td>
+        <td><a ui-sref="app.documents.detail({id: {{doc.id}}})">{{doc.name}}</a></td>
         <td>{{doc.updated_at | date:'medium'}}</td>
         <td>{{doc.description}}</td>
       </tr>

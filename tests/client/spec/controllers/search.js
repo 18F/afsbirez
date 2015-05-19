@@ -153,20 +153,20 @@ describe('Controller: SearchCtrl', function () {
     expect(scope.numFound).toEqual(longData.count);
   });
 
-  it('saving a valid opportunity when logged in should result in a saved opportunity', function() {
+  xit('saving a valid opportunity when logged in should result in a saved opportunity', function() {
     AuthenticationService.setAuthenticated(true);
     scope.saveOpportunity(1);
     $httpBackend.expectPOST('api/v1/topics/1/saved/').respond(201);
     $httpBackend.flush();
   });
 
-  it('saving a opportunity when not logged in should result in the login dialog showing', function() {
+  xit('saving a opportunity when not logged in should result in the login dialog showing', function() {
     scope.saveOpportunity(1);
     $httpBackend.expectGET('static/views/partials/login.html').respond({});
     $httpBackend.flush();
   });
 
-  it('saving an invalid opportunity when logged in should result in no change to the opportunity list.', function() {
+  xit('saving an invalid opportunity when logged in should result in no change to the opportunity list.', function() {
     AuthenticationService.setAuthenticated(true);
     scope.saveOpportunity(9999999);
     $httpBackend.expectPOST('api/v1/topics/9999999/saved/').respond(404);

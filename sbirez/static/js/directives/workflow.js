@@ -5,17 +5,13 @@ angular.module('sbirezApp').directive('workflow', function() {
     restrict: 'A',
     replace: true,
     scope: {
-      includeSidebar: '@',
-      includeMetro: '@',
       proposalId: '@'
     },
     templateUrl: 'static/views/partials/workflow.html',
-    controller: ['$scope', '$http', '$q', '$stateParams', '$location', 'ProposalService', 'ValidationService',
-      function ($scope, $http, $q, $stateParams, $location, ProposalService, ValidationService) {
+    controller: ['$scope', '$stateParams', '$state', '$location', 'ProposalService', 
+      function ($scope, $stateParams, $state, $location, ProposalService) {
 
-        //$scope.workflows = [];
         $scope.currentWorkflow = {};
-        //$scope.parentWorkflow = null;
         $scope.startingWorkflow = null;
         $scope.backWorkflow = null;
         $scope.nextWorkflow = null;
@@ -24,6 +20,9 @@ angular.module('sbirezApp').directive('workflow', function() {
 
         $scope.jumpTo = function(workflow_id) {
           var data = ProposalService.getWorkflow(workflow_id);
+          if (workflow_id === undefined) {
+            $scope.startingWorkflow = data.current.id;
+          }
           $scope.currentWorkflow = data.current;
           $scope.backWorkflow = data.previous;
           $scope.nextWorkflow = data.next;
@@ -31,7 +30,7 @@ angular.module('sbirezApp').directive('workflow', function() {
         };
 
         ProposalService.load(parseInt($scope.proposalId)).then(function() {
-          $scope.jumpTo($stateParams.current !== null ? $stateParams.current : null);
+          $scope.jumpTo($stateParams.current !== undefined ? $stateParams.current : undefined);
         });
 
         $scope.showBackButton = function() {
@@ -42,15 +41,22 @@ angular.module('sbirezApp').directive('workflow', function() {
           return $scope.nextWorkflow !== null;
         };
 
-        $scope.saveData = function() {
+        $scope.saveAndContinue = function(next) { 
+          ProposalService.validate();
           ProposalService.saveData();
+          $scope.jumpTo(next);
         };
 
-        $scope.validate = function() {
-        ProposalService.validate();
-        //  $scope.validationData = {};
-        //  var response = ValidationService.validate($scope.currentWorkflow, $scope.proposalData, $scope.validationData, false);
+        $scope.exit = function() {
+          $state.go('app.proposals.report',{id: $scope.proposalId});
         };
+
+        $scope.saveAndExit = function(next) { 
+          ProposalService.validate();
+          ProposalService.saveData();
+          $scope.exit();
+        };
+
       }
     ]
   };

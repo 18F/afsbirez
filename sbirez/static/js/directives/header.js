@@ -5,12 +5,10 @@ angular.module('sbirezApp').directive('header', function() {
     restrict: 'A',
     replace: true,
     templateUrl: 'static/views/partials/header.html',
-    controller: ['$scope', '$filter', '$window', '$location', 'AuthenticationService', 'DialogService', 'UserService',
-      function ($scope, $filter, $window, $location, AuthenticationService, DialogService, UserService) {
-        $scope.menu = [{
-          'title': 'Home',
-          'link': '/'
-        }];
+    controller: ['$scope', '$filter', '$window', '$location', '$state', 'AuthenticationService', 'DialogService', 'UserService', 'SearchService',
+      function ($scope, $filter, $window, $location, $state, AuthenticationService, DialogService, UserService, SearchService) {
+        $scope.menu = [];
+        $scope.query = '';
 
         $scope.openLogin = function() {
           DialogService.openLogin();
@@ -20,32 +18,51 @@ angular.module('sbirezApp').directive('header', function() {
           UserService.logOut();
         };
 
-        if ($window.sessionStorage.token !== undefined && $window.sessionStorage.token !== null && $window.sessionStorage.token !== '' &&
-            AuthenticationService.isAuthenticated) {
-          $scope.menu.push({
-            'title': $window.sessionStorage.username + ' (Logout)',
-            'click':$scope.openLogout
-          });
-        }
-        else {
-          $scope.menu.push({'title': 'Login', 'click':$scope.openLogin});
-        }
-
-//        $scope.menu.push({'title': 'Contact', 'link':'/contact'});
-
-        $scope.isActive = function(route) {
-          return route === $location.path();
+        var setMenu = function() {
+          if ($window.sessionStorage.token !== undefined && $window.sessionStorage.token !== null && $window.sessionStorage.token !== '' &&
+              AuthenticationService.isAuthenticated) {
+            $scope.menu = [{
+              'class': 'my-topics',
+              'title': 'My topics',
+              'link': '/app/savedOpps'
+            }, {
+              'class': 'notifications',
+              'title': 'Notifications',
+              'link': '/app/notifications'
+            }, {
+              'class': 'my-company',
+              'title': 'My company',
+              'link': '/app/account/organization'
+            }, {
+              'class': 'sign-out',
+              'title': 'Sign out',
+              'click':$scope.openLogout
+            }];
+          } else {
+            $scope.menu = [{'title': 'Sign in', 'click':$scope.openLogin, 'class':'sign-in'}];
+          }
         };
 
-        AuthenticationService.registerObserverCallback(function() {
+        setMenu();
+
+        AuthenticationService.registerObserverCallback(setMenu);
+
+        $scope.search = function() {
           if(AuthenticationService.isAuthenticated &&
              ($window.sessionStorage.token !== null && $window.sessionStorage.token !== undefined && $window.sessionStorage.token !== '')) {
-            $scope.menu[1] = {'title': $window.sessionStorage.username + ' (Logout)','click':$scope.openLogout};
+            SearchService.search(1, $scope.query, 10).then(function(data) {
+              $state.go('app.search');
+            }, function(error) {
+              console.log(error);
+            });
+          } else {
+            SearchService.search(1, $scope.query, 10).then(function(data) {
+              $state.go('home.search', {}, {'reload':true});
+            }, function(error) {
+              console.log(error);
+            });
           }
-          else {
-            $scope.menu[1] = {'title': 'Login', 'click':$scope.openLogin};
-          }
-        });
+        };
 
       }
     ]

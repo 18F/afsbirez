@@ -21,6 +21,7 @@ angular_js = Bundle(
     "js/app.js",
     "js/filters/truncate.js",
     "js/directives/workflow.js",
+    "js/directives/topic.js",
     "js/directives/pagination.js",
     "js/directives/backbutton.js",
     "js/directives/header.js",
@@ -31,13 +32,12 @@ angular_js = Bundle(
     "js/directives/elements/checkbox.js",
     "js/directives/elements/group.js",
     "js/directives/elements/lineitem.js",
+    "js/directives/elements/readonlytext.js",
     "js/directives/elements/upload.js",
     "js/controllers/main.js",
-    "js/controllers/appmain.js",
     "js/controllers/search.js",
     "js/controllers/form.js",
     "js/controllers/contact.js",
-    "js/controllers/activity.js",
     "js/controllers/accountUser.js",
     "js/controllers/accountOrganization.js",
     "js/controllers/savedOpps.js",
@@ -48,6 +48,7 @@ angular_js = Bundle(
     "js/controllers/document.js",
     "js/controllers/proposalList.js",
     "js/controllers/proposal.js",
+    "js/controllers/proposalReport.js",
     "js/controllers/adminuser.js",
     "js/controllers/topic.js",
     "js/services/authsvc.js",
@@ -71,6 +72,7 @@ combined_sass = Bundle(
 )
 
 combined_css = Bundle(
+    "css/reset.css",
     "lib/ngDialog/css/ngDialog.css",
     "lib/ngDialog/css/ngDialog-theme-default.css",
     "css/ngdialog-theme-login.css",

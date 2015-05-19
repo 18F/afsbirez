@@ -1,0 +1,47 @@
+<div class="proposal-progress-report">
+  <header class="proposal-banner">
+    <div class="wrap">
+      <h1>{{proposal.title}}</h1>
+    </div>
+  </header>
+
+  <main class="proposal-content">
+    <div class="wrap">
+      <section>
+        <h1>Progress report</h2>
+        <p>SBIR proposals are comprised of four parts, listed below. We&rsquo;ll help you submit your proposal by filling out the necessary paperwork, one step at a time.</p>
+        <ol>
+          <li ng-repeat="element in workflow.children">
+            <a href="#" ui-sref="app.proposals.detail({id: proposalId, current: element.id})">
+              {{element.human}}
+            </a>
+            <ol ng-if="element.children.length > 0">
+              <li ng-if="child.element_type === 'group'" ng-repeat="child in element.children">
+                <a href="#" ui-sref="app.proposals.detail({id: proposalId, current: child.id})">
+                  {{child.human}}
+                </a>
+              </li>
+            </ol>
+          </li>
+        </ol>
+        <button type="button" id="start" ui-sref="app.proposals.detail({id: proposalId, current: goodStartWorkflow})">Get started</button>
+        <button type="button" id="validate_state" ng-click="validate()">Verify this proposal</button>          
+      </section>
+      <aside>
+        <h1>Technical point <span class="preposition">of</span> contact</h1>
+        <img src="http://placekitten.com/g/256/256">
+        <span>Dr. Soandso McSmartpants</span>
+        <span>1-888-222-2222</span>
+        <div>
+          <span>123 Streetname Ave</span>
+          <span>Alexandria, VA 22222</span>
+        </div>
+      </aside>
+    </div>
+  </main>
+  <footer class="proposal-footer">
+    <div class="wrap">
+      <div topic="proposal.topic" remove-option="true"></div>
+    </div>
+  </footer>  
+</div>
