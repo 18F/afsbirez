@@ -10,18 +10,19 @@ describe('Controller: DocumentListCtrl', function () {
     $httpBackend,
     $window,
     $q,
+    $rootScope,
     AuthenticationService,
     DocumentService;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function (_$httpBackend_, $controller, $rootScope, _$window_, _$q_, _AuthenticationService_, _DocumentService_) {
+  beforeEach(inject(function (_$httpBackend_, $controller, _$rootScope_, _$window_, _$q_, _AuthenticationService_, _DocumentService_) {
     $httpBackend = _$httpBackend_;
     $window = _$window_;
     $q = _$q_;
+    $rootScope = _$rootScope_;
     AuthenticationService = _AuthenticationService_;
     DocumentService = _DocumentService_;
     $httpBackend.whenGET('static/views/partials/main.html').respond({});
-    $httpBackend.whenGET('static/views/partials/search.html').respond({});
     scope = $rootScope.$new();
     spyOn(DocumentService, 'list').andCallFake(function() {
       var deferred = $q.defer();
@@ -41,7 +42,7 @@ describe('Controller: DocumentListCtrl', function () {
     $window.sessionStorage.userid = 1;
     AuthenticationService.setAuthenticated(true);
     expect(scope.docList.length).toBe(0);
-    $httpBackend.flush();
+    $rootScope.$digest();
     expect(scope.docList.length).toBe(3);
   });
 });

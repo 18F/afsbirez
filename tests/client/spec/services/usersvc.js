@@ -16,7 +16,6 @@ describe('Service: UserService', function () {
     $window = _$window_;
     AuthenticationService = _AuthenticationService_;
     $httpBackend.whenGET('static/views/partials/main.html').respond({});
-    $httpBackend.whenGET('static/views/partials/search.html').respond({});
     UserService = _UserService_;
   }));
 

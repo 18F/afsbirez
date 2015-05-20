@@ -17,15 +17,17 @@ angular.module('sbirezApp', [
     $stateProvider
       .state('home', {
         url: '/',
-        abstract: true,
-        templateUrl: 'static/views/partials/main.html',
-        controller: 'MainCtrl'
-      })
-      .state('home.search', {
-        url: '?q',
-        reloadOnSearch: true,
         views: {
-          'tabContent': {
+          '': {
+            templateUrl: 'static/views/partials/main.html',
+            controller: 'MainCtrl'
+          }
+        }
+      })
+      .state('search', {
+        url: '/search/',
+        views: {
+          '': {
             templateUrl: 'static/views/partials/search.html',
             controller: 'SearchCtrl'
           }
@@ -250,7 +252,7 @@ angular.module('sbirezApp', [
   //console.log('$stateChangeStart to '+toState.to+'- fired when the transition begins. toState,toParams : \n',toState, toParams);
     if (toState !== null && toState.access !== undefined && toState.access.requiredAuthentication && !AuthenticationService.isAuthenticated && !$window.sessionStorage.token) {
       event.preventDefault();
-      $state.go('home.search');
+      $state.go('home');
     }
   });
 });

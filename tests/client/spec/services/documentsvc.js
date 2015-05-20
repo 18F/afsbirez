@@ -18,7 +18,6 @@ describe('Service: DocumentService', function () {
     $rootScope = _$rootScope_;
     AuthenticationService = _AuthenticationService_;
     $httpBackend.whenGET('static/views/partials/main.html').respond({});
-    $httpBackend.whenGET('static/views/partials/search.html').respond({});
     DocumentService = _DocumentService_;
   }));
 
