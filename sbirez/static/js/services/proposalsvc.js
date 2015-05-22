@@ -15,6 +15,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
   var workflowLength = 0;
   var previousWorkflow = null;
   var nextWorkflow = null;
+  var parentName = '';
   var loadingPromise = null;
 
   var PROPOSAL_URI = 'api/v1/proposals/';
@@ -210,7 +211,23 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       validationCallbacks = []; 
       askIfCallbacks = {};
       var index;
+      var innerIndex;
+      var found = false;
       if (currentWorkflowIndex >= 0) {
+        for (index = currentWorkflowIndex - 1; index >= 0 && !found; --index) {
+          for (innerIndex = 0; innerIndex < workflows[index].children.length; innerIndex++) {
+            if (workflows[index].children[innerIndex].id === elementId) {
+              if (index === 0) {
+                parentName = workflows[index].children[innerIndex].human;
+              } else {
+                parentName = workflows[index].human;
+              }
+              found = true;
+              break;
+            }
+          }
+        }
+
         previousWorkflow = null;
         for (index = currentWorkflowIndex - 1; index >= 0; --index) {
           if (workflows[index].element_type === 'group' || workflows[index].element_type === 'workflow') {
@@ -234,7 +251,8 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return {
       'current': workflows[currentWorkflowIndex],
       'previous': previousWorkflow,
-      'next': nextWorkflow 
+      'next': nextWorkflow,
+      'parentName': parentName
     };
   };
 

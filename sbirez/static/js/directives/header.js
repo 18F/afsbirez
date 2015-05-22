@@ -23,19 +23,19 @@ angular.module('sbirezApp').directive('header', function() {
               AuthenticationService.isAuthenticated) {
             $scope.menu = [{
               'class': 'my-topics',
-              'title': 'My topics',
+              'title': 'My Proposals',
               'link': '/app/savedOpps'
             }, {
-              'class': 'notifications',
-              'title': 'Notifications',
-              'link': '/app/notifications'
-            }, {
+//              'class': 'notifications',
+//              'title': 'Notifications',
+//              'link': '/app/notifications'
+//            }, {
               'class': 'my-company',
-              'title': 'My company',
+              'title': 'My Company',
               'link': '/app/account/organization'
             }, {
               'class': 'sign-out',
-              'title': 'Sign out',
+              'title': 'Sign Out',
               'click':$scope.openLogout
             }];
           } else {

@@ -12,6 +12,7 @@ angular.module('sbirezApp').directive('bool', function() {
     controller: ['$scope', 'ProposalService',
       function ($scope, ProposalService) {
         $scope.element = $scope.bool;
+        $scope.visible = true;
         $scope.validationstorage = '';
 
         var validationCallback = function(data) {

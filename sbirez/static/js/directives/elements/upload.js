@@ -71,7 +71,7 @@ angular.module('sbirezApp').directive('upload', function() {
         $scope.start = function(index) {
           DocumentService.upload($scope.selectedFiles[index],
             $scope.selectedFiles[index].filename,
-            $scope.selectedFiles[index].description,
+            $scope.selectedFiles[index].filename,
             $scope.proposal,
             fileId,
             function(val) {console.log('progress', val);

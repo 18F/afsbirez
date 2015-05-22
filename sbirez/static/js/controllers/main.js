@@ -4,6 +4,7 @@ angular.module('sbirezApp')
   .controller('MainCtrl', function ($scope, $http, $location, $state, $window, AuthenticationService, DialogService, $rootScope, SearchService) {
     $scope.auth = AuthenticationService;
     $scope.isLoggedIn = $scope.auth.getAuthenticated() && ($window.sessionStorage.token !== null && $window.sessionStorage.token !== undefined);
+    $rootScope.bodyClass = 'home';
     $scope.query = '';
 
 

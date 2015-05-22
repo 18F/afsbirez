@@ -16,7 +16,6 @@ angular.module('sbirezApp').factory('SearchService', function($http, $q, Proposa
 
     search: function(page, searchTerm, itemsPerPage) {
       var deferred = $q.defer();
-      console.log('search', page, numFound, itemsPerPage);
       if (typeof page === 'number' && page === Math.floor(page) && page >= 0) {
         page = page;
       }

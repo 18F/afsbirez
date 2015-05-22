@@ -17,6 +17,7 @@ angular.module('sbirezApp').directive('workflow', function() {
         $scope.nextWorkflow = null;
         $scope.proposalData = {};
         $scope.validationData = {};
+        $scope.parentName = '';
 
         $scope.jumpTo = function(workflow_id) {
           var data = ProposalService.getWorkflow(workflow_id);
@@ -26,6 +27,7 @@ angular.module('sbirezApp').directive('workflow', function() {
           $scope.currentWorkflow = data.current;
           $scope.backWorkflow = data.previous;
           $scope.nextWorkflow = data.next;
+          $scope.parentName = data.parentName;
           $location.search('current', workflow_id);
         };
 

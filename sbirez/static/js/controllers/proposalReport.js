@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('ProposalReportCtrl', function ($scope, $http, $window, $state, AuthenticationService, ProposalService) {
+  .controller('ProposalReportCtrl', function ($scope, $rootScope, $state, AuthenticationService, ProposalService) {
     $scope.proposalId = $state.params.id;
     $scope.proposal = {};
     $scope.workflow = {};
     $scope.goodStartWorkflow = null;
+    $rootScope.bodyClass = 'proposal proposal-overview';
 
     var goodStartElement = function() {
       var goodStart = $scope.workflow.children[0];

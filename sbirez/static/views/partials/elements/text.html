@@ -1,4 +1,6 @@
-<div class="text-question">
-  <label class="question" for="{{element.name}}"><div marked="element.human"></div></label>
-  <textarea id="{{element.name}}" class="form-control" ng-change="apply()" ng-model="storage"></textarea>
+<div class="field field-textarea" ng-show="visible">
+  <label class="question" for="{{element.name}}">
+    <span marked="element.human"></span>
+    <textarea id="{{element.name}}" name="{{element.name}}" class="form-control" ng-change="apply()" ng-model="storage"></textarea>
+  </label>
 </div>

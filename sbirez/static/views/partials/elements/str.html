@@ -1,9 +1,9 @@
-<div class="str-question">
-  <label class="question" ng-show="visible" for="{{element.name}}"><div marked="fieldName"></div></label>
-  <div ng-show="visible && options.length === 0">
+<div class="field" ng-show="visible" ng-class="{'is-branch': element.ask_if, 'field-select': options.length > 0, 'field-text': options.length === 0}">
+  <label for="{{element.name}}"><span marked="fieldName" class="label-text"></span></label>
+  <div ng-show="options.length === 0">
     <input id="{{element.name}}" class="form-control" ng-change="apply()" ng-model="storage" type="text"></input>
   </div>
-  <div ng-show="visible && options.length > 0">
+  <div ng-show="options.length > 0">
     <select id="{{element.name}}" class="form-control" ng-change="apply()" ng-options="opt as opt for opt in options" ng-model="storage"></select>
   </div>
   <div ng-show="validationstorage" class="text-danger"><p class="errortext">{{validationstorage}}</p></div>

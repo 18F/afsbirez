@@ -237,8 +237,7 @@ angular.module('sbirezApp', [
   });
   $rootScope.$on('$stateChangeSuccess',function(event, toState, toParams, fromState, fromParams){
     //console.log('$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.', event, toState);
-    $rootScope.controller = toState.name.replace(/\./g, '_');
-    //console.log($rootScope.controller);
+    $rootScope.bodyClass = '';
   });
   $rootScope.$on('$viewContentLoaded',function(event){
     //console.log('$viewContentLoaded - fired after dom rendered',event);

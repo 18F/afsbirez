@@ -1,5 +1,5 @@
-<section class="fieldset fieldset-radio">
-  <h1><div marked="fieldName"></div></h1>
+<section ng-show="visible" ng-class="{'is-branch': element.ask_if}" class="fieldset fieldset-radio field">
+  <h1 marked="fieldName"></h1>
   <div class="field field-radio">
     <label>
       <input type="radio" ng-model="storage" id="{{element.name}}-yes" ng-click="apply()" value="true"> 

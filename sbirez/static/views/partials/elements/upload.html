@@ -1,18 +1,13 @@
-<div class="upload-question">
-  <div class="panel panel-default">
-    <div class="panel-heading">{{element.human}}</div>
-    <div class="panel-body">
-      <input id="{{element.name}}" type="file" ng-file-select="onFileSelect($files)" multiple>
-      <div ng-file-drop-available="dropSupported=false" />
-      <div ng-show="selectedFiles !== null">
-        <div class="sel-file" ng-repeat="f in selectedFiles">
-          <label class="question" for="filename">File Name:</label>
-          <input id="filename" class="form-control" ng-model="f.filename" type="text"></input>
-          <label class="question" for="filedesc">Description:</label>
-          <input id="filedesc" class="form-control" ng-model="f.description" type="text"></input>
-          <button type="button" ng-click="start($index)" ng-show="progress[$index] < 0">Upload</button>
-        </div>
-      </div>
+<div class="field field-upload">
+  <label>
+    <span class="label-text">{{element.human}}</span>
+    <input id="{{element.name}}" name="{{element.name}}" type="file" ng-file-select="onFileSelect($files)" size="40">
+    <div class="sel-file" ng-repeat="f in selectedFiles">
+      <label class="question" for="filename">
+        <span class="label-text">File Name:</span>
+        <input id="filename" class="form-control" ng-model="f.filename" type="text"></input>
+      </label>
+      <button type="button" ng-click="start($index)" ng-show="progress[$index] < 0">Upload</button>
     </div>
-  </div>
+  </label>
 </div>

@@ -14,6 +14,7 @@ angular.module('sbirezApp').directive('checkbox', function() {
       function ($scope, ProposalService) {
         $scope.element = $scope.checkbox;
         $scope.fieldName = $scope.element.human;
+        $scope.visible = true;
         if ($scope.multiplename !== undefined && $scope.element.human.indexOf('%multiple%') > -1) {
           $scope.fieldName = $scope.element.human.replace('%multiple%', $scope.multiplename);
         }
