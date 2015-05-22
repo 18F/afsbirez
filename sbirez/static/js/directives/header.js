@@ -57,7 +57,7 @@ angular.module('sbirezApp').directive('header', function() {
             });
           } else {
             SearchService.search(1, $scope.query, 10).then(function(data) {
-              $state.go('home.search', {}, {'reload':true});
+              $state.go('search', {}, {'reload':true});
             }, function(error) {
               console.log(error);
             });

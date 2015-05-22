@@ -933,3 +933,46 @@ article.topic.is-favorite h1::after{
 
 
 /* @end */
+
+/* @group body.home */
+body.home {
+    padding-bottom: 0;
+    background-color: #073763;
+    #hero {
+        padding: 60px 0 40px;
+        color: white;
+        h1 { font-size: 72px; }
+        p {
+            font-size: 20px;
+            margin: 40px 0;
+        }
+        form {
+            position: relative;
+            .label-text{
+                position: absolute; left: -9999em;
+            }
+            input {
+                border: none;
+                line-height: 20px;
+                min-height: 50px;
+                padding: 0 110px 0 20px;
+            }
+            button[type="submit"] {
+                position: absolute;
+                top: 2px;
+                right: 2px;
+                background-color: #134f5c;
+                border: none;
+                color: white;
+                font: inherit;
+                padding: 15px 20px;
+                margin: 0;
+                cursor: pointer;
+            }
+        }
+    }
+}
+/* @end */
+
+
+

@@ -18,7 +18,6 @@ describe('Service: ProposalService', function () {
     $rootScope = _$rootScope_;
     AuthenticationService = _AuthenticationService_;
     $httpBackend.whenGET('static/views/partials/main.html').respond({});
-    $httpBackend.whenGET('static/views/partials/search.html').respond({});
     ProposalService = _ProposalService_;
   }));
 

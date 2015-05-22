@@ -57,9 +57,5 @@ describe('Controller: ProposalCtrl', function () {
 
   it('should attach a proposal to the scope', function () {
     expect(scope.data).toBeDefined();
-    $httpBackend.whenGET('static/views/partials/main.html').respond({});
-    $httpBackend.whenGET('static/views/partials/search.html').respond({});
-    $httpBackend.flush();
-    expect(scope.data).toBeDefined();
   });
 });

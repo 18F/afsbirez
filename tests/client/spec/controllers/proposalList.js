@@ -17,7 +17,6 @@ describe('Controller: ProposalListCtrl', function () {
     $httpBackend = _$httpBackend_;
     $q = _$q_;
     $httpBackend.whenGET('static/views/partials/main.html').respond({});
-    $httpBackend.whenGET('static/views/partials/search.html').respond({});
     spyOn(ProposalService, 'list').andCallFake(function() {
       var deferred = $q.defer();
       deferred.resolve({'results':[
