@@ -17,10 +17,10 @@ angular.module('sbirezApp')
         end = '…';
       }
 
-      if (text.length <= length || text.length - end.length <= length) {
+      if (text && (text.length <= length || text.length - end.length <= length)) {
         return text;
       }
-      else {
+      else if (text) {
         return String(text).substring(0, length-end.length) + end;
       }
     };

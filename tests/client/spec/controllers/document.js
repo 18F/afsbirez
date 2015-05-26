@@ -90,7 +90,6 @@ describe('Controller: DocumentCtrl', function () {
     $httpBackend.expectDELETE('api/v1/documents/1/').respond(200, '');
     scope.remove();
     $httpBackend.expectGET('static/views/partials/appmain.html').respond(200, '');
-    $httpBackend.expectGET('static/views/partials/activity.html').respond(200, '');
     $httpBackend.expectGET('static/views/partials/document.html').respond(200, '');
     $httpBackend.expectGET('static/views/partials/documentList.html').respond(200, '');
     $httpBackend.flush();

@@ -17,14 +17,17 @@ angular.module('sbirezApp', [
     $stateProvider
       .state('home', {
         url: '/',
-        abstract: true,
-        templateUrl: 'static/views/partials/main.html',
-        controller: 'MainCtrl'
-      })
-      .state('home.search', {
-        url: '',
         views: {
-          'tabContent': {
+          '': {
+            templateUrl: 'static/views/partials/main.html',
+            controller: 'MainCtrl'
+          }
+        }
+      })
+      .state('search', {
+        url: '/search/',
+        views: {
+          '': {
             templateUrl: 'static/views/partials/search.html',
             controller: 'SearchCtrl'
           }
@@ -46,43 +49,32 @@ angular.module('sbirezApp', [
         views: {
           '': {
             templateUrl: 'static/views/partials/appmain.html',
-            controller: 'AppMainCtrl'
+            controller: ''
           }
         }
       })
-      .state('app.activity', {
-        url: '',
-        abstract: 'true',
+      .state('app.search', {
+        url: '/search?q',
         views: {
           'tabContent': {
-            templateUrl: 'static/views/partials/activity.html',
-            controller: 'ActivityCtrl'
-          }
-        },
-        access: { requiredAuthentication: true }
-      })
-      .state('app.activity.search', {
-        url: '/search',
-        views: {
-          'activityContent': {
             templateUrl: 'static/views/partials/search.html',
             controller: 'SearchCtrl'
           }
         },
         access: { requiredAuthentication: true }
       })
-      .state('app.activity.proposals', {
+      .state('app.proposals', {
         url: '/proposals',
         abstract: true,
         views: {
-          'activityContent': {
+          'tabContent': {
             templateUrl: 'static/views/partials/proposal.html',
             controller: ''
           }
         },
         access: { requiredAuthentication: true }
       })
-      .state('app.activity.proposals.list', {
+      .state('app.proposals.list', {
         url: '',
         views: {
           '': {
@@ -92,7 +84,7 @@ angular.module('sbirezApp', [
         },
         access: { requiredAuthentication: true }
       })
-      .state('app.activity.proposals.detail', {
+      .state('app.proposals.detail', {
         url: '/:id?current',
         reloadOnSearch: false,
         views: {
@@ -103,17 +95,27 @@ angular.module('sbirezApp', [
         },
         access: { requiredAuthentication: true }
       })
-      .state('app.activity.documents', {
+      .state('app.proposals.report', {
+        url: '/report/:id',
+        views: {
+          '': {
+            templateUrl: 'static/views/partials/proposal.report.html',
+            controller: 'ProposalReportCtrl'
+          }
+        },
+        access: { requiredAuthentication: true }
+      })
+      .state('app.documents', {
         url: '/documents',
         abstract: true,
         views: {
-          'activityContent': {
+          'tabContent': {
             templateUrl: 'static/views/partials/document.html'
           }
         },
         access: { requiredAuthentication: true }
       })
-      .state('app.activity.documents.list', {
+      .state('app.documents.list', {
         url: '',
         views: {
           '': {
@@ -123,7 +125,7 @@ angular.module('sbirezApp', [
         },
         access: { requiredAuthentication: true }
       })
-      .state('app.activity.documents.detail', {
+      .state('app.documents.detail', {
         url: '/:id',
         views: {
           '': {
@@ -133,30 +135,30 @@ angular.module('sbirezApp', [
         },
         access: { requiredAuthentication: true }
       })
-      .state('app.activity.savedOpps', {
+      .state('app.savedOpps', {
         url: '/savedOpps',
         views: {
-          'activityContent': {
+          'tabContent': {
             templateUrl: 'static/views/partials/savedOpps.html',
             controller: 'SavedOppsCtrl'
           }
         },
         access: { requiredAuthentication: true }
       })
-      .state('app.activity.savedSearches', {
+      .state('app.savedSearches', {
         url: '/savedSearches',
         views: {
-          'activityContent': {
+          'tabContent': {
             templateUrl: 'static/views/partials/savedSearches.html',
             controller: 'SavedSearchesCtrl'
           }
         },
         access: { requiredAuthentication: true }
       })
-      .state('app.activity.history', {
+      .state('app.history', {
         url: '/history',
         views: {
-          'activityContent': {
+          'tabContent': {
             templateUrl: 'static/views/partials/history.html',
             controller: 'HistoryCtrl'
           }
@@ -234,7 +236,9 @@ angular.module('sbirezApp', [
     //console.log(arguments);
   });
   $rootScope.$on('$stateChangeSuccess',function(event, toState, toParams, fromState, fromParams){
-    //console.log('$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.');
+    //console.log('$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.', event, toState);
+    $rootScope.controller = toState.name.replace(/\./g, '_');
+    //console.log($rootScope.controller);
   });
   $rootScope.$on('$viewContentLoaded',function(event){
     //console.log('$viewContentLoaded - fired after dom rendered',event);
@@ -248,7 +252,7 @@ angular.module('sbirezApp', [
   //console.log('$stateChangeStart to '+toState.to+'- fired when the transition begins. toState,toParams : \n',toState, toParams);
     if (toState !== null && toState.access !== undefined && toState.access.requiredAuthentication && !AuthenticationService.isAuthenticated && !$window.sessionStorage.token) {
       event.preventDefault();
-      $state.go('home.search');
+      $state.go('home');
     }
   });
 });

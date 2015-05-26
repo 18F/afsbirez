@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('MainCtrl', function ($scope, $http, $location, $state, $window, AuthenticationService, DialogService, $rootScope) {
+  .controller('MainCtrl', function ($scope, $http, $location, $state, $window, AuthenticationService, DialogService, $rootScope, SearchService) {
     $scope.auth = AuthenticationService;
     $scope.isLoggedIn = $scope.auth.getAuthenticated() && ($window.sessionStorage.token !== null && $window.sessionStorage.token !== undefined);
+    $scope.query = '';
 
 
     AuthenticationService.registerObserverCallback(function() {
@@ -19,6 +20,14 @@ angular.module('sbirezApp')
 
     $scope.logIn = function() {
       console.log('here');
+    };
+
+    $scope.search = function() {
+      SearchService.search(1, $scope.query, 10).then(function(data) {
+        $state.go('search', {}, {'reload':true});
+      }, function(error) {
+        console.log(error);
+      });
     };
 
   });

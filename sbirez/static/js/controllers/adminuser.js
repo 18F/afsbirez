@@ -25,7 +25,7 @@ angular.module('sbirezApp')
               $state.go($scope.ngDialogData.name, $scope.ngDialogData);
             }
             else {
-              $state.go('app.activity.search');
+              $state.go('app.search');
             }
           },function(status) {
             if (status && status.data && status.data.non_field_errors) {

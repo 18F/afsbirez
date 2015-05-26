@@ -10,8 +10,10 @@ describe('Controller: ProposalCtrl', function () {
     $routeParams,
     mockDependency,
     $httpBackend,
+    $window,
     $q,
     ProposalService,
+    AuthenticationService,
     data;
 
   data = {
@@ -31,13 +33,17 @@ describe('Controller: ProposalCtrl', function () {
     mockDependency.params = {};
     mockDependency.params.id = 1;
     
-    inject(function (_$httpBackend_, $controller, $rootScope, _$q_, _ProposalService_) {
+    inject(function (_$httpBackend_, $controller, $rootScope, _$window_, _$q_, _ProposalService_, _AuthenticationService_) {
       $httpBackend = _$httpBackend_;
       scope = $rootScope.$new();
       $routeParams = mockDependency;
       ProposalService = _ProposalService_;
+      AuthenticationService = _AuthenticationService_;
       $q = _$q_;
-      spyOn(ProposalService, 'get').andCallFake(function() {
+      $window = _$window_;
+      $window.sessionStorage.userid = 1;
+      AuthenticationService.setAuthenticated(true);
+      spyOn(ProposalService, 'load').andCallFake(function() {
         var deferred = $q.defer();
         deferred.resolve(data);
         return deferred.promise;
@@ -50,10 +56,6 @@ describe('Controller: ProposalCtrl', function () {
   });
 
   it('should attach a proposal to the scope', function () {
-    expect(scope.data).toBeDefined();
-    $httpBackend.whenGET('static/views/partials/main.html').respond({});
-    $httpBackend.whenGET('static/views/partials/search.html').respond({});
-    $httpBackend.flush();
     expect(scope.data).toBeDefined();
   });
 });
