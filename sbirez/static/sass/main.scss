@@ -851,11 +851,16 @@ body.proposal.proposal-overview aside img+span{
     max-width: none;
 }
 
+body.proposal.proposal-overview aside h1 span{
+    display: inline;
+}
+
 body.proposal.proposal-overview aside div,
 body.proposal.proposal-overview aside span{
     line-height: 1.3em;
-    max-width: 10em;
+    max-width: none;
     font-size: 14px;    
+    display: block;
 }
 
 body.proposal.proposal-overview ol li{

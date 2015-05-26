@@ -28,20 +28,17 @@
         <button type="button" id="validate_state" ng-click="validate()">Verify this proposal</button>          
       </section>
       <aside>
-        <h1>Technical point <span class="preposition">of</span> contact</h1>
-        <img src="http://placekitten.com/g/256/256">
+        <h1><span class="technical-point">Technical point</span><span class="preposition">of</span> contact</h1>
         <span>Dr. Soandso McSmartpants</span>
         <span>1-888-222-2222</span>
-        <div>
-          <span>123 Streetname Ave</span>
-          <span>Alexandria, VA 22222</span>
-        </div>
+        <span>test@email.com</span>
       </aside>
     </div>
   </main>
   <footer class="proposal-footer">
     <div class="wrap">
-      <div topic="proposal.topic" remove-option="true"></div>
+      <div topic="proposal.topic" view-details="true" save-option="true"></div>
+      <button class="button-remove" ng-click="delete()">Delete this proposal</button>
     </div>
   </footer>  
 </div>

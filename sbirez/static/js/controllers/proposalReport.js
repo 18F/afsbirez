@@ -31,4 +31,10 @@ angular.module('sbirezApp')
     $scope.validate = function() {
       ProposalService.validate();
     };
+
+    $scope.delete = function() {
+      ProposalService.remove(parseInt($scope.proposalId));
+      $state.go('app.savedOpps');
+    };
+
   });

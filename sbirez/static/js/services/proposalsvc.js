@@ -405,15 +405,15 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
         return deferred.promise;
       }
     },
-    remove: function(opportunityId) {
-      // remove opportunity from saved opps
-      if (typeof opportunityId === 'number') {
+    remove: function(proposalId) {
+      // remove proposal from saved opps
+      if (typeof proposalId === 'number') {
         if (AuthenticationService.isAuthenticated) {
-          return removeProposal(opportunityId);
+          return removeProposal(proposalId);
         } else {
           return DialogService.openLogin().then(function(data) {
             if (data.value) {
-              return removeProposal(opportunityId);
+              return removeProposal(proposalId);
             } else {
               var deferred = $q.defer();
               deferred.reject(new Error('Failed to authenticate'));
