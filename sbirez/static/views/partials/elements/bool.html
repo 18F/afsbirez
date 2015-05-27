@@ -2,13 +2,13 @@
   <h1 marked="fieldName"></h1>
   <div class="field field-radio">
     <label>
-      <input type="radio" ng-model="storage" id="{{element.name}}-yes" ng-click="apply()" value="true"> 
+      <input type="radio" ng-model="storage" name="{{fieldToken}}" id="{{fieldToken}}-yes" ng-click="apply()" value="true"> 
       <span class="label-text">Yes</span>
     </label>
   </div>
   <div class="field field-radio">
     <label>
-      <input type="radio" ng-model="storage" id="{{element.name}}-no" ng-click="apply()"> 
+      <input type="radio" ng-model="storage" name="{{fieldToken}}" id="{{fieldToken}}-no" ng-click="apply()" value="false"> 
       <span class="label-text">No</span>
     </label>
   </div>

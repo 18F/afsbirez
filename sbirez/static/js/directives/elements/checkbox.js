@@ -19,6 +19,11 @@ angular.module('sbirezApp').directive('checkbox', function() {
           $scope.fieldName = $scope.element.human.replace('%multiple%', $scope.multiplename);
         }
 
+        $scope.fieldToken = $scope.element.name;
+        if ($scope.multipletoken !== undefined) {
+          $scope.fieldToken = $scope.element.name + '_' + $scope.multipletoken;
+        }
+
         $scope.validationstorage = '';
 
         var validationCallback = function(data) {
@@ -33,11 +38,6 @@ angular.module('sbirezApp').directive('checkbox', function() {
                                  validationCallback,
                                  $scope.element.ask_if !== null ? askIfCallback : null,
                                  $scope.multipletoken);
-
-        $scope.fieldName = $scope.element.human;
-        if ($scope.multiplename !== undefined && $scope.element.human.indexOf('%multiple%') > -1) {
-          $scope.fieldName = $scope.element.human.replace('%multiple%', $scope.multiplename);
-        }
 
         $scope.apply = function() {
           console.log('bool apply', $scope.element.id, $scope.storage);

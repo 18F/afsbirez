@@ -415,6 +415,7 @@ header.banner h1 span.icon-logo{
     height: 38px;
     background-size: 100%;
     margin-right: 0.4em;
+    margin-top: 0.1em;
 }
 
 header.banner form,
@@ -868,7 +869,7 @@ body.proposal.proposal-overview ol li{
     position: relative;
 }
 
-body.proposal.proposal-overview ol li.cover-sheet > span{
+body.proposal.proposal-overview ol li.parent-element > span{
     font-weight: 600;
 }
 

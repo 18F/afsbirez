@@ -1,6 +1,6 @@
 <div class="field-checkbox field" ng-show="visible" ng-class="{'is-branch': element.ask_if}">
-  <label for="{{element.name}}">
-    <input type="checkbox" ng-model="storage" ng-change="apply()" id="{{element.name}}"><span class="label-text" marked="fieldName"></span> 
+  <label for="{{fieldToken}}">
+    <input type="checkbox" ng-model="storage" ng-change="apply()" name="{{fieldToken}}" id="{{fieldToken}}"><span class="label-text" marked="fieldName"></span> 
   </label>
   <div ng-show="validationstorage" class="text-danger"><p class="errortext">{{validationstorage}}</p></div>
 </div>

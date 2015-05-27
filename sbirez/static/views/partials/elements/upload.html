@@ -1,7 +1,7 @@
 <div class="field field-upload">
   <label>
     <span class="label-text">{{element.human}}</span>
-    <input id="{{element.name}}" name="{{element.name}}" type="file" ng-file-select="onFileSelect($files)" size="40">
+    <input id="{{fieldToken}}" name="{{fieldToken}}" type="file" ng-file-select="onFileSelect($files)" size="40">
     <div class="sel-file" ng-repeat="f in selectedFiles">
       <label class="question" for="filename">
         <span class="label-text">File Name:</span>

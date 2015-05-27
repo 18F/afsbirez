@@ -39,6 +39,11 @@ angular.module('sbirezApp').directive('upload', function() {
           $scope.fieldName = $scope.element.human.replace('%multiple%', $scope.multiplename);
         }
 
+        $scope.fieldToken = $scope.element.name;
+        if ($scope.multipletoken !== undefined) {
+          $scope.fieldToken = $scope.element.name + '_' + $scope.multipletoken;
+        }
+
         $scope.apply = function() {
           ProposalService.apply($scope.element, $scope.storage, $scope.multipletoken);
         };
