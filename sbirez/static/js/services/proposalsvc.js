@@ -29,7 +29,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       deferred.reject(new Error(data));
     });
     return deferred.promise;
-  }
+  };
 
   var getProposals = function() {
     var deferred = $q.defer();
@@ -256,6 +256,92 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     };
   };
 
+  var ObjectLengthCount = function(object) {
+    var length = 0;
+    for (var key in object) {
+      if (object.hasOwnProperty(key)) {
+        ++length;
+      }
+    }
+    return length;
+  };
+    
+  var ObjectLengthModern = function(object) {
+    return Object.keys(object).length;
+  };
+    
+  var ObjectLengthEither = Object.keys ? ObjectLengthModern : ObjectLengthCount;
+
+  var isSet = function(data, elementName) {
+    return !(data === undefined ||
+             data[elementName] === null ||
+             data[elementName] === undefined ||
+             data[elementName] === '' ||
+             (typeof data[elementName] === 'object' && data[elementName].length === undefined));
+  };
+
+  var checkCompleteness = function(element, data) {
+    var length = element.children.length;
+    var index = 0;
+    var complete = true;
+    for (index; index < length && complete; index++) {
+      if (element.children[index].required && element.children[index].ask_if) {
+        if (data[element.children[index].ask_if] === true) {
+          complete = isSet(data, element.children[index].name);
+        }
+      } else if (element.children[index].required) {
+        complete = isSet(data, element.children[index].name);
+      }
+    }
+    return complete;
+  };
+
+  var getProposalOverview = function(validate) {
+    var overview = [];
+    var element, child;
+    if (validate) {
+      validateWorkflow();
+    }
+    for (var index = 0; index < workflow.children.length; index++) {
+      element = {
+                  'name':workflow.children[index].human,
+                  'id':workflow.children[index].id
+                };
+      if (workflow.children[index].children[0].element_type === 'group') {
+        element.children = [];
+        for (var subindex = 0; subindex < workflow.children[index].children.length; subindex++) {
+          child = {
+                    'name': workflow.children[index].children[subindex].human,
+                    'id':workflow.children[index].children[subindex].id
+                  };
+          if (validate) {
+            child.errors = ObjectLengthEither(validationData[workflow.name][workflow.children[index].name][workflow.children[index].children[subindex].name])
+          }
+          if (proposalData && proposalData[workflow.name] && proposalData[workflow.name][workflow.children[index].name]) {
+            child.complete = checkCompleteness(workflow.children[index].children[subindex], proposalData[workflow.name][workflow.children[index].name][workflow.children[index].children[subindex].name]);
+          }
+          else {
+            child.complete = false;
+          }
+          element.children.push(child);
+        }
+      }
+      else {
+        if (validate) {
+          element.errors = ObjectLengthEither(validationData[workflow.name][workflow.children[index].name]);
+        }
+        if (proposalData && proposalData[workflow.name]) {
+          element.complete = checkCompleteness(workflow.children[index], proposalData[workflow.name][workflow.children[index].name]);
+        }
+        else {
+          element.complete = false;
+        }
+      }
+      overview.push(element);
+    }
+    return overview;
+  };
+
   var getOrder = function(element, multipleToken, altName) {
     var order = [];
     order.push(altName !== undefined ? altName : element.name);
@@ -312,8 +398,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
 
       // check to see if the state was already set
       var message = getDataIndex(order, false, validationData);
-      //console.log('message', message, message.length);
-      if (typeof message === 'object' && message.length === undefined) {
+      if (message === null || (typeof message === 'object' && message.length === undefined)) {
         message = '';
       }
       validationCallback(message);
@@ -551,6 +636,21 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
         return DialogService.openLogin().then(function(data) {
           if (data.value) {
             return getWorkflowElement(elementId);
+          } else {
+            var deferred = $q.defer();
+            deferred.reject(new Error('Failed to authenticate'));
+            return deferred.promise;
+          }
+        });
+      }
+    },
+    getOverview: function(validate) {
+      if (AuthenticationService.isAuthenticated) {
+        return getProposalOverview(validate);
+      } else {
+        return DialogService.openLogin().then(function(data) {
+          if (data.value) {
+            return getProposalOverview(validate);
           } else {
             var deferred = $q.defer();
             deferred.reject(new Error('Failed to authenticate'));

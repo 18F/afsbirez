@@ -181,11 +181,14 @@ angular.module('sbirezApp').factory('ValidationService', function() {
              (typeof data[elementName] === 'object' && data[elementName].length === undefined));
   };
 
+
+  // as with processValidation, returns true if the it passes, false if it fails
   var processRequired = function(element, workflow, data) {
-    if (element.ask_if && isSet(data, element.ask_if)) {
+    // if it has a condition, and that condition is set
+    if (element.ask_if && isSet(data, element.ask_if) && data[element.ask_if] === true) {
       return isSet(data, element.name);
     } else if (!element.ask_if) { 
-      return (isSet(data, element.name)); 
+      return isSet(data, element.name); 
     }
     else {
       return true;

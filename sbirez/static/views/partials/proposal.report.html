@@ -1,7 +1,7 @@
 <div class="proposal-progress-report">
   <header class="proposal-banner">
     <div class="wrap">
-      <h1>{{proposal.title}}</h1>
+      <h1>{{::proposal.title}}</h1>
     </div>
   </header>
 
@@ -11,14 +11,15 @@
         <h1 class="primary-header">Overview</h1>
         <p>Proposals are comprised of four parts, listed below. We&rsquo;ll help you submit your proposal by filling out the necessary paperwork, one step at a time.</p>
         <ol>
-          <li ng-repeat="element in workflow.children">
-            <a href="#" ui-sref="app.proposals.detail({id: proposalId, current: element.id})">
-              {{element.human}}
+          <li ng-class="{'parent-element': element.children, 'is-incomplete': !element.children && !element.complete, 'is-complete': !element.children && element.complete}" ng-repeat="element in overview">
+            <a href="#" ng-if="!element.children" ui-sref="app.proposals.detail({id: proposalId, current: element.id})">
+              {{::element.name}}
             </a>
-            <ol ng-if="element.children.length > 0">
-              <li ng-if="child.element_type === 'group'" ng-repeat="child in element.children">
+            <span ng-if="element.children">{{::element.name}}</span>
+            <ol ng-if="element.children">
+              <li ng-class="{'is-incomplete': !child.complete, 'is-complete': child.complete}" ng-repeat="child in element.children">
                 <a href="#" ui-sref="app.proposals.detail({id: proposalId, current: child.id})">
-                  {{child.human}}
+                  {{::child.name}}
                 </a>
               </li>
             </ol>
@@ -37,6 +38,7 @@
   </main>
   <footer class="proposal-footer">
     <div class="wrap">
+      <h1>Related topic</h1>
       <div topic="proposal.topic" view-details="true" save-option="true"></div>
       <button class="button-remove" ng-click="delete()">Delete this proposal</button>
     </div>
