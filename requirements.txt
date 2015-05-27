@@ -7,6 +7,7 @@ django-custom-user==0.5
 django-downloadview==1.6
 django-pgjson==0.2.3
 django-rest-auth==0.3.4
+-e git+https://github.com/eofs/django-rest-framework-proxy.git@c4acff85e639d3b9dd15b4fac70c553b003900ac#egg=django_rest_framework_proxy-origin/HEAD
 djangorestframework==3.1.1
 djangorestframework-hstore==1.2
 djangorestframework-jwt==1.4.0

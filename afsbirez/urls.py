@@ -1,8 +1,10 @@
 from django.conf.urls import patterns, include, url
+from django.conf import settings
 from django.contrib import admin
 from django.views.generic import TemplateView
 
 from rest_framework import routers
+from rest_framework_proxy.views import ProxyView
 from sbirez import api, models
 
 router = routers.DefaultRouter()
@@ -17,7 +19,6 @@ router.register(r'persons', api.PersonViewSet)
 router.register(r'documents', api.DocumentViewSet)
 router.register(r'documentversions', api.DocumentVersionViewSet)
 router.register(r'elements', api.ElementViewSet)
-
 
 urlpatterns = patterns('',
     url(r'^api/v1/topics/(?P<pk>[0-9]+)/saved/$', api.SaveTopicView.as_view()),
@@ -58,4 +59,10 @@ urlpatterns = patterns('',
     url(r'^search/', 'sbirez.views.home', name='home'),
     url(r'^topic/', 'sbirez.views.home', name='home'),
     url(r'^app/', 'sbirez.views.home', name='home'),
+
+    # proxy company info searches to SAM API
+    url(r'^api/v1/firms/search/(?P<searchterms>.*)$',
+        ProxyView.as_view(source='registrations?qterms=%(searchterms)s&api_key='
+                          + settings.REST_PROXY['API_KEY']),
+        name='firm-search'),
 )

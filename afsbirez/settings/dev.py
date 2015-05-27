@@ -2,6 +2,7 @@ import os
 
 from .base import *
 from django.utils.crypto import get_random_string
+from .credentials import SAM_API_KEY
 
 DEBUG = True
 TEMPLATE_DEBUG = True
@@ -22,3 +23,8 @@ DATABASES = {
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 INSTALLED_APPS.append('django_extensions')
+
+REST_PROXY = {
+    'HOST': 'https://api.data.gov/sam/v1',
+    'API_KEY': SAM_API_KEY,
+    }
