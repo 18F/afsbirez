@@ -24,7 +24,7 @@ angular.module('sbirezApp').directive('header', function() {
             $scope.menu = [{
               'class': 'my-topics',
               'title': 'My Proposals',
-              'link': '/app/savedOpps'
+              'link': '/app/proposals'
             }, {
 //              'class': 'notifications',
 //              'title': 'Notifications',

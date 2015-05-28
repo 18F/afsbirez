@@ -8,9 +8,6 @@
           <input type="search" id="query" name="query" ng-model="query" value="" />
         </label>
       </div>
-      <footer>
-        <button type="submit">Search</button>
-      </footer>
     </form>
     <nav class="primary">
       <a class="{{item.title}}" ng-repeat="item in menu" ng-click="item.click()" href="{{item.link}}">{{item.title}}</a>

@@ -36,7 +36,7 @@ angular.module('sbirezApp')
 
     $scope.delete = function() {
       ProposalService.remove($scope.proposalId);
-      $state.go('app.savedOpps');
+      $state.go('app.proposals.list');
     };
 
   });

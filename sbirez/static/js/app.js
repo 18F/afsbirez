@@ -78,8 +78,8 @@ angular.module('sbirezApp', [
         url: '',
         views: {
           '': {
-            templateUrl: 'static/views/partials/proposalList.html',
-            controller: 'ProposalListCtrl'
+            templateUrl: 'static/views/partials/savedOpps.html',
+            controller: 'SavedOppsCtrl'
           }
         },
         access: { requiredAuthentication: true }
@@ -131,16 +131,6 @@ angular.module('sbirezApp', [
           '': {
             templateUrl: 'static/views/partials/documentDetails.html',
             controller: 'DocumentCtrl'
-          }
-        },
-        access: { requiredAuthentication: true }
-      })
-      .state('app.savedOpps', {
-        url: '/savedOpps',
-        views: {
-          'tabContent': {
-            templateUrl: 'static/views/partials/savedOpps.html',
-            controller: 'SavedOppsCtrl'
           }
         },
         access: { requiredAuthentication: true }
