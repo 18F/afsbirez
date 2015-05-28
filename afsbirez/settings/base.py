@@ -95,3 +95,7 @@ STATICFILES_FINDERS = (
 )
 
 DEFAULT_FROM_EMAIL='catherine.devlin@gsa.gov'
+
+REST_PROXY = {
+    'HOST': 'https://api.data.gov/sam/v1',
+    }

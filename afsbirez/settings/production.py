@@ -40,7 +40,4 @@ EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 # store email credentials in `credentials.py` (outside version control)
 
-REST_PROXY = {
-    'HOST': 'https://api.data.gov/sam/v1',
-    'API_KEY': SAM_API_KEY,
-    }
+REST_PROXY['API_KEY'] = SAM_API_KEY
