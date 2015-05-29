@@ -6,12 +6,14 @@ angular.module('sbirezApp').directive('bool', function() {
     replace: true,
     scope: {
       bool: '=',
-      multiplename: '=?'
+      multiplename: '=?',
+      multipletoken: '=?'
     },
     templateUrl: 'static/views/partials/elements/bool.html',
     controller: ['$scope', 'ProposalService',
       function ($scope, ProposalService) {
         $scope.element = $scope.bool;
+        $scope.visible = true;
         $scope.validationstorage = '';
 
         var validationCallback = function(data) {
@@ -30,6 +32,11 @@ angular.module('sbirezApp').directive('bool', function() {
         $scope.fieldName = $scope.element.human;
         if ($scope.multiplename !== undefined && $scope.element.human.indexOf('%multiple%') > -1) {
           $scope.fieldName = $scope.element.human.replace('%multiple%', $scope.multiplename);
+        }
+
+        $scope.fieldToken = $scope.element.name;
+        if ($scope.multipletoken !== undefined) {
+          $scope.fieldToken = $scope.element.name + '_' + $scope.multipletoken;
         }
 
         $scope.apply = function() {

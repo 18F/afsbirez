@@ -1,12 +1,13 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('AccountOrganizationCtrl', function ($scope, $http, $state, $q, $window, UserService) {
+  .controller('AccountOrganizationCtrl', function ($scope, $http, $state, $q, $window, $rootScope, UserService) {
 
     $scope.orgId = null;
     $scope.firm = {};
     $scope.firm.point_of_contact = {};
     $scope.firm.address = {};
+    $rootScope.bodyClass = 'my-company';
 
     UserService.getUserDetails().then(function(data) {
       $scope.orgId = data.firm;

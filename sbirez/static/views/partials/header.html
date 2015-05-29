@@ -1,6 +1,6 @@
 <header id="header" role="banner" class="header banner">
   <div class="wrap">
-    <h1><a class="home" href="/">SBIR-EZ</a></h1>
+    <h1><span class="icon-logo"></span>SBIR-EZ</h1>
     <form ng-submit="search()">
       <div class="field">
         <label>
@@ -8,12 +8,9 @@
           <input type="search" id="query" name="query" ng-model="query" value="" />
         </label>
       </div>
-      <footer>
-        <button type="submit">Search</button>
-      </footer>
     </form>
     <nav class="primary">
-      <a class="{{item.title}}" ng-repeat="item in menu" ng-click="item.click()" ng-href="{{item.link}}">{{item.title}}</a>
+      <a class="{{item.title}}" ng-repeat="item in menu" ng-click="item.click()" href="{{item.link}}">{{item.title}}</a>
     </nav>
   </div>
 </header>

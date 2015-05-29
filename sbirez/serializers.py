@@ -10,6 +10,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_recursive.fields import RecursiveField
 from .utils import nested_update
+from django.core.exceptions import ObjectDoesNotExist
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -184,6 +185,7 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
     keywords = KeywordSerializer(many=True)
     areas = AreaSerializer(many=True)
     saved = serializers.SerializerMethodField()
+    proposal = serializers.SerializerMethodField()
     solicitation = SolicitationSerializer()
 
     def get_saved(self, obj):
@@ -195,12 +197,23 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
         else:
             return obj.saved_by.filter(id=current_user.id).exists()
 
+    def get_proposal(self, obj):
+        "``True`` if current has saved this topic for later reference.  ``None`` if no current user."
+        current_user = self.context.get('request').user
+        if current_user.is_anonymous():
+            return None
+        else:
+            try:
+                return Proposal.objects.get(owner_id=current_user.id, topic_id=obj.id).id
+            except ObjectDoesNotExist:
+                return None 
+
     class Meta:
         model = Topic
         fields = ('id', 'topic_number', 'url', 'title', 'agency',
                     'program', 'description', 'objective',
                     'solicitation', 'references', 'phases',
-                    'keywords', 'areas', 'saved',
+                    'keywords', 'areas', 'saved', 'proposal'
                     )
 
 

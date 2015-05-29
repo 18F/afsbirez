@@ -8,8 +8,12 @@
       <h1>{{data.title}}</h1>
       <h2>{{data.program}} {{data.topic_number}}</h2>
       <nav>
-        <form action="proposal_progress_report.php"><button>Start a proposal</button></form>
-        <form><button class="button-remove">Remove from my topics</button></form>
+        <span ng-if="data.saved">
+          <a href="#" ng-hide="data.proposal" ng-click="createProposal()" title="Start Proposal for {{data.topic_number}}">Start a proposal</a>
+          <a href="#" ng-show="data.proposal" ui-sref="app.proposals.report({id: data.proposal})" title="Goto Proposal for {{data.topic_number}}">View proposal</a>
+        </span>
+        <a href="#" ng-hide="data.saved" ng-click="saveOpportunity()" title="Save {{data.topic_number}} for later">Add to my topics</a>
+        <a href="#" ng-show="data.saved" ng-click="removeOpportunity()" title="Remove {{data.topic_number}}">Remove from my topics</a>
       </nav>
     </header>
     <section ng-show="data.objective" class="topic-objective">
@@ -45,8 +49,5 @@
       <dt>Proposal Submission End Date:</dt>
       <dd>{{data.solicitation.proposals_end_date | date }}</dd>
     </dl>
-	    <div ng-hide="data.saved">
-	      <button class="btn btn-default btn-sm pull-right" ng-click="saveOpportunity()" title="Save {{topic.topic_number}} for later" type="button">Save for later</button>
-    </div>
   </div>
 </div>

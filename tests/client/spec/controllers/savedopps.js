@@ -26,6 +26,7 @@ describe('Controller: SavedOppsCtrl', function () {
     'results': [{
         'title': 'The title.',
         'id':123,
+        'proposal':2,
         'pre_release_date':'',
         'proposals_begin_date':'',
         'proposals_end_date':''
@@ -72,10 +73,8 @@ describe('Controller: SavedOppsCtrl', function () {
     AuthenticationService.setAuthenticated(true);
     expect(scope.data).toEqual({});
     $httpBackend.expectGET('api/v1/topics/?closed=true&saved=true').respond(data);
-    $httpBackend.expectGET('api/v1/proposals/').respond(propData);
     $httpBackend.flush();
-    expect(scope.proposals).toBeDefined();
-    expect(scope.data.results[0].proposal_id).toBe(2);
+    expect(scope.data.results[0].proposal).toBe(2);
   });
 
   it('page should not load if not logged in', function () {
