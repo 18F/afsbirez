@@ -1,0 +1,27 @@
+
+.icon-checkbox-unchecked {
+	background-image: url('png/checkbox-unchecked.png');
+	background-repeat: no-repeat;
+}
+
+.icon-checkmark,
+.is-complete::after {
+	background-image: url('png/checkmark.png');
+	background-repeat: no-repeat;
+}
+
+.icon-cross,
+.is-error::after {
+	background-image: url('png/cross.png');
+	background-repeat: no-repeat;
+}
+
+.icon-logo {
+	background-image: url('png/logo.png');
+	background-repeat: no-repeat;
+}
+
+.icon-search {
+	background-image: url('png/search.png');
+	background-repeat: no-repeat;
+}

@@ -161,19 +161,15 @@ describe('Directive: WorkflowDirective', function () {
     $httpBackend.expectGET('api/v1/topics/8/').respond(elementData);
     $httpBackend.flush();
     // validate title
-    var title = formElement.find('h2');
+    var title = formElement.find('h1');
     expect(title.text()).toBe('Test Workflow');
 
     // validate that the child elements create workflow elements
-    var elements = formElement.children('div.ng-scope');
+    var elements = formElement.find('main form').children('div.ng-scope');
     expect(elements.length).toBe(3);
     expect(elements.eq(0).children(0).attr('text')).toBeDefined();
     expect(elements.eq(1).children(0).attr('str')).toBeDefined();
     expect(elements.eq(2).children(0).attr('bool')).toBeDefined();
-
-    // validate that there is a save button
-    var saveButton = formElement.find('button#save_exit');
-    expect(saveButton.length).toBe(1);
   });
 
   var loadNestedWorkflows = function() {

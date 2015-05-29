@@ -1,12 +1,12 @@
 <div class="wrap">
   <div ng-show="results && results.results && numFound > 0">
-    <h1 class="search-results-heading">{{numFound}} Results for {{searchTerm}}</h1>
+    <h1 class="p-name primary-header">{{numFound}} Results for {{searchTerm}}</h1>
   </div>
   <div ng-show="results && results.results && numFound === 0">
-    <h1 class="search-results-heading">No results found</h1>
+    <h1 class="p-name primary-header">No results found</h1>
   </div>
   <div ng-repeat="topic in results.results">
-    <div topic="topic" ng-show="topic.id" id="topic.topic_number" save-option="true" create-option="true"></div>
+    <div topic="topic" ng-show="topic.id" id="topic.topic_number" view-details="true" save-option="true" create-option="true"></div>
   </div>
   <div ng-if="results.results && numFound > itemCount">
     <pagination ng-attr-current-page="{{currentPage}}" ng-attr-item-count="{{numFound}}" ng-attr-items-per-page="{{itemsPerPage}}" ng-attr-method="search" />

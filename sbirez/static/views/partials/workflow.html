@@ -1,17 +1,34 @@
-<div>
-  <h2>{{currentWorkflow.human}}</h2>
-  <div ng-repeat="element in currentWorkflow.children">
-    <div str="element" ng-if="element.element_type === 'str' || element.element_type === 'long_str' || element.element_type === 'med_str' || element.element_type === 'short_str' || element.element_type === 'phone' || element.element_type === 'email' || element.element_type === 'int'  || element.element_type === 'dollars' || element.element_type === 'float' || element.element_type === 'percentage' || element.element_type === 'timespan' || element.element_type === 'big_str'"></div>
-    <div text="element" ng-if="element.element_type === 'text'"></div>
-    <div bool="element" ng-if="element.element_type === 'bool'"></div>
-    <div checkbox="element" ng-if="element.element_type === 'checkbox'"></div>
-    <div readonlytext="element" ng-if="element.element_type === 'read_only_text'"></div>
-    <div group="element" method="jumpTo" ng-if="element.element_type === 'workflow' || element.element_type === 'group'"></div>
-    <div lineitem="element" ng-if="element.element_type === 'line_item'" proposal="{{proposalId}}"></div>
-    <div upload="element" ng-if="element.element_type === 'file_upload'" proposal="{{proposalId}}"></div>
-  </div>
-  <!-- <button ng-if="showBackButton()" type="button" id="prior_state" ng-click="jumpTo(backWorkflow)">Back</button>-->
-  <button ng-if="showNextButton()" type="button" id="next_state" ng-click="saveAndContinue(nextWorkflow)">Save and continue</button>
-  <a href="#" id="cancel" ng-click="exit()">Cancel</a>
-  <button type="button" id="save_exit" ng-click="saveAndExit()">Save and return to the proposal progress report</button>
+<div class="proposal-details">
+  <header class="proposal-banner">
+    <div class="wrap">
+      <ol class="breadcrumbs">
+        <li><a href="#" ui-sref="app.proposals.report({id: proposalId})">Proposal</a></li>
+        <li>{{parentName}}</li>
+      </ol>
+    </div>
+  </header>
+  <main role="main">
+    <div class="wrap">
+      <form>
+        <!-- <a class="a-return" ui-sref="app.proposals.report({id: proposalId})">← Return to overview</a>-->
+        <h1>{{currentWorkflow.human}}</h1>
+        <div ng-repeat="element in currentWorkflow.children">
+          <div str="element" ng-if="element.element_type === 'str' || element.element_type === 'long_str' || element.element_type === 'med_str' || element.element_type === 'short_str' || element.element_type === 'phone' || element.element_type === 'email' || element.element_type === 'int'  || element.element_type === 'dollars' || element.element_type === 'float' || element.element_type === 'percentage' || element.element_type === 'timespan' || element.element_type === 'big_str'"></div>
+          <div text="element" ng-if="element.element_type === 'text'"></div>
+          <div bool="element" ng-if="element.element_type === 'bool'"></div>
+          <div checkbox="element" ng-if="element.element_type === 'checkbox'"></div>
+          <div readonlytext="element" ng-if="element.element_type === 'read_only_text'"></div>
+          <div group="element" method="jumpTo" ng-if="element.element_type === 'workflow' || element.element_type === 'group'"></div>
+          <div lineitem="element" ng-if="element.element_type === 'line_item'" proposal="{{proposalId}}"></div>
+          <div upload="element" ng-if="element.element_type === 'file_upload'" proposal="{{proposalId}}"></div>
+        </div>
+        <footer>
+          <!-- <button ng-if="showBackButton()" type="button" id="prior_state" ng-click="jumpTo(backWorkflow)">Back</button>-->
+          <button ng-if="showNextButton()" type="button" id="next_state" ng-click="saveAndContinue(nextWorkflow)">Save and continue</button>
+          <!-- <a href="#" id="cancel" ng-click="exit()">Cancel</a>-->
+          <!-- <button type="button" id="save_exit" ng-click="saveAndExit()">Save and return to the proposal progress report</button>-->
+        </footer>
+      </form>
+    </div>
+  </main>
 </div>

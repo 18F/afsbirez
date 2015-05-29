@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('SearchCtrl', function ($scope, SearchService) {
+  .controller('SearchCtrl', function ($scope, $rootScope, SearchService) {
+
+    $rootScope.bodyClass = 'search-results';
  
     var loadState = function() {
       var state = SearchService.loadState();

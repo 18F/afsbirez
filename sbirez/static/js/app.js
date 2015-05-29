@@ -78,8 +78,8 @@ angular.module('sbirezApp', [
         url: '',
         views: {
           '': {
-            templateUrl: 'static/views/partials/proposalList.html',
-            controller: 'ProposalListCtrl'
+            templateUrl: 'static/views/partials/savedOpps.html',
+            controller: 'SavedOppsCtrl'
           }
         },
         access: { requiredAuthentication: true }
@@ -131,16 +131,6 @@ angular.module('sbirezApp', [
           '': {
             templateUrl: 'static/views/partials/documentDetails.html',
             controller: 'DocumentCtrl'
-          }
-        },
-        access: { requiredAuthentication: true }
-      })
-      .state('app.savedOpps', {
-        url: '/savedOpps',
-        views: {
-          'tabContent': {
-            templateUrl: 'static/views/partials/savedOpps.html',
-            controller: 'SavedOppsCtrl'
           }
         },
         access: { requiredAuthentication: true }
@@ -237,8 +227,7 @@ angular.module('sbirezApp', [
   });
   $rootScope.$on('$stateChangeSuccess',function(event, toState, toParams, fromState, fromParams){
     //console.log('$stateChangeSuccess to '+toState.name+'- fired once the state transition is complete.', event, toState);
-    $rootScope.controller = toState.name.replace(/\./g, '_');
-    //console.log($rootScope.controller);
+    $rootScope.bodyClass = '';
   });
   $rootScope.$on('$viewContentLoaded',function(event){
     //console.log('$viewContentLoaded - fired after dom rendered',event);

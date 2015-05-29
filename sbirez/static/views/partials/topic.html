@@ -1,20 +1,20 @@
 <article id="topic.topic_number" class="topic h-entry" ng-class="{'is-favorite': topic.saved === true}">
   <a ui-sref="topic({id:topic.id})" class="topic-content">
-    <h1>{{topic.title}}</h1>
-    <h2>{{topic.topic_number}}</h2>
-    <p class="entry-summary">{{topic.description|truncate:500}}</p>
+    <h1>{{::topic.title}}</h1>
+    <h2>{{::topic.topic_number}}</h2>
+    <p class="entry-summary">{{::topic.description|truncate:500}}</p>
   </a>
   <nav>
+    <span ng-if="viewDetails">
+      <a ui-sref="topic({id:topic.id})">View details</a>
+    </span>
+    <span ng-if="createOption && topic.saved">
+      <a href="#" ng-hide="topic.proposal" ng-click="createProposal()" title="Start Proposal for {{::topic.topic_number}}">Start a proposal</a>
+      <a href="#" ng-show="topic.proposal" ui-sref="app.proposals.report({id: topic.proposal})" title="Goto Proposal for {{::topic.topic_number}}">View proposal</a>
+    </span>
     <span ng-if="saveOption">
-      <button ng-hide="topic.saved" ng-click="saveOpportunity()" title="Save {{topic.topic_number}} for later" type="button">Add to my topics</button>
-      <button ng-show="topic.saved" ng-click="removeOpportunity()" title="Remove {{topic.topic_number}}" type="button" class="button-remove">Remove from my topics</button>
-    </span>
-    <span ng-if="removeOption">
-      <button ng-show="removeOption" ng-click="removeOpportunity()" title="Remove {{topic.topic_number}}" type="button" class="button-remove">Remove from my topics</button>
-    </span>
-    <span ng-if="createOption">
-      <button ng-show="topic.proposal_id" ui-sref="app.proposals.report({id: topic.proposal_id})" title="Goto Proposal for {{topic.topic_number}}" type="button">View Proposal</button>
-      <button ng-hide="topic.proposal_id" ng-click="createProposal()" title="Create Proposal for {{topic.topic_number}}" type="button">Create Proposal</button>
+      <a href="#" ng-hide="topic.saved" ng-click="saveOpportunity()" title="Save {{::topic.topic_number}} for later">Add to my topics</a>
+      <a href="#" ng-show="topic.saved" ng-click="removeOpportunity()" title="Remove {{::topic.topic_number}}">Remove from my topics</a>
     </span>
   </nav>
 </article>

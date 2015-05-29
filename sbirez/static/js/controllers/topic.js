@@ -1,15 +1,30 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('TopicCtrl', function ($scope, $http, $window, $state, AuthenticationService, SavedOpportunityService) {
+  .controller('TopicCtrl', function ($scope, $rootScope, $http, $state, AuthenticationService, SavedOpportunityService) {
     $scope.topicId = $state.params.id;
     $scope.data = {};
+    $rootScope.bodyClass = 'topic';
 
     $scope.saveOpportunity = function() {
       SavedOpportunityService.save($scope.topicId).then(function() {
         $scope.data.saved = true;
       }, function(error) {
         console.log(error);
+      });
+    };
+
+    $scope.removeOpportunity = function() {
+      SavedOpportunityService.remove($scope.topicId).then(function() {
+        $scope.data.saved = false;
+      });
+    };
+
+    $scope.createProposal = function() {
+      var title = 'Proposal for ' + $scope.data.title;
+      var workflow = $scope.data.solicitation.element;
+      ProposalService.create($scope.topicId, title, workflow).then(function(data) {
+        $scope.data.proposal = data.id;
       });
     };
 
