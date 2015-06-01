@@ -5,6 +5,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
   var proposal = {};
   var proposalData = {};
   var validationData = {};
+  var overview = [];
   var validationCallbacks = []; 
   var askIfCallbacks = {};
   // workflow as a tree
@@ -15,19 +16,24 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
   var workflowLength = 0;
   var previousWorkflow = null;
   var nextWorkflow = null;
-  var parentName = '';
   var loadingPromise = null;
+  var topic = {};
 
   var PROPOSAL_URI = 'api/v1/proposals/';
   var TOPIC_URI = 'api/v1/topics/';
 
   var getTopic = function(topicId) {
     var deferred = $q.defer();
-    $http.get(TOPIC_URI + topicId + '/').success(function(data) {
-      deferred.resolve(data);
-    }).error(function(data) {
-      deferred.reject(new Error(data));
-    });
+    if (topic.id === topicId) {
+      deferred.resolve(topic);
+    } else {
+      $http.get(TOPIC_URI + topicId + '/').success(function(data) {
+        topic = data;
+        deferred.resolve(data);
+      }).error(function(data) {
+        deferred.reject(new Error(data));
+      });
+    }
     return deferred.promise;
   };
 
@@ -41,11 +47,17 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
 
   var getProposal = function(proposalId) {
     var deferred = $q.defer();
-    $http.get(PROPOSAL_URI + proposalId + '/').success(function(data) {
-      deferred.resolve(data);
-    }).error(function(data) {
-      deferred.reject(new Error(data));
-    });
+    if (proposal.id === proposalId) {
+      deferred.resolve(proposal);
+    }
+    else {
+      $http.get(PROPOSAL_URI + proposalId + '/').success(function(data) {
+        proposal = data;
+        deferred.resolve(data);
+      }).error(function(data) {
+        deferred.reject(new Error(data));
+      });
+    }
     return deferred.promise;
   };
 
@@ -163,10 +175,17 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
           workflowLength = workflows.length;
           buildMultiplicities();
           if (typeof proposal.topic !== 'object' && proposal.topic.id === undefined) {
-            $http.get(TOPIC_URI + proposal.topic + '/').success(function(data) {
-              proposal.topic = data;
+            if (topic.id === proposal.topic) {
+              proposal.topic = topic;
               loadingPromise.resolve(proposal);
-            });
+              console.log('already loaded topic', topic);
+            } else {
+              $http.get(TOPIC_URI + proposal.topic + '/').success(function(data) {
+                proposal.topic = data;
+                topic = data;
+                loadingPromise.resolve(proposal);
+              });
+            }
           }
           else {
             loadingPromise.resolve(proposal);
@@ -214,23 +233,9 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       var innerIndex;
       var found = false;
       if (currentWorkflowIndex >= 0) {
-        for (index = currentWorkflowIndex - 1; index >= 0 && !found; --index) {
-          for (innerIndex = 0; innerIndex < workflows[index].children.length; innerIndex++) {
-            if (workflows[index].children[innerIndex].id === elementId) {
-              if (index === 0) {
-                parentName = workflows[index].children[innerIndex].human;
-              } else {
-                parentName = workflows[index].human;
-              }
-              found = true;
-              break;
-            }
-          }
-        }
-
         previousWorkflow = null;
         for (index = currentWorkflowIndex - 1; index >= 0; --index) {
-          if (workflows[index].element_type === 'group' || workflows[index].element_type === 'workflow') {
+          if ((workflows[index].element_type === 'group' || workflows[index].element_type === 'workflow') && workflows[index].children && workflows[index].children[0] && workflows[index].children[0].element_type !== 'group' && workflows[index].children[0].element_type !== 'workflow') {
             previousWorkflow = workflows[index].id;
             break;
           }
@@ -239,7 +244,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       if (currentWorkflowIndex < workflowLength) {
         nextWorkflow = null;
         for (index = currentWorkflowIndex + 1; index < workflowLength; ++index) {
-          if (workflows[index].element_type === 'group' || workflows[index].element_type === 'workflow') {
+          if ((workflows[index].element_type === 'group' || workflows[index].element_type === 'workflow') && workflows[index].children && workflows[index].children[0] && workflows[index].children[0].element_type !== 'group' && workflows[index].children[0].element_type !== 'workflow') {
             nextWorkflow = workflows[index].id;
             break;
           }
@@ -251,8 +256,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return {
       'current': workflows[currentWorkflowIndex],
       'previous': previousWorkflow,
-      'next': nextWorkflow,
-      'parentName': parentName
+      'next': nextWorkflow
     };
   };
 
@@ -260,18 +264,16 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     var length = 0;
     for (var key in object) {
       if (object.hasOwnProperty(key)) {
-        ++length;
+        if (typeof object[key] === 'object') {
+          length += ObjectLengthCount(object[key]);
+        } else {
+          ++length;
+        }
       }
     }
     return length;
   };
     
-  var ObjectLengthModern = function(object) {
-    return Object.keys(object).length;
-  };
-    
-  var ObjectLengthEither = Object.keys ? ObjectLengthModern : ObjectLengthCount;
-
   var isSet = function(data, elementName) {
     return !(data === undefined ||
              data[elementName] === null ||
@@ -297,47 +299,49 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
   };
 
   var getProposalOverview = function(validate) {
-    var overview = [];
     var element, child;
-    if (validate) {
-      validateWorkflow();
-    }
-    for (var index = 0; index < workflow.children.length; index++) {
-      element = {
-                  'name':workflow.children[index].human,
-                  'id':workflow.children[index].id
-                };
-      if (workflow.children[index].children[0].element_type === 'group') {
-        element.children = [];
-        for (var subindex = 0; subindex < workflow.children[index].children.length; subindex++) {
-          child = {
-                    'name': workflow.children[index].children[subindex].human,
-                    'id':workflow.children[index].children[subindex].id
-                  };
-          if (validate) {
-            child.errors = ObjectLengthEither(validationData[workflow.name][workflow.children[index].name][workflow.children[index].children[subindex].name])
-          }
-          if (proposalData && proposalData[workflow.name] && proposalData[workflow.name][workflow.children[index].name]) {
-            child.complete = checkCompleteness(workflow.children[index].children[subindex], proposalData[workflow.name][workflow.children[index].name][workflow.children[index].children[subindex].name]);
-          }
-          else {
-            child.complete = false;
-          }
-          element.children.push(child);
-        }
+    if (overview.length === 0 || validate) {
+      overview = [];
+      if (validate) {
+        validateWorkflow();
       }
-      else {
-        if (validate) {
-          element.errors = ObjectLengthEither(validationData[workflow.name][workflow.children[index].name]);
-        }
-        if (proposalData && proposalData[workflow.name]) {
-          element.complete = checkCompleteness(workflow.children[index], proposalData[workflow.name][workflow.children[index].name]);
+      for (var index = 0; index < workflow.children.length; index++) {
+        element = {
+                    'name':workflow.children[index].human,
+                    'id':workflow.children[index].id
+                  };
+        if (workflow.children[index].children && workflow.children[index].children[0] && workflow.children[index].children[0].element_type === 'group') {
+          element.children = [];
+          for (var subindex = 0; subindex < workflow.children[index].children.length; subindex++) {
+            child = {
+                      'name': workflow.children[index].children[subindex].human,
+                      'id':workflow.children[index].children[subindex].id
+                    };
+            if (validate) {
+              child.errors = ObjectLengthCount(validationData[workflow.name][workflow.children[index].name][workflow.children[index].children[subindex].name])
+            }
+            if (proposalData && proposalData[workflow.name] && proposalData[workflow.name][workflow.children[index].name]) {
+              child.complete = checkCompleteness(workflow.children[index].children[subindex], proposalData[workflow.name][workflow.children[index].name][workflow.children[index].children[subindex].name]);
+            }
+            else {
+              child.complete = false;
+            }
+            element.children.push(child);
+          }
         }
         else {
-          element.complete = false;
+          if (validate) {
+            element.errors = ObjectLengthCount(validationData[workflow.name][workflow.children[index].name]);
+          }
+          if (proposalData && proposalData[workflow.name]) {
+            element.complete = checkCompleteness(workflow.children[index], proposalData[workflow.name][workflow.children[index].name]);
+          }
+          else {
+            element.complete = false;
+          }
         }
+        overview.push(element);
       }
-      overview.push(element);
     }
     return overview;
   };
@@ -372,7 +376,6 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
         data[order[index]] = {};
       }
       data = data[order[index]];
-      //console.log('data', data);
     }
     return data;
   };
@@ -383,7 +386,6 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     var order = getOrder(element, multipleToken);
     var data = getDataIndex(order, false, proposalData);
     var fieldName;
-    //console.log('order', order, data, element.name, multipleToken);    
     // if there is a validation callback, add it to the validation structure
     if (validationCallback !== null && validationCallback !== undefined) {
       fieldName = element.name;

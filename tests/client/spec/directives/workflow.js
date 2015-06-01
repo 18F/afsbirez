@@ -17,7 +17,7 @@ describe('Directive: WorkflowDirective', function () {
     'id': 3,
     'owner': 3,
     'submitted_at': '2015-04-14T00:48:55.023678Z',
-    'title': 'Temperature/Heat Flux Imaging of an Aerodynamic Model in High-Temperature, Continuous-Flow Wind Tunnels',
+    'title': 'Proposal for Test Workflow',
     'topic': 8,
     'workflow': 1
   };
@@ -111,7 +111,22 @@ describe('Directive: WorkflowDirective', function () {
         'validation_msg': null,
         'ask_if': null,
         'multiplicity': null,
-        'children': []
+        'children': [
+          {
+            'id': 4,
+            'name': 'bool_field',
+            'order': 1,
+            'element_type': 'bool',
+            'required': false,
+            'default': null,
+            'human': 'Bool Field',
+            'help': null,
+            'validation': null,
+            'validation_msg': null,
+            'ask_if': null,
+            'multiplicity': null,
+            'children': []
+          }]
       },
       {
         'id': 3,
@@ -126,7 +141,22 @@ describe('Directive: WorkflowDirective', function () {
         'validation_msg': null,
         'ask_if': null,
         'multiplicity': null,
-        'children': []
+        'children': [
+          {
+            'id': 5,
+            'name': 'bool_field',
+            'order': 1,
+            'element_type': 'bool',
+            'required': false,
+            'default': null,
+            'human': 'Bool Field',
+            'help': null,
+            'validation': null,
+            'validation_msg': null,
+            'ask_if': null,
+            'multiplicity': null,
+            'children': []
+          }]
       }
     ]
   };
@@ -159,10 +189,11 @@ describe('Directive: WorkflowDirective', function () {
     $httpBackend.expectGET('api/v1/proposals/1/').respond(propData);
     $httpBackend.expectGET('api/v1/elements/1/').respond(elementData);
     $httpBackend.expectGET('api/v1/topics/8/').respond(elementData);
+    $httpBackend.expectGET('api/v1/proposals/1/').respond(propData);
     $httpBackend.flush();
     // validate title
-    var title = formElement.find('h1');
-    expect(title.text()).toBe('Test Workflow');
+    var title = formElement.find('header.proposal-banner div.wrap h1');
+    expect(title.text()).toBe('Proposal for Test Workflow');
 
     // validate that the child elements create workflow elements
     var elements = formElement.find('main form').children('div.ng-scope');
@@ -180,6 +211,7 @@ describe('Directive: WorkflowDirective', function () {
     $httpBackend.expectGET('api/v1/proposals/1/').respond(propData);
     $httpBackend.expectGET('api/v1/elements/1/').respond(nestedElementData);
     $httpBackend.expectGET('api/v1/topics/8/').respond(nestedElementData);
+    $httpBackend.expectGET('api/v1/proposals/1/').respond(propData);
     $httpBackend.flush();
     return formElement;
   }
@@ -197,7 +229,7 @@ describe('Directive: WorkflowDirective', function () {
     $rootScope.$$childTail.jumpTo(2);
     expect($rootScope.$$childTail.currentWorkflow.id).toBe(2);
     expect($rootScope.$$childTail.nextWorkflow).toBe(3);
-    expect($rootScope.$$childTail.backWorkflow).toBe(1);
+    expect($rootScope.$$childTail.backWorkflow).toBeNull();
   });
 
   it('jumpTo does not change state if given invalid id', function() {
@@ -212,7 +244,7 @@ describe('Directive: WorkflowDirective', function () {
     var formElement = loadNestedWorkflows(); 
     $rootScope.$$childTail.jumpTo(2);
     expect($rootScope.$$childTail.currentWorkflow.id).toBe(2);
-    expect($rootScope.$$childTail.showBackButton()).toBe(true);
+    expect($rootScope.$$childTail.showBackButton()).toBe(false);
     expect($rootScope.$$childTail.showNextButton()).toBe(true);
   });
 

@@ -10,29 +10,35 @@
       <section>
         <h1 class="primary-header">Overview</h1>
         <p>Proposals are comprised of four parts, listed below. We&rsquo;ll help you submit your proposal by filling out the necessary paperwork, one step at a time.</p>
-        <ol>
-          <li ng-class="{'parent-element': element.children, 'is-incomplete': !element.children && !element.complete, 'is-complete': !element.children && element.complete}" ng-repeat="element in overview">
-            <a href="#" ng-if="!element.children" ui-sref="app.proposals.detail({id: proposalId, current: element.id})">
-              {{::element.name}}
-            </a>
-            <span ng-if="element.children">{{::element.name}}</span>
-            <ol ng-if="element.children">
-              <li ng-class="{'is-incomplete': !child.complete, 'is-complete': child.complete}" ng-repeat="child in element.children">
-                <a href="#" ui-sref="app.proposals.detail({id: proposalId, current: child.id})">
-                  {{::child.name}}
-                </a>
-              </li>
-            </ol>
-          </li>
-        </ol>
-        <button type="button" id="start" ui-sref="app.proposals.detail({id: proposalId, current: goodStartWorkflow})">Get started</button>
+        <nav class="toc" role="navigation">
+          <ol>
+            <li ng-class="{'parent-element': element.children, 'is-error': element.errors, 'is-incomplete': !element.children && !element.complete, 'is-complete': !element.children && element.complete}" ng-repeat="element in overview">
+              <a href="#" ng-if="!element.children" ui-sref="app.proposals.detail({id: proposalId, current: element.id})">
+                {{::element.name}}
+                <span class="toc-error-count" ng-if="element.errors">{{element.errors}} errors</span>
+              </a>
+              <span ng-if="element.children">{{::element.name}}</span>
+              <ol ng-if="element.children">
+                <li ng-class="{'is-error': child.errors, 'is-incomplete': !child.complete, 'is-complete': child.complete}" ng-repeat="child in element.children">
+                  <a href="#" ui-sref="app.proposals.detail({id: proposalId, current: child.id})">
+                    {{::child.name}}
+                    <span class="toc-error-count" ng-if="child.errors">{{child.errors}} errors</span>
+                  </a>
+                </li>
+              </ol>
+            </li>
+          </ol>
+        </nav>
+        <button type="button" id="start" ui-sref="app.proposals.detail({id: proposalId, current: goodStartWorkflow})">{{buttonMessage}}</button>
         <button type="button" id="validate_state" ng-click="validate()">Verify this proposal</button>          
       </section>
       <aside>
         <h1><span class="technical-point">Technical point</span><span class="preposition">of</span> contact</h1>
-        <span>Dr. Soandso McSmartpants</span>
-        <span>1-888-222-2222</span>
-        <span>test@email.com</span>
+        <div class="hcard">
+          <span>Dr. Soandso McSmartpants</span>
+          <span>1-888-222-2222</span>
+          <span>test@email.com</span>
+        </div>
       </aside>
     </div>
   </main>

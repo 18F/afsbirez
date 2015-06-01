@@ -1,17 +1,46 @@
 <div class="proposal-details">
   <header class="proposal-banner">
     <div class="wrap">
-      <ol class="breadcrumbs">
-        <li><a href="#" ui-sref="app.proposals.report({id: proposalId})">Proposal</a></li>
-        <li>{{parentName}}</li>
-      </ol>
+      <h1><a href="#" ui-sref="app.proposals.report({id: proposalId})">{{proposal.title}}</a></h1>
     </div>
   </header>
   <main role="main">
     <div class="wrap">
       <form>
-        <!-- <a class="a-return" ui-sref="app.proposals.report({id: proposalId})">← Return to overview</a>-->
+        <aside class="form-nav">
+          <h1>Table <span class="preposition">of</span> contents</h1>
+          <nav class="toc" role="navigation">
+            <ol>
+              <li ng-class="{'toc-proposal-parent-element': element.children, 'is-incomplete': !element.children && !element.complete, 'is-complete': !element.children && element.complete}" ng-repeat="element in overview">
+                <a href="#" ng-if="!element.children" ng-class="{'is-current': element.id === currentWorkflow.id}" ng-click="jumpTo(element.id)">
+                  {{::element.name}}
+                </a>
+                <span ng-if="element.children">{{::element.name}}</span>
+                <ol ng-if="element.children">
+                  <li ng-class="{'is-incomplete': !child.complete, 'is-complete': child.complete}" ng-repeat="child in element.children">
+                    <a href="#" ng-class="{'is-current': child.id === currentWorkflow.id}" ng-click="jumpTo(child.id)">
+                      {{::child.name}}
+                    </a>
+                  </li>
+                </ol>
+              </li>
+            </ol>
+          </nav>
+          <div class="form-nav-prev-next">
+            <a class="button form-nav-prev" ng-class="{'is-disabled': !showBackButton()}" ng-click="jumpTo(backWorkflow)" href="#">Previous</a>
+            <button class="button form-nav-next" ng-click="jumpTo(nextWorkflow)" type="submit">Next</button>
+          </div>
+        </aside>
+      <form>
         <h1>{{currentWorkflow.human}}</h1>
+        <summary ng-if="validationData" class="error-message">
+          <h1>We’ve detected {{validationData.length}} errors on this page.</h1> 
+          <details>
+            <ol>
+              <li ng-repeat="error in validationData">error.message</li>
+            </ol>
+          </details>
+        </summary>
         <div ng-repeat="element in currentWorkflow.children">
           <div str="element" ng-if="element.element_type === 'str' || element.element_type === 'long_str' || element.element_type === 'med_str' || element.element_type === 'short_str' || element.element_type === 'phone' || element.element_type === 'email' || element.element_type === 'int'  || element.element_type === 'dollars' || element.element_type === 'float' || element.element_type === 'percentage' || element.element_type === 'timespan' || element.element_type === 'big_str'"></div>
           <div text="element" ng-if="element.element_type === 'text'"></div>
