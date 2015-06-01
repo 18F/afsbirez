@@ -32,7 +32,8 @@ INSTALLED_APPS = [
     'django_assets',
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_auth'
+    'rest_auth',
+    'djmail',
 ]
 
 MIDDLEWARE_CLASSES = (
