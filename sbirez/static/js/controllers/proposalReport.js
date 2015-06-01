@@ -12,7 +12,6 @@ angular.module('sbirezApp')
 
     var goodStartElement = function() {
       var goodStart = $scope.overview[0].id;
-      console.log($scope.overview);
       var found = false;
       for (var i = 0; i < $scope.overview.length && !found; i++) {
         if ($scope.overview[i].complete === false) {
