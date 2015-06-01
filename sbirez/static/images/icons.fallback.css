@@ -1,0 +1,22 @@
+.icon-logo {
+	background-image: url('png/logo.png');
+	background-repeat: no-repeat;
+}
+
+.icon-search,
+header.banner form div.field::after {
+	background-image: url('png/search.png');
+	background-repeat: no-repeat;
+}
+
+.icon-checkmark-green,
+.is-complete::after {
+	background-image: url('png/checkmark_green.png');
+	background-repeat: no-repeat;
+}
+
+.icon-cross-red,
+.is-error::after {
+	background-image: url('png/cross_red.png');
+	background-repeat: no-repeat;
+}

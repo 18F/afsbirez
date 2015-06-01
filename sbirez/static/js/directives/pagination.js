@@ -26,7 +26,7 @@ angular.module('sbirezApp').directive('pagination', ['$compile', function($compi
         var startRange = currentPage * itemsPerPage - (itemsPerPage - 1);
         var endRange = Math.min(currentPage * itemsPerPage, itemCount);
 
-        var retVal = '<nav class="pagination">' +
+        var retVal = '<nav class="pagination" role="navigation">' +
           '<a class="pagination-prev" ng-click="$parent.' + attrs.method + '(\'prev\')" href="#">Previous</a>'+
           '<a class="pagination-next" ng-click="$parent.' + attrs.method + '(\'next\')" href="#">Next</a>' +
           '<span class="showing-results">Showing results</span>' +

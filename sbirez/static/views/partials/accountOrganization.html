@@ -1,214 +1,197 @@
-<div>
-  <p class="header-text">Firm Information</p>
-  <p class="topic-header-text">Basics</p>
-  <form class="form-horizontal">
-    <div class="form-group">
-      <label for="firmName" class="control-label col-md-2">Firm Name:</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="firmName" ng-model="firm.name">
+<main role="main">
+  <div class="wrap">
+    <form>
+      <h1>Firm Information</h1>
+      <h2>Basics</h2>
+      <div class="field">
+        <label for="firmName"><span class="label-text">Firm name</span>
+          <input type="text" id="firmName" ng-model="firm.name">
+        </label>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="firmstreet" class="control-label col-md-2">Street:</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="firmstreet" ng-model="firm.address.street">
-        <input type="text" class="form-control" id="firmstreet2" ng-model="firm.address.street2">
+      <section class="fieldset fieldset-mailing-address">
+        <h1>Mailing address</h1>
+        <div class="field field-street">
+          <label for="firmstreet">
+            <span class="label-text">Street</span>
+            <input type="text" id="firmstreet" ng-model="firm.address.street">
+          </label>
+        </div> 
+        <div class="field field-city">
+          <label for="firmcity">
+            <span class="label-text">City</span>
+            <input type="text" id="firmcity" ng-model="firm.address.city">
+          </label>
+        </div> 
+        <div class="field field-state">
+          <label for="firmstate">
+            <span class="label-text">State</span>
+            <select id="firmstate" class="form-control" ng-model="firm.address.state" size="1">
+              <option value="">Please Select State</option>
+              <option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option>
+              <option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option>
+              <option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="DC">Dist of Columbia</option>
+              <option value="FL">Florida</option><option value="GA">Georgia</option><option value="HI">Hawaii</option>
+              <option value="ID">Idaho</option><option value="IL">Illinois</option><option value="IN">Indiana</option>
+              <option value="IA">Iowa</option><option value="KS">Kansas</option><option value="KY">Kentucky</option>
+              <option value="LA">Louisiana</option><option value="ME">Maine</option><option value="MD">Maryland</option>
+              <option value="MA">Massachusetts</option><option value="MI">Michigan</option><option value="MN">Minnesota</option>
+              <option value="MS">Mississippi</option><option value="MO">Missouri</option><option value="MT">Montana</option>
+              <option value="NE">Nebraska</option><option value="NV">Nevada</option><option value="NH">New Hampshire</option>
+              <option value="NJ">New Jersey</option><option value="NM">New Mexico</option><option value="NY">New York</option>
+              <option value="NC">North Carolina</option><option value="ND">North Dakota</option><option value="OH">Ohio</option>
+              <option value="OK">Oklahoma</option><option value="OR">Oregon</option><option value="PA">Pennsylvania</option>
+              <option value="RI">Rhode Island</option><option value="SC">South Carolina</option><option value="SD">South Dakota</option>
+              <option value="TN">Tennessee</option><option value="TX">Texas</option><option value="UT">Utah</option>
+              <option value="VT">Vermont</option><option value="VA">Virginia</option><option value="WA">Washington</option>
+              <option value="WV">West Virginia</option><option value="WI">Wisconsin</option><option value="WY">Wyoming</option>
+            </select>
+          </label>
+        </div>
+        <div class="field field-zip">
+          <label for="firmzip">
+            <span class="label-text">Zip</span>
+            <input type="text" id="firmzip" ng-model="firm.address.zip">
+          </label>
+        </div>
+      </section>
+      <div class="field">
+        <label for="firmwebsite">
+          <span class="label-text">Web site</span>
+          <input type="text" id="firmwebsite" ng-model="firm.website">
+        </label>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="firmcity" class="control-label col-md-2">City:</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="firmcity" ng-model="firm.address.city">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="firmstate" class="control-label col-md-2">State:</label>
-      <div class="col-md-4">
-        <select id="firmstate" class="form-control" ng-model="firm.address.state" size="1">
-          <option value="">Please Select State</option>
-          <option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option>
-          <option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option>
-          <option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="DC">Dist of Columbia</option>
-          <option value="FL">Florida</option><option value="GA">Georgia</option><option value="HI">Hawaii</option>
-          <option value="ID">Idaho</option><option value="IL">Illinois</option><option value="IN">Indiana</option>
-          <option value="IA">Iowa</option><option value="KS">Kansas</option><option value="KY">Kentucky</option>
-          <option value="LA">Louisiana</option><option value="ME">Maine</option><option value="MD">Maryland</option>
-          <option value="MA">Massachusetts</option><option value="MI">Michigan</option><option value="MN">Minnesota</option>
-          <option value="MS">Mississippi</option><option value="MO">Missouri</option><option value="MT">Montana</option>
-          <option value="NE">Nebraska</option><option value="NV">Nevada</option><option value="NH">New Hampshire</option>
-          <option value="NJ">New Jersey</option><option value="NM">New Mexico</option><option value="NY">New York</option>
-          <option value="NC">North Carolina</option><option value="ND">North Dakota</option><option value="OH">Ohio</option>
-          <option value="OK">Oklahoma</option><option value="OR">Oregon</option><option value="PA">Pennsylvania</option>
-          <option value="RI">Rhode Island</option><option value="SC">South Carolina</option><option value="SD">South Dakota</option>
-          <option value="TN">Tennessee</option><option value="TX">Texas</option><option value="UT">Utah</option>
-          <option value="VT">Vermont</option><option value="VA">Virginia</option><option value="WA">Washington</option>
-          <option value="WV">West Virginia</option><option value="WI">Wisconsin</option><option value="WY">Wyoming</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="firmzip" class="control-label col-md-2">Zip:</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="firmzip" ng-model="firm.address.zip">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="firmwebsite" class="control-label col-md-2">Web Site:</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="firmwebsite" ng-model="firm.website">
-      </div>
-    </div>
-    <hr />
 
-    <p class="topic-header-text">Identifiers</p>
-    <div class="form-group">
-      <label for="firmtaxid" class="control-label col-md-2">Federal Tax ID:</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="firmtaxid" ng-model="firm.tax_id">
+      <h2>Identifiers</h2>
+      <div class="field">
+        <label for="firmtaxid"><span class="label-text">Federal Tax ID</span>
+          <input type="text" id="firmtaxid" ng-model="firm.tax_id">
+        </label>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="firmsbaid" class="control-label col-md-2">SBA SBC ID Number:</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="firmsbaid" ng-model="firm.sbc_id">
+      <div class="field">
+        <label for="firmsbaid"><span class="label-text">SBA SBC ID Number</span>
+          <input type="text" id="firmsbaid" ng-model="firm.sbc_id">
+        </label>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="firmduns" class="control-label col-md-2">DUNS Number:</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="firmduns" ng-model="firm.duns_id">
+      <div class="field">
+        <label for="firmduns"><span class="label-text">DUNS Number</span>
+          <input type="text" id="firmduns" ng-model="firm.duns_id">
+        </label>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="firmcagecode" class="control-label col-md-2">CAGE Code:</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="firmcagecode" ng-model="firm.cage_code">
+      <div class="field">
+        <label for="firmcagecode"><span class="label-text">CAGE Code</span>
+          <input type="text" id="firmcagecode" ng-model="firm.cage_code">
+        </label>
       </div>
-    </div>
 <!--    <div class="form-group">
-      <label for="firmsic" class="control-label col-md-2">SIC Codes:</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="firmsic" ng-model="firm.sic">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="firmnaics" class="control-label col-md-2">NAICS:</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="firmnaics" ng-model="firm.naics">
-      </div>
-    </div>
--->    <hr />
-
-    <p class="topic-header-text">Point Of Contact</p>
-    <div class="form-group">
-      <label for="firmpocname" class="control-label col-md-2">Name:</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="firmpocname" ng-model="firm.point_of_contact.name">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="firmpocemail" class="control-label col-md-2">E-mail:</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="firmpocemail" ng-model="firm.point_of_contact.email">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="firmpocphone" class="control-label col-md-2">Phone Number:</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="firmpocphone" ng-model="firm.point_of_contact.phone">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="firmpocfax" class="control-label col-md-2">Fax Number:</label>
-      <div class="col-md-4">
-        <input type="text" class="form-control" id="firmpocfax" ng-model="firm.point_of_contact.fax">
-      </div>
-    </div>
-    <hr />
-
-  </form>
-  <form class="form-inline">
-    <p class="topic-header-text">Background</p>
-    <div class="form-group">
-      <label for="firmfoundingyear" class="control-label question">1) The year your company was founded:</label>
-      <input type="text" class="form-control" id="firmfoundingyear" ng-model="firm.founding_year">
-    </div>
-  </form>
-  <br />
-  <p>2) How many SBIR and/or STTR awards has your firm received from the Federal Government (including DoD)? (The answer "0" will not affect your ability to obtain an SBIR award.):</p>
-  <form class="form-horizontal">
-    <div class="form-group">
-      <label for="firmphase1count" class="control-label question col-md-2">Phase I:</label>
-      <div class="col-md-2">
-        <input type="text" class="form-control" id="firmphase1count" ng-model="firm.phase1_count">
-      </div>
-      <label for="firmphase1year" class="control-label question col-md-5">What year did you receive your first Phase I Award?</label>
-      <div class="col-md-2">
-        <input type="text" class="form-control" id="firmphase1year" ng-model="firm.phase1_year">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="firmphase2count" class="control-label question col-md-2">Phase II:</label>
-      <div class="col-md-2">
-      <input type="text" class="form-control" id="firmphase2count" ng-model="firm.phase2_count">
-      </div>
-      <label for="firmphase2year" class="control-label question col-md-5">What year did you receive your first Phase II Award?</label>
-      <div class="col-md-2">
-      <input type="text" class="form-control" id="firmphase2year" ng-model="firm.phase2_year">
-      </div>
-    </div>
-  </form>
-  <form class="form-horizontal">
-    <p>3) Number of firm employees (including all affiliates):</p>
-    <div class="form-group">
-      <label for="firmemployeesphase2" class="control-label question col-md-5">(a) At the time of your firm's first Phase 2 Award:</label>
-        <div class="col-md-2">
-          <input type="text" class="form-control" id="firmemployeesphase2" placeholder="" ng-model="firm.phase2_employees">
+        <label for="firmsic" class="control-label col-md-2">SIC Codes:</label>
+        <div class="col-md-4">
+          <input type="text" class="form-control" id="firmsic" ng-model="firm.sic">
         </div>
       </div>
       <div class="form-group">
-        <label for="firmemployeesphase2" class="control-label question col-md-5">(b) Currently:</label>
-        <div class="col-md-2">
-          <input type="text" class="form-control" id="firmemployeesnow" placeholder="" ng-model="firm.current_employees">
+        <label for="firmnaics" class="control-label col-md-2">NAICS:</label>
+        <div class="col-md-4">
+          <input type="text" class="form-control" id="firmnaics" ng-model="firm.naics">
         </div>
       </div>
-    </div>
-    <div class="form-group">
-      <p for="firmipo" class="control-label">4) Has your firm successfully completed an Initial Public Offering ("IPO") of stock since receiving its first Phase 2 award that was the result, in part, of technology your firm developed under the Federal SBIR and/or STTR programs?</p>
-      <div class="col-md-2">
-        <label class="radio-inline">
-          <input type="radio" ng-model="firm.ipo_completed" id="firmipoyes" value="true"> Yes
-        </label>
-        <label class="radio-inline">
-          <input type="radio" ng-model="firm.ipo_completed" id="firmipono" value="false" checked="checked"> No
+-->   
+
+      <section class="fieldset fieldset-point-of-contact">
+        <h1>Point Of Contact</h1>
+        <div class="field">
+          <label for="firmpocname"><span class="label-text">Name</span>
+            <input type="text" id="firmpocname" ng-model="firm.point_of_contact.name">
+          </label>
+        </div>
+        <div class="field">
+          <label for="firmpocemail"><span class="label-text">E-mail:</span>
+            <input type="text" id="firmpocemail" ng-model="firm.point_of_contact.email">
+          </label>
+        </div>
+        <div class="field">
+          <label for="firmpocphone"><span class="label-text">Phone Number:</span>
+            <input type="text" id="firmpocphone" ng-model="firm.point_of_contact.phone">
+          </label>
+        </div>
+        <div class="field">
+          <label for="firmpocfax"><span class="label-text">Fax Number:</span>
+            <input type="text" id="firmpocfax" ng-model="firm.point_of_contact.fax">
+          </label>
+        </div>
+      </section>
+
+      <h2>Background</h2>
+      <div class="field field-year">
+        <label for="firmfoundingyear"><span class="label-text">The year your company was founded:</span>
+          <input type="text" id="firmfoundingyear" ng-model="firm.founding_year">
         </label>
       </div>
-    </div>
-  </form>
-  <br />
-  <form class="form-inline">
-    <div class="form-group">
-      <label for="firmpatents" class="control-label question">5) How many patents have resulted, at least in part, from your firm's SBIR andd/or STTR awards?</label>
-      <input type="text" class="form-control" id="firmpatents" ng-model="firm.patent_count">
-    </div>
-    <div class="form-group">
-      <label for="firmtotalrevenue" class="control-label question">6) Your firm's total revenue for the last fiscal year:</label>
-      <select id="firmtotalrevenue" class="form-control" ng-model="firm.total_revenue_range" >
-        <option value="">Please select a value</option>
-        <option value="<$100,000">&lt;$100,000</option>
-        <option value="$100,000-$499,999">$100,000-$499,999</option>
-        <option value="$500,000-$999,999">$500,000-$999,999</option>
-        <option value="$1,000,000-$4,999,999">$1,000,000-$4,999,999</option>
-        <option value="$5,000,000-$19,999,999">$5,000,000-$19,999,999</option>
-        <option value="$20,000,000-$99,999,999">$20,000,000-$99,999,999</option>
-        <option value="$100,000,000+">$100,000,000+</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="firmrevenuepercent" class="control-label question">7) What percentage of your firm's revenues during its last fiscal year is Federal SBIR and/or STTR funding (Phase I and/or Phase II)?</label>
-      <input type="text" class="form-control" id="firmrevenuepercent" ng-model="firm.revenue_percent">
-    </div>
-  </form>
-  <br />
-  <button type="submit" class="btn btn-primary" ng-click="updateFirm()">Update</button>
-</div>
+      <div class="field field-number">
+        <p>How many SBIR and/or STTR awards has your firm received from the Federal Government (including DoD)? (The answer "0" will not affect your ability to obtain an SBIR award.):</p>
+        <label for="firmphase1count"><span class="label-text">Phase I:</span>
+          <input type="text" id="firmphase1count" ng-model="firm.phase1_count">
+        </label>
+      </div>
+      <div class="field field-year">
+        <label for="firmphase1year"><span class="label-text">What year did you receive your first Phase I Award?</span>
+          <input type="text" id="firmphase1year" ng-model="firm.phase1_year">
+        </label>
+      </div>
+      <div class="field field-number">
+        <label for="firmphase2count"><span class="label-text">Phase II:</span>
+          <input type="text" id="firmphase2count" ng-model="firm.phase2_count">
+        </label>
+      </div>
+      <div class="field field-year">
+        <label for="firmphase2year"><span class="label-text">What year did you receive your first Phase II Award?</span>
+          <input type="text" id="firmphase2year" ng-model="firm.phase2_year">
+        </label>
+      </div>
+      <div class="field field-number">
+        <p>Number of firm employees (including all affiliates):</p>
+        <label for="firmemployeesphase2"><span class="label-text">(a) At the time of your firm's first Phase 2 Award:</span>
+          <input type="text" id="firmemployeesphase2" ng-model="firm.phase2_employees">
+        </label>
+      </div>
+      <div class="field field-number">
+        <label for="firmemployeesphase2"><span class="label-text">(b) Currently:</span>
+          <input type="text" id="firmemployeesnow" ng-model="firm.current_employees">
+        </label>
+      </div>
+      <div class="field field-radio">
+        <p for="firmipo"><span class="label-text">Has your firm successfully completed an Initial Public Offering ("IPO") of stock since receiving its first Phase 2 award that was the result, in part, of technology your firm developed under the Federal SBIR and/or STTR programs?</span></p>
+        <label>
+          <input type="radio" ng-model="firm.ipo_completed" id="firmipoyes" value="true"><span class="label-text">Yes</span>
+        </label>
+        <label>
+          <input type="radio" ng-model="firm.ipo_completed" id="firmipono" value="false" checked="checked"><span class="label-text">No</span>
+        </label>
+      </div>
+      <div class="field field-number">
+        <label for="firmpatents"><span class="label-text">How many patents have resulted, at least in part, from your firm's SBIR andd/or STTR awards?</span>
+          <input type="text" id="firmpatents" ng-model="firm.patent_count">
+        </label>
+      </div>
+      <div class="field field-number">
+        <label for="firmtotalrevenue"><span class="label-text">Your firm's total revenue for the last fiscal year:</span>
+          <select id="firmtotalrevenue" ng-model="firm.total_revenue_range">
+            <option value="">Please select a value</option>
+            <option value="<$100,000">&lt;$100,000</option>
+            <option value="$100,000-$499,999">$100,000-$499,999</option>
+            <option value="$500,000-$999,999">$500,000-$999,999</option>
+            <option value="$1,000,000-$4,999,999">$1,000,000-$4,999,999</option>
+            <option value="$5,000,000-$19,999,999">$5,000,000-$19,999,999</option>
+            <option value="$20,000,000-$99,999,999">$20,000,000-$99,999,999</option>
+            <option value="$100,000,000+">$100,000,000+</option>
+          </select>
+        </label>
+      </div>
+      <div class="field field-year">
+        <label for="firmrevenuepercent"><span class="label-text">What percentage of your firm's revenues during its last fiscal year is Federal SBIR and/or STTR funding (Phase I and/or Phase II)?</span>
+          <input type="text" id="firmrevenuepercent" ng-model="firm.revenue_percent">
+        </label>
+      </div>
+      <button type="submit" class="btn btn-primary" ng-click="updateFirm()">Save and return</button>
+    </form>
+  </div>
+</main>

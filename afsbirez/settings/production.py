@@ -16,6 +16,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 from .base import *
 from .credentials import EMAIL_HOST, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, DJANGO_SECRET_KEY
+from .credentials import SAM_API_KEY
 
 import dj_database_url
 
@@ -23,7 +24,7 @@ import dj_database_url
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = DJANGO_SECRET_KEY 
+SECRET_KEY = DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -38,3 +39,5 @@ DJMAIL_REAL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 # store email credentials in `credentials.py` (outside version control)
+
+REST_PROXY['API_KEY'] = SAM_API_KEY

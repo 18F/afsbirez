@@ -6,6 +6,7 @@ angular.module('sbirezApp').directive('topic', function() {
     replace: true,
     scope: {
       topic: '=',
+      viewDetails: '@',
       removeOption: '@',
       saveOption: '@',
       createOption: '@'
@@ -32,7 +33,7 @@ angular.module('sbirezApp').directive('topic', function() {
           var title = 'Proposal for ' + $scope.topic.title;
           var workflow = $scope.topic.solicitation.element;
           ProposalService.create($scope.topic.id, title, workflow).then(function(data) {
-            $scope.topic.proposal_id = data.id;
+            $scope.topic.proposal = data.id;
           });
         }; 
 

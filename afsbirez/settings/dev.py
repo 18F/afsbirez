@@ -21,3 +21,5 @@ DATABASES = {
 
 DJMAIL_REAL_BACKEND="django.core.mail.backends.console.EmailBackend"
 INSTALLED_APPS.append('django_extensions')
+
+REST_PROXY['API_KEY'] = 'DEMO_KEY'
