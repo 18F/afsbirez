@@ -13,6 +13,7 @@ djangorestframework-hstore==1.2
 djangorestframework-jwt==1.4.0
 djangorestframework-recursive==0.1.0
 dj-database-url==0.3.0
+djmail==0.10.0
 djorm-ext-pgfulltext==0.9.3
 jsmin==2.1.1
 marshmallow==1.2.2

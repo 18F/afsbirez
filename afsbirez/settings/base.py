@@ -32,7 +32,8 @@ INSTALLED_APPS = [
     'django_assets',
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_auth'
+    'rest_auth',
+    'djmail',
 ]
 
 MIDDLEWARE_CLASSES = (
@@ -95,6 +96,8 @@ STATICFILES_FINDERS = (
 )
 
 DEFAULT_FROM_EMAIL='catherine.devlin@gsa.gov'
+
+EMAIL_BACKEND="djmail.backends.default.EmailBackend"
 
 REST_PROXY = {
     'HOST': 'https://api.data.gov/sam/v1',
