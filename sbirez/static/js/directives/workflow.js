@@ -16,27 +16,34 @@ angular.module('sbirezApp').directive('workflow', function() {
         $scope.backWorkflow = null;
         $scope.nextWorkflow = null;
         $scope.proposalData = {};
-        $scope.validationData = {};
-        $scope.parentName = '';
+        $scope.validationData = undefined;
+        $scope.overview;
+        $scope.proposal = {};
+        $scope.proposalId = parseInt($scope.proposalId);
 
         $scope.jumpTo = function(workflow_id) {
-          var data = ProposalService.getWorkflow(workflow_id);
-          if (workflow_id === undefined) {
-            $scope.startingWorkflow = data.current.id;
+          if (workflow_id !== null) {
+            var data = ProposalService.getWorkflow(workflow_id);
+            if (workflow_id === undefined) {
+              $scope.startingWorkflow = data.current.id;
+            }
+            $scope.currentWorkflow = data.current;
+            $scope.backWorkflow = data.previous;
+            $scope.nextWorkflow = data.next;
+            $location.search('current', workflow_id);
           }
-          $scope.currentWorkflow = data.current;
-          $scope.backWorkflow = data.previous;
-          $scope.nextWorkflow = data.next;
-          $scope.parentName = data.parentName;
-          $location.search('current', workflow_id);
         };
 
-        ProposalService.load(parseInt($scope.proposalId)).then(function() {
+        ProposalService.load($scope.proposalId).then(function() {
           $scope.jumpTo($stateParams.current !== undefined ? $stateParams.current : undefined);
+          ProposalService.get(parseInt($scope.proposalId)).then(function(data) {
+            $scope.proposal = data;
+          });
+          $scope.overview = ProposalService.getOverview(false);
         });
 
         $scope.showBackButton = function() {
-          return $scope.backWorkflow !== null;
+          return $scope.backWorkflow !== null ;
         };
 
         $scope.showNextButton = function() {

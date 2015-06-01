@@ -81,6 +81,33 @@ main ol{
 
 /* @group forms */
 
+/* @group summary.error-message */
+
+summary.error-message{
+    background: #990017;
+    color: white;
+    padding: 8px;
+    border-radius: 3px;
+    font-size: 14px;
+    line-height: 18px;
+    margin-bottom: 24px;
+    margin-top: -8px;
+}
+
+summary.error-message details{ margin-top: 8px; }
+summary.error-message details p:first-of-type{ margin-top: 8px; }
+summary.error-message details ol{
+    list-style-type: decimal;
+    margin: 0 0 0 1.4em;
+    padding-top: 0;
+}
+
+summary.error-message details ol li{
+    margin-bottom: 6px;
+}
+
+/* @end */
+
 label { display: block; }
 
 input[type=text],
@@ -105,13 +132,19 @@ textarea{
 .field-select select{
     min-width: 0; 
     background: none;
+    padding-right: 24px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
 }
 
-.field-select{ 
+.field-select span.label-select{ 
     position: relative; 
+    width: 15%;
+    display: block;
 }
 
-.field-select::after{
+.field-select span.label-select::after{
     content: "";
     border: 6px solid black;
     position: absolute;
@@ -137,8 +170,9 @@ button,
     border: 1px solid;
     color: #008c52;
     font: inherit;
-    padding: 10px;
+    padding: 10px 12px;
     margin: 0;  
+    line-height: 16px;	
     cursor: pointer;
     text-decoration: none;
 }
@@ -204,7 +238,8 @@ section.fieldset{
     margin-bottom: 2px;
 }
 
-section.fieldset > h1{
+section.fieldset > h1,
+section.fieldset > header > h1{
     position: absolute;
     background: white;
     margin: 0 0 -3px;
@@ -296,7 +331,40 @@ div.element-aside{
     padding-left:3px;
 }
 
+div.field.is-error input,
+div.field.is-error textarea{
+    background: #fff7f4;
+    background: repeating-linear-gradient(
+        45deg,
+        #fff4f2,
+        #fff4f2 10px,
+        #fff7f4 10px,
+        #fff7f4 20px
+    );
+    border-color: #ce6246;
+}
+
+div.field.is-error span.error-message,
+section.fieldset.fieldset-radio.is-error span.error-message{
+    color: #990017;	
+    display: block;
+}
+
+div.field.is-error span.error-message,
+section.fieldset.fieldset-radio.is-error span.error-message{
+    color: #af1830;	
+    font-size: 14px;
+    padding-top: 6px;
+    display: block;
+    font-style: italic;	
+}
+
 /* @group widths */
+
+.field-collaborator-name input,
+.field-collaborator-point-of-contact input{
+    width: 75%;	
+}
 
 .field-name,
 .field-title,
@@ -305,18 +373,19 @@ div.element-aside{
     width: 50%;
 }
 
-.field-phone,
-.field-fax,
-.field-rate,
-.field-estimated-hours,
-.field-overhead,
-.field-fringe-benefits input{
-    width: 33%;
-}
-
+.field-phone input,
+.field-fax input,
+.field-rate input,
+.field-estimated-hours input,
+.field-overhead input,
 .field-year input,
-.field-number input{
-    width: 10%;
+.field-number input,
+.field-fringe-benefits input,
+.field-proposed-cost input,
+.field-proposed-dta-amount input,
+.field-contract-number input,
+.field-num-phase-2-awards input{
+    width: 33%;
 }
 
 /* @end */
@@ -340,16 +409,19 @@ div.element-aside{
     background: #e3e3e3;
 }
 
-
-.is-branch{
-}
-
 main div.wrap > form {
-    border-right: 1px solid #eee;
-    padding-right: 16px;
-    padding-top: 16px;
+    padding-top: 12px;
     max-width: 576px;
 }
+
+@media screen and (min-width: 640px) {
+    main div.wrap > form {
+        padding-right: 16px;
+        border-right: 1px solid #eee;
+        margin-right: 224px;
+    }
+}
+
 
 main form footer{ 
     margin-top: 32px; 
@@ -425,10 +497,18 @@ header.banner div.field label {
     width: 100%; 
 }
 
-header.banner nav{ font-size: 14px; }
+header.banner nav{ 
+    font-size: 14px; 
+    margin-left: -10px;
+}
+header.banner nav::after{
+    content: "";
+    display: table;
+    clear: both; 
+}
 header.banner nav a{ 
     float: left;
-    padding: 0 0.8em;
+    padding: 0 10px;
 }
 header.banner nav a:hover{ color: #a3d3ff; }
 
@@ -472,8 +552,8 @@ header.banner form div.field input {
 header.banner form div.field input:active {
 }
 
-@media screen and (min-width: 853.33px) {
-    header.banner div.wrap{ padding-right: 386px; }
+@media screen and (min-width: 768.88px) {
+    header.banner div.wrap{ padding-right: 288px; }
     header.banner nav{
         position: absolute;
         right: -0.8em;
@@ -509,6 +589,7 @@ article.topic a.topic-content:hover h1{
 article.topic h1{
     font-family: georgia;
     font-size: 21px;
+    line-height: 24px;
     font-weight: 100;
     display: inline-block;
     vertical-align: middle;
@@ -618,93 +699,6 @@ article.topic.is-favorite h1::after{
 
 /* @group nav.pagination */
 
-/* @group nav.table-of-contents */
-nav.table-of-contents{
-    font-size: 14px;
-    float: right;
-    padding-left: 16px;
-    width: 224px;
-}
-
-nav.table-of-contents h1{
-    font-size: 11px;
-    text-transform: uppercase;
-    font-family: Georgia;
-    letter-spacing: 0.125em;
-    word-spacing: 0.15em;
-    color: #555;
-    margin-bottom: 24px;
-    margin-top: 20px;
-}
-
-nav.table-of-contents a{
-    color: #777;
-}
-
-nav.table-of-contents ol,
-nav.table-of-contents li{
-    padding: 0;
-    margin: 0;
-    line-height: 1.2;
-}
-
-nav.table-of-contents li.cover-sheet span,
-nav.table-of-contents li{
-    display: block;
-    margin-bottom: 0.4em;
-}
-
-nav.table-of-contents li.cover-sheet span{
-	font-weight: 600;
-	color: #606060;
-}
-
-nav.table-of-contents ol ol{
-	padding-left: 0.8em;
-}
-
-nav.table-of-contents div.previous-next{ margin-top: 2em; }
-nav.table-of-contents div.previous-next::after{
-	content: "";
-	display: block;
-	clear: both;
-}
-
-nav.table-of-contents div.previous-next a.button{
-	float: left;	
-	border-color: #aaa;
-	border-radius: 3px 0 0 3px;
-	padding: 8px 10px;
-}
-
-nav.table-of-contents div.previous-next a.button:hover{
-	text-decoration: underline;
-}
-
-nav.table-of-contents div.previous-next a.button.is-disabled{
-	border-color: #e3e3e3;
-	color: #ccc;
-}
-
-nav.table-of-contents div.previous-next a.button.is-disabled:hover{
-	text-decoration: none;
-}
-
-nav.table-of-contents div.previous-next a.button.button-next{
-	border-radius: 0 3px 3px 0;
-	border-left: none;
-}
-
-nav.table-of-contents div.previous-next a.button.button-previous.is-disabled{
-	border-right: none;
-	cursor: default;
-}
-nav.table-of-contents div.previous-next a.button.button-previous.is-disabled+a.button-next{
-	border-left: 1px solid #aaa;
-}
-
-/* @end */
-
 nav.pagination{
     margin-top: 3em;
     position: relative;
@@ -737,43 +731,143 @@ nav.pagination a.pagination-next{
 
 /* @end */
 
-/* @group body.proposal-cost-volume */
+/* @group nav.toc */
 
-.fieldset-labor-related-costs > header h1,
-.fieldset-direct-material-costs > header h1{
-    display: inline-block;
-    vertical-align: middle;
+nav.toc ol{ padding-top: 0; }
+
+nav.toc ol li > span,
+nav.toc ol li{
+    display: block;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-bottom: 0;
+    position: relative;
+    border-bottom: 1px solid #f3f3f3;
 }
 
-.fieldset-labor-related-costs > header a,
-.fieldset-direct-material-costs > header a{
+nav.toc ol li.toc-proposal-cover-sheet,
+nav.toc ol li > span{
+    border: none;
+    padding-bottom: 0;
+}
+
+nav.toc ol li ol{ 
+    border-left: 3px solid #f3f3f3;
+    padding-left: 6px;
+    padding-top: 0;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+nav.toc ol li.is-incomplete,
+nav.toc ol li.is-complete,
+nav.toc ol li.is-error{
+    padding-left: 32px;	
+    line-height: 24px;
+}
+
+nav.toc ol li.is-incomplete::before,
+nav.toc ol li.is-complete::before,
+nav.toc ol li.is-error::before{
+    content: "";
+    width: 24px;
+    height: 24px;
+    border: 1px solid #ccc;
+    position: absolute;
+    left: 0;
+    top: 4px;	
+}
+
+nav.toc ol li.is-error::after,
+nav.toc ol li.is-complete::after{
+    opacity: 0.8;
+}
+
+nav.toc ol li.is-error::after{
+    width: 14px;
+    height: 14px;
+    top: 9px;
+    left: 5px;
+}
+
+nav.toc ol li::after{
+    content: "";
+    display: block;
+    position: absolute;
+    left: 4px;
+    top: 7px;
+    width: 16px;
+    height: 16px;
+    background-size: 100%;
+}
+
+nav.toc ol li span.toc-error-count{
+    float: right;
+    text-decoration: none;
+    color: #aaa;
+    font-size: 14px;
+}
+
+
+
+/* @end */
+
+/* @group body.proposal-cost-volume */
+
+section.fieldset-labor-related-costs > header,
+section.fieldset-direct-material-costs > header{
+    margin-bottom: 24px;
+}
+
+section.fieldset-labor-related-costs > header h1,
+section.fieldset-direct-material-costs > header h1{
+    display: inline-block;
+    vertical-align: middle;
+    font: inherit;
+    color: #333;
+    font-size: 21px;
+    line-height: 16px;
+    margin: 0;
+    position: static;
+}
+
+section.fieldset-labor-related-costs > header a,
+section.fieldset-direct-material-costs > header a{
     background: none;
     border: 1px solid;
     color: #a50;
     font: inherit;
     padding: 6px 8px;
     font-size: 14px;
-    margin: 0 0 0 0.4em;
+    margin: 4px 0 0 0.4em;
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
     vertical-align: middle;
     position: relative;
-    top: -9px;
+    border-radius: 3px;
 }
 
-.fieldset-labor-related-costs > header a:hover,
-.fieldset-direct-material-costs > header a:hover {
+section.fieldset-labor-related-costs > header a:hover,
+section.fieldset-direct-material-costs > header a:hover {
     background: #cb4d00;
     border-color: #cb4d00;
     color: white;
 }
 
-.fieldset-labor-related-costs > header a:active,
-.fieldset-direct-material-costs > header a:active {
+section.fieldset-labor-related-costs > header a:active,
+section.fieldset-direct-material-costs > header a:active {
     color: #c6bb96;
     background: #7e2000;
     border-color: #7e2000;
+}
+
+section.fieldset-direct-material-costs section.fieldset-direct-material-cost a.remove{
+    position: absolute;
+    right: 16px;
+    font-size: 14px;
+    color: #e51600;
+	
 }
 
 
@@ -791,23 +885,8 @@ header.company-banner{
     color: #555;
 }
 
-header.proposal-banner ol li{ 
-    display: inline; 
-    margin-right: 0.4em;
-}
-
-header.proposal-banner ol li::after{
-    content: "|";
-    padding-left: 0.8em;
-    color: #aaa;
-}
-
-header.proposal-banner ol li:last-of-type::after{ display: none;
-}
-header.proposal-banner ol li a{color: #888; } 
-header.proposal-banner ol li a:hover{color: #555; }
-
-
+header.proposal-banner a{color: #555; } 
+header.proposal-banner a:hover{color: #333; }
 
 /* @end */
 
@@ -816,8 +895,8 @@ header.proposal-banner ol li a:hover{color: #555; }
 
 body.proposal.proposal-overview aside h1,
 body.proposal.proposal-overview .proposal-footer .wrap > h1{
-    font-size: 14px;
-    line-height: 21px;
+    font-size: 11px;
+    line-height: 18px;
     text-transform: uppercase;
     font-family: Georgia;
     letter-spacing: 0.125em;
@@ -852,89 +931,23 @@ body.proposal.proposal-overview aside img+span{
     max-width: none;
 }
 
-body.proposal.proposal-overview aside h1 span{
-    display: inline;
-}
-
-body.proposal.proposal-overview aside div,
-body.proposal.proposal-overview aside span{
+body.proposal.proposal-overview aside div.hcard{
     line-height: 1.3em;
-    max-width: none;
-    font-size: 14px;    
+    max-width: 10em;
+    font-size: 14px;	
+}
+
+body.proposal.proposal-overview aside div.hcard span{
     display: block;
 }
-
-body.proposal.proposal-overview ol li{
-    margin-bottom: 0.4em;
-    position: relative;
-}
-
-body.proposal.proposal-overview ol li.parent-element > span{
-    font-weight: 600;
-}
-
-body.proposal.proposal-overview ol li ol{ 
-    margin-bottom: 1em;
-    border-left: 3px solid #eee;
-    padding-left: 6px;
-    padding-top: 0;
-    margin-top: 0.4em;
-}
-
-body.proposal.proposal-overview ol li.is-incomplete,
-body.proposal.proposal-overview ol li.is-complete,
-body.proposal.proposal-overview ol li.is-error{
-    padding-left: 32px;	
-    line-height: 24px;
-}
-
-body.proposal.proposal-overview ol li.is-incomplete::before,
-body.proposal.proposal-overview ol li.is-complete::before,
-body.proposal.proposal-overview ol li.is-error::before{
-    content: "";
-    width: 24px;
-    height: 24px;
-    border: 1px solid #ccc;
-    position: absolute;
-    left: 0;
-    top: 0;	
-}
-
-body.proposal.proposal-overview ol li.is-error::after,
-body.proposal.proposal-overview ol li.is-complete::after{
-    opacity: 0.8;
-}
-
-body.proposal.proposal-overview ol li.is-error::after{
-    width: 14px;
-    height: 14px;
-    top: 5px;
-    left: 5px;
-}
-
-body.proposal.proposal-overview ol li::after{
-    content: "";
-    display: block;
-    position: absolute;
-    left: 4px;
-    top: 4px;
-    width: 16px;
-    height: 16px;
-    background-size: 100%;
-
-}
-
-
-
-
 
 /* @end */
 
 /* @group footer */
 
 footer.proposal-footer div.wrap{
-	border-top: 3px solid #e3e3e3;
-	padding-top: 1em;
+    border-top: 3px solid #e3e3e3;
+    padding-top: 1em;
 }
 
 
@@ -942,12 +955,12 @@ footer.proposal-footer div.wrap{
 /* @end */
 
 @media screen and (min-width: 711.11px) {
-	body.proposal.proposal-overview main.proposal-content div.wrap{ 
+    body.proposal.proposal-overview main.proposal-content div.wrap{ 
         padding-right: 304px;
         position: relative;
     }
 
-	body.proposal.proposal-overview main.proposal-content div.wrap aside{ 
+    body.proposal.proposal-overview main.proposal-content div.wrap aside{ 
         position: absolute;
         right: 0;
         top: 4px;
@@ -964,7 +977,7 @@ footer.proposal-footer div.wrap{
         display: block;
         white-space: nowrap;
     }
-	body.proposal.proposal-overview main.proposal-content img{
+    body.proposal.proposal-overview main.proposal-content img{
         display: block;
         position: static;
         width: 96px;
@@ -1114,8 +1127,151 @@ body.home {
             }
         }
     }
+}    
+/* @end */
+
+/* @group body.proposal */
+
+
+
+/* @group aside.form-nav */
+
+aside.form-nav{
+    font-size: 14px;
+    padding-left: 16px;
+    width: 224px;
+    border: 1px solid #aaa;
+    padding: 12px;
+    margin-bottom: 16px;
+    border-radius: 5px;
 }
+	
+@media screen and (min-width: 640px) {
+    aside.form-nav{
+        border: none;
+        position: absolute;
+        top: 32px;
+        right: 0;
+        padding: 0 0 0 16px;
+        margin: 0;
+    }
+
+}
+	
+aside.form-nav h1{
+    font-size: 11px;
+    text-transform: uppercase;
+    font-family: Georgia;
+    letter-spacing: 0.125em;
+    word-spacing: 0.15em;
+    color: #555;
+    margin-bottom: 20px;
+}
+	
+aside.form-nav nav.toc,
+aside.form-nav a{
+    color: #555;
+}
+	
+	
+aside.form-nav nav.toc ol li ol{ 
+    border-left: 2px solid #eee;
+}
+	
+aside.form-nav nav.toc ol li span,
+aside.form-nav nav.toc ol li{
+    padding: 0;
+    margin: 0 0 6px;
+    border: none;
+    line-height: 1.2;
+}
+	
+aside.form-nav span.toc-error-count{ display: none; }
+	
+aside.form-nav nav.toc ol li.is-incomplete,
+aside.form-nav nav.toc ol li.is-complete,
+aside.form-nav nav.toc ol li.is-error{
+    padding-left: 20px;
+    line-height: 16px;
+}
+
+aside.form-nav nav.toc ol li.is-incomplete::before,
+aside.form-nav nav.toc ol li.is-complete::before,
+aside.form-nav nav.toc ol li.is-error::before{
+    width: 14px;
+    height: 14px;
+    top: 1px;		
+}
+
+aside.form-nav nav.toc ol li::after{
+    left: 2px;
+    top: 3px;
+    width: 10px;
+    height: 10px;
+    background-size: 100%;
+}
+
+aside.form-nav nav.toc ol li.is-error::after{
+    left: 3px;
+    top: 4px;
+    width: 8px;
+    height: 8px;
+}
+
+aside.form-nav nav.toc li a.is-current{
+    font-weight: 600;
+    text-decoration: none;	
+}
+	
+aside.form-nav ol ol{ padding-left: 0.8em;}
+	
+aside.form-nav div.form-nav-prev-next{ margin-top: 2em; }
+aside.form-nav div.form-nav-prev-next::after{
+    content: "";
+    display: block;
+    clear: both;
+}
+	
+aside.form-nav div.form-nav-prev-next .form-nav-prev,
+aside.form-nav div.form-nav-prev-next .form-nav-next{
+    float: left;	
+    border-color: #888;
+    border-radius: 3px 0 0 3px;
+    padding: 6px 8px;
+    color: #555;
+}
+	
+aside.form-nav div.form-nav-prev-next .form-nav-prev:hover,
+aside.form-nav div.form-nav-prev-next .form-nav-next:hover{
+    text-decoration: underline;
+    background: inherit;
+}
+	
+aside.form-nav div.form-nav-prev-next .is-disabled{
+    border-color: #ccc;
+    color: #aaa;
+}
+	
+aside.form-nav div.form-nav-prev-next .is-disabled:hover{
+    text-decoration: none;
+}
+	
+aside.form-nav div.form-nav-prev-next .form-nav-next{
+    border-radius: 0 3px 3px 0;
+    border-left: none;
+}
+	
+aside.form-nav div.form-nav-prev-next .form-nav-prev.is-disabled{
+    border-right: none;
+    cursor: default;
+}
+	
+aside.form-nav div.form-nav-prev-next .form-nav-prev.is-disabled+.form-nav-next{
+    border-left: 1px solid #aaa;
+}
+	
+
 /* @end */
 
 
-
+/* @end */
