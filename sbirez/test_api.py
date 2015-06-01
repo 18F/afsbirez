@@ -1,9 +1,11 @@
 from rest_framework.test import APIRequestFactory, APIClient, APITestCase
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_proxy.views import ProxyView
 from collections import OrderedDict
 from copy import deepcopy
 import json
+from unittest import mock
 
 from django.test import TestCase
 
@@ -287,6 +289,55 @@ class UserTests(APITestCase):
         self.assertIn('abc', user.firm.name)
 
 
+_SAMPLE_SAM_API_RESPONSE = {
+     'links': [{'href': 'https://api.data.gov/sam/v1/registrations?qterms=intellitech&start=1&length=10',
+                'rel': 'self'}],
+     'results': [{'cage': '1FUB9',
+                  'duns': '003725520',
+                  'dunsPlus4': '0000',
+                  'expirationDate': '2015-09-02 09:13:51.000',
+                  'hasDelinquentFederalDebt': False,
+                  'hasKnownExclusion': False,
+                  'legalBusinessName': 'INTELLITECH SYSTEMS INC',
+                  'links': [{'href': 'https://api.data.gov/sam/v1/registrations/0037255200000',
+                             'rel': 'details'}],
+                  'samAddress': {'city': 'FAIRBORN',
+                                 'country': 'USA',
+                                 'line1': '3144 PRESIDENTIAL DRIVE',
+                                 'stateOrProvince': 'OH',
+                                 'zip': '45324',
+                                 'zip4': '2039'},
+                  'status': 'Active'},
+                 {'cage': '6Z7N4',
+                  'duns': '003725520',
+                  'dunsPlus4': '0037',
+                  'expirationDate': '2015-09-02 09:13:51.000',
+                  'hasDelinquentFederalDebt': False,
+                  'hasKnownExclusion': False,
+                  'legalBusinessName': 'INTELLITECH SYSTEMS INC',
+                  'links': [{'href': 'https://api.data.gov/sam/v1/registrations/0037255200037',
+                             'rel': 'details'}],
+                  'samAddress': {'city': 'FAIRBORN',
+                                 'country': 'USA',
+                                 'line1': '3144 PRESIDENTIAL DRIVE',
+                                 'stateOrProvince': 'OH',
+                                 'zip': '45324',
+                                 'zip4': '2039'},
+                  'status': 'Active'}]
+    }
+
+def mock_sam_api_server(*arg, **kwarg):
+    if 'intellitech' in kwarg['searchterms'].lower():
+        return Response(data=_SAMPLE_SAM_API_RESPONSE, status=status.HTTP_200_OK)
+    else:
+        return Response(data={'links':
+                              [{'href': 'https://api.data.gov/sam/v1/registrations?' +
+                                'qterms=snrgl&start=1&length=10',
+                                'rel': 'self'}],
+                              'results': []},
+                        status=status.HTTP_200_OK)
+
+
 class FirmTests(APITestCase):
     firm_data = {'name':'TestCo', 'tax_id':'12345', 'sbc_id':'12345',
          'duns_id':'12345', 'cage_code':'12345', 'website':'www.testco.com',
@@ -561,6 +612,18 @@ class FirmTests(APITestCase):
         response = self.client.patch('/api/v1/firms/' + str(firm.id) + '/',
               json.dumps(local_data), content_type='application/json')
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
+
+    @mock.patch('rest_framework_proxy.views.ProxyView.get', mock_sam_api_server)
+    def test_firm_search_existing_firm(self):
+        response = self.client.get('/api/v1/firms/search/Intellitech')
+        firm0 = response.data['results'][0]
+        self.assertEqual('INTELLITECH SYSTEMS INC', firm0['legalBusinessName'])
+        self.assertEqual('003725520', firm0['duns'])
+
+    @mock.patch('rest_framework_proxy.views.ProxyView.get', mock_sam_api_server)
+    def test_firm_search_nonexisting_firm(self):
+        response = self.client.get('/api/v1/firms/search/no_firm_has_this_silly_name')
+        self.assertEqual([], response.data['results'])
 
 
 class TopicTests(APITestCase):
