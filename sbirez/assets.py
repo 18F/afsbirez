@@ -13,6 +13,7 @@ bower_js = Bundle(
     "lib/angular-order-object-by/src/ng-order-object-by.js",
     "lib/marked/lib/marked.js",
     "lib/angular-marked/angular-marked.js",
+    "lib/base64/base64.min.js",
     filters="jsmin",
     output="js/bower.min.js"
 )
