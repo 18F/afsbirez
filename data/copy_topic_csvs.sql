@@ -17,41 +17,41 @@ commit;
 UPDATE sbirez_rawtopic
 SET    solicitation = ':solicitaion';
 
--- This will destroy and submitted proposal data!
+-- This will destroy and submitted proposal data
 
 DELETE
 FROM   sbirez_proposal
 WHERE  topic_id IN
   ( SELECT id FROM sbirez_topic WHERE solicitation_id =
-    ( SELECT id FROM sbirez_solicitation WHERE name = 'DoD SBIR 2015.1' )
+    ( SELECT id FROM sbirez_solicitation WHERE name = :solicitation )
   );
 
 DELETE
 FROM   sbirez_reference
 WHERE  topic_id IN
   ( SELECT id FROM sbirez_topic WHERE solicitation_id =
-    ( SELECT id FROM sbirez_solicitation WHERE name = 'DoD SBIR 2015.1' )
+    ( SELECT id FROM sbirez_solicitation WHERE name = :solicitation )
   );
 
 DELETE
 FROM   sbirez_phase
 WHERE  topic_id IN
   ( SELECT id FROM sbirez_topic WHERE solicitation_id =
-    ( SELECT id FROM sbirez_solicitation WHERE name = 'DoD SBIR 2015.1' )
+    ( SELECT id FROM sbirez_solicitation WHERE name = :solicitation)
   );
 
 DELETE
 FROM   sbirez_area_topics
 WHERE  topic_id IN
   ( SELECT id FROM sbirez_topic WHERE solicitation_id =
-    ( SELECT id FROM sbirez_solicitation WHERE name = 'DoD SBIR 2015.1' )
+    ( SELECT id FROM sbirez_solicitation WHERE name = :solicitation)
   );
 
 DELETE
 FROM   sbirez_keyword_topics
 WHERE  topic_id IN
   ( SELECT id FROM sbirez_topic WHERE solicitation_id =
-    ( SELECT id FROM sbirez_solicitation WHERE name = 'DoD SBIR 2015.1' )
+    ( SELECT id FROM sbirez_solicitation WHERE name = :solicitation)
   );
 
 DELETE FROM sbirez_keyword WHERE id NOT IN (SELECT keyword_id FROM sbirez_keyword_topics);
@@ -59,7 +59,7 @@ DELETE FROM sbirez_keyword WHERE id NOT IN (SELECT keyword_id FROM sbirez_keywor
 DELETE
 FROM   sbirez_topic
 WHERE  solicitation_id =
-  ( SELECT id FROM sbirez_solicitation WHERE name = 'DoD SBIR 2015.1' );
+  ( SELECT id FROM sbirez_solicitation WHERE name = :solicitation);
 
 INSERT INTO sbirez_topic
   (  topic_number,
@@ -83,7 +83,7 @@ SELECT
     TSVECTOR('')  -- will be re-indexed with the `indextopics` management command after completion
 FROM sbirez_rawtopic rt
 JOIN sbirez_rawagency ra ON rt.agency_id = ra.id
-JOIN sbirez_solicitation s ON (s.name = 'DoD SBIR 2015.1');
+JOIN sbirez_solicitation s ON (s.name = :solicitation);
 
 UPDATE sbirez_topic
 SET
