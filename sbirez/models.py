@@ -288,7 +288,7 @@ class Topic(models.Model):
 
     topic_number = models.TextField(unique=True)
     solicitation = models.ForeignKey(Solicitation, related_name='solicitation')
-    url = models.TextField(unique=True)
+    url = models.TextField(unique=True, blank=True, null=True)
     title = models.TextField()
     agency = models.TextField(blank=True, null=True)
     program = models.CharField(max_length=10, choices=PROGRAM_CHOICES)
@@ -339,3 +339,78 @@ class DocumentVersion(models.Model):
 
     class Meta:
         ordering = ['updated_at',]
+
+
+class RawAgency(models.Model):
+
+    name = models.TextField()
+    type = models.IntegerField()
+
+
+class RawCommand(models.Model):
+
+    agency = models.ForeignKey(RawAgency, related_name='commands')
+    name = models.TextField()
+
+
+class RawTopic(models.Model):
+
+    solicitation = models.TextField()
+    program = models.TextField()
+    agency = models.ForeignKey(RawAgency, related_name='topics')
+    title = models.TextField(primary_key=True)
+    text = models.TextField()
+    keywords = models.TextField(null=True)
+    background = models.TextField(null=True)
+    airplatform = models.NullBooleanField()
+    chembiodefense = models.NullBooleanField()
+    infosystems = models.NullBooleanField()
+    groundseaveh = models.NullBooleanField()
+    materials = models.NullBooleanField()
+    biomedical = models.NullBooleanField()
+    sensors = models.NullBooleanField()
+    electronics = models.NullBooleanField()
+    battlespace = models.NullBooleanField()
+    spaceplatform = models.NullBooleanField()
+    humansystems = models.NullBooleanField()
+    weapons = models.NullBooleanField()
+    nucleartech = models.NullBooleanField()
+    command = models.ForeignKey(RawCommand, related_name='topics')
+    tpoc = models.TextField(null=True)
+    tpocphone = models.TextField(null=True)
+    tpocfax = models.TextField(null=True)
+    tpocemail = models.TextField(null=True)
+    tpocoffsym = models.TextField(null=True)
+    tpoc2 = models.TextField(null=True)
+    tpoc2phone = models.TextField(null=True)
+    tpoc2fax = models.TextField(null=True)
+    tpoc2email = models.TextField(null=True)
+    tpoc2offsym = models.TextField(null=True)
+    tpoc3 = models.TextField(null=True)
+    tpoc3phone = models.TextField(null=True)
+    tpoc3fax = models.TextField(null=True)
+    tpoc3email = models.TextField(null=True)
+    tpoc3offsym = models.TextField(null=True)
+    tpoc4 = models.TextField(null=True)
+    tpoc4phone = models.TextField(null=True)
+    tpoc4fax = models.TextField(null=True)
+    tpoc4email = models.TextField(null=True)
+    tpoc4offsym = models.TextField(null=True)
+    acqprogram = models.TextField(null=True)
+    acqpoc = models.TextField(null=True)
+    acqphone = models.TextField(null=True)
+    acqfax = models.TextField(null=True)
+    acqemail = models.TextField(null=True)
+    acqinterest = models.TextField(null=True)
+    meetcriteria = models.TextField(null=True)
+    rationale = models.TextField(null=True)
+    itar = models.NullBooleanField()
+    previously_submitted = models.NullBooleanField()
+    previously_approved = models.NullBooleanField()
+    prior_solicitation = models.NullBooleanField()
+    renewable_energy = models.IntegerField(null=True)
+    manufacturing = models.IntegerField(null=True)
+    topic = models.TextField(null=True)
+    prior_topic_no = models.TextField(null=True)
+    recommend2 = models.TextField(null=True)
+    direct2phase2 = models.IntegerField(null=True)
