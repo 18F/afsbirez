@@ -7,6 +7,8 @@ angular.module('sbirezApp')
     $scope.firm = {};
     $scope.firm.point_of_contact = {};
     $scope.firm.address = {};
+    $scope.validationData = {};
+    $scope.errorState = false;
     $rootScope.bodyClass = 'my-company';
 
     UserService.getUserDetails().then(function(data) {
@@ -36,10 +38,13 @@ angular.module('sbirezApp')
         if ($scope.firm.point_of_contact === null) {
           delete $scope.firm.point_of_contact;
         }
-        
+       
         $http.patch('api/v1/firms/' + $scope.orgId + '/', $scope.firm).success(function(data) {
           $scope.firm = data;
+          $state.go('app.proposals.list');
         }).error(function(data, status) {
+          $scope.errorState = true;
+          $scope.validationData = data;
           console.log('update', data, status);
         });
       }
