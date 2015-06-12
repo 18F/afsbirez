@@ -12,6 +12,7 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
         $window.sessionStorage.username = null;
         $window.sessionStorage.userid = null;
         $window.sessionStorage.firmid = null;
+        user = {};
         AuthenticationService.setAuthenticated(false);
         $location.path('/');      
     },

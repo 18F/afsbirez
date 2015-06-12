@@ -11,6 +11,7 @@ body{
     font-size: 16px;
     color: #333;
     padding-bottom: 2em;
+    background-color: white;
 }
 
 a{ color: #0064be; }
@@ -205,8 +206,7 @@ button.button-remove:active{
 }
 
 form > h1 ,
-.fieldset-labor-related-costs > header > h1,
-.fieldset-direct-material-costs > header > h1 {
+.fieldset-dynamic > header > h1 {
     margin-top: 8px;
     margin-bottom: 1em;
     font-size: 27px;
@@ -233,8 +233,7 @@ section.fieldset{
 .fieldset+.fieldset:not(.fieldset-radio){ margin-top: 32px; }
 
 .fieldset-principal-investigator .fieldset:last-of-type,
-.fieldset-labor-related-cost .field:last-of-type,
-.fieldset-direct-material-cost .field:last-of-type{
+.fieldset-dynamic-item.field:last-of-type{
     margin-bottom: 2px;
 }
 
@@ -256,8 +255,7 @@ section.fieldset div.field:last-of-type+section.fieldset{
     margin-top: 24px;
 }
 
-.fieldset.fieldset-labor-related-costs,
-.fieldset.fieldset-direct-material-costs,
+.fieldset.fieldset-dynamic,
 .fieldset.fieldset-discretionary-technical-assistance,
 .fieldset.fieldset-equivalent-work,
 .fieldset.fieldset-equivalent-work .fieldset,
@@ -369,6 +367,7 @@ section.fieldset.fieldset-radio.is-error span.error-message{
 .field-name,
 .field-title,
 .field-email,
+.field-med_str,
 .field-category{
     width: 50%;
 }
@@ -380,10 +379,15 @@ section.fieldset.fieldset-radio.is-error span.error-message{
 .field-overhead input,
 .field-year input,
 .field-number input,
+.field-int input,
+.field-float input,
 .field-fringe-benefits input,
-.field-proposed-cost input,
+.field-dollars input,
+.field-timespan input,
+.field-percentage input,
 .field-proposed-dta-amount input,
 .field-contract-number input,
+.field-short_str,
 .field-num-phase-2-awards input{
     width: 33%;
 }
@@ -511,6 +515,11 @@ header.banner nav a{
     padding: 0 10px;
 }
 header.banner nav a:hover{ color: #a3d3ff; }
+
+body.my-topics, body.notifications, body.my-company,
+body.proposal, body.search-results, body.topic {
+    background-color: white;
+}
 
 body.my-topics header.banner nav a.my-topics,
 body.notifications header.banner nav a.notifications,
@@ -814,13 +823,11 @@ nav.toc ol li span.toc-error-count{
 
 /* @group body.proposal-cost-volume */
 
-section.fieldset-labor-related-costs > header,
-section.fieldset-direct-material-costs > header{
+section.fieldset-dynamic > header{
     margin-bottom: 24px;
 }
 
-section.fieldset-labor-related-costs > header h1,
-section.fieldset-direct-material-costs > header h1{
+section.fieldset-dynamic > header h1{
     display: inline-block;
     vertical-align: middle;
     font: inherit;
@@ -831,8 +838,7 @@ section.fieldset-direct-material-costs > header h1{
     position: static;
 }
 
-section.fieldset-labor-related-costs > header a,
-section.fieldset-direct-material-costs > header a{
+section.fieldset-dynamic > header a{
     background: none;
     border: 1px solid;
     color: #a50;
@@ -848,21 +854,19 @@ section.fieldset-direct-material-costs > header a{
     border-radius: 3px;
 }
 
-section.fieldset-labor-related-costs > header a:hover,
-section.fieldset-direct-material-costs > header a:hover {
+section.fieldset-dynamic > header a:hover {
     background: #cb4d00;
     border-color: #cb4d00;
     color: white;
 }
 
-section.fieldset-labor-related-costs > header a:active,
-section.fieldset-direct-material-costs > header a:active {
+section.fieldset-dynamic > header a:active {
     color: #c6bb96;
     background: #7e2000;
     border-color: #7e2000;
 }
 
-section.fieldset-direct-material-costs section.fieldset-direct-material-cost a.remove{
+section.fieldset-dynamic section.fieldset-dynamic-item a.remove{
     position: absolute;
     right: 16px;
     font-size: 14px;
