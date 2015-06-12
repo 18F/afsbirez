@@ -5,7 +5,7 @@ from sbirez import validation_helpers
 from django.contrib.auth.models import User, Group
 from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person
 from sbirez.models import Address, Proposal, Address
-from sbirez.models import Element, Document, DocumentVersion, Solicitation
+from sbirez.models import Element, Document, DocumentVersion, Solicitation, Jargon
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_recursive.fields import RecursiveField
@@ -206,7 +206,7 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
             try:
                 return Proposal.objects.get(owner_id=current_user.id, topic_id=obj.id).id
             except ObjectDoesNotExist:
-                return None 
+                return None
 
     class Meta:
         model = Topic
@@ -227,7 +227,14 @@ class ElementSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'order', 'element_type',
                   'required', 'default', 'human', 'help',
                   'validation', 'validation_msg', 'ask_if',
-                  'multiplicity', 'children', )
+                  'multiplicity', 'jargons', 'children', )
+
+
+
+class JargonSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Jargon
 
 
 class ProposalValidator(object):
