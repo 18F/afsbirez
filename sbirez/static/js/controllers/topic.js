@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('TopicCtrl', function ($scope, $rootScope, $http, $state, AuthenticationService, SavedOpportunityService) {
+  .controller('TopicCtrl', function ($scope, $rootScope, $http, $state, AuthenticationService, SavedOpportunityService, ProposalService) {
     $scope.topicId = $state.params.id;
     $scope.data = {};
     $rootScope.bodyClass = 'topic';
@@ -23,7 +23,7 @@ angular.module('sbirezApp')
     $scope.createProposal = function() {
       var title = 'Proposal for ' + $scope.data.title;
       var workflow = $scope.data.solicitation.element;
-      ProposalService.create($scope.topicId, title, workflow).then(function(data) {
+      ProposalService.create($scope.data.id, title, workflow).then(function(data) {
         $scope.data.proposal = data.id;
       });
     };
