@@ -1,1 +1,999 @@
-[{"pk": 1, "model": "sbirez.element", "fields": {"element_type": "workflow", "help": null, "order": 1, "name": "holy_grail_workflow", "multiplicity": null, "validation": null, "parent": null, "ask_if": null, "validation_msg": null, "default": null, "human": "Holy Grail Workflow", "required": false}}, {"pk": 2, "model": "sbirez.element", "fields": {"element_type": "med_str", "help": "Thy moniker", "order": 1, "name": "quest_thy_name", "multiplicity": null, "validation": null, "parent": 1, "ask_if": null, "validation_msg": null, "default": null, "human": "What is thy name?", "required": false}}, {"pk": 3, "model": "sbirez.element", "fields": {"element_type": "group", "help": null, "order": 2, "name": "subquest", "multiplicity": null, "validation": null, "parent": 1, "ask_if": null, "validation_msg": null, "default": null, "human": "Subquest", "required": false}}, {"pk": 4, "model": "sbirez.element", "fields": {"element_type": "med_str", "help": null, "order": 1, "name": "quest_thy_quest", "multiplicity": null, "validation": null, "parent": 3, "ask_if": null, "validation_msg": null, "default": null, "human": "What is thy quest?", "required": false}}, {"pk": 5, "model": "sbirez.element", "fields": {"element_type": "med_str", "help": null, "order": 2, "name": "quest_thy_favorite_color", "multiplicity": null, "validation": "does_not_equal blue", "parent": 3, "ask_if": null, "validation_msg": "Lancelot already said blue", "default": null, "human": "What is thy favorite color?", "required": false}}]
+[
+    {
+        "fields": {
+            "app_label": "admin",
+            "model": "logentry"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "app_label": "auth",
+            "model": "permission"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "app_label": "auth",
+            "model": "group"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "app_label": "contenttypes",
+            "model": "contenttype"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "app_label": "sessions",
+            "model": "session"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "app_label": "sbirez",
+            "model": "address"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 6
+    },
+    {
+        "fields": {
+            "app_label": "sbirez",
+            "model": "person"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 7
+    },
+    {
+        "fields": {
+            "app_label": "sbirez",
+            "model": "firm"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 8
+    },
+    {
+        "fields": {
+            "app_label": "sbirez",
+            "model": "sbirezuser"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 9
+    },
+    {
+        "fields": {
+            "app_label": "sbirez",
+            "model": "area"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 10
+    },
+    {
+        "fields": {
+            "app_label": "sbirez",
+            "model": "keyword"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 11
+    },
+    {
+        "fields": {
+            "app_label": "sbirez",
+            "model": "phase"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 12
+    },
+    {
+        "fields": {
+            "app_label": "sbirez",
+            "model": "reference"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 13
+    },
+    {
+        "fields": {
+            "app_label": "sbirez",
+            "model": "element"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 14
+    },
+    {
+        "fields": {
+            "app_label": "sbirez",
+            "model": "jargon"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 15
+    },
+    {
+        "fields": {
+            "app_label": "sbirez",
+            "model": "solicitation"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 16
+    },
+    {
+        "fields": {
+            "app_label": "sbirez",
+            "model": "topic"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 17
+    },
+    {
+        "fields": {
+            "app_label": "sbirez",
+            "model": "proposal"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 18
+    },
+    {
+        "fields": {
+            "app_label": "sbirez",
+            "model": "document"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 19
+    },
+    {
+        "fields": {
+            "app_label": "sbirez",
+            "model": "documentversion"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 20
+    },
+    {
+        "fields": {
+            "app_label": "authtoken",
+            "model": "token"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 21
+    },
+    {
+        "fields": {
+            "app_label": "djmail",
+            "model": "message"
+        },
+        "model": "contenttypes.contenttype",
+        "pk": 22
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "workflow",
+            "help": null,
+            "human": "Holy Grail Workflow",
+            "multiplicity": null,
+            "name": "holy_grail_workflow",
+            "order": 1,
+            "parent": null,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "med_str",
+            "help": "Thy moniker",
+            "human": "What is thy name?",
+            "multiplicity": null,
+            "name": "quest_thy_name",
+            "order": 1,
+            "parent": 1,
+            "required": true,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "group",
+            "help": null,
+            "human": "Subquest",
+            "multiplicity": null,
+            "name": "subquest",
+            "order": 2,
+            "parent": 1,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "med_str",
+            "help": null,
+            "human": "What is thy quest?",
+            "multiplicity": null,
+            "name": "quest_thy_quest",
+            "order": 1,
+            "parent": 3,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "med_str",
+            "help": null,
+            "human": "What is thy favorite color?",
+            "multiplicity": null,
+            "name": "quest_thy_favorite_color",
+            "order": 2,
+            "parent": 3,
+            "required": true,
+            "validation": "does_not_equal blue",
+            "validation_msg": "Lancelot already said blue"
+        },
+        "model": "sbirez.element",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "line_item",
+            "help": null,
+            "human": "Knights",
+            "multiplicity": "Lancelot, Galahad, Robin",
+            "name": "knights",
+            "order": 3,
+            "parent": 1,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 6
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "bool",
+            "help": null,
+            "human": "Is Courageous",
+            "multiplicity": null,
+            "name": "is_courageous",
+            "order": 1,
+            "parent": 6,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 7
+    },
+    {
+        "fields": {
+            "ask_if": "is_courageous",
+            "default": null,
+            "element_type": "int",
+            "help": null,
+            "human": "On a scale of 1 to 10, how <span class=\"jargon\" jargon=\"courage\">courageous</span>?",
+            "multiplicity": null,
+            "name": "how_courageous_exactly",
+            "order": 2,
+            "parent": 6,
+            "required": true,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 8
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "line_item",
+            "help": null,
+            "human": "Minstrels",
+            "multiplicity": "3",
+            "name": "minstrels",
+            "order": 4,
+            "parent": 1,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 9
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "med_str",
+            "help": null,
+            "human": "Name",
+            "multiplicity": null,
+            "name": "name",
+            "order": 1,
+            "parent": 9,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 10
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "med_str",
+            "help": null,
+            "human": "Instrument",
+            "multiplicity": null,
+            "name": "instrument",
+            "order": 2,
+            "parent": 9,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 11
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "float",
+            "help": null,
+            "human": "weight in kg",
+            "multiplicity": null,
+            "name": "kg",
+            "order": 3,
+            "parent": 9,
+            "required": true,
+            "validation": "not_less_than 0",
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 12
+    },
+    {
+        "fields": {
+            "elements": [
+                8
+            ],
+            "html": "the ability to do something that frightens one",
+            "name": "courage"
+        },
+        "model": "sbirez.jargon",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "codename": "add_logentry",
+            "content_type": 1,
+            "name": "Can add log entry"
+        },
+        "model": "auth.permission",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "codename": "change_logentry",
+            "content_type": 1,
+            "name": "Can change log entry"
+        },
+        "model": "auth.permission",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "codename": "delete_logentry",
+            "content_type": 1,
+            "name": "Can delete log entry"
+        },
+        "model": "auth.permission",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "codename": "add_permission",
+            "content_type": 2,
+            "name": "Can add permission"
+        },
+        "model": "auth.permission",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "codename": "change_permission",
+            "content_type": 2,
+            "name": "Can change permission"
+        },
+        "model": "auth.permission",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "codename": "delete_permission",
+            "content_type": 2,
+            "name": "Can delete permission"
+        },
+        "model": "auth.permission",
+        "pk": 6
+    },
+    {
+        "fields": {
+            "codename": "add_group",
+            "content_type": 3,
+            "name": "Can add group"
+        },
+        "model": "auth.permission",
+        "pk": 7
+    },
+    {
+        "fields": {
+            "codename": "change_group",
+            "content_type": 3,
+            "name": "Can change group"
+        },
+        "model": "auth.permission",
+        "pk": 8
+    },
+    {
+        "fields": {
+            "codename": "delete_group",
+            "content_type": 3,
+            "name": "Can delete group"
+        },
+        "model": "auth.permission",
+        "pk": 9
+    },
+    {
+        "fields": {
+            "codename": "add_contenttype",
+            "content_type": 4,
+            "name": "Can add content type"
+        },
+        "model": "auth.permission",
+        "pk": 10
+    },
+    {
+        "fields": {
+            "codename": "change_contenttype",
+            "content_type": 4,
+            "name": "Can change content type"
+        },
+        "model": "auth.permission",
+        "pk": 11
+    },
+    {
+        "fields": {
+            "codename": "delete_contenttype",
+            "content_type": 4,
+            "name": "Can delete content type"
+        },
+        "model": "auth.permission",
+        "pk": 12
+    },
+    {
+        "fields": {
+            "codename": "add_session",
+            "content_type": 5,
+            "name": "Can add session"
+        },
+        "model": "auth.permission",
+        "pk": 13
+    },
+    {
+        "fields": {
+            "codename": "change_session",
+            "content_type": 5,
+            "name": "Can change session"
+        },
+        "model": "auth.permission",
+        "pk": 14
+    },
+    {
+        "fields": {
+            "codename": "delete_session",
+            "content_type": 5,
+            "name": "Can delete session"
+        },
+        "model": "auth.permission",
+        "pk": 15
+    },
+    {
+        "fields": {
+            "codename": "add_address",
+            "content_type": 6,
+            "name": "Can add address"
+        },
+        "model": "auth.permission",
+        "pk": 16
+    },
+    {
+        "fields": {
+            "codename": "change_address",
+            "content_type": 6,
+            "name": "Can change address"
+        },
+        "model": "auth.permission",
+        "pk": 17
+    },
+    {
+        "fields": {
+            "codename": "delete_address",
+            "content_type": 6,
+            "name": "Can delete address"
+        },
+        "model": "auth.permission",
+        "pk": 18
+    },
+    {
+        "fields": {
+            "codename": "add_person",
+            "content_type": 7,
+            "name": "Can add person"
+        },
+        "model": "auth.permission",
+        "pk": 19
+    },
+    {
+        "fields": {
+            "codename": "change_person",
+            "content_type": 7,
+            "name": "Can change person"
+        },
+        "model": "auth.permission",
+        "pk": 20
+    },
+    {
+        "fields": {
+            "codename": "delete_person",
+            "content_type": 7,
+            "name": "Can delete person"
+        },
+        "model": "auth.permission",
+        "pk": 21
+    },
+    {
+        "fields": {
+            "codename": "add_firm",
+            "content_type": 8,
+            "name": "Can add firm"
+        },
+        "model": "auth.permission",
+        "pk": 22
+    },
+    {
+        "fields": {
+            "codename": "change_firm",
+            "content_type": 8,
+            "name": "Can change firm"
+        },
+        "model": "auth.permission",
+        "pk": 23
+    },
+    {
+        "fields": {
+            "codename": "delete_firm",
+            "content_type": 8,
+            "name": "Can delete firm"
+        },
+        "model": "auth.permission",
+        "pk": 24
+    },
+    {
+        "fields": {
+            "codename": "add_sbirezuser",
+            "content_type": 9,
+            "name": "Can add user"
+        },
+        "model": "auth.permission",
+        "pk": 25
+    },
+    {
+        "fields": {
+            "codename": "change_sbirezuser",
+            "content_type": 9,
+            "name": "Can change user"
+        },
+        "model": "auth.permission",
+        "pk": 26
+    },
+    {
+        "fields": {
+            "codename": "delete_sbirezuser",
+            "content_type": 9,
+            "name": "Can delete user"
+        },
+        "model": "auth.permission",
+        "pk": 27
+    },
+    {
+        "fields": {
+            "codename": "add_area",
+            "content_type": 10,
+            "name": "Can add area"
+        },
+        "model": "auth.permission",
+        "pk": 28
+    },
+    {
+        "fields": {
+            "codename": "change_area",
+            "content_type": 10,
+            "name": "Can change area"
+        },
+        "model": "auth.permission",
+        "pk": 29
+    },
+    {
+        "fields": {
+            "codename": "delete_area",
+            "content_type": 10,
+            "name": "Can delete area"
+        },
+        "model": "auth.permission",
+        "pk": 30
+    },
+    {
+        "fields": {
+            "codename": "add_keyword",
+            "content_type": 11,
+            "name": "Can add keyword"
+        },
+        "model": "auth.permission",
+        "pk": 31
+    },
+    {
+        "fields": {
+            "codename": "change_keyword",
+            "content_type": 11,
+            "name": "Can change keyword"
+        },
+        "model": "auth.permission",
+        "pk": 32
+    },
+    {
+        "fields": {
+            "codename": "delete_keyword",
+            "content_type": 11,
+            "name": "Can delete keyword"
+        },
+        "model": "auth.permission",
+        "pk": 33
+    },
+    {
+        "fields": {
+            "codename": "add_phase",
+            "content_type": 12,
+            "name": "Can add phase"
+        },
+        "model": "auth.permission",
+        "pk": 34
+    },
+    {
+        "fields": {
+            "codename": "change_phase",
+            "content_type": 12,
+            "name": "Can change phase"
+        },
+        "model": "auth.permission",
+        "pk": 35
+    },
+    {
+        "fields": {
+            "codename": "delete_phase",
+            "content_type": 12,
+            "name": "Can delete phase"
+        },
+        "model": "auth.permission",
+        "pk": 36
+    },
+    {
+        "fields": {
+            "codename": "add_reference",
+            "content_type": 13,
+            "name": "Can add reference"
+        },
+        "model": "auth.permission",
+        "pk": 37
+    },
+    {
+        "fields": {
+            "codename": "change_reference",
+            "content_type": 13,
+            "name": "Can change reference"
+        },
+        "model": "auth.permission",
+        "pk": 38
+    },
+    {
+        "fields": {
+            "codename": "delete_reference",
+            "content_type": 13,
+            "name": "Can delete reference"
+        },
+        "model": "auth.permission",
+        "pk": 39
+    },
+    {
+        "fields": {
+            "codename": "add_element",
+            "content_type": 14,
+            "name": "Can add element"
+        },
+        "model": "auth.permission",
+        "pk": 40
+    },
+    {
+        "fields": {
+            "codename": "change_element",
+            "content_type": 14,
+            "name": "Can change element"
+        },
+        "model": "auth.permission",
+        "pk": 41
+    },
+    {
+        "fields": {
+            "codename": "delete_element",
+            "content_type": 14,
+            "name": "Can delete element"
+        },
+        "model": "auth.permission",
+        "pk": 42
+    },
+    {
+        "fields": {
+            "codename": "add_jargon",
+            "content_type": 15,
+            "name": "Can add jargon"
+        },
+        "model": "auth.permission",
+        "pk": 43
+    },
+    {
+        "fields": {
+            "codename": "change_jargon",
+            "content_type": 15,
+            "name": "Can change jargon"
+        },
+        "model": "auth.permission",
+        "pk": 44
+    },
+    {
+        "fields": {
+            "codename": "delete_jargon",
+            "content_type": 15,
+            "name": "Can delete jargon"
+        },
+        "model": "auth.permission",
+        "pk": 45
+    },
+    {
+        "fields": {
+            "codename": "add_solicitation",
+            "content_type": 16,
+            "name": "Can add solicitation"
+        },
+        "model": "auth.permission",
+        "pk": 46
+    },
+    {
+        "fields": {
+            "codename": "change_solicitation",
+            "content_type": 16,
+            "name": "Can change solicitation"
+        },
+        "model": "auth.permission",
+        "pk": 47
+    },
+    {
+        "fields": {
+            "codename": "delete_solicitation",
+            "content_type": 16,
+            "name": "Can delete solicitation"
+        },
+        "model": "auth.permission",
+        "pk": 48
+    },
+    {
+        "fields": {
+            "codename": "add_topic",
+            "content_type": 17,
+            "name": "Can add topic"
+        },
+        "model": "auth.permission",
+        "pk": 49
+    },
+    {
+        "fields": {
+            "codename": "change_topic",
+            "content_type": 17,
+            "name": "Can change topic"
+        },
+        "model": "auth.permission",
+        "pk": 50
+    },
+    {
+        "fields": {
+            "codename": "delete_topic",
+            "content_type": 17,
+            "name": "Can delete topic"
+        },
+        "model": "auth.permission",
+        "pk": 51
+    },
+    {
+        "fields": {
+            "codename": "add_proposal",
+            "content_type": 18,
+            "name": "Can add proposal"
+        },
+        "model": "auth.permission",
+        "pk": 52
+    },
+    {
+        "fields": {
+            "codename": "change_proposal",
+            "content_type": 18,
+            "name": "Can change proposal"
+        },
+        "model": "auth.permission",
+        "pk": 53
+    },
+    {
+        "fields": {
+            "codename": "delete_proposal",
+            "content_type": 18,
+            "name": "Can delete proposal"
+        },
+        "model": "auth.permission",
+        "pk": 54
+    },
+    {
+        "fields": {
+            "codename": "add_document",
+            "content_type": 19,
+            "name": "Can add document"
+        },
+        "model": "auth.permission",
+        "pk": 55
+    },
+    {
+        "fields": {
+            "codename": "change_document",
+            "content_type": 19,
+            "name": "Can change document"
+        },
+        "model": "auth.permission",
+        "pk": 56
+    },
+    {
+        "fields": {
+            "codename": "delete_document",
+            "content_type": 19,
+            "name": "Can delete document"
+        },
+        "model": "auth.permission",
+        "pk": 57
+    },
+    {
+        "fields": {
+            "codename": "add_documentversion",
+            "content_type": 20,
+            "name": "Can add document version"
+        },
+        "model": "auth.permission",
+        "pk": 58
+    },
+    {
+        "fields": {
+            "codename": "change_documentversion",
+            "content_type": 20,
+            "name": "Can change document version"
+        },
+        "model": "auth.permission",
+        "pk": 59
+    },
+    {
+        "fields": {
+            "codename": "delete_documentversion",
+            "content_type": 20,
+            "name": "Can delete document version"
+        },
+        "model": "auth.permission",
+        "pk": 60
+    },
+    {
+        "fields": {
+            "codename": "add_token",
+            "content_type": 21,
+            "name": "Can add token"
+        },
+        "model": "auth.permission",
+        "pk": 61
+    },
+    {
+        "fields": {
+            "codename": "change_token",
+            "content_type": 21,
+            "name": "Can change token"
+        },
+        "model": "auth.permission",
+        "pk": 62
+    },
+    {
+        "fields": {
+            "codename": "delete_token",
+            "content_type": 21,
+            "name": "Can delete token"
+        },
+        "model": "auth.permission",
+        "pk": 63
+    },
+    {
+        "fields": {
+            "codename": "add_message",
+            "content_type": 22,
+            "name": "Can add Message"
+        },
+        "model": "auth.permission",
+        "pk": 64
+    },
+    {
+        "fields": {
+            "codename": "change_message",
+            "content_type": 22,
+            "name": "Can change Message"
+        },
+        "model": "auth.permission",
+        "pk": 65
+    },
+    {
+        "fields": {
+            "codename": "delete_message",
+            "content_type": 22,
+            "name": "Can delete Message"
+        },
+        "model": "auth.permission",
+        "pk": 66
+    }
+]

@@ -223,9 +223,15 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
                     )
 
 
+class JargonSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Jargon
+
+
 class ElementSerializer(serializers.ModelSerializer):
 
-    children = RecursiveField(many=True)
+    jargons = JargonSerializer(many=True)
 
     class Meta:
         model = Element
@@ -233,14 +239,7 @@ class ElementSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'order', 'element_type',
                   'required', 'default', 'human', 'help',
                   'validation', 'validation_msg', 'ask_if',
-                  'multiplicity', 'jargons', 'children', )
-
-
-
-class JargonSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Jargon
+                  'multiplicity', 'jargons', 'children' )
 
 
 class ProposalValidator(object):
@@ -352,4 +351,3 @@ class DocumentSerializer(serializers.ModelSerializer):
                   'updated_at', 'firm', 'proposals',
                   'versions',
                   )
-
