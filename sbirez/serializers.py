@@ -231,6 +231,7 @@ class JargonSerializer(serializers.ModelSerializer):
 
 class ElementSerializer(serializers.ModelSerializer):
 
+    children = RecursiveField(many=True)
     jargons = JargonSerializer(many=True)
 
     class Meta:
