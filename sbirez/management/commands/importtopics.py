@@ -1,3 +1,4 @@
+from data.copy_topic_csvs import load
 from django.core.management.base import BaseCommand
 from django.core.management import call_command, CommandError
 from django.conf import settings
@@ -42,7 +43,11 @@ class Command(BaseCommand):
         os.system("mdb-export %s agency > data/agency.csv" % mdb_filename)
         os.system("mdb-export %s topics > data/topic.csv" % mdb_filename)
 
+        load(solicitation_name)
+        '''
         os.system("""psql -v ON_ERROR_STOP=1 -v solicitation="'%s'" -f data/copy_topic_csvs.sql %s""" %
                   (solicitation_name, settings.DATABASES['default']['NAME']))
+                  '''
+
 
         call_command('indextopics')
