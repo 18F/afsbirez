@@ -30,13 +30,14 @@ area_names = {
 def get_area_name(raw):
     return area_names.get(raw, raw.title())
 
-def load(solicitation_name):
+def load(solicitation_name, clear=False):
     solicitation = Solicitation.objects.filter(
         name=solicitation_name).first()
     raw_agencies = csv.DictReader(open('data/agency.csv'))
     raw_commands = csv.DictReader(open('data/command.csv'))
     raw_topics = csv.DictReader(open('data/topic.csv'))
-    Topic.objects.filter(solicitation__name=solicitation_name).delete()
+    if clear:
+        Topic.objects.filter(solicitation__name=solicitation_name).delete()
     agencies = {a['AgencyID']: a['AgencyName'] for a in raw_agencies}
     commands = {a['CommandID']: a['CommandName'] for a in raw_commands}
     for raw_topic in raw_topics:

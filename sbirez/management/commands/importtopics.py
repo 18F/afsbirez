@@ -17,8 +17,11 @@ class Command(BaseCommand):
         parser.add_argument('mdb_filename')
         parser.add_argument('solicitation_name')
         # example: DoD SBIR 2015.1
+        parser.add_argument('--clear', action='store_true',
+                            default=False,
+                            help='Firts, delete all records with this solicitation')
 
-    def handle(self, mdb_filename, solicitation_name, **options):
+    def handle(self, mdb_filename, solicitation_name, clear=False, **options):
 
         if not os.path.isfile(mdb_filename):
             raise OSError("MS Access database %s not found" % mdb_filename)
@@ -34,16 +37,12 @@ class Command(BaseCommand):
         if solicitation_name not in solicitation_names:
             raise CommandError("Available solicitation_names are: " + ", ".join(solicitation_names))
 
-        confirm = input("Replace all existing data for solicitation %s (Y/n)?" % solicitation_name)
-        if confirm.lower().startswith("n"):
-            return
-
         # Use MDB tools to dump CSVs from MS Access .mdb file
         os.system("mdb-export %s commands > data/command.csv" % mdb_filename)
         os.system("mdb-export %s agency > data/agency.csv" % mdb_filename)
         os.system("mdb-export %s topics > data/topic.csv" % mdb_filename)
 
-        load(solicitation_name)
+        load(solicitation_name, clear=clear)
         '''
         os.system("""psql -v ON_ERROR_STOP=1 -v solicitation="'%s'" -f data/copy_topic_csvs.sql %s""" %
                   (solicitation_name, settings.DATABASES['default']['NAME']))
