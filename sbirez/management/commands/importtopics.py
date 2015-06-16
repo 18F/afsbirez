@@ -1,4 +1,4 @@
-from data.copy_topic_csvs import load
+from .modules.copy_topic_csvs import load
 from django.core.management.base import BaseCommand
 from django.core.management import call_command, CommandError
 from django.conf import settings
