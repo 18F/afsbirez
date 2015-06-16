@@ -1,4 +1,4 @@
-<div class="field field-textarea" ng-show="visible">
+<div class="field field-{{text.element_type}} field-textarea" ng-show="visible">
   <label class="question" for="{{fieldToken}}">
     <span marked="element.human"></span>
     <textarea id="{{fieldToken}}" name="{{fieldToken}}" class="form-control" ng-change="apply()" ng-model="storage"></textarea>

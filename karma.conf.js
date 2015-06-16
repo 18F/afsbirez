@@ -25,6 +25,7 @@ module.exports = function(config) {
       'sbirez/static/lib/angular-order-object-by/src/ng-order-object-by.js',
       'sbirez/static/lib/marked/lib/marked.js',
       'sbirez/static/lib/angular-marked/angular-marked.js',
+      'sbirez/static/jslib/parser/parser.js',
       'sbirez/static/js/app.js',
       'sbirez/static/js/controllers/*.js',
       'sbirez/static/js/services/*.js',

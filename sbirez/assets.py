@@ -1,6 +1,7 @@
 from django_assets import Bundle, register
 
 bower_js = Bundle(
+    "jslib/parser/parser.js",
     "lib/angular/angular.js",
     "lib/angular-resource/angular-resource.js",
     "lib/angular-cookies/angular-cookies.js",
@@ -33,8 +34,10 @@ angular_js = Bundle(
     "js/directives/elements/checkbox.js",
     "js/directives/elements/group.js",
     "js/directives/elements/lineitem.js",
+    "js/directives/elements/dynamiclineitem.js",
     "js/directives/elements/readonlytext.js",
     "js/directives/elements/upload.js",
+    "js/directives/elements/calculated.js",
     "js/controllers/main.js",
     "js/controllers/search.js",
     "js/controllers/form.js",

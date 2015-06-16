@@ -44,7 +44,6 @@ angular.module('sbirezApp').factory('SearchService', function($http, $q, Proposa
       lastSearch = searchTerm;
 
       var config = {};
-      var proposals;
       config.params = [];
       config.params.q = searchTerm;
       config.params.page_size = itemsPerPage;
