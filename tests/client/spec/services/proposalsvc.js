@@ -34,7 +34,7 @@ describe('Service: ProposalService', function () {
     'workflow': 1,
     'topic': 1,
     'title': 'title',
-    'data':"{\"nestedworkflow\":{\"nested_workflow1\":{\"bool_field1\":\"true\"},\"nested_workflow3\":{}}}"
+    'data':'{\"nestedworkflow\":{\"nested_workflow1\":{\"bool_field1\":\"true\"},\"nested_workflow3\":{}}}'
   };
 
   var elemData = {
@@ -479,7 +479,7 @@ describe('Service: ProposalService', function () {
 
   it('should open a login dialog if not authed on remove', function() {
     AuthenticationService.setAuthenticated(false);
-    var response = ProposalService.remove(1);
+    ProposalService.remove(1);
     $httpBackend.expectGET('static/views/partials/login.html').respond(200);
     $httpBackend.flush();
   });
@@ -495,7 +495,7 @@ describe('Service: ProposalService', function () {
 
   it('should open a login dialog if not authed on list', function() {
     AuthenticationService.setAuthenticated(false);
-    var response = ProposalService.list();
+    ProposalService.list();
     $httpBackend.expectGET('static/views/partials/login.html').respond(200);
     $httpBackend.flush();
   });
@@ -511,7 +511,7 @@ describe('Service: ProposalService', function () {
 
   it('should open a login dialog if not authed on get', function() {
     AuthenticationService.setAuthenticated(false);
-    var response = ProposalService.get(1);
+    ProposalService.get(1);
     $httpBackend.expectGET('static/views/partials/login.html').respond(200);
     $httpBackend.flush();
   });
@@ -529,7 +529,7 @@ describe('Service: ProposalService', function () {
     AuthenticationService.setAuthenticated(true);
     var goodHandler = jasmine.createSpy('success');
     var errorHandler = jasmine.createSpy('error');
-    var promise = ProposalService.complete().then(goodHandler, errorHandler);
+    ProposalService.complete().then(goodHandler, errorHandler);
     $rootScope.$digest();
     expect(errorHandler).toHaveBeenCalled();
     $httpBackend.flush();
@@ -552,7 +552,6 @@ describe('Service: ProposalService', function () {
 
   it('should open a login dialog if not authed on save', function() {
     AuthenticationService.setAuthenticated(false);
-    var data = {'field_1': '123', 'field_2': '234'};
     ProposalService.saveData();
     $httpBackend.expectGET('static/views/partials/login.html').respond(200);
     $httpBackend.flush();
@@ -563,7 +562,7 @@ describe('Service: ProposalService', function () {
     AuthenticationService.setAuthenticated(true);
     var goodHandler = jasmine.createSpy('success');
     var errorHandler = jasmine.createSpy('error');
-    var promise = ProposalService.saveData().then(goodHandler, errorHandler);
+    ProposalService.saveData().then(goodHandler, errorHandler);
     $rootScope.$digest();
     expect(errorHandler).toHaveBeenCalled();
     $httpBackend.flush();
@@ -608,7 +607,7 @@ describe('Service: ProposalService', function () {
     AuthenticationService.setAuthenticated(true);
     var goodHandler = jasmine.createSpy('success');
     var errorHandler = jasmine.createSpy('error');
-    var promise = ProposalService.load(523).then(goodHandler, errorHandler);
+    ProposalService.load(523).then(goodHandler, errorHandler);
     $httpBackend.expectGET('api/v1/proposals/523/').respond(404);
     $httpBackend.flush();
     expect(errorHandler).toHaveBeenCalled();
@@ -638,11 +637,11 @@ describe('Service: ProposalService', function () {
     AuthenticationService.setAuthenticated(true);
     var goodHandler = jasmine.createSpy('success');
     var errorHandler = jasmine.createSpy('error');
-    var promise = ProposalService.unload().then(goodHandler, errorHandler);
+    ProposalService.unload().then(goodHandler, errorHandler);
     $rootScope.$digest();
     expect(goodHandler).toHaveBeenCalled();    
     $httpBackend.flush();
-  })
+  });
 
   it('should open a login dialog if not authed on unload', function() {
     AuthenticationService.setAuthenticated(false);
@@ -657,33 +656,33 @@ describe('Service: ProposalService', function () {
     var wf;
     var goodHandler = jasmine.createSpy('success').andCallFake(function(data) { wf = data;});
     var errorHandler = jasmine.createSpy('error');
-    var promise = ProposalService.getWorkflow(2).then(goodHandler, errorHandler);
+    ProposalService.getWorkflow(2).then(goodHandler, errorHandler);
     $rootScope.$digest();
     expect(goodHandler).toHaveBeenCalled();
     expect(wf.current.name).toBe('nested_workflow1');
     expect(wf.previous).toBeNull();
     expect(wf.next).toBe(3);
-  })
+  });
 
   it('should return an error if no workflow is loaded and the user is authenticated', function() {
     $window.sessionStorage.userid = 1;
     AuthenticationService.setAuthenticated(true);
     var goodHandler = jasmine.createSpy('success');
     var errorHandler = jasmine.createSpy('error');
-    var promise = ProposalService.getWorkflow(2).then(goodHandler, errorHandler);
+    ProposalService.getWorkflow(2).then(goodHandler, errorHandler);
     $rootScope.$digest();
     expect(errorHandler).toHaveBeenCalled();
     $httpBackend.flush();
-  })
+  });
 
   it('should return an error if an invalid element is chosen when a workflow is loaded and the user is authenticated', function() {
     successfulLoad();
     var goodHandler = jasmine.createSpy('success');
     var errorHandler = jasmine.createSpy('error');
-    var promise = ProposalService.getWorkflow(2323).then(goodHandler, errorHandler);
+    ProposalService.getWorkflow(2323).then(goodHandler, errorHandler);
     $rootScope.$digest();
     expect(errorHandler).toHaveBeenCalled();
-  })
+  });
 
   it('should open a login dialog if not authed on getWorkflow', function() {
     AuthenticationService.setAuthenticated(false);
@@ -711,6 +710,7 @@ describe('Service: ProposalService', function () {
     $window.sessionStorage.userid = 1;
     AuthenticationService.setAuthenticated(true);
     $httpBackend.flush();
+    var ov;
     var goodHandler = jasmine.createSpy('success').andCallFake(function(data) { ov = data;});
     var errorHandler = jasmine.createSpy('error');
     ProposalService.getOverview().then(goodHandler, errorHandler);
@@ -760,7 +760,7 @@ describe('Service: ProposalService', function () {
 
   it ('should return the data value on successful registration with a validation callback', function() {
     successfulLoad();
-    var validationCallback = function(data) {};
+    var validationCallback = function() {};
 
     var result = ProposalService.register(boolField, validationCallback, null);
     $rootScope.$digest();
@@ -769,7 +769,7 @@ describe('Service: ProposalService', function () {
 
   it ('should return the data value on successful registration with a askif callback', function() {
     successfulLoad();
-    var askifCallback = function(data) {};
+    var askifCallback = function() {};
     var result = ProposalService.register(boolField, null, askifCallback);
     $rootScope.$digest();
     expect(result).toBe('true');
@@ -778,7 +778,7 @@ describe('Service: ProposalService', function () {
   it ('should call the askif callback if the field requests it', function() {
     successfulLoad();
     var callbackData;
-    var askifCallback = function(data) {callbackData = data};
+    var askifCallback = function(data) {callbackData = data;};
     ProposalService.register(boolField, null, null);
     ProposalService.register(dollarField, null, askifCallback);
     $rootScope.$digest();
@@ -802,7 +802,7 @@ describe('Service: ProposalService', function () {
     var storage = 12.99;
     ProposalService.apply(dollarField, storage);
     ProposalService.saveData();
-    var responseData = {"owner":"1","firm":null,"workflow":1,"topic":1,"title":"title","data":"{\"nestedworkflow\":{\"nested_workflow1\":{\"bool_field1\":\"true\",\"dollar_field1\":12.99},\"nested_workflow3\":{}}}"};
+    var responseData = {'owner':'1','firm':null,'workflow':1,'topic':1,'title':'title','data':'{\"nestedworkflow\":{\"nested_workflow1\":{\"bool_field1\":\"true\",\"dollar_field1\":12.99},\"nested_workflow3\":{}}}'};
     $httpBackend.expect('PUT', 'api/v1/proposals/1/partial/', responseData).respond(200);
     $httpBackend.flush();
   });
@@ -810,7 +810,7 @@ describe('Service: ProposalService', function () {
   it ('should update calculated fields on success, if needed', function() {
     successfulLoad();
     var callbackData;
-    var validationCallback = function(data) {callbackData = data};
+    var validationCallback = function(data) {callbackData = data;};
 
     ProposalService.register(boolField, null, null);
     ProposalService.register(dollarField, null, null);
@@ -824,7 +824,7 @@ describe('Service: ProposalService', function () {
   it ('should call the askif callback if an apply changes the value', function() {
     successfulLoad();
     var callbackData;
-    var askifCallback = function(data) {callbackData = data};
+    var askifCallback = function(data) {callbackData = data;};
     ProposalService.register(boolField, null, null);
     ProposalService.register(dollarField, null, askifCallback);
     $rootScope.$digest();
@@ -855,8 +855,8 @@ describe('Service: ProposalService', function () {
     successfulLoad();
     var callbackDataUnset;
     var callbackDataSet;
-    var validationCallbackSkipped = function(data) {callbackDataUnset = data};
-    var validationCallbackCalled = function(data) {callbackDataSet = data};
+    var validationCallbackSkipped = function(data) {callbackDataUnset = data;};
+    var validationCallbackCalled = function(data) {callbackDataSet = data;};
     ProposalService.register(boolField, validationCallbackSkipped, null);
     ProposalService.register(boolField2, validationCallbackCalled, null);
     $rootScope.$digest();
@@ -923,7 +923,7 @@ describe('Service: ProposalService', function () {
     $rootScope.$digest();
     var value = ProposalService.getDynamicCount(dynamicLineItem);
     expect(value).toBe(1);
-    var ret = ProposalService.addDynamicItem(dynamicLineItem);
+    ProposalService.addDynamicItem(dynamicLineItem);
     ProposalService.register(dollarField2, null, null, '1');
     value = ProposalService.getDynamicCount(dynamicLineItem);
     expect(value).toBe(2);
@@ -961,7 +961,7 @@ describe('Service: ProposalService', function () {
     $rootScope.$digest();
     var value = ProposalService.getDynamicCount(dynamicLineItem);
     expect(value).toBe(1);
-    var ret = ProposalService.addDynamicItem(dynamicLineItem);
+    ProposalService.addDynamicItem(dynamicLineItem);
     ProposalService.register(dollarField2, null, null, '1');
     value = ProposalService.getDynamicCount(dynamicLineItem);
     expect(value).toBe(2);

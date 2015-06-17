@@ -569,7 +569,6 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     if (calculatedCallbacks[fieldName] !== undefined) {
       record = calculatedCallbacks[fieldName];
       record.value = numericValue(value);
-      //console.log('applied', record);
       for (index = 0; index < record.callbacks.length; index++) {
         params = [];
         if (record.callbacks[index].variables[0] !== 'sum') {
@@ -577,9 +576,6 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
             var varName = getFieldName(record.callbacks[index].variables[varIndex], multipleToken);
             if (calculatedCallbacks[varName]) {
               params.push(calculatedCallbacks[varName].value);
-            }
-            else {
-              console.log('not found', varName);
             }
           }
           record.callbacks[index].callback(record.callbacks[index].calculation.apply(null, params));
