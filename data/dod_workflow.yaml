@@ -5,12 +5,12 @@
   children:
     -
       name: dod_coversheet
-      element_type: group
+      element_type: workflow 
       human: Coversheet
       children:
       -
         name: eligibility
-        element_type: group
+        element_type: workflow 
         children:
         -
           name: release_to_edc
@@ -109,7 +109,7 @@
           element_type: read_only_text
       -
         name: business_information
-        element_type: group
+        element_type: workflow 
         children:
         -
           name: employee_count
@@ -242,7 +242,7 @@
           ask_if: not dcaa_review
       -
         name: proposal_information
-        element_type: group
+        element_type: workflow 
         children:
         -
           name: proposed_cost
@@ -349,7 +349,7 @@
           validation_msg: Maximum of 8 keywords
       -
         name: project_team_information
-        element_type: group
+        element_type: workflow 
         children:
         -
           name: teaming_partners_yn
@@ -388,8 +388,8 @@
           required: True
       -
         name: pi_info
-        element_type: group
-        human: Principal Investigator (PI)/Corporate Official (CO) Information
+        element_type: workflow 
+        human: Principal Investigator/Corporate Official Information
         children:
         -
           name: pi_time_percentage
@@ -445,59 +445,49 @@
     -
       name: dod_technicalvolume
       human: Technical Volume
-      element_type: group 
+      element_type: workflow 
       children:
         -
-          name: reviewed_requirement_group
-          element_type: group
-          human: Requirements Review
-          children:
-          -
-            name: reviewed_requirement 
-            element_type: bool
-            human: Have you reviewed all the requirements in the Air Force and 
-                   DoD Solicitation instructions?
-            required: True
+          name: reviewed_requirement 
+          element_type: bool
+          human: Have you reviewed all the requirements in the Air Force and 
+                 DoD Solicitation instructions?
+          required: True
         -
-          name: document_format 
-          element_type: group
-          human: Technical Volume Formatting
-          children:
-          -
-            name: is_pdf 
-            element_type: bool
-            human: Is the Technical Volume a single Portable Document Format 
-                   (PDF) file, including graphics?
-            required: True
-          -
-            name: was_virus_scanned 
-            element_type: bool
-            human: Did you virus scan the document?
-            required: True
-          -
-            name: is_20_pages
-            element_type: bool
-            human: Is the document less than or equal to twenty pages in length?
-            required: True
-          -
-            name: is_font_and_paper_correct 
-            element_type: bool
-            human: Is the font 10 pt. or larger on 8-1/2" x 11" paper with one-inch margins?
-            required: True
-          -
-            name: contains_header 
-            element_type: bool 
-            human: Does it contain a header with the company name, topic number, and
-                   proposal number? This header can exist in the margin.
-            required: True
-          -
-            name: tech_volume_upload 
-            element_type: file_upload 
-            human: Upload Technical Volume          
-            required: True
+          name: is_pdf 
+          element_type: bool
+          human: Is the Technical Volume a single Portable Document Format 
+                 (PDF) file, including graphics?
+          required: True
+        -
+          name: was_virus_scanned 
+          element_type: bool
+          human: Did you virus scan the document?
+          required: True
+        -
+          name: is_20_pages
+          element_type: bool
+          human: Is the document less than or equal to twenty pages in length?
+          required: True
+        -
+          name: is_font_and_paper_correct 
+          element_type: bool
+          human: Is the font 10 pt. or larger on 8-1/2" x 11" paper with one-inch margins?
+          required: True
+        -
+          name: contains_header 
+          element_type: bool 
+          human: Does it contain a header with the company name, topic number, and
+                 proposal number? This header can exist in the margin.
+          required: True
+        -
+          name: tech_volume_upload 
+          element_type: file_upload 
+          human: Upload Technical Volume          
+          required: True
     -
       name: dod_cost_volume 
-      element_type: group
+      element_type: workflow 
       human: Cost Volume
       children:
       -
@@ -526,19 +516,45 @@
           element_type: float
           required: True
         -
-          name: phase_1_cost
-          element_type: dollars
-          required: True
+          name: labor_cost
+          human: Cost
+          element_type: calculated
+          validation: "hourly_rate * estimated_hours"
+          required: False 
+      -
+        name: subtotal_direct_labor 
+        element_type: calculated 
+        required: False
+        validation: "sum(labor_cost)" 
+        human: "Subtotal Direct Labor (DL)"
       -
         name: fringe_benefit_percentage
         element_type: percentage
         required: True
-        human: "Fringe Benefits, if not included in Overhead, (rate: %)"
+        human: "Fringe Benefits Rate, if not included in Overhead (%)"
+      -
+        name: fringe_benefit
+        element_type: calculated 
+        required: False 
+        validation: "subtotal_direct_labor * fringe_benefit_percentage * .01" 
+        human: "Fringe Benefits (rate x DL)"
       -
         name: labor_overhead_percentage
         element_type: percentage
-        human: "Labor Overhead (rate: %)"
+        human: "Labor Overhead Rate (%)"
         required: True
+      -
+        name: labor_overhead
+        element_type: calculated 
+        human: "Labor Overhead (rate * (DL + Fringe))"
+        validation: "(subtotal_direct_labor + fringe_benefit) * labor_overhead_percentage * .01" 
+        required: True
+      -
+        name: total_direct_labor
+        element_type: calculated 
+        human: "Total Direct Labor (TDL)"
+        validation: "subtotal_direct_labor + fringe_benefit + labor_overhead" 
+        required: False 
       -
         name: direct_material_costs
         element_type: line_item
@@ -546,15 +562,37 @@
         children:
         -
           name: name
-          element_type: med_str
-          human: ""
+          element_type: big_str
+          human: "Item Description" 
+          required: True
         -
-          name: phase_1_cost
+          name: material_cost
+          human: Cost
           element_type: dollars
+          required: True
+      -
+        name: subtotal_direct_material
+        element_type: calculated 
+        required: False
+        validation: "sum(material_cost)" 
+        human: "Subtotal Direct Material Costs (DM)"
       -
         name: material_overhead_percentage
         element_type: percentage
-        human: "Material Overhead (rate: %)"
+        human: "Material Overhead Rate (%)"
+        required: True
+      -
+        name: material_overhead
+        element_type: calculated 
+        human: "Material Overhead (rate * DM)"
+        validation: "subtotal_direct_material * material_overhead_percentage * .01" 
+        required: False 
+      -
+        name: total_direct_material
+        element_type: calculated 
+        human: "Total Direct Material (TDM)"
+        validation: "subtotal_direct_material + material_overhead" 
+        required: False 
       -
         name: other_direct_costs
         element_type: line_item
@@ -563,25 +601,85 @@
         -
           name: name
           element_type: med_str
-          human: ""
+          human: "Item Description"
+          required: True
         -
-          name: phase_1_cost
+          name: other_cost
+          human: Cost
           element_type: dollars
+          required: True
       -
-        name: other_direct_cost_overhead
+        name: subtotal_other
+        element_type: calculated
+        required: False
+        validation: "sum(other_cost)"
+        human: "Subtotal Other Direct Costs (ODC)"
+      -
+        name: other_overhead_percentage
         element_type: percentage
-        human: "Direct Cost Overhead (rate: %)"
+        human: "Direct Cost Overhead Rate (%)"
         required: True
+      -
+        name: other_overhead
+        element_type: calculated
+        human: "Direct Cost Overhead (rate * ODC)"
+        validation: "subtotal_other * other_overhead_percentage * .01"
+        required: False
+      -
+        name: total_other_direct
+        element_type: calculated
+        human: "Total Other Direct Costs (TODC)"
+        validation: "subtotal_other + other_overhead"
+        required: False
       -
         name: general_admin_rate
         element_type: percentage
-        human: "General & Administrative (rate: %)"
+        human: "General & Administrative Rate (%)"
+        required: True
+      -
+        name: general_admin_rate_labor
+        element_type: checkbox 
+        human: Apply G & A rate to Total Direct Labor (TDL)
+        required: False
+      -
+        name: general_admin_rate_materials
+        element_type: checkbox 
+        required: False
+        human: Apply G & A rate to Total Direct Materials (TDM)
+      -
+        name: general_admin_rate_other
+        element_type: checkbox 
+        required: False
+        human: Apply G & A rate to Total Other Direct Costs (TODC)
+      -
+        name: general_admin
+        element_type: calculated
+        required: False
+        human: General & Administrative Cost
+        validation: "(general_admin_rate * general_admin_rate_labor * .01 * total_direct_labor) + (general_admin_rate * general_admin_rate_materials * .01 * total_direct_material) + (general_admin_rate * general_admin_rate_other * .01 * total_other_direct)"
+      -
+        name: total_cost 
+        element_type: calculated 
+        human: "Total Cost"
+        validation: "total_other_direct + total_direct_material + total_direct_labor + general_admin"
+        required: False 
+      -
+        name: fee_or_profit_rate
+        element_type: percentage
+        human: "Fee or Profit Rate (%)"
         required: True
       -
         name: fee_or_profit
-        element_type: percentage
-        human: "Fee or Profit (rate: %)"
-        required: True
+        element_type: calculated
+        human: "Fee or Profit"
+        required: False
+        validation: "total_cost * fee_or_profit_rate * .01"
+      -
+        name: estimated_total_cost 
+        element_type: calculated 
+        human: "Estimated Total Cost"
+        validation: "total_cost + fee_or_profit"
+        required: False 
       -
         name: discretionary_technical_assistance
         element_type: dollars
@@ -654,7 +752,7 @@
         element_type: read_only_text
     -
       name: dod_company_commercialization_report
-      element_type: group
+      element_type: workflow 
       human: Company Commercialization Report
       children:
       -

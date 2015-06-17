@@ -5,7 +5,7 @@ angular.module('sbirezApp')
     $scope.proposalId = parseInt($state.params.id);
     $scope.proposal = {};
     $scope.workflow = {};
-    $scope.overview;
+    $scope.overview = {};
     $scope.goodStartWorkflow = null;
     $scope.buttonMessage = 'Get Started';
     $rootScope.bodyClass = 'proposal proposal-overview';
@@ -34,12 +34,16 @@ angular.module('sbirezApp')
 
     ProposalService.load($scope.proposalId).then(function(data) {
       $scope.proposal = data;
-      $scope.workflow = ProposalService.getWorkflow(parseInt($scope.proposal.workflow)).current;
-      $scope.overview = ProposalService.getOverview(false);
-      $scope.goodStartWorkflow = goodStartElement();
-      if ($scope.goodStartWorkflow !== $scope.overview[0].id) {
-        $scope.buttonMessage = 'Continue';
-      }
+      $scope.workflow = ProposalService.getWorkflow(parseInt($scope.proposal.workflow)).then(function(data) {
+        $scope.workflow = data.current;
+      });
+      ProposalService.getOverview(false).then(function(data) {
+        $scope.overview = data;
+        $scope.goodStartWorkflow = goodStartElement();
+        if ($scope.goodStartWorkflow !== $scope.overview[0].id) {
+          $scope.buttonMessage = 'Continue';
+        }
+      });
     });
 
     $scope.validate = function() {

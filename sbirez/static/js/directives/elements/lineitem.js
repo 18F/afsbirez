@@ -13,6 +13,7 @@ angular.module('sbirezApp').directive('lineitem', function() {
       function ($scope, ProposalService) {
         $scope.element = $scope.lineitem;
         $scope.visible = true;
+        $scope.visibleCount = $scope.element.multiplicity.length;
 
         var askIfCallback = function(data) {
           $scope.visible = (data === true || data === 'true');

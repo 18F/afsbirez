@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('SavedOppsCtrl', function ($scope, $rootScope, SavedOpportunityService, ProposalService) {
+  .controller('SavedOppsCtrl', function ($scope, $rootScope, SavedOpportunityService) {
     $scope.data = {};
     $rootScope.bodyClass = 'my-topics';
 

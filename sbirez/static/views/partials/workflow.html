@@ -46,9 +46,11 @@
           <div text="element" ng-if="element.element_type === 'text'"></div>
           <div bool="element" ng-if="element.element_type === 'bool'"></div>
           <div checkbox="element" ng-if="element.element_type === 'checkbox'"></div>
+          <div calculated="element" ng-if="element.element_type === 'calculated'"></div>
           <div readonlytext="element" ng-if="element.element_type === 'read_only_text'"></div>
           <div group="element" method="jumpTo" ng-if="element.element_type === 'workflow' || element.element_type === 'group'"></div>
-          <div lineitem="element" ng-if="element.element_type === 'line_item'" proposal="{{proposalId}}"></div>
+          <div dynamiclineitem="element" ng-if="element.element_type === 'line_item' && element.multiplicityCount > 0" proposal="{{proposalId}}"></div>
+          <div lineitem="element" ng-if="element.element_type === 'line_item' && !element.multiplicityCount" proposal="{{proposalId}}"></div>
           <div upload="element" ng-if="element.element_type === 'file_upload'" proposal="{{proposalId}}"></div>
         </div>
         <footer>

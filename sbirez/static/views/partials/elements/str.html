@@ -1,4 +1,4 @@
-<div class="field" ng-show="visible" ng-class="{'is-branch': element.ask_if, 'field-select': options.length > 0, 'field-text': options.length === 0}">
+<div class="field field-{{str.element_type}}" ng-show="visible" ng-class="{'is-branch': element.ask_if, 'field-select': options.length > 0, 'field-text': options.length === 0}">
   <label for="{{fieldToken}}"><span marked="fieldName" class="label-text"></span></label>
   <div ng-show="options.length === 0">
     <input id="{{fieldToken}}" class="form-control" ng-change="apply()" ng-model="storage" type="text"></input>

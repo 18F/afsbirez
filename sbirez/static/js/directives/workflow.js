@@ -17,20 +17,21 @@ angular.module('sbirezApp').directive('workflow', function() {
         $scope.nextWorkflow = null;
         $scope.proposalData = {};
         $scope.validationData = undefined;
-        $scope.overview;
+        $scope.overview = {};
         $scope.proposal = {};
         $scope.proposalId = parseInt($scope.proposalId);
 
         $scope.jumpTo = function(workflow_id) {
           if (workflow_id !== null) {
-            var data = ProposalService.getWorkflow(workflow_id);
-            if (workflow_id === undefined) {
-              $scope.startingWorkflow = data.current.id;
-            }
-            $scope.currentWorkflow = data.current;
-            $scope.backWorkflow = data.previous;
-            $scope.nextWorkflow = data.next;
-            $location.search('current', workflow_id);
+            ProposalService.getWorkflow(workflow_id).then(function(data) {
+              if (workflow_id === undefined) {
+                $scope.startingWorkflow = data.current.id;
+              }
+              $scope.currentWorkflow = data.current;
+              $scope.backWorkflow = data.previous;
+              $scope.nextWorkflow = data.next;
+              $location.search('current', workflow_id);
+            });
           }
         };
 
@@ -39,7 +40,9 @@ angular.module('sbirezApp').directive('workflow', function() {
           ProposalService.get(parseInt($scope.proposalId)).then(function(data) {
             $scope.proposal = data;
           });
-          $scope.overview = ProposalService.getOverview(false);
+          ProposalService.getOverview(false).then(function(data) {
+            $scope.overview = data;
+          }); 
         });
 
         $scope.showBackButton = function() {
@@ -60,7 +63,7 @@ angular.module('sbirezApp').directive('workflow', function() {
           $state.go('app.proposals.report',{id: $scope.proposalId});
         };
 
-        $scope.saveAndExit = function(next) { 
+        $scope.saveAndExit = function() { 
           ProposalService.validate();
           ProposalService.saveData();
           $scope.exit();

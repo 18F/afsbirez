@@ -132,7 +132,7 @@ describe('Directive: WorkflowDirective', function () {
         'id': 3,
         'name': 'nested_workflow2',
         'order': 1,
-        'element_type': 'group',
+        'element_type': 'workflow',
         'required': false,
         'default': null,
         'human': 'Nested 2',
@@ -227,6 +227,7 @@ describe('Directive: WorkflowDirective', function () {
   it('jumpTo changes state correctly if given valid id', function() {
     var formElement = loadNestedWorkflows(); 
     $rootScope.$$childTail.jumpTo(2);
+    $rootScope.$digest();
     expect($rootScope.$$childTail.currentWorkflow.id).toBe(2);
     expect($rootScope.$$childTail.nextWorkflow).toBe(3);
     expect($rootScope.$$childTail.backWorkflow).toBeNull();
@@ -235,6 +236,7 @@ describe('Directive: WorkflowDirective', function () {
   it('jumpTo does not change state if given invalid id', function() {
     var formElement = loadNestedWorkflows(); 
     $rootScope.$$childTail.jumpTo(20);
+    $rootScope.$digest();
     expect($rootScope.$$childTail.currentWorkflow.id).toBe(1);
     expect($rootScope.$$childTail.nextWorkflow).toBe(2);
     expect($rootScope.$$childTail.backWorkflow).toBeNull();
@@ -243,6 +245,7 @@ describe('Directive: WorkflowDirective', function () {
   it('showBackButton and showNextButton state are true when they are expected to be', function() {
     var formElement = loadNestedWorkflows(); 
     $rootScope.$$childTail.jumpTo(2);
+    $rootScope.$digest();
     expect($rootScope.$$childTail.currentWorkflow.id).toBe(2);
     expect($rootScope.$$childTail.showBackButton()).toBe(false);
     expect($rootScope.$$childTail.showNextButton()).toBe(true);
@@ -258,6 +261,7 @@ describe('Directive: WorkflowDirective', function () {
   it('showBackButton and showNextButton state are false when they are expected to be', function() {
     var formElement = loadNestedWorkflows(); 
     $rootScope.$$childTail.jumpTo(3);
+    $rootScope.$digest();
     expect($rootScope.$$childTail.currentWorkflow.id).toBe(3);
     expect($rootScope.$$childTail.showBackButton()).toBe(true);
     expect($rootScope.$$childTail.showNextButton()).toBe(false);

@@ -1,36 +1,42 @@
 'use strict';
 
-angular.module('sbirezApp').directive('str', function() {
+angular.module('sbirezApp').directive('calculated', function() {
   return {
     restrict: 'A',
     replace: true,
     scope: {
-      str: '=',
+      calculated: '=',
       multiplename: '=?',
       multipletoken: '=?'
     },
-    templateUrl: 'static/views/partials/elements/str.html',
+    templateUrl: 'static/views/partials/elements/calculated.html',
     controller: ['$scope', 'ProposalService',
       function ($scope, ProposalService) {
-        $scope.element = $scope.str;
+        $scope.element = $scope.calculated;
         $scope.fieldName = $scope.element.human;
         $scope.options = [];
         $scope.visible = true;
         $scope.validationstorage = '';
 
         var validationCallback = function(data) {
-          $scope.validationstorage = data;
+          $scope.storage = data;
+          $scope.apply();
         };
 
         var askIfCallback = function(data) {
           $scope.visible = (data === true || data === 'true');
         };
 
+        $scope.apply = function() {
+          ProposalService.apply($scope.element, $scope.storage, $scope.multipletoken);
+        };
+
         $scope.storage = ProposalService.register($scope.element,
                                  validationCallback,
                                  $scope.element.ask_if !== null ? askIfCallback : null,
                                  $scope.multipletoken);
-        if ($scope.storage.length === undefined) {
+        //console.log('$storage', $scope.storage, $scope.element.name, $scope.storage.length);
+        if ($scope.storage.length === undefined && typeof $scope.storage === 'object') {
           $scope.storage = '';
         }
 
@@ -44,30 +50,8 @@ angular.module('sbirezApp').directive('str', function() {
           $scope.fieldToken = $scope.element.name + '_' + $scope.multipletoken;
         }
 
-        $scope.apply = function() {
-          ProposalService.apply($scope.element, $scope.storage, $scope.multipletoken);
-        };
-
         if ($scope.multiplename !== undefined && $scope.fieldName.indexOf('%multiple%') > -1) {
           $scope.fieldName = $scope.fieldName.replace('%multiple%', $scope.multiplename);
-        }
-
-        if ($scope.element.validation) {
-          var validationElements = $scope.element.validation.split(' ');
-          if (validationElements[0] === 'one_of' && validationElements.length > 2) {
-            validationElements.splice(0,1);
-            if (validationElements[0].slice(0, 1) === '"') {
-              var options = validationElements.join(' ');
-              validationElements = options.split(',');
-              for (var i = 0; i < validationElements.length; i++) {
-                validationElements[i] = validationElements[i].trim();
-                validationElements[i] = validationElements[i].slice(1, validationElements[i].length - 1);
-              }
-              $scope.options = validationElements;
-            } else {
-              $scope.options = validationElements;
-            }
-          }
         }
       }
     ]
