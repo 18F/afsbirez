@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from sbirez.models import Topic, Firm, Proposal, Address, Person
-from sbirez.models import Element, Document, DocumentVersion
+from sbirez.models import Element, Document, DocumentVersion, Jargon
 from rest_framework import viewsets, mixins, generics, status, permissions, exceptions
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
@@ -16,6 +16,7 @@ from djmail import template_mail
 
 from sbirez.serializers import FirmSerializer, ProposalSerializer, PartialProposalSerializer
 from sbirez.serializers import AddressSerializer, ElementSerializer
+from sbirez.serializers import JargonSerializer
 from sbirez.serializers import PersonSerializer, DocumentSerializer, DocumentVersionSerializer
 import marshmallow as mm
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -140,6 +141,14 @@ class ElementViewSet(viewsets.ReadOnlyModelViewSet):
         return [ReadOnlyUnlessStaff(), ]
 
 
+class JargonViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Jargon.objects.all()
+    serializer_class = JargonSerializer
+
+    def get_permissions(self):
+        return [ReadOnlyUnlessStaff(), ]
+
+
 class ProposalViewSet(viewsets.ModelViewSet):
     serializer_class = ProposalSerializer
     queryset = Proposal.objects.all()
@@ -237,4 +246,3 @@ class DocumentVersionViewSet(viewsets.ModelViewSet):
     queryset = DocumentVersion.objects.all()
     serializer_class = DocumentVersionSerializer
     permission_classes = (IsAuthenticated,)
-

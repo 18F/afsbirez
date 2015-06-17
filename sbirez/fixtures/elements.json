@@ -1,1 +1,229 @@
-[{"pk": 1, "model": "sbirez.element", "fields": {"element_type": "workflow", "help": null, "order": 1, "name": "holy_grail_workflow", "multiplicity": null, "validation": null, "parent": null, "ask_if": null, "validation_msg": null, "default": null, "human": "Holy Grail Workflow", "required": false}}, {"pk": 2, "model": "sbirez.element", "fields": {"element_type": "med_str", "help": "Thy moniker", "order": 1, "name": "quest_thy_name", "multiplicity": null, "validation": null, "parent": 1, "ask_if": null, "validation_msg": null, "default": null, "human": "What is thy name?", "required": false}}, {"pk": 3, "model": "sbirez.element", "fields": {"element_type": "group", "help": null, "order": 2, "name": "subquest", "multiplicity": null, "validation": null, "parent": 1, "ask_if": null, "validation_msg": null, "default": null, "human": "Subquest", "required": false}}, {"pk": 4, "model": "sbirez.element", "fields": {"element_type": "med_str", "help": null, "order": 1, "name": "quest_thy_quest", "multiplicity": null, "validation": null, "parent": 3, "ask_if": null, "validation_msg": null, "default": null, "human": "What is thy quest?", "required": false}}, {"pk": 5, "model": "sbirez.element", "fields": {"element_type": "med_str", "help": null, "order": 2, "name": "quest_thy_favorite_color", "multiplicity": null, "validation": "does_not_equal blue", "parent": 3, "ask_if": null, "validation_msg": "Lancelot already said blue", "default": null, "human": "What is thy favorite color?", "required": false}}]
+[
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "workflow",
+            "help": null,
+            "human": "Holy Grail Workflow",
+            "multiplicity": null,
+            "name": "holy_grail_workflow",
+            "order": 1,
+            "parent": null,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "med_str",
+            "help": "Thy moniker",
+            "human": "What is thy name?",
+            "multiplicity": null,
+            "name": "quest_thy_name",
+            "order": 1,
+            "parent": 1,
+            "required": true,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "group",
+            "help": null,
+            "human": "Subquest",
+            "multiplicity": null,
+            "name": "subquest",
+            "order": 2,
+            "parent": 1,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "med_str",
+            "help": null,
+            "human": "What is thy quest?",
+            "multiplicity": null,
+            "name": "quest_thy_quest",
+            "order": 1,
+            "parent": 3,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "med_str",
+            "help": null,
+            "human": "What is thy favorite color?",
+            "multiplicity": null,
+            "name": "quest_thy_favorite_color",
+            "order": 2,
+            "parent": 3,
+            "required": true,
+            "validation": "does_not_equal blue",
+            "validation_msg": "Lancelot already said blue"
+        },
+        "model": "sbirez.element",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "line_item",
+            "help": null,
+            "human": "Knights",
+            "multiplicity": "Lancelot, Galahad, Robin",
+            "name": "knights",
+            "order": 3,
+            "parent": 1,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 6
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "bool",
+            "help": null,
+            "human": "Is Courageous",
+            "multiplicity": null,
+            "name": "is_courageous",
+            "order": 1,
+            "parent": 6,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 7
+    },
+    {
+        "fields": {
+            "ask_if": "is_courageous",
+            "default": null,
+            "element_type": "int",
+            "help": null,
+            "human": "On a scale of 1 to 10, how <span class=\"jargon\" jargon=\"courage\">courageous</span>?",
+            "multiplicity": null,
+            "name": "how_courageous_exactly",
+            "order": 2,
+            "parent": 6,
+            "required": true,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 8
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "line_item",
+            "help": null,
+            "human": "Minstrels",
+            "multiplicity": "3",
+            "name": "minstrels",
+            "order": 4,
+            "parent": 1,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 9
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "med_str",
+            "help": null,
+            "human": "Name",
+            "multiplicity": null,
+            "name": "name",
+            "order": 1,
+            "parent": 9,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 10
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "med_str",
+            "help": null,
+            "human": "Instrument",
+            "multiplicity": null,
+            "name": "instrument",
+            "order": 2,
+            "parent": 9,
+            "required": false,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 11
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "float",
+            "help": null,
+            "human": "weight in kg",
+            "multiplicity": null,
+            "name": "kg",
+            "order": 3,
+            "parent": 9,
+            "required": true,
+            "validation": "not_less_than 0",
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 12
+    },
+    {
+        "fields": {
+            "elements": [
+                8
+            ],
+            "html": "the ability to do something that frightens one",
+            "name": "courage"
+        },
+        "model": "sbirez.jargon",
+        "pk": 1
+    }
+]

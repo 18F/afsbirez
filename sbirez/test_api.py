@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework_proxy.views import ProxyView
 from collections import OrderedDict
 from copy import deepcopy
+import collections
 import json
 from unittest import mock
 
@@ -781,12 +782,27 @@ class ElementTests(APITestCase):
         self.assertEqual(response.data["name"], 'holy_grail_workflow')
         self.assertEqual(response.data['children'][0]['human'], 'What is thy name?')
 
-    # Check that default value for `human` field working
-    def test_workflow_included(self):
-        response = self.client.get('/api/v1/elements/')
-        all_humans = [n['human'] for n in response.data['results']]
-        self.assertIn('Holy Grail Workflow', all_humans)
+    # Check that nested jargon is included
+    def test_jargon_present(self):
+        response = self.client.get('/api/v1/elements/8/')
+        self.assertEqual(len(response.data['jargons']), 1)
+        self.assertEqual(type(response.data['jargons'][0]),
+                         collections.OrderedDict)
 
+
+class JargonTests(APITestCase):
+
+    fixtures = ['elements.json', ]
+
+    # Check that the jargon index loads
+    def test_jargon_view_set(self):
+        response = self.client.get('/api/v1/jargons/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def test_get_single_jargon(self):
+        response = self.client.get('/api/v1/jargons/1/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data["name"], 'courage')
 
 
 class PersonTests(APITestCase):
@@ -1254,5 +1270,3 @@ class PasswordHandlingTests(APITestCase):
                                     {'email': '  this is not an email address  '})
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual('Enter a valid email address.', response.data['email'][0])
-
-
