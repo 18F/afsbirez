@@ -258,6 +258,12 @@ class Element(models.Model):
         return errors
 
 
+class Jargon(models.Model):
+    name = models.TextField(unique=True)
+    html = models.TextField()
+    elements = models.ManyToManyField('Element', blank=True, null=True, related_name='jargons')
+
+
 class Solicitation(models.Model):
     name = models.TextField(unique=True)
     element = models.ForeignKey(Element, related_name='element', null=True)
