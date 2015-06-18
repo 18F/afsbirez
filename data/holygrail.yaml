@@ -60,3 +60,9 @@
       required: True
       element_type: float
       validation: not_less_than 0
+    -
+      name: lb
+      human: weight in lb
+      required: True
+      element_type: float
+      validation: "kg / 2.20462"

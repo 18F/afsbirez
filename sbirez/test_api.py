@@ -1065,11 +1065,13 @@ class ProposalValidationTests(APITestCase):
                       "name": "Phil",
                       "instrument": "phlute",
                       "kg": 77.1,
+                      "lb": 169.7,
                       },
                   "1": {
                       "name": "Sasha",
                       "instrument": "sackbut",
                       "kg": 55,
+                      "lb": 121,
                       },
                   }
              })

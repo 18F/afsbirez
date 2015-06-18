@@ -1,4 +1,5 @@
 import hashlib
+import re
 import shlex
 
 from django.db import models
@@ -200,6 +201,9 @@ class Element(models.Model):
                 and not accept_partial
                 and ((not self.ask_if) or datum.get(self.ask_if)))
 
+    # recognize "validations" that are actually calculations
+    _calc_pattern = re.compile(r"\S\s+[+-/*]\s+\S")
+
     def validation_errors(self, top_level, data, accept_partial):
         """
         Assemble a list of all errors found when this element's validation is
@@ -234,19 +238,22 @@ class Element(models.Model):
 
             if self.validation:
                 for validation in self.validation.split(';'):
+                    if self._calc_pattern.search(validation):
+                        # This "validation" is actually a calculation
+                        continue
                     args = shlex.split(validation)
                     function_name = args.pop(0)
                     try:
                         func = getattr(validation_helpers, function_name)
+                        if not func(top_level, found, *args):
+                            errors.append(
+                                '%s: %s' % (self.name, self.validation_msg or
+                                                       "failed %s" % function_name))
                     except AttributeError:
                         # validation refers to a function not found in helper library
                         errors.append(
-                            '%s: validation function %s absent from validation_helpers.py',
+                            '%s: validation function %s absent from validation_helpers.py' %
                             (self.name, function_name))
-                    if not func(top_level, found, *args):
-                        errors.append(
-                            '%s: %s' % (self.name, self.validation_msg or
-                                                   "failed %s" % function_name))
 
             if self.multiplicity:
                 # then the keys are not relevant, and we just want to validate values
