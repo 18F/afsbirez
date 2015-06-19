@@ -447,7 +447,7 @@
             "default": null,
             "element_type": "int",
             "help": null,
-            "human": "On a scale of 1 to 10, how courageous?",
+            "human": "On a scale of 1 to 10, how <span class=\"jargon\" jargon=\"courage\">courageous</span>?",
             "multiplicity": null,
             "name": "how_courageous_exactly",
             "order": 2,
@@ -517,7 +517,7 @@
         "fields": {
             "ask_if": null,
             "default": null,
-            "element_type": "med_str",
+            "element_type": "float",
             "help": null,
             "human": "weight in kg",
             "multiplicity": null,
@@ -530,6 +530,24 @@
         },
         "model": "sbirez.element",
         "pk": 12
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "float",
+            "help": null,
+            "human": "weight in lb",
+            "multiplicity": null,
+            "name": "lb",
+            "order": 4,
+            "parent": 9,
+            "required": true,
+            "validation": "kg / 2.20462",
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 13
     },
     {
         "fields": {
