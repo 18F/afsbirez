@@ -293,9 +293,9 @@
         "fields": {
             "element": null,
             "name": "DoD SBIR 2015.1",
-            "pre_release_date": "2014-12-12T05:00:00Z",
-            "proposals_begin_date": "2015-01-15T05:00:00Z",
-            "proposals_end_date": "2015-02-18T05:00:00Z"
+            "pre_release_date": "2014-12-12",
+            "proposals_begin_date": "2015-01-15",
+            "proposals_end_date": "2015-02-18"
         },
         "model": "sbirez.solicitation",
         "pk": 1

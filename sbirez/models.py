@@ -1,4 +1,5 @@
 import hashlib
+import json
 import shlex
 
 from django.db import models
@@ -9,6 +10,8 @@ from django.conf import settings
 from custom_user.models import AbstractEmailUser
 from rest_framework import serializers
 from django_pgjson.fields import JsonField
+from django.db import transaction
+from django.core.exceptions import ValidationError
 
 from sbirez import validation_helpers
 
@@ -167,8 +170,51 @@ class Element(models.Model):
     validation_msg = models.TextField(null=True, blank=True)
     ask_if = models.TextField(null=True, blank=True)
 
+    def __str__(self):
+        return '%s: %s' % (self.element_type, self.name)
+
     class Meta:
         ordering = ['order',]
+
+    @classmethod
+    def from_dict(cls, element_dict, parent=None):
+        """Generates a tree of new elements from `element_dict`"""
+        fields = dict(element_dict)
+        if parent:
+            fields['parent_id'] = parent.id
+        children = fields.pop('children', [])
+        jargons = fields.pop('jargons', [])
+        instance = cls(**fields)
+        instance.save()
+        for jargon in jargons:
+            try:
+                jargon_instance = Jargon.objects.get(name=jargon['name'])
+                if (('html' in jargon) and
+                    (jargon['html'] != jargon_instance.html)):
+                    logger.warn(
+                        'HTML for jargon `%s` already specified, ignoring edit'
+                        % jargon_instance.name)
+            except Jargon.DoesNotExist:
+                jargon_instance = Jargon(name=jargon['name'],
+                                         html=jargon['html'])
+                jargon_instance.save()
+            instance.jargons.add(jargon_instance)
+
+        order = 1
+        for child in children:
+            child['order'] = order
+            cls.from_dict(child, parent=instance)
+            order += 1
+
+        return instance
+
+    @classmethod
+    def tree_from_dict(cls, allelement_dicts):
+        order = 1
+        for el in allelement_dicts:
+            el['order'] = order
+            cls.from_dict(el, parent=None)
+            order += 1
 
     def save(self, *args, **kwargs):
         """Human-readable should derive from ``name`` by default."""
@@ -258,6 +304,24 @@ class Element(models.Model):
         return errors
 
 
+@transaction.atomic
+def legal_workflow_validator(value):
+    allelements = json.loads(value)
+    try:
+        Element.tree_from_dict(allelements)
+    except Exception as e:
+        raise ValidationError(str(e))
+    transaction.rollback()    # During validation, we are only "scouting"
+    return True
+
+class WorkflowDefinition(models.Model):
+
+    workflow = models.OneToOneField(Element, limit_choices_to=
+                                             {'element_type':'workflow'})
+    source = JsonField(validators=[legal_workflow_validator,])
+    source = JsonField()
+
+
 class Jargon(models.Model):
     name = models.TextField(unique=True)
     html = models.TextField()
@@ -266,15 +330,18 @@ class Jargon(models.Model):
 
 class Solicitation(models.Model):
     name = models.TextField(unique=True)
-    element = models.ForeignKey(Element, related_name='element', null=True)
-    pre_release_date = models.DateTimeField()
-    proposals_begin_date = models.DateTimeField()
-    proposals_end_date = models.DateTimeField()
+    element = models.ForeignKey(Element, related_name='element',
+                                verbose_name='Workflow', null=True)
+    pre_release_date = models.DateField()
+    proposals_begin_date = models.DateField()
+    proposals_end_date = models.DateField()
+
+    def __str__(self):
+        return self.name
 
     @property
     def days_to_close(self):
         return (self.proposals_end_date - timezone.now()).days
-
 
     @property
     def status(self):
@@ -285,6 +352,7 @@ class Solicitation(models.Model):
             return 'Open'
         else:
             return 'Future'
+
 
 class Topic(models.Model):
     PROGRAM_CHOICES = (
