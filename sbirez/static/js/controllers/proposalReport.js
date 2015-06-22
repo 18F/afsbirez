@@ -47,7 +47,9 @@ angular.module('sbirezApp')
     });
 
     $scope.validate = function() {
-      $scope.overview = ProposalService.getOverview(true);
+      ProposalService.getOverview(true).then(function(data) {
+        $scope.overview = data;
+      });
     };
 
     $scope.delete = function() {

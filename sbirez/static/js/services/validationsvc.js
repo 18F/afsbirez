@@ -181,9 +181,8 @@ angular.module('sbirezApp').factory('ValidationService', function() {
              (typeof data[elementName] === 'object' && data[elementName].length === undefined));
   };
 
-
   // as with processValidation, returns true if the it passes, false if it fails
-  var processRequired = function(element, workflow, data) {
+  var processRequired = function(element, data) {
     // if it has a condition, and that condition is set
     if (element.ask_if && isSet(data, element.ask_if) && data[element.ask_if] === true) {
       return isSet(data, element.name);
@@ -194,23 +193,26 @@ angular.module('sbirezApp').factory('ValidationService', function() {
       return true;
     }
   };
- 
+
   return {
     validate: function(workflow, data, validationResults) {
       var length = workflow.children.length;
+      var requiredSet = false;
       for (var i = 0; i < length; i++) {
         var element = workflow.children[i];
-        if (element.validation !== null && data && data[element.name]) {
+        if (element.required === true) {
+          if (!processRequired(element, data)) {
+            validationResults[element.name] = 'This field is required';
+            requiredSet = true;
+          } else {
+            validationResults[element.name] = {};
+          }
+        } 
+        if (element.validation !== null && data && data[element.name] && !requiredSet) {
           if (!processValidation(element.validation, data[element.name])) {
             validationResults[element.name] = element.validation_msg;
           } else {
-            //console.log('validation passed', element.name); 
-          }
-        }
-        else if (element.required === true) {
-          if (!processRequired(element, workflow, data)) {
-            validationResults[element.name] = 'Field is required';
-            //console.log('Field is required', element.name);
+            validationResults[element.name] = {};
           }
         }
 
@@ -231,7 +233,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
             this.validate(element, data[element.name][element.multiplicity[j].token], validationResults[element.name][element.multiplicity[j].token]);
           }
         }
-        if (element.children.length > 0 && element.element_type === 'group' || element.element_type === 'workflow') {
+        if (element.children.length > 0 && element.element_type === 'workflow') {
           //console.log('validate precall', element.name);
           if (validationResults[element.name] === undefined) {
             validationResults[element.name] = {};
@@ -244,6 +246,28 @@ angular.module('sbirezApp').factory('ValidationService', function() {
       }
       //console.log('Validation Results', validationResults);
       return validationResults === undefined ? true : validationResults.length === 0;
+    },
+
+    validateElement: function(element, data, validationResults) {
+      console.log('validating1', element, data, validationResults);
+      var requiredSet = false;
+      if (element.required === true) {
+        if (!processRequired(element, data)) {
+          validationResults[element.name] = 'This field is required';
+          console.log('Field is required', element.name);
+          requiredSet = true;
+        } else {
+          validationResults[element.name] = {};
+        }
+      } 
+      if (element.validation !== null && data && data[element.name] && !requiredSet) {
+        if (!processValidation(element.validation, data[element.name])) {
+          validationResults[element.name] = element.validation_msg;
+        } else {
+          validationResults[element.name] = {};
+        }
+      }
+      console.log('validating', element, data, validationResults);
     }
   };
 });
