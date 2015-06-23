@@ -12,7 +12,7 @@ describe('Directive: WorkflowDirective', function () {
     nestedElementData;
 
   propData = {
-    'data': '{}',
+    'data': {},
     'firm': 2,
     'id': 3,
     'owner': 3,
