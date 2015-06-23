@@ -52,11 +52,11 @@
           <div upload="element" ng-if="element.element_type === 'file_upload'" proposal="{{proposalId}}"></div>
         </div>
         <footer>
-          <!-- <button ng-if="showBackButton()" type="button" id="prior_state" ng-click="jumpTo(backWorkflow)">Back</button>-->
+          <summary ng-if="validationList.length" class="error-message">
+            <h1>We’ve detected {{validationList.length}} errors on this page. Click the button again to continue.</h1>
+          </summary>
           <button ng-if="showNextButton()" type="button" id="next_state" ng-click="saveAndContinue(nextWorkflow)">Save and continue</button>
           <button ng-if="!showNextButton()" type="button" id="next_state" ng-click="saveAndExit()">Return to overview</button>
-          <!-- <a href="#" id="cancel" ng-click="exit()">Cancel</a>-->
-          <!-- <button type="button" id="save_exit" ng-click="saveAndExit()">Save and return to the proposal progress report</button>-->
         </footer>
       </form>
     </div>

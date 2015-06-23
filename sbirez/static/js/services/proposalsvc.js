@@ -354,6 +354,9 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     var length = element.children.length;
     var index = 0;
     var complete = true;
+    if (data === undefined) {
+      return false;
+    }
     for (index; index < length && complete; index++) {
       if (element.children[index].required && element.children[index].ask_if) {
         if (data[element.children[index].ask_if] === true) {
@@ -647,18 +650,31 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     applyCalculatedCallback(fieldName, value, element.name, multipleToken);
   };
 
-  var validateWorkflow = function() {
+  var validateWorkflow = function(element) {
     validationMode = true;
-    validationData = {};
-    validationData[workflow.name] = {};
-    if (proposalData[workflow.name] === undefined) {
-      proposalData[workflow.name] = {};
+    var data;
+    var validData;
+    if (element) {
+      var order = getOrder(element); 
+      data = getDataIndex(order, false, proposalData);
+      validData = getDataIndex(order, true, validationData);
+      validData[order[0]] = {};
+      validData = validData[order[0]];
+    } else {
+      validationData = {};
+      validationData[workflow.name] = {};
+      if (proposalData[workflow.name] === undefined) {
+        proposalData[workflow.name] = {};
+      }
+      validData = validationData[workflow.name];
+      data = proposalData[workflow.name];
+      element = workflow;
     }
-    ValidationService.validate(workflow, proposalData[workflow.name], validationData[workflow.name], true);
+    ValidationService.validate(element, data, validData, true);
     for (var index = 0; index < validationCallbacks.length; index++) {
       // check to see if the state was already set
       var message = getDataIndex(validationCallbacks[index].order, false, validationData);
-      if (typeof message === 'object' && message !== null && message.length === undefined) {
+      if (typeof message === 'object' && isEmpty(message)) {
         message = '';
       }
       validationCallbacks[index].cb(message);
@@ -907,10 +923,10 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
         });
       }
     },
-    validate: function() {
+    validate: function(element) {
       if (AuthenticationService.isAuthenticated) {
         if (proposal.id) {
-          return validateWorkflow();
+          return validateWorkflow(element);
         }
         else {
           var deferred = $q.defer();
@@ -920,7 +936,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       } else {
         return DialogService.openLogin().then(function(data) {
           if (data.value) {
-            return validateWorkflow();
+            return validateWorkflow(element);
           } else {
             var deferred = $q.defer();
             deferred.reject(new Error('Failed to authenticate'));

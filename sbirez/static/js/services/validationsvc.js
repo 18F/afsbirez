@@ -181,7 +181,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
              (typeof data[elementName] === 'object' && data[elementName].length === undefined));
   };
 
-  // as with processValidation, returns true if the it passes, false if it fails
+  // as with processValidation, returns true if  it passes, false if it fails
   var processRequired = function(element, data) {
     // if it has a condition, and that condition is set
     if (element.ask_if && isSet(data, element.ask_if) && data[element.ask_if] === true) {
@@ -215,8 +215,8 @@ angular.module('sbirezApp').factory('ValidationService', function() {
             validationResults[element.name] = {};
           }
         }
-
-        if (element.element_type === 'line_item' && element.multiplicity && element.multiplicity.length > 0) {
+        if (element.element_type === 'line_item' && element.multiplicity && element.multiplicity.length > 0 &&
+            (!element.ask_if || element.ask_if && isSet(data, element.ask_if) && data[element.ask_if] === 'true')) {
           for (var j = 0; j < element.multiplicity.length; j++) {
             if (data[element.name] === undefined) {
               data[element.name] = {};
