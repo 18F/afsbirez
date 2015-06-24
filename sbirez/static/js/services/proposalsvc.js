@@ -19,6 +19,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
   var nextWorkflow = null;
   var loadingPromise = null;
   var topic = {};
+  var validationMode = false;
 
   var PROPOSAL_URI = 'api/v1/proposals/';
   var TOPIC_URI = 'api/v1/topics/';
@@ -75,20 +76,25 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return deferred.promise;
   };
 
-  var saveProposalData = function() {
+  var saveProposalData = function(validate) {
     var deferred = $q.defer();
-    $http.put(PROPOSAL_URI + proposal.id + '/partial/', {
-      'owner': proposal.owner, 
-      'firm': proposal.firm, 
-      'workflow': proposal.workflow, 
-      'topic': proposal.topic.id,
-      'title': proposal.title,
-      'data':JSON.stringify(proposalData)}).success(function(data) {
-        console.log('saved', data);
-      deferred.resolve(data);
-    }).error(function(data) {
-      deferred.reject(new Error(data));
-    });
+    var url = PROPOSAL_URI + proposal.id + (validate ? '/' : '/partial/');
+    var method = validate ? 'PATCH' : 'PUT';
+    $http({
+      'url': url,
+      'method': method,
+      'data': {
+        'owner': proposal.owner, 
+        'firm': proposal.firm, 
+        'workflow': proposal.workflow, 
+        'topic': proposal.topic.id,
+        'title': proposal.title,
+        'data':JSON.stringify(proposalData)}}).success(function(data) {
+          console.log('saved', data);
+          deferred.resolve(data);
+        }).error(function(data) {
+          deferred.reject(new Error(data));
+        });
     return deferred.promise;
   };
 
@@ -201,7 +207,6 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
 
   var loadProposal = function(proposalId) {
     // retrieves workflow and data
-    //var deferred = $q.defer();
     if (proposal.id !== proposalId) {
       overview = [];
       loadingPromise = $q.defer();
@@ -330,6 +335,15 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return length;
   };
     
+  var isEmpty = function(obj) {
+    for(var prop in obj) {
+      if(obj.hasOwnProperty(prop)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   var isSet = function(data, elementName) {
     return !(data === undefined || data[elementName] === null ||
              data[elementName] === undefined || data[elementName] === '' ||
@@ -340,6 +354,9 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     var length = element.children.length;
     var index = 0;
     var complete = true;
+    if (data === undefined) {
+      return false;
+    }
     for (index; index < length && complete; index++) {
       if (element.children[index].required && element.children[index].ask_if) {
         if (data[element.children[index].ask_if] === true) {
@@ -355,7 +372,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
   var getProposalOverview = function(validate) {
     var deferred = $q.defer();
     var element, child;
-    if (overview.length === 0 || validate) {
+    if (overview.length === 0 || validate || validationMode) {
       overview = [];
       if (validate) {
         validateWorkflow();
@@ -372,7 +389,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
                       'name': workflow.children[index].children[subindex].human,
                       'id':workflow.children[index].children[subindex].id
                     };
-            if (validate) {
+            if (validationData && validationData[workflow.name] && validationData[workflow.name][workflow.children[index].name]) {
               child.errors = objectLengthCount(validationData[workflow.name][workflow.children[index].name][workflow.children[index].children[subindex].name]);
             }
             if (proposalData && proposalData[workflow.name] && proposalData[workflow.name][workflow.children[index].name]) {
@@ -384,7 +401,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
           }
         }
         else {
-          if (validate) {
+          if (validationData && validationData[workflow.name] && validationData[workflow.name][workflow.children[index].name]) {
             element.errors = objectLengthCount(validationData[workflow.name][workflow.children[index].name]);
           }
           if (proposalData && proposalData[workflow.name]) {
@@ -559,8 +576,6 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       var askIfData = getDataIndex(order, true, proposalData);
       askIfCallback(askIfData[order[0]]);
     }
-    // return the data
-    //console.log('out', calculatedCallbacks);
     return data;
   };
 
@@ -605,12 +620,29 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     var data = getDataIndex(order, true, proposalData);
     data[order[0]] = value;
     var fieldName = getFieldName(element.name, multipleToken);
+    var index = 0;
 
     if (element.element_type === 'bool' || element.element_type === 'checkbox') {
       // walk the askIf tree to see if any callbacks need to be called.
       if (askIfCallbacks[fieldName] !== undefined) {
-        for (var index = 0; index < askIfCallbacks[fieldName].length; index++) {
+        for (index = 0; index < askIfCallbacks[fieldName].length; index++) {
           askIfCallbacks[fieldName][index](value);
+        }
+      }
+    }
+
+    // if we've validated the proposal, let's keep that up to date.
+    if (validationMode) {
+      var message = getDataIndex(order, true, validationData);
+      var priorMessage = message[order[0]];
+      ValidationService.validateElement(element, data, message);
+      if ((priorMessage !== message[order[0]]) && (isEmpty(priorMessage) !== isEmpty(message[order[0]]))) {  
+        for (index = 0; index < validationCallbacks.length; index++) {
+          message = getDataIndex(validationCallbacks[index].order, false, validationData);
+          if (typeof message === 'object' && isEmpty(message)) {
+            message = '';
+          }
+          validationCallbacks[index].cb(message);
         }
       }
     }
@@ -618,21 +650,43 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     applyCalculatedCallback(fieldName, value, element.name, multipleToken);
   };
 
-  var validateWorkflow = function() {
-    validationData = {};
-    validationData[workflow.name] = {};
-    if (proposalData[workflow.name] === undefined) {
-      proposalData[workflow.name] = {};
+  var validateWorkflow = function(element) {
+    validationMode = true;
+    var data;
+    var validData;
+    if (element) {
+      var order = getOrder(element); 
+      data = getDataIndex(order, false, proposalData);
+      validData = getDataIndex(order, true, validationData);
+      validData[order[0]] = {};
+      validData = validData[order[0]];
+    } else {
+      validationData = {};
+      validationData[workflow.name] = {};
+      if (proposalData[workflow.name] === undefined) {
+        proposalData[workflow.name] = {};
+      }
+      validData = validationData[workflow.name];
+      data = proposalData[workflow.name];
+      element = workflow;
     }
-    ValidationService.validate(workflow, proposalData[workflow.name], validationData[workflow.name], true);
+    ValidationService.validate(element, data, validData, true);
     for (var index = 0; index < validationCallbacks.length; index++) {
       // check to see if the state was already set
       var message = getDataIndex(validationCallbacks[index].order, false, validationData);
-      if (typeof message === 'object' && message !== null && message.length === undefined) {
+      if (typeof message === 'object' && isEmpty(message)) {
         message = '';
       }
       validationCallbacks[index].cb(message);
     }
+  };
+
+  var currentValidationData = function(element) {
+    var deferred = $q.defer();
+    var order = getOrder(element);
+    var selectedData = getDataIndex(order, false, validationData);
+    deferred.resolve(selectedData);
+    return deferred.promise;
   };
 
   return {
@@ -720,10 +774,10 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
         });
       }
     },
-    saveData: function() {
+    saveData: function(validate) {
       if (AuthenticationService.isAuthenticated) {
         if (proposal.id) {
-          return saveProposalData();
+          return saveProposalData(validate);
         }
         else {
           var deferred = $q.defer();
@@ -733,7 +787,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       } else {
         return DialogService.openLogin().then(function(data) {
           if (data.value) {
-            return saveProposalData();
+            return saveProposalData(validate);
           } else {
             var deferred = $q.defer();
             deferred.reject(new Error('Failed to authenticate'));
@@ -869,10 +923,10 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
         });
       }
     },
-    validate: function() {
+    validate: function(element) {
       if (AuthenticationService.isAuthenticated) {
         if (proposal.id) {
-          return validateWorkflow();
+          return validateWorkflow(element);
         }
         else {
           var deferred = $q.defer();
@@ -882,7 +936,29 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       } else {
         return DialogService.openLogin().then(function(data) {
           if (data.value) {
-            return validateWorkflow();
+            return validateWorkflow(element);
+          } else {
+            var deferred = $q.defer();
+            deferred.reject(new Error('Failed to authenticate'));
+            return deferred.promise;
+          }
+        });
+      }
+    },
+    getValidationData: function(element) {
+      if (AuthenticationService.isAuthenticated) {
+        if (proposal.id && element) {
+          return currentValidationData(element);
+        }
+        else {
+          var deferred = $q.defer();
+          deferred.reject(new Error('No proposal loaded.'));
+          return deferred.promise;
+        }
+      } else {
+        return DialogService.openLogin().then(function(data) {
+          if (data.value) {
+            return currentValidationData(element);
           } else {
             var deferred = $q.defer();
             deferred.reject(new Error('Failed to authenticate'));
