@@ -12,5 +12,5 @@
       <span class="label-text">No</span>
     </label>
   </div>
-  <div ng-show="validationstorage" class="text-danger"><p class="errortext">{{validationstorage}}</p></div>
+  <div ng-show="validationstorage" class="field" ng-class="{'is-error':validationstorage}"><span class="error-message">{{validationstorage}}</span></div>
 </section>
