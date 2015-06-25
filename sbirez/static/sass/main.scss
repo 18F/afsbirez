@@ -4,7 +4,6 @@
 
 div.skip-nav a { position: absolute; left: -10000; top: 0; width: 1px; height: 1px; overflow: hidden; } div.skip-nav a:focus { position: absolute; top: 5px; left: 5px; width: auto; height: auto; z-index: 999999; background-color: white; padding-left: 2px; padding-right: 2px; overflow: visible; }
 
-main{ padding-bottom: 2em; }
 
 body{
     font-family: helvetica neue, helvetica, sans-serif;
@@ -15,10 +14,38 @@ body{
 }
 
 a{ color: #0064be; }
-a:hover{ color: #003c72; text-decoration: none;}
+a:hover{ color: #003c72; }
 
-a.a-return{ color: #777; font-size: 14px;}
-a.a-return:hover{ color: #555; }
+a.a-return{ 
+    color: #666; 
+    font-size: 14px;
+    display: block;
+    padding-top: 8px;
+}
+
+a.a-return::before{
+    content: "\2190";
+    color: #888;
+    margin-left: 4px;
+    margin-right: 10px;
+    display: inline-block;
+    background: #f3f3f3;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    border-radius: 100%;
+    text-align: center;
+	
+}
+a.a-return:hover{ color: #333; }
+a.a-return:hover::before{ color: #444; background: #eee;}
+
+
+
+
+
+@media screen and (min-width: 768.88px) {
+}
 
 p, li, dd, dt {
     line-height: 1.4em;
@@ -63,12 +90,21 @@ div.wrap::after{
     clear: both;
 }
 
+
 h1.primary-header {
-    font-size: 36px;
-    font-family: 'franklin-gothic-urw-cond', sans-serif;
+    font-size: 32px;
+    font-family: 'franklin-gothic-urw-cond', Helvetica Neue, Helvetica, sans-serif;
+    line-height: 1;
     margin-top: 24px;
-    margin-bottom: 0.24em;
+    margin-bottom: 0.6em;
     margin-left: -0.03em;
+}
+
+@media screen and (min-width: 711.11px) { 
+    h1.primary-header{ 
+        font-size: 40px; 
+        margin-bottom: 0.4em;
+    } 
 }
 
 main ol{ 
@@ -76,6 +112,20 @@ main ol{
     padding-top: 1em; 
 }
 
+div.notice{
+	font-size: 14px;
+	padding: 12px;
+	border: 1px solid goldenrod;
+	border-radius: 3px;
+	margin: 1em 0;
+	background: #fff2df;
+	color: #4f0e00;
+	
+}
+div.notice a{
+	color: #af3b00;
+}
+div.notice p:last-child{ margin-bottom: 0;}
 
 
 /* @end */
@@ -121,10 +171,10 @@ textarea{
     -webkit-appearance: none;
     padding: 4px 8px;
     border: 1px solid #ccc;
-    border-radius: 0;
+    border-radius: 3px;
     line-height: 36px;
     min-height: 36px;
-    min-width: 10em;
+    min-width: 4em;
     width: 100%;
     margin: 0;
     font: inherit;
@@ -176,6 +226,9 @@ button,
     line-height: 16px;	
     cursor: pointer;
     text-decoration: none;
+    border-radius: 3px;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 button:hover {
@@ -206,10 +259,11 @@ button.button-remove:active{
 }
 
 form > h1 ,
+body.sign-up-post main h1,
 .fieldset-dynamic > header > h1 {
-    margin-top: 8px;
-    margin-bottom: 1em;
-    font-size: 27px;
+    margin-top: 32px;
+    margin-bottom: 16px;
+    font-size: 28px;
     line-height: 32px;
     color: #444;
     font-family: Georgia;
@@ -223,11 +277,14 @@ div.field,
 section.fieldset,
 section.fieldset.fieldset-radio{ margin-bottom: 24px; }
 
+div.field+section.fieldset{ margin-top: 32px; }
+
 section.fieldset{
     border: 1px solid #cfcfcf;
     padding: 20px 16px 16px;
     position: relative;
     margin-bottom: 20px;
+    border-radius: 4px;
 }
 
 .fieldset+.fieldset:not(.fieldset-radio){ margin-top: 32px; }
@@ -248,7 +305,7 @@ section.fieldset > header > h1{
     font-size: 14px;
     line-height: 16px;
     font-weight: 600;
-    color: #5a5a5a;
+    color: #777;
 }
 
 section.fieldset div.field:last-of-type+section.fieldset{
@@ -293,8 +350,13 @@ div.field.field-radio label{
     vertical-align: middle;
 }
 
-div.field.field-radio.is-focused label{
-    background: yellow;
+main div.field input:focus,
+main div.field textarea:focus,
+main div.field.field-checkbox.is-focused label,
+main div.field.field-radio.is-focused label{
+    background: #fff2df;
+    border-color: goldenrod;
+    outline: none;
 }
 
 div.field.field-checkbox span.label-text,
@@ -309,6 +371,7 @@ div.field.field-checkbox{
     padding-left: 24px;
     margin-bottom: 8px;
 }
+
 div.field.field-checkbox input{ 
     font-size: 1em; 
     line-height: 1;
@@ -357,6 +420,38 @@ section.fieldset.fieldset-radio.is-error span.error-message{
     font-style: italic;	
 }
 
+section.fieldset.fieldset-address div.field-city-state-zip::after{
+	content: "";
+	display: table;
+	clear: both;
+}
+
+section.fieldset.fieldset-address div.field-city-state-zip{
+	margin-right: -0.67em;
+	margin-bottom: 0;
+}
+
+section.fieldset.fieldset-address div.field.field-city,
+section.fieldset.fieldset-address div.field.field-state,
+section.fieldset.fieldset-address div.field.field-zip{
+	float: left;
+	width: 25%;
+	padding-right: 0.67em; 
+}
+
+section.fieldset.fieldset-address div.field.field-city{ 
+	width: 50%; 
+}
+
+
+section.fieldset.fieldset-address div.field.field-city input,
+section.fieldset.fieldset-address div.field.field-state input,
+section.fieldset.fieldset-address div.field.field-zip input{
+	min-width: 0;
+}
+
+
+
 /* @group widths */
 
 .field-collaborator-name input,
@@ -364,11 +459,16 @@ section.fieldset.fieldset-radio.is-error span.error-message{
     width: 75%;	
 }
 
-.field-name,
-.field-title,
-.field-email,
-.field-category{
+.field-name input,
+.field-title input,
+.field-category input,
+.field-email input,
+.field-med_str input,
+.field-federal-tax-id input,
+.field-duns-number input,
+.field-cage-code input{
     width: 50%;
+    min-width: 10em;
 }
 
 .field-phone input,
@@ -392,6 +492,14 @@ section.fieldset.fieldset-radio.is-error span.error-message{
     width: 33%;
 }
 
+.field-phone-number input,
+.field-fax-number input{
+    width: 10em;
+}
+
+
+.field-number-short input{ width: 2em; }
+
 /* @end */
 
 
@@ -413,22 +521,26 @@ section.fieldset.fieldset-radio.is-error span.error-message{
     background: #e3e3e3;
 }
 
-main div.wrap > form {
-    padding-top: 12px;
-    max-width: 576px;
-}
+main div.wrap > form { max-width: 576px; }
 
 @media screen and (min-width: 640px) {
-    main div.wrap > form {
-        padding-right: 16px;
-        border-right: 1px solid #eee;
-        margin-right: 224px;
-    }
+   body.company main div.wrap > form,
+   body.proposal main div.wrap > form {
+       padding-right: 16px;
+       border-right: 1px solid #eee;
+   }
+	
+   body.proposal main div.wrap > form {
+       margin-right: 224px;
+   }
+	
+	
 }
 
 
 main form footer{ 
     margin-top: 32px; 
+    padding-bottom: 64px;
     position: relative;
 }
 
@@ -468,21 +580,25 @@ main form footer p button{
 /* @group header.banner */
 
 header.banner{
-    background: #00529e;
+    background: #2c628d;
     color: #fff;
-    line-height: 40px;
+    line-height: 32px;
     overflow: hidden;
+    padding: 4px 0;
 }
 
 header.banner a{ color: white; }
-header.banner div.wrap{ padding-left: 124px; }
 
 header.banner h1{
-    float: left; 
-    width: 112px;
-    margin-left: -124px;
     font-weight: 600;
+    margin-top: 4px;
+    float: left;
+    margin-right: 8px;
 }
+
+header.banner h1 a{ text-decoration: none; }
+header.banner h1 a:hover{ text-decoration: underline; }
+
 
 header.banner h1 span.icon-logo{
     display: inline-block;
@@ -491,7 +607,6 @@ header.banner h1 span.icon-logo{
     height: 38px;
     background-size: 100%;
     margin-right: 0.4em;
-    margin-top: 0.1em;
 }
 
 header.banner form,
@@ -501,23 +616,35 @@ header.banner div.field label {
     width: 100%; 
 }
 
-header.banner nav{ 
-    font-size: 14px; 
-    margin-left: -10px;
+header.banner form{
+    margin-bottom: 8px;
+    float: left;
 }
+
+header.banner form footer{
+    position: absolute;
+    left: -9999em;
+    top: -9999em;
+}
+
 header.banner nav::after{
     content: "";
     display: table;
     clear: both; 
 }
+
+header.banner nav{
+    margin-top: 4px;
+}
 header.banner nav a{ 
     float: left;
-    padding: 0 10px;
+    padding: 0 4px;
 }
 header.banner nav a:hover{ color: #a3d3ff; }
 
-body.my-topics, body.notifications, body.my-company,
-body.proposal, body.search-results, body.topic {
+body.proposals, body.notifications, body.company,
+body.proposal, body.topics, body.topic,
+body.proposal-no-results, body.search-no-results {
     background-color: white;
 }
 
@@ -538,9 +665,9 @@ header.banner form div.field{
 header.banner form div.field::after{
     background-size: 100%;
     position: absolute;
-    left: 8px;
+    left: 9px;
     top: 50%;
-    margin-top: -7px;
+    margin-top: -8px;
     content: "";
     width: 16px;
     height: 16px;
@@ -552,23 +679,82 @@ header.banner form div.field input {
     border: none;
     line-height: 20px;
     min-height: 20px;
-    padding-left: 20px;
+    padding-left: 28px;
     width: 100%;
-    background: #032353;
+    font-size: 14px;
+    background: #11233f;
     color: #fff;
+    position: relative;
+    top: -1px;
 }
 
-header.banner form div.field input:active {
+
+@media screen and (min-width: 355.55px) {
+    header.banner nav{ 
+        font-size: 12px; 
+        position: absolute;
+        top: 1px;
+        right: 0;
+    }
 }
 
-@media screen and (min-width: 768.88px) {
-    header.banner div.wrap{ padding-right: 288px; }
+
+@media screen and (min-width: 444.44px) {
+
+    header.banner div.wrap{ padding-left: 124px; }
+
+    header.banner form{ 
+        margin-top: 3px; 
+        margin-bottom: 0;
+    }
+	
+    header.banner nav{ 
+        position: static;
+        font-size: 14px;
+        margin-left: -10px;
+        margin-top: 4px;
+    }
+
+    header.banner nav a{  padding: 0 10px; }
+    header.banner h1{
+        width: 112px;
+        margin: 0;
+        margin-left: -124px;
+    }
+}
+
+
+@media screen and (min-width: 711.11px) {
+
+    header.banner{
+        line-height: 32px;
+    }
+	
+    header.banner div.wrap{ 
+        padding: 8px 288px 9px 156px;
+    }
+	
+    header.banner h1{
+        width: 156px;
+        margin-left: -156px;
+        margin-top: 2px;
+    }
+		
+    header.banner h1 span.icon-logo{
+        width: 42px;
+        height: 36px;
+        position: relative;
+        top: -5px;
+        left: -1px;
+        margin-right: 6px;
+    }
+
     header.banner nav{
         position: absolute;
         right: -0.8em;
-        top: 0;
+        top: 6px;
         width: auto;
-    }   
+    }	
 }
 
 
@@ -656,18 +842,8 @@ article.topic nav button:hover{
 
 /* @group is-favorite */
 
-article.topic.is-favorite h1::after{
-    background: #fff691;
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: -1;
-    -webkit-transform: skew(-30deg);
-    -moz-transform: skew(-30deg);
-    transform: skew(-30deg);
+article.topic.is-favorite h1{
+    color: #b03a00;
 }
 
 /* @end */
@@ -719,6 +895,7 @@ nav.pagination{
     color: #555;
     border-top: 3px solid #eee;
     font-size: 14px;
+    margin-bottom: 2em;
 }
 
 nav.pagination span.showing-results{ display: block; }
@@ -821,6 +998,74 @@ nav.toc ol li span.toc-error-count{
 
 /* @end */
 
+/* @group body.company */
+
+body.company h1.primary-header{
+    margin-bottom: 24px;
+    padding-top: 24px;
+    margin-top: 0;	
+}
+
+/* @end */
+
+/* @group body.home */
+
+body.home{
+    background-color: #12355d;
+    color: white;
+}
+
+body.home header.banner{ margin-bottom: 24px; }
+body.home header.banner form{ display: none; }
+body.home main form div.field span.label-text{
+    position: absolute;
+    left: -9999em;
+}
+
+body.home main form{
+    position: relative;
+    padding-right: 96px;
+}
+
+body.home main form div.field input[type=text],
+body.home main form div.field input[type=search]{ 
+    border: none; 
+    height: 38px;
+    padding: 0;
+}
+
+body.home main form button{
+    color: white;
+    width: 84px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+body.home main form button:hover{
+    box-shadow: none;
+    border-color: yellow;
+    color: yellow;
+    background: none;
+}
+
+@media screen and (min-width: 768.88px) {
+    body.home main h1{
+        font-size: 48px;
+        margin-bottom: 0.4em;
+    }
+	
+    body.home main p{ 
+        font-size: 20px; 
+        max-width: 32em;
+    }
+}
+
+body.home main p:first-of-type{ margin-bottom: 1.4em; }
+body.home main form{ border: none; }
+
+/* @end */
+
 /* @group body.proposal-cost-volume */
 
 section.fieldset-dynamic > header{
@@ -831,7 +1076,7 @@ section.fieldset-dynamic > header h1{
     display: inline-block;
     vertical-align: middle;
     font: inherit;
-    color: #333;
+    color: #555;
     font-size: 21px;
     line-height: 16px;
     margin: 0;
@@ -871,7 +1116,15 @@ section.fieldset-dynamic section.fieldset-dynamic-item a.remove{
     right: 16px;
     font-size: 14px;
     color: #e51600;
+    border-radius: 3px;
+    padding: 4px 6px;
 	
+}
+
+section.fieldset-dynamic section.fieldset-dynamic-item a.remove:hover{
+    background: #cc1602; 
+    color: white;
+    text-decoration: none;
 }
 
 
@@ -885,8 +1138,10 @@ section.fieldset-dynamic section.fieldset-dynamic-item a.remove{
 header.proposal-banner,
 header.company-banner{
     background: #eee;
-    line-height: 40px;
+    line-height: 24px;
     color: #555;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 header.proposal-banner a{color: #555; } 
@@ -952,6 +1207,7 @@ body.proposal.proposal-overview aside div.hcard span{
 footer.proposal-footer div.wrap{
     border-top: 3px solid #e3e3e3;
     padding-top: 1em;
+    margin-top: 1em;
 }
 
 
@@ -993,25 +1249,94 @@ footer.proposal-footer div.wrap{
 
 /* @end */
 
-/* @group body.search-results */
 
-body.search-results h1.primary-header {
-    margin-bottom: 1em;
+
+/* @group body.no-results */
+
+body.topics-no-results main div.wrap,
+body.proposals-no-results main div.wrap {
+    padding: 1em;
+    background: #f3f3f3;
+    margin-top: 1em;
+    border-radius: 8px;
+}
+
+body.proposals-no-results main div.wrap h1,
+body.topics-no-results main div.wrap h1{ margin-top: 0; }
+
+/* @end */
+
+/* @group body.topics, body.proposals */
+
+body.proposals h1.primary-header,
+body.topics h1.primary-header{
+    margin-bottom: 24px; 
 }
 
 /* @end */
 
-/* @group body.sign-in */
-body.sign-in {
-    background: #fafafa;
-}
-body.sign-in main form {
+/* @group body.sign-in, body.sign-up, body.sign-up-post */
+
+body.sign-in,
+body.sign-up,
+body.sign-up-post { background: #fafafa; }
+
+body.sign-in main div.wrap,
+body.sign-up main div.wrap,
+body.sign-up-post main div.wrap {
     padding: 16px;
-    max-width: 320px;
-    margin: 1em auto;
+    margin: 24px auto;
+    max-width: 480px;
     border: 3px solid #e3e3e3;
     background: white;
 }
+
+body.sign-in main h1,
+body.sign-up main h1,
+body.sign-up-post main h1{
+    margin-top: 0;
+    margin-bottom: 24px;
+    color: #b03a00;
+}
+
+body.sign-in footer,
+body.sign-up footer,
+body.sign-up-post footer { 
+    padding-bottom: 0; 
+    margin-top: 28px;
+}
+
+body.sign-up-post main h1{
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+body.sign-up-post footer a.button{ margin-top: 24px; }
+body.sign-up-post footer div { margin-top: 1em; }
+body.sign-up-post footer div p{ 
+    color: #555;
+    font-size: 12px;
+    margin-top: 4px;
+}
+body.sign-up p#password-instructions{
+    font-size: 12px;
+    color: #555;
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+@media screen and (min-width: 711.11px) { 
+    body.sign-in main div.wrap,
+    body.sign-up main div.wrap,
+    body.sign-up-post main div.wrap {
+        padding: 24px;
+        max-width: 384px;
+        margin: 48px auto;
+    }
+	
+    body.sign-up-post main div.wrap{ max-width: 512px; }
+}
+
+
 
 /* @end */
 
@@ -1023,12 +1348,14 @@ body.topic main nav form{
 }
 
 body.topic main h1{
-    font-size: 28px;
+    font-size: 24px;
     line-height: 1.2em;
     font-family: Georgia, serif;
     margin-top: 1em;
     margin-bottom: 0.4em;
 }
+
+@media screen and (min-width: 711.11px) { body.topic main h1{ font-size: 28px; } }
 
 body.topic main h2{
     display: inline-block;
@@ -1048,27 +1375,10 @@ body.topic main section h1{
     font: inherit;
     font-size: 18px;
     font-weight: 600;
+    color: #107b7b;
 }
 
 body.topic main section p{ margin-bottom: 1em; }
-
-
-
-@media screen and (min-width: 711.11px) {
-    body.topic main div.wrap{
-        padding-right: 208px;
-        position: relative;
-    }
-	
-    body.topic main div.wrap nav{
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 192px;
-    }
-
-    body.topic main div.wrap form{ display: block; }
-
     body.topic main  nav a,
     body.topic main nav button{
         display: block;
@@ -1088,50 +1398,28 @@ body.topic main section p{ margin-bottom: 1em; }
         color: #333;
         cursor: pointer;
     }
+
+
+
+@media screen and (min-width: 711.11px) {
+    body.topic main div.wrap header{
+        padding-right: 208px;
+        position: relative;
+    }
+	
+    body.topic main div.wrap nav{
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 192px;
+    }
+
+    body.topic main div.wrap form{ display: block; }
+
 	
 }
 
 
-/* @end */
-
-/* @group body.home */
-body.home {
-    padding-bottom: 0;
-    background-color: #073763;
-    #hero {
-        padding: 60px 0 40px;
-        color: white;
-        h1 { font-size: 72px; }
-        p {
-            font-size: 20px;
-            margin: 40px 0;
-        }
-        form {
-            position: relative;
-            .label-text{
-                position: absolute; left: -9999em;
-            }
-            input {
-                border: none;
-                line-height: 20px;
-                min-height: 50px;
-                padding: 0 110px 0 20px;
-            }
-            button[type="submit"] {
-                position: absolute;
-                top: 2px;
-                right: 2px;
-                background-color: #134f5c;
-                border: none;
-                color: white;
-                font: inherit;
-                padding: 15px 20px;
-                margin: 0;
-                cursor: pointer;
-            }
-        }
-    }
-}    
 /* @end */
 
 /* @group body.proposal */
@@ -1221,6 +1509,11 @@ aside.form-nav nav.toc ol li.is-error::after{
     width: 8px;
     height: 8px;
 }
+	
+aside.form-nav li.cover-sheet span{
+    font-weight: 600;
+    color: #606060;
+}
 
 aside.form-nav nav.toc li a.is-current{
     font-weight: 600;
@@ -1277,5 +1570,52 @@ aside.form-nav div.form-nav-prev-next .form-nav-prev.is-disabled+.form-nav-next{
 
 /* @end */
 
+
+/* @end */
+
+/* @group bigfoot */
+
+body .bigfoot-footnote__button {
+    padding: 0;
+    border-radius: 99em;
+    margin: 0 0 0 0.4em;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    line-height: 19px;
+    border: 1px solid #ccc;
+    color: #555;
+    background: #eee;
+    transition: none;
+}
+
+body .bigfoot-footnote__button:hover,
+body .bigfoot-footnote__button:focus{
+    background: #ddd;
+    color: #333;
+}
+
+body .bigfoot-footnote__button:active {
+    background: #ccc;
+    color: #111;
+}
+body .bigfoot-footnote__button svg{
+    display: none;
+}
+body .bigfoot-footnote__button:before{
+    content: "?";
+}
+
+body .bigfoot-footnote__button:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+@media screen {	
+    body.bigfoot section.footnotes{
+        display: none;
+    }	
+}
 
 /* @end */
