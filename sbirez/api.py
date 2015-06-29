@@ -168,6 +168,11 @@ class ProposalViewSet(viewsets.ModelViewSet):
         email = mails.submit_notification(prop.owner.email,
                                           {'proposal': prop})
         email.send()
+        email = mails.mock_submission(prop.owner.email,
+            {'proposal': prop, 'data':
+              json.dumps(prop.data, indent=2, sort_keys=True)
+            })
+        email.send()
         return Response({'status': 'Submission completed'})
 
 

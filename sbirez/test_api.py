@@ -1037,10 +1037,25 @@ class ProposalTests(APITestCase):
         initial_emails_in_memory = len(django.core.mail.outbox)
         response = self.client.post('/api/v1/proposals/2/submit/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(len(django.core.mail.outbox), initial_emails_in_memory + 1)
+        self.assertEqual(len(django.core.mail.outbox),
+                         initial_emails_in_memory + 2)
+        # Note: if mock_submission emails deleted, these 2s
+        # will become 1s
+        notification_message = django.core.mail.outbox[-2]
+        self.assertIn('submitted', notification_message.subject)
+        self.assertIn('Title', notification_message.body)
+
+    # test that submitting a proposal sends an
+    # email mocking the upstream submission
+    # delete this when actual upstream submission enabled
+    def test_mock_submission_email(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/2/submit/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
         message = django.core.mail.outbox[-1]
-        self.assertIn('submitted', message.subject)
-        self.assertIn('Title', message.body)
+        self.assertIn('SBIR proposal submission', message.subject)
+        self.assertIn("'subquest': {'quest_thy_quest': 'To seek the Grail'",
+                      message.body)
 
 
 class ProposalValidationTests(APITestCase):
