@@ -543,10 +543,17 @@ describe('Service: ProposalService', function () {
   });
 
   // saveData
-  it('should save data if authenticated', function() {
+  it('should save data without validating if requested and if authenticated', function() {
     successfulLoad();
-    ProposalService.saveData();
+    ProposalService.saveData(false);
     $httpBackend.expect('PUT', 'api/v1/proposals/1/partial/', responseProp).respond(200);
+    $httpBackend.flush();
+  });
+
+  it('should save data and validate if requested and if authenticated', function() {
+    successfulLoad();
+    ProposalService.saveData(true);
+    $httpBackend.expect('PATCH', 'api/v1/proposals/1/', responseProp).respond(200);
     $httpBackend.flush();
   });
 
@@ -862,7 +869,7 @@ describe('Service: ProposalService', function () {
     $rootScope.$digest();
     ProposalService.validate();
     $rootScope.$digest();
-    expect(callbackDataSet).toBe('Field is required');
+    expect(callbackDataSet).toBe('This field is required');
     expect(callbackDataUnset).toBe('');
   });
 

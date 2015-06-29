@@ -15,15 +15,22 @@
         -
           name: release_to_edc
           human: Does your firm allow for the release of its contact information
-                 to Economic Development Organizations?
+                 to <span class=\"jargon\" jargon=\"economic_development_organizations\">Economic Development Organizations</span>?
           element_type: bool
           required: True
+          jargons:
+          -
+            name: economic_development_organizations
+            html: "An economic development organization is an organization dedicated to the economic development of a region, be it a subnational area such as a town, city, county, province, or state; a whole nation; or transnational regions unified through economic integration. EDOs are typically government agencies, public-private partnerships, or non-governmental organizations working together with other actors to improve the regional economy they focus on."
         -
           name: small_business
           human: Are you a small business as described in section 3.15 of the solicitation
                  with no more than 500 employees including affiliates?
           element_type: bool
           required: True
+          jargons:
+          -
+            name: economic_development_organizations
         -
           name: ownership_control_requirements
           human: Does your business concern meet the ownership and control requirements in
@@ -355,6 +362,7 @@
           name: teaming_partners_yn
           element_type: bool
           human: Are teaming partners or subcontractors proposed?
+          required: True
         -
           name: teaming_partners
           element_type: line_item

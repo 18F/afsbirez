@@ -9,7 +9,7 @@ angular.module('sbirezApp')
     $scope.firm.address = {};
     $scope.validationData = {};
     $scope.errorState = false;
-    $rootScope.bodyClass = 'my-company';
+    $rootScope.bodyClass = 'company';
 
     UserService.getUserDetails().then(function(data) {
       $scope.orgId = data.firm;
