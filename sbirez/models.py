@@ -216,6 +216,11 @@ class Element(models.Model):
             cls.from_dict(el, parent=None)
             order += 1
 
+    def dict(self):
+        result = {k:v for (k, v) in self.__dict__.items() if not k.startswith('_')}
+        result['children'] = [c.dict() for c in self.children.all()]
+        return result
+
     def save(self, *args, **kwargs):
         """Human-readable should derive from ``name`` by default."""
         if not self.human:
@@ -317,9 +322,19 @@ def legal_workflow_validator(value):
 class WorkflowDefinition(models.Model):
 
     workflow = models.OneToOneField(Element, limit_choices_to=
-                                             {'element_type':'workflow'})
-    source = JsonField(validators=[legal_workflow_validator,])
-    source = JsonField()
+                                    {'element_type':'workflow'})
+    source = JsonField(validators=[legal_workflow_validator,],
+                       json_dump_args=dict(indent=2, sort_keys=True))
+
+    def save(self, *arg, reassign_workflow=True, **kwargs):
+        if reassign_workflow:
+            new_workflow = Element.from_dict(self.source, parent=None)
+            if self.workflow:
+                new_workflow.proposals = self.workflows.proposals
+                # transfer old attachments to new
+                self.workflow.delete()
+            self.workflow = new_workflow
+        super(WorkflowDefinition, self).save(*arg, **kwargs)
 
 
 class Jargon(models.Model):
