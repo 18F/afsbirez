@@ -479,6 +479,7 @@ section.fieldset.fieldset-address div.field.field-zip input{
 .field-year input,
 .field-number input,
 .field-int input,
+.field-integer input,
 .field-float input,
 .field-fringe-benefits input,
 .field-dollars input,
@@ -498,7 +499,7 @@ section.fieldset.fieldset-address div.field.field-zip input{
 }
 
 
-.field-number-short input{ width: 2em; }
+.field-number-short input { width: 2em; }
 
 /* @end */
 
@@ -1578,14 +1579,14 @@ aside.form-nav div.form-nav-prev-next .form-nav-prev.is-disabled+.form-nav-next{
 body .bigfoot-footnote__button {
     padding: 0;
     border-radius: 99em;
-    margin: 0 0 0 0.4em;
+    margin: 0 0 0 0.2em;
     width: 20px;
     height: 20px;
     font-size: 14px;
     line-height: 19px;
     border: 1px solid #ccc;
-    color: #555;
-    background: #eee;
+    color: #fff;
+    background: #2c628d;
     transition: none;
 }
 
@@ -1596,7 +1597,7 @@ body .bigfoot-footnote__button:focus{
 }
 
 body .bigfoot-footnote__button:active {
-    background: #ccc;
+    background: #2c628d;
     color: #111;
 }
 body .bigfoot-footnote__button svg{
@@ -1610,6 +1611,10 @@ body .bigfoot-footnote__button:after {
     content: '';
     display: table;
     clear: both;
+}
+
+.bigfoot-footnote__wrapper {
+    width: 50em;
 }
 
 @media screen {	

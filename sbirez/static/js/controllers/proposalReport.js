@@ -9,25 +9,33 @@ angular.module('sbirezApp')
     $scope.goodStartWorkflow = null;
     $scope.buttonMessage = 'Get Started';
     $rootScope.bodyClass = 'proposal proposal-overview';
+    $scope.showContinue = true;
+    var first = true;
 
     var goodStartElement = function() {
-      var goodStart = $scope.overview[0].id;
+      var goodStart = -1; //$scope.overview[0].id;
       var found = false;
+
       for (var i = 0; i < $scope.overview.length && !found; i++) {
         if ($scope.overview[i].complete === false) {
           goodStart = $scope.overview[i].id;
           found = true;
           break;
         }
-        else if ($scope.overview[i].children) {
+        if ($scope.overview[i].children) {
           for (var j = 0; j < $scope.overview[i].children.length; j++) {
             if ($scope.overview[i].children[j].complete === false) {
               goodStart = $scope.overview[i].children[j].id;
               found = true;
               break;
             }
+            first = false; 
           }
-        } 
+          if (found) {
+            break;
+          }
+        }
+        first = false; 
       }
       return goodStart;
     };
@@ -40,7 +48,9 @@ angular.module('sbirezApp')
       ProposalService.getOverview(false).then(function(data) {
         $scope.overview = data;
         $scope.goodStartWorkflow = goodStartElement();
-        if ($scope.goodStartWorkflow !== $scope.overview[0].id) {
+        if (!first && $scope.goodStartWorkflow === -1) {
+          $scope.showContinue = false;
+        } else if (!first) {
           $scope.buttonMessage = 'Continue';
         }
       });

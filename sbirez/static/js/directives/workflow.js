@@ -8,8 +8,8 @@ angular.module('sbirezApp').directive('workflow', function() {
       proposalId: '@'
     },
     templateUrl: 'static/views/partials/workflow.html',
-    controller: ['$scope', '$stateParams', '$state', '$location', 'ProposalService', 
-      function ($scope, $stateParams, $state, $location, ProposalService) {
+    controller: ['$scope', '$stateParams', '$state', '$location', 'ProposalService', '$timeout', 
+      function ($scope, $stateParams, $state, $location, ProposalService, $timeout) {
 
         $scope.currentWorkflow = {};
         $scope.startingWorkflow = null;
@@ -48,6 +48,10 @@ angular.module('sbirezApp').directive('workflow', function() {
           return null;
         };
 
+        function spliceSlice(str, index, count, add) {
+          return str.slice(0, index) + (add || '') + str.slice(index + count);
+        };
+
         var buildErrorList = function(validationData, rootElement) {
           if (rootElement === undefined) {
             rootElement = $scope.currentWorkflow;
@@ -56,7 +60,15 @@ angular.module('sbirezApp').directive('workflow', function() {
             if(validationData.hasOwnProperty(prop)) {
               if (typeof validationData[prop] !== 'object') {
                 var element = findChildElement(prop, rootElement);
-                $scope.validationList.push({'id':prop, 'human': element.human, 'message': validationData[prop]});
+                var human = element.human;
+                var jargonIndex = human.indexOf('<jargon');
+                var endIndex;
+                while (jargonIndex !== -1) {
+                  endIndex = human.indexOf('>', jargonIndex);
+                  human = spliceSlice(human, jargonIndex, endIndex - jargonIndex + 1,'');
+                  jargonIndex = human.indexOf('<jargon');
+                }
+                $scope.validationList.push({'id':prop, 'human': human, 'message': validationData[prop]});
               } else if (!isEmpty(validationData[prop])) {
                 buildErrorList(validationData[prop], findChildElement(prop, rootElement));
               }
@@ -90,6 +102,7 @@ angular.module('sbirezApp').directive('workflow', function() {
                 buildErrorList($scope.validationData);
                 ProposalService.getOverview(false).then(function(data) {
                   $scope.overview = data;
+                  $timeout($.bigfoot, 100);
                 });
               });
             });
