@@ -25,7 +25,7 @@
     {% endassets %}
   </head>
   {% verbatim %}
-  <body ng-app="sbirezApp" class="{{bodyClass}}">
+  <body ng-app="sbirezApp" class="bigfoot {{bodyClass}}">
   {% endverbatim %}
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -60,8 +60,6 @@
     {% assets "bower_js" %}
       <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
-
-    <script type="text/javascript" src="static/lib/jquery/dist/jquery.min.js"></script>
 
     {% assets "angular_js" %}
       <script type="text/javascript" src="{{ ASSET_URL }}"></script>
