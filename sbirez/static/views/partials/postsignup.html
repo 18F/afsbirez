@@ -1,0 +1,25 @@
+<main role="main">
+  <div class="wrap">
+    <form role="form">
+      <h1>Sign in</h1>
+      <div class="field">
+        <label>
+          <span class="label-text">Email address</span>
+          <input type="email" ng-model="email">
+          <div ng-show="errorEmail" class="text-danger"><p class="errortext">{{errorLoginEmail}}</p></div>
+        </label>
+      </div>
+      <div class="field">
+        <label>
+          <span class="label-text">Password</span>
+          <input type="password" ng-model="password">
+          <div ng-show="errorPassword" class="text-danger"><p class="errortext">{{errorLoginPassword}}</p></div>
+        </label>
+      </div>
+      <div ng-show="errorMsg" class="text-danger"><p class="errortext">{{errorMsg}}</p></div>
+      <footer>
+        <button class="button" ng-click="logIn()">Sign in</button>
+      </footer>
+    </form>
+  </div>
+</main>

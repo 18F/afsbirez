@@ -1,0 +1,36 @@
+<main role="main">
+  <div class="wrap">
+    <form role="form">
+      <h1>Sign up</h1>
+      <div class="field" ng-class="{'is-error': errorName}">
+        <label>
+          <span class="label-text">Full name</span>
+          <input type="text" ng-model="name">
+        </label>
+        <span ng-show="errorName" class="error-message">{{errorName}}</span>
+      </div>
+      <div class="field" ng-class="{'is-error': errorEmail}">
+        <label>
+          <span class="label-text">Email address</span>
+          <input type="email" ng-model="email">
+        </label>
+        <span ng-show="errorEmail" class="error-message">{{errorEmail}}</span>
+      </div>
+      <div class="field field-password" ng-class="{'is-error': errorPassword}">
+        <label>
+          <span class="label-text">Password</span>
+          <input id="password" type="password" ng-model="password" aria-describedby="password-instructions">
+          <span ng-show="errorPassword" class="error-message">{{errorPassword}}</span>
+          <p id="password-instructions">Passwords must be eight characters including one uppercase letter, one special character (e.g., !, @, #), and alphanumeric characters.</p>
+        </label>
+      </div>
+      <div ng-show="errorMsg" class="field is-error">
+        <span class="error-message">{{errorMsg}}</span>
+      </div>
+      <footer>
+        <button class="button" ng-click="signUp()">Sign up</button>
+        <p>Already have an account? <a ui-sref="signin">Sign in</a></p>
+      </footer>
+    </form>
+  </div>
+</main>

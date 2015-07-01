@@ -29,8 +29,11 @@
             </li>
           </ol>
         </nav>
-        <button type="button" id="start" ui-sref="app.proposals.detail({id: proposalId, current: goodStartWorkflow})">{{buttonMessage}}</button>
+        <button type="button" id="start" ng-if="showContinue" ui-sref="app.proposals.detail({id: proposalId, current: goodStartWorkflow})">{{buttonMessage}}</button>
         <button type="button" id="validate_state" ng-click="validate()">Verify this proposal</button>          
+        <!-- <div class="notice">
+          <p><strong>Note:</strong> You&rsquo;ll need to fill in <a href="company.php">your company information</a> before you can submit a proposal.</p>
+        </div> -->
       </section>
       <aside>
         <h1><span class="technical-point">Technical point</span><span class="preposition">of</span> contact</h1>

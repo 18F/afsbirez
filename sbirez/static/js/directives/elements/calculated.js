@@ -19,7 +19,7 @@ angular.module('sbirezApp').directive('calculated', function() {
         $scope.validationstorage = '';
 
         var validationCallback = function(data) {
-          $scope.storage = data;
+          $scope.storage = Math.round((data + 0.00001) * 100) / 100;
           $scope.apply();
         };
 

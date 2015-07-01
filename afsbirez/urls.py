@@ -60,6 +60,9 @@ urlpatterns = patterns('',
     url(r'^search/', 'sbirez.views.home', name='home'),
     url(r'^topic/', 'sbirez.views.home', name='home'),
     url(r'^app/', 'sbirez.views.home', name='home'),
+    url(r'^signin/', 'sbirez.views.home', name='home'),
+    url(r'^signup/', 'sbirez.views.home', name='home'),
+    url(r'^reset/', 'sbirez.views.home', name='home'),
 
     # proxy company info searches to SAM API
     url(r'^api/v1/firms/search/(?P<searchterms>.*)$',
