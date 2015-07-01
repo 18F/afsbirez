@@ -499,265 +499,290 @@
       human: Cost Volume
       children:
       -
-        name: work_location
-        element_type: med_str
-        human: Location Where Work Will Be Performed
-        required: True
-      -
-        name: direct_labor
-        element_type: line_item
-        multiplicity: 8
+        name: cv_general
+        element_type: workflow
+        human: General
         children:
         -
-          name: category
-          human: Category and/or Individual
+          name: work_location
           element_type: med_str
+          human: Location Where Work Will Be Performed
           required: True
         -
-          name: hourly_rate
-          human:  Rate/Hour
-          element_type: dollars
+          name: cost_volume_explanatory
+          element_type: text
+          human: Explanatory material related to the Cost Volume
+                 (including substantiation of subcontractor costs)
           required: True
         -
-          name: estimated_hours
-          human: Est. Hours
-          element_type: float
+          name: cost_breakdown_official
+          human: Firm's official responsible for the cost breakdown
+          element_type: line_item
+          children:
+          -
+            name: name
+            element_type: med_str
+            required: True
+          -
+            name: title
+            element_type: med_str
+            required: True
+        -
+          name: dcaa_review
+          human: If the Defense Contracting Audit Agency (DCAA) has performed a review
+                 of your projects within the past 12 months, please provide the following
+          element_type: line_item
+          children:
+          -
+            name: reviewing_office
+            element_type: med_str
+            required: True
+          -
+            name: individual
+            element_type: med_str
+            required: True
+          -
+            name: address
+            element_type: text
+            required: True
+          -
+            name: phone
+            element_type: phone
+            required: True
+        -
+          name: use_government_property_yn
+          human: Will you require the use of any government property
+                 in the performance of this proposal?
+          required: True
+          element_type: bool
+        -
+          name: government_property_to_use
+          human: If Yes, identify
+          ask_if: use_government_property_yn
+          element_type: big_str
+        -
+          name: payment_desired
+          human: Specify the type of payment desired
+          element_type: big_str 
+          required: True
+          validation: one_of "partial payments (monthly) as work progresses (recommended)",
+                      "progress payments"
+        -
+          name: false_statements
+          human: Knowingly and willfully making any false, ficticious, or fraudulent
+                 statements or representations may be a felony under the Federal Criminal
+                 False Statement Act (18 USC Sec 1001), punishable by a fine of up to 
+                 $10,000, up to five years in prison, or both.
+          element_type: read_only_text
+      -
+        name: cv_direct_labor
+        element_type: workflow
+        human: Direct Labor
+        children:
+        -
+          name: direct_labor
+          element_type: line_item
+          multiplicity: 8
+          children:
+          -
+            name: category
+            human: Category and/or Individual
+            element_type: med_str
+            required: True
+          -
+            name: hourly_rate
+            human:  Rate/Hour
+            element_type: dollars
+            required: True
+          -
+            name: estimated_hours
+            human: Est. Hours
+            element_type: float
+            required: True
+          -
+            name: labor_cost
+            human: Cost
+            element_type: calculated
+            validation: "hourly_rate * estimated_hours"
+            required: False 
+        -
+          name: subtotal_direct_labor 
+          element_type: calculated 
+          required: False
+          validation: "sum(labor_cost)" 
+          human: "Subtotal Direct Labor (DL)"
+        -
+          name: fringe_benefit_percentage
+          element_type: percentage
+          required: True
+          human: "Fringe Benefits Rate, if not included in Overhead (%)"
+        -
+          name: fringe_benefit
+          element_type: calculated 
+          required: False 
+          validation: "subtotal_direct_labor * fringe_benefit_percentage * .01" 
+          human: "Fringe Benefits (rate x DL)"
+        -
+          name: labor_overhead_percentage
+          element_type: percentage
+          human: "Labor Overhead Rate (%)"
           required: True
         -
-          name: labor_cost
-          human: Cost
-          element_type: calculated
-          validation: "hourly_rate * estimated_hours"
+          name: labor_overhead
+          element_type: calculated 
+          human: "Labor Overhead (rate * (DL + Fringe))"
+          validation: "(subtotal_direct_labor + fringe_benefit) * labor_overhead_percentage * .01" 
+          required: True
+        -
+          name: total_direct_labor
+          element_type: calculated 
+          human: "Total Direct Labor (TDL)"
+          validation: "subtotal_direct_labor + fringe_benefit + labor_overhead" 
           required: False 
       -
-        name: subtotal_direct_labor 
-        element_type: calculated 
-        required: False
-        validation: "sum(labor_cost)" 
-        human: "Subtotal Direct Labor (DL)"
-      -
-        name: fringe_benefit_percentage
-        element_type: percentage
-        required: True
-        human: "Fringe Benefits Rate, if not included in Overhead (%)"
-      -
-        name: fringe_benefit
-        element_type: calculated 
-        required: False 
-        validation: "subtotal_direct_labor * fringe_benefit_percentage * .01" 
-        human: "Fringe Benefits (rate x DL)"
-      -
-        name: labor_overhead_percentage
-        element_type: percentage
-        human: "Labor Overhead Rate (%)"
-        required: True
-      -
-        name: labor_overhead
-        element_type: calculated 
-        human: "Labor Overhead (rate * (DL + Fringe))"
-        validation: "(subtotal_direct_labor + fringe_benefit) * labor_overhead_percentage * .01" 
-        required: True
-      -
-        name: total_direct_labor
-        element_type: calculated 
-        human: "Total Direct Labor (TDL)"
-        validation: "subtotal_direct_labor + fringe_benefit + labor_overhead" 
-        required: False 
-      -
-        name: direct_material_costs
-        element_type: line_item
-        multiplicity: 4
+        name: cv_direct_material
+        element_type: workflow
+        human: Direct Materials
         children:
         -
-          name: name
-          element_type: big_str
-          human: "Item Description" 
+          name: direct_material_costs
+          element_type: line_item
+          multiplicity: 4
+          children:
+          -
+            name: name
+            element_type: big_str
+            human: "Item Description" 
+            required: True
+          -
+            name: material_cost
+            human: Cost
+            element_type: dollars
+            required: True
+        -
+          name: subtotal_direct_material
+          element_type: calculated 
+          required: False
+          validation: "sum(material_cost)" 
+          human: "Subtotal Direct Material Costs (DM)"
+        -
+          name: material_overhead_percentage
+          element_type: percentage
+          human: "Material Overhead Rate (%)"
           required: True
         -
-          name: material_cost
-          human: Cost
+          name: material_overhead
+          element_type: calculated 
+          human: "Material Overhead (rate * DM)"
+          validation: "subtotal_direct_material * material_overhead_percentage * .01" 
+          required: False 
+        -
+          name: total_direct_material
+          element_type: calculated 
+          human: "Total Direct Material (TDM)"
+          validation: "subtotal_direct_material + material_overhead" 
+          required: False 
+      -
+        name: cv_other_direct
+        element_type: workflow
+        human: Other Direct Costs
+        children:
+        -
+          name: other_direct_costs
+          element_type: line_item
+          multiplicity: 4
+          children:
+          -
+            name: name
+            element_type: med_str
+            human: "Item Description"
+            required: True
+          -
+            name: other_cost
+            human: Cost
+            element_type: dollars
+            required: True
+        -
+          name: subtotal_other
+          element_type: calculated
+          required: False
+          validation: "sum(other_cost)"
+          human: "Subtotal Other Direct Costs (ODC)"
+        -
+          name: other_overhead_percentage
+          element_type: percentage
+          human: "Direct Cost Overhead Rate (%)"
+          required: True
+        -
+          name: other_overhead
+          element_type: calculated
+          human: "Direct Cost Overhead (rate * ODC)"
+          validation: "subtotal_other * other_overhead_percentage * .01"
+          required: False
+        -
+          name: total_other_direct
+          element_type: calculated
+          human: "Total Other Direct Costs (TODC)"
+          validation: "subtotal_other + other_overhead"
+          required: False
+      -
+        name: cv_totals
+        element_type: workflow
+        human: Totals
+        children:
+        -
+          name: general_admin_rate
+          element_type: percentage
+          human: "General & Administrative Rate (%)"
+          required: True
+        -
+          name: general_admin_rate_labor
+          element_type: checkbox 
+          human: Apply G & A rate to Total Direct Labor (TDL)
+          required: False
+        -
+          name: general_admin_rate_materials
+          element_type: checkbox 
+          required: False
+          human: Apply G & A rate to Total Direct Materials (TDM)
+        -
+          name: general_admin_rate_other
+          element_type: checkbox 
+          required: False
+          human: Apply G & A rate to Total Other Direct Costs (TODC)
+        -
+          name: general_admin
+          element_type: calculated
+          required: False
+          human: General & Administrative Cost
+          validation: "(general_admin_rate * general_admin_rate_labor * .01 * total_direct_labor) + (general_admin_rate * general_admin_rate_materials * .01 * total_direct_material) + (general_admin_rate * general_admin_rate_other * .01 * total_other_direct)"
+        -
+          name: total_cost 
+          element_type: calculated 
+          human: "Total Cost"
+          validation: "total_other_direct + total_direct_material + total_direct_labor + general_admin"
+          required: False 
+        -
+          name: fee_or_profit_rate
+          element_type: percentage
+          human: "Fee or Profit Rate (%)"
+          required: True
+        -
+          name: fee_or_profit
+          element_type: calculated
+          human: "Fee or Profit"
+          required: False
+          validation: "total_cost * fee_or_profit_rate * .01"
+        -
+          name: estimated_total_cost 
+          element_type: calculated 
+          human: "Estimated Total Cost"
+          validation: "total_cost + fee_or_profit"
+          required: False 
+        -
+          name: discretionary_technical_assistance
           element_type: dollars
           required: True
-      -
-        name: subtotal_direct_material
-        element_type: calculated 
-        required: False
-        validation: "sum(material_cost)" 
-        human: "Subtotal Direct Material Costs (DM)"
-      -
-        name: material_overhead_percentage
-        element_type: percentage
-        human: "Material Overhead Rate (%)"
-        required: True
-      -
-        name: material_overhead
-        element_type: calculated 
-        human: "Material Overhead (rate * DM)"
-        validation: "subtotal_direct_material * material_overhead_percentage * .01" 
-        required: False 
-      -
-        name: total_direct_material
-        element_type: calculated 
-        human: "Total Direct Material (TDM)"
-        validation: "subtotal_direct_material + material_overhead" 
-        required: False 
-      -
-        name: other_direct_costs
-        element_type: line_item
-        multiplicity: 4
-        children:
-        -
-          name: name
-          element_type: med_str
-          human: "Item Description"
-          required: True
-        -
-          name: other_cost
-          human: Cost
-          element_type: dollars
-          required: True
-      -
-        name: subtotal_other
-        element_type: calculated
-        required: False
-        validation: "sum(other_cost)"
-        human: "Subtotal Other Direct Costs (ODC)"
-      -
-        name: other_overhead_percentage
-        element_type: percentage
-        human: "Direct Cost Overhead Rate (%)"
-        required: True
-      -
-        name: other_overhead
-        element_type: calculated
-        human: "Direct Cost Overhead (rate * ODC)"
-        validation: "subtotal_other * other_overhead_percentage * .01"
-        required: False
-      -
-        name: total_other_direct
-        element_type: calculated
-        human: "Total Other Direct Costs (TODC)"
-        validation: "subtotal_other + other_overhead"
-        required: False
-      -
-        name: general_admin_rate
-        element_type: percentage
-        human: "General & Administrative Rate (%)"
-        required: True
-      -
-        name: general_admin_rate_labor
-        element_type: checkbox 
-        human: Apply G & A rate to Total Direct Labor (TDL)
-        required: False
-      -
-        name: general_admin_rate_materials
-        element_type: checkbox 
-        required: False
-        human: Apply G & A rate to Total Direct Materials (TDM)
-      -
-        name: general_admin_rate_other
-        element_type: checkbox 
-        required: False
-        human: Apply G & A rate to Total Other Direct Costs (TODC)
-      -
-        name: general_admin
-        element_type: calculated
-        required: False
-        human: General & Administrative Cost
-        validation: "(general_admin_rate * general_admin_rate_labor * .01 * total_direct_labor) + (general_admin_rate * general_admin_rate_materials * .01 * total_direct_material) + (general_admin_rate * general_admin_rate_other * .01 * total_other_direct)"
-      -
-        name: total_cost 
-        element_type: calculated 
-        human: "Total Cost"
-        validation: "total_other_direct + total_direct_material + total_direct_labor + general_admin"
-        required: False 
-      -
-        name: fee_or_profit_rate
-        element_type: percentage
-        human: "Fee or Profit Rate (%)"
-        required: True
-      -
-        name: fee_or_profit
-        element_type: calculated
-        human: "Fee or Profit"
-        required: False
-        validation: "total_cost * fee_or_profit_rate * .01"
-      -
-        name: estimated_total_cost 
-        element_type: calculated 
-        human: "Estimated Total Cost"
-        validation: "total_cost + fee_or_profit"
-        required: False 
-      -
-        name: discretionary_technical_assistance
-        element_type: dollars
-        required: True
-      -
-        name: cost_volume_explanatory
-        element_type: text
-        human: Explanatory material related to the Cost Volume
-               (including substantiation of subcontractor costs)
-        required: True
-      -
-        name: cost_breakdown_official
-        human: Firm's official responsible for the cost breakdown
-        element_type: line_item
-        children:
-        -
-          name: name
-          element_type: med_str
-          required: True
-        -
-          name: title
-          element_type: med_str
-          required: True
-      -
-        name: dcaa_review
-        human: If the Defense Contracting Audit Agency (DCAA) has performed a review
-               of your projects within the past 12 months, please provide the following
-        element_type: line_item
-        children:
-        -
-          name: reviewing_office
-          element_type: med_str
-          required: True
-        -
-          name: individual
-          element_type: med_str
-          required: True
-        -
-          name: address
-          element_type: text
-          required: True
-        -
-          name: phone
-          element_type: phone
-          required: True
-      -
-        name: use_government_property_yn
-        human: Will you require the use of any government property
-               in the performance of this proposal?
-        required: True
-        element_type: bool
-      -
-        name: government_property_to_use
-        human: If Yes, identify
-        ask_if: use_government_property_yn
-        element_type: big_str
-      -
-        name: payment_desired
-        human: Specify the type of payment desired
-        element_type: big_str 
-        required: True
-        validation: one_of "partial payments (monthly) as work progresses (recommended)",
-                    "progress payments"
-      -
-        name: false_statements
-        human: Knowingly and willfully making any false, ficticious, or fraudulent
-               statements or representations may be a felony under the Federal Criminal
-               False Statement Act (18 USC Sec 1001), punishable by a fine of up to 
-               $10,000, up to five years in prison, or both.
-        element_type: read_only_text
     -
       name: dod_company_commercialization_report
       element_type: workflow 
