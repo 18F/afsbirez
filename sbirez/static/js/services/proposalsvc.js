@@ -491,7 +491,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     // return data, and set validation & ask_if callbacks
     // find or create the proposal data in the correct spot, taking into account the multipleToken, if present.
     var order = getOrder(element, multipleToken);
-    var data = getDataIndex(order, false, proposalData);
+    var data = getDataIndex(order, true, proposalData);
     var fieldName;
     // if there is a validation callback, add it to the validation structure
     if (validationCallback !== null && validationCallback !== undefined) {
@@ -505,25 +505,21 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
 
         // check to see if the state was already set
         var message = getDataIndex(order, false, validationData);
-        if (message === null || (typeof message === 'object' && message.length === undefined)) {
+        if (message === null || (typeof message === 'object' && isEmpty(message))) {
           message = '';
         }
         validationCallback(message);
         if (!calculatedCallbacks[fieldName]) {
           calculatedCallbacks[fieldName] = {
-            value: numericValue(data),
+            value: numericValue(data[order[0]]),
             callbacks:[]
           };
         }
       } else {
-        var expr = Parser.parse(element .validation);
+        var expr = Parser.parse(element.validation);
         var variables = expr.variables();
-        if (!calculatedCallbacks[fieldName]) {
-          calculatedCallbacks[fieldName] = {
-            value: numericValue(data),
-            callbacks:[]
-          };
-        }
+        expr = expr.toJSFunction(variables);
+        var params = [];
         for (var index = 0; index < variables.length; index++) {
           var variableName = getFieldName(variables[index], multipleToken);
           if (variableName === 'sum') {
@@ -537,9 +533,10 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
           if (calculatedCallbacks[variableName]) {
             calculatedCallbacks[variableName].callbacks.push({
               callback:validationCallback,
-              calculation:expr.toJSFunction(variables),
+              calculation:expr,
               variables:variables
             });
+            params.push(calculatedCallbacks[variableName].value);
           }
           else {
             var variableElement = getElement(variables[index]);
@@ -552,11 +549,26 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
               };
               calculatedCallbacks[variableName].callbacks.push({
                 callback:validationCallback,
-                calculation:expr.toJSFunction(variables),
+                calculation:expr,
                 variables:variables
               });
+              params.push(variableValue);
             }
           }
+        }
+        if (variables[0] === 'sum') {
+          data[order[0]] = sum(params);
+        } else {
+          data[order[0]] = expr.apply(null, params);
+        }
+        if (isNaN(data[order[0]])) {
+          data[order[0]] = {};
+        }
+        if (!calculatedCallbacks[fieldName]) {
+          calculatedCallbacks[fieldName] = {
+            value: numericValue(data[order[0]]),
+            callbacks:[]
+          };
         }
       }
     }
@@ -576,7 +588,10 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       var askIfData = getDataIndex(order, true, proposalData);
       askIfCallback(askIfData[order[0]]);
     }
-    return data;
+    if (data[order[0]] === undefined) {
+      data[order[0]] = {};
+    }
+    return data[order[0]];
   };
 
   var applyCalculatedCallback = function(fieldName, value, name, multipleToken) {
