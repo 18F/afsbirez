@@ -168,6 +168,20 @@ class ProposalViewSet(viewsets.ModelViewSet):
         email = mails.submit_notification(prop.owner.email,
                                           {'proposal': prop})
         email.send()
+        email = mails.mock_submission(prop.owner.email,
+            {'proposal': prop, 'data':
+              json.dumps(prop.data, indent=2, sort_keys=True)
+            })
+        for doc in prop.document_set.all():
+            content = doc.file.read()
+            # decoding necessary due to an unfixed Django bug
+            # see https://code.djangoproject.com/ticket/24623
+            try:
+                content = content.decode('utf-8')
+            except (AttributeError, UnicodeDecodeError):
+                pass   # apparently it was not a 'bytes' type
+            email.attach(doc.file.name, content)
+        email.send()
         return Response({'status': 'Submission completed'})
 
 
