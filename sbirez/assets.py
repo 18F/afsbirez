@@ -2,7 +2,6 @@ from django_assets import Bundle, register
 
 bower_js = Bundle(
     "jslib/parser/parser.js",
-    "lib/jquery/dist/jquery.min.js",
     "lib/angular/angular.js",
     "lib/angular-resource/angular-resource.js",
     "lib/angular-cookies/angular-cookies.js",
@@ -11,12 +10,11 @@ bower_js = Bundle(
     "lib/angular-route/angular-route.js",
     "lib/ng-file-upload/angular-file-upload.js",
     "lib/ngDialog/js/ngDialog.min.js",
-    "lib/marked/lib/marked.js",
-    "lib/angular-marked/angular-marked.js",
     "lib/angular-ui-router/release/angular-ui-router.js",
     "lib/angular-order-object-by/src/ng-order-object-by.js",
+    "lib/marked/lib/marked.js",
+    "lib/angular-marked/angular-marked.js",
     "lib/base64/base64.min.js",
-    "lib/bigfoot/dist/bigfoot.min.js",
     filters="jsmin",
     output="js/bower.min.js"
 )
@@ -28,7 +26,6 @@ angular_js = Bundle(
     "js/directives/topic.js",
     "js/directives/pagination.js",
     "js/directives/backbutton.js",
-    "js/directives/jargon.js",
     "js/directives/header.js",
     "js/directives/footer.js",
     "js/directives/elements/str.js",
@@ -43,10 +40,6 @@ angular_js = Bundle(
     "js/directives/elements/calculated.js",
     "js/controllers/main.js",
     "js/controllers/search.js",
-    "js/controllers/signin.js",
-    "js/controllers/signup.js",
-    "js/controllers/landing.js",
-    "js/controllers/reset.js",
     "js/controllers/form.js",
     "js/controllers/contact.js",
     "js/controllers/accountUser.js",
@@ -89,7 +82,6 @@ combined_css = Bundle(
     "css/ngdialog-theme-login.css",
     "css/ngdialog-theme-intromessage.css",
     "css/ngdialog-theme-logout.css",
-    "lib/bigfoot/dist/bigfoot-default.css",
     combined_sass,
     filters="cssmin",
     output="css/sbirez.min.css"

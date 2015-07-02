@@ -10,6 +10,10 @@ angular.module('sbirezApp').directive('header', function() {
         $scope.menu = [];
         $scope.query = '';
 
+        $scope.openLogin = function() {
+          DialogService.openLogin();
+        };
+
         $scope.openLogout = function() {
           UserService.logOut();
         };
@@ -22,6 +26,10 @@ angular.module('sbirezApp').directive('header', function() {
               'title': 'My Proposals',
               'link': '/app/proposals'
             }, {
+//              'class': 'notifications',
+//              'title': 'Notifications',
+//              'link': '/app/notifications'
+//            }, {
               'class': 'my-company',
               'title': 'My Company',
               'link': '/app/account/organization'
@@ -31,7 +39,7 @@ angular.module('sbirezApp').directive('header', function() {
               'click':$scope.openLogout
             }];
           } else {
-            $scope.menu = [{'title': 'Sign in', 'link':'/signin/', 'class':'sign-in'}];
+            $scope.menu = [{'title': 'Sign in', 'click':$scope.openLogin, 'class':'sign-in'}];
           }
         };
 

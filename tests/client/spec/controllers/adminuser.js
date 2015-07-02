@@ -1,19 +1,17 @@
 'use strict';
 
-describe('Controller: SignInCtrl', function () {
+describe('Controller: AdminUserCtrl', function () {
 
   // load the controller's module
   beforeEach(module('sbirezApp'));
 
-  var SignInCtrl,
+  var AdminUserCtrl,
     scope,
     window,
     UserService,
     $httpBackend,
     $location,
     $q;
-
-    var data ={'data': {'token':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0MzU2OTU4ODIsInVzZXJfaWQiOjMsImVtYWlsIjoiZGF2ZUBnbWFpbC5jb20iLCJvcmlnX2lhdCI6MTQzNTY5Mjg4MiwidXNlcm5hbWUiOiJkYXZlQGdtYWlsLmNvbSJ9.EZe59iapntq48PBMQ2WB8UeEFGVcy61y_MAvVw7sXAI', 'username':'test', 'id':1}};
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$httpBackend_, _$q_, _$location_, $controller, $rootScope, $window, _UserService_) {
@@ -26,19 +24,18 @@ describe('Controller: SignInCtrl', function () {
     window = $window;
     $q = _$q_;
     $location = _$location_;
-    SignInCtrl = $controller('SignInCtrl', {
+    AdminUserCtrl = $controller('AdminUserCtrl', {
       $scope: scope
     });
   }));
 
   it('should set the token to window storage on successful signin and direct back to the application', function () {
+    var data ={'data': {'token':'ABC', 'username':'test', 'id':1}};
     var mockDeferred = $q.defer();
     spyOn(UserService, 'logIn').andReturn(mockDeferred.promise);
     spyOn(UserService, 'getUserDetails').andReturn(mockDeferred.promise);
     spyOn($location, 'path');
-    scope.email = data.data.username;
-    scope.password = '123';
-    scope.logIn();
+    scope.logIn(data.data.username, '123');
     mockDeferred.resolve(data);
     scope.$root.$digest();
     expect(window.sessionStorage.token).toBe(data.data.token);
@@ -46,16 +43,24 @@ describe('Controller: SignInCtrl', function () {
   });
   
   it('should not redirect and it should return an error', function () {
+    var data = {'data': {'token':'XYZ', 'username':'test', 'id':1}};
     var mockDeferred = $q.defer();
     spyOn(UserService, 'logIn').andReturn(mockDeferred.promise);
     spyOn($location, 'path');
-    data.data.token = 'ABC';
-    scope.email = data.data.username;
-    scope.password = '123';
-    scope.logIn();
+    scope.logIn(data.username, '123');
     mockDeferred.reject(data);
     scope.$root.$digest();
     expect(window.sessionStorage.token).toNotBe(data.data.token);
     expect(scope.errorMsg).toBeDefined();
   });
+  
+  it('should remove tokens and redirect to root when logout', function () {
+    expect(window.sessionStorage.token).not.toBeUndefined();
+    spyOn($location, 'path');
+    scope.logOut();
+    scope.$root.$digest();
+    expect(window.sessionStorage.token).toBe('');
+    expect($location.path).toHaveBeenCalledWith('/');
+  });
+
 });

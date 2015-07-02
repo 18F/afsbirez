@@ -1,11 +1,11 @@
 <section ng-show="visible" class="fieldset fieldset-dynamic">
   <header>
-    <h1>{{::element.human}}</h1>
+    <h1>{{element.human}}</h1>
     <a href="#" ng-click="addAnother()">Add another</a>
   </header>
   <section class="fieldset fieldset-dynamic-item" ng-if="element.multiplicity" ng-repeat="multiple in element.multiplicity| limitTo:visibleCount">
     <header>
-      <h1>{{::element.human}} {{multiple.value + 1}}</h1>
+      <h1>{{element.human}} {{multiple.value + 1}}</h1>
       <a href="#" ng-if="visibleCount > 1" ng-click="remove(multiple.value)" class="remove">Remove</a>
     </header>
     <div ng-repeat="subelement in element.children">
@@ -29,7 +29,7 @@
         <div group="subelement" method="jumpTo" ></div>
       </div>
       <div class="workflow-element" ng-class="{'element-aside':subelement.ask_if}" ng-if="subelement.element_type === 'file_upload'">
-        <div upload="subelement" proposalId="{{::proposalId}}" multiplename="multiple.value" multipletoken="multiple.token"></div>
+        <div upload="subelement" proposalId="{{proposalId}}" multiplename="multiple.value" multipletoken="multiple.token"></div>
       </div>
     </div>
   </section>

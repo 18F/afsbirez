@@ -33,33 +33,6 @@ angular.module('sbirezApp', [
           }
         }
       })
-      .state('signin', {
-        url: '/signin/',
-        views: {
-          '': {
-            templateUrl: 'static/views/partials/signin.html',
-            controller: 'SignInCtrl'
-          }
-        }
-      })
-      .state('signup', {
-        url: '/signup/',
-        views: {
-          '': {
-            templateUrl: 'static/views/partials/signup.html',
-            controller: 'SignUpCtrl'
-          }
-        }
-      })
-      .state('reset', {
-        url: '/reset/',
-        views: {
-          '': {
-            templateUrl: 'static/views/partials/reset.html',
-            controller: 'ResetCtrl'
-          }
-        }
-      })
       .state('topic', {
         url: '/topic/:id',
         views: {
@@ -86,16 +59,6 @@ angular.module('sbirezApp', [
           'tabContent': {
             templateUrl: 'static/views/partials/search.html',
             controller: 'SearchCtrl'
-          }
-        },
-        access: { requiredAuthentication: true }
-      })
-      .state('app.landing', {
-        url: '/landing',
-        views: {
-          'tabContent': {
-            templateUrl: 'static/views/partials/landing.html',
-            controller: 'LandingCtrl'
           }
         },
         access: { requiredAuthentication: true }
