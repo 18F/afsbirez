@@ -1,8 +1,8 @@
 <section ng-show="visible" class="fieldset">
-  <h1>{{element.human}}</h1>
+  <h1>{{::element.human}}</h1>
   <div ng-if="element.multiplicity" ng-repeat="multiple in element.multiplicity| limitTo:visibleCount">
     <div ng-repeat="subelement in element.children">
-      <div class="workflow-element" ng-class="{'element-aside':subelement.ask_if}" ng-if="subelement.element_type === 'str' || subelement.element_type === 'long_str' || subelement.element_type === 'med_str' || subelement.element_type === 'short_str' || subelement.element_type === 'phone' || subelement.element_type === 'email' || subelement.element_type === 'int' || subelement.element_type === 'dollars' || subelement.element_type === 'float' || subelement.element_type === 'percentage' || subelement.element_type === 'big_str'">
+      <div class="workflow-element" ng-class="{'element-aside':subelement.ask_if}" ng-if="subelement.element_type === 'str' || subelement.element_type === 'long_str' || subelement.element_type === 'med_str' || subelement.element_type === 'short_str' || subelement.element_type === 'phone' || subelement.element_type === 'email' || subelement.element_type === 'int' || subelement.element_type === 'dollars' || subelement.element_type === 'float' || subelement.element_type === 'percentage' || subelement.element_type === 'big_str' || subelement.element_type === 'integer' || subelement.element_type === 'integer_spans'">
         <div str="subelement" multiplename="multiple.value" multipletoken="multiple.token"></div>
       </div>
       <div readonlytext="element" class="workflow-element" ng-class="{'element-aside':subelement.ask_if}" ng-if="element.element_type === 'read_only_text'"></div>
@@ -22,7 +22,7 @@
         <div group="subelement" method="jumpTo" ></div>
       </div>
       <div class="workflow-element" ng-class="{'element-aside':subelement.ask_if}" ng-if="subelement.element_type === 'file_upload'">
-        <div upload="subelement" proposalId="{{proposalId}}" multiplename="multiple.value" multipletoken="multiple.token"></div>
+        <div upload="subelement" proposalId="{{::proposalId}}" multiplename="multiple.value" multipletoken="multiple.token"></div>
       </div>
     </div>
   </div>

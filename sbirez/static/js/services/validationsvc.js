@@ -249,7 +249,6 @@ angular.module('sbirezApp').factory('ValidationService', function() {
     },
 
     validateElement: function(element, data, validationResults) {
-      console.log('validating1', element, data, validationResults);
       var requiredSet = false;
       if (element.required === true) {
         if (!processRequired(element, data)) {
@@ -267,7 +266,6 @@ angular.module('sbirezApp').factory('ValidationService', function() {
           validationResults[element.name] = {};
         }
       }
-      console.log('validating', element, data, validationResults);
     }
   };
 });
