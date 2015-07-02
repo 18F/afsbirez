@@ -1067,8 +1067,7 @@ class ProposalTests(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         messages = {m.subject: m for m in django.core.mail.outbox[-2:]}
         message = messages['SBIR proposal submission: Title']
-        import ipdb; ipdb.set_trace()
-        self.assertIn("'subquest': {'quest_thy_quest': 'To seek the Grail'",
+        self.assertIn("'quest_thy_quest': 'To seek the Grail'",
                       message.body)
         self.assertEqual(message.attachments[0][1],
                          "Don't shoot the exhaust port!")
