@@ -5,11 +5,14 @@ from rest_framework_proxy.views import ProxyView
 from collections import OrderedDict
 from copy import deepcopy
 import collections
+import dbm
 import json
+import tempfile
 from unittest import mock
 
 from django.test import TestCase
 import django.core.mail
+from django.core.files import uploadedfile
 
 from sbirez.models import Firm
 from sbirez import api
@@ -1030,9 +1033,17 @@ class ProposalTests(APITestCase):
         self.assertEqual(response.data['owner'], 2)
         self.assertEqual(response.data['firm'], 1)
 
+    def _messages(self, messages):
+        result = {}
+        for message in messages:
+            if True:
+                pass
+        return result
+
     # test that submitting a proposal sends an email
     def test_email_upon_submission(self):
         user = _fixture_user(self)
+        response = _upload_death_star_plans(self)
 
         initial_emails_in_memory = len(django.core.mail.outbox)
         response = self.client.post('/api/v1/proposals/2/submit/')
@@ -1041,7 +1052,8 @@ class ProposalTests(APITestCase):
                          initial_emails_in_memory + 2)
         # Note: if mock_submission emails deleted, these 2s
         # will become 1s
-        notification_message = django.core.mail.outbox[-2]
+        messages = {m.subject: m for m in django.core.mail.outbox[-2:]}
+        notification_message = messages['Your SBIR proposal has been submitted']
         self.assertIn('submitted', notification_message.subject)
         self.assertIn('Title', notification_message.body)
 
@@ -1050,13 +1062,46 @@ class ProposalTests(APITestCase):
     # delete this when actual upstream submission enabled
     def test_mock_submission_email(self):
         user = _fixture_user(self)
+        response = _upload_death_star_plans(self)
         response = self.client.post('/api/v1/proposals/2/submit/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        message = django.core.mail.outbox[-1]
-        self.assertIn('SBIR proposal submission', message.subject)
+        messages = {m.subject: m for m in django.core.mail.outbox[-2:]}
+        message = messages['SBIR proposal submission: Title']
+        import ipdb; ipdb.set_trace()
         self.assertIn("'subquest': {'quest_thy_quest': 'To seek the Grail'",
                       message.body)
+        self.assertEqual(message.attachments[0][1],
+                         "Don't shoot the exhaust port!")
 
+    def test_mock_submission_email_with_binary_attachment(self):
+        user = _fixture_user(self)
+
+        # create and attach a binary file: a dbm k:v database
+        shipfile = tempfile.NamedTemporaryFile(suffix='db')
+        ships = dbm.open(shipfile.name, 'n')
+        ships['Falcon'] = 'Solo'
+        ships['Serenity'] = 'Reynolds'
+        ships.close()
+
+        response = self.client.post('/api/v1/documents/', {
+        'name': 'ships.db',
+        'description': 'Keep an eye on these shady characters.',
+        'file': shipfile,
+        'proposals': 2})
+
+        response = self.client.post('/api/v1/proposals/2/submit/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        messages = {m.subject: m for m in django.core.mail.outbox[-2:]}
+        message = messages['SBIR proposal submission: Title']
+        self.assertEqual(len(message.attachments), 1)
+
+        # verify that the database can be reconstituted
+        # from the attachment
+        shipfile = tempfile.NamedTemporaryFile(suffix='db')
+        shipfile.write(message.attachments[0][1])
+        ships = dbm.open(shipfile.name, 'r')
+        self.assertEqual(ships['Falcon'], b'Solo')
 
 class ProposalValidationTests(APITestCase):
 
@@ -1171,13 +1216,13 @@ def _upload_death_star_plans(test_instance, login=True):
         user = _fixture_user(test_instance)
 
     # Write the death star plans
-    plans = open('deathstarplans.txt', 'wb')
     nobothans = bytearray("Don't shoot the exhaust port!", "UTF-8")
+    plans = uploadedfile.TemporaryUploadedFile(name='deathstarplans.txt',
+        size=len(nobothans), charset='utf-8', content_type='text/plain')
     plans.write(nobothans)
-    plans.close()
+    plans.seek(0)
 
     # Upload the plans to R2's memory banks
-    plans = open('deathstarplans.txt', 'rb')
     response = test_instance.client.post('/api/v1/documents/', {
         'name': 'Secret Death Star Plans',
         'description': 'Many bothan spies died to bring us this information.',
