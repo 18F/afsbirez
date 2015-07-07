@@ -34,7 +34,7 @@
     },
     {
         "fields": {
-            "address": null,
+            "address": 1,
             "cage_code": "abc",
             "current_employees": 200000,
             "duns_id": "789",
@@ -46,7 +46,7 @@
             "phase2_count": 3,
             "phase2_employees": 100000,
             "phase2_year": 1980,
-            "point_of_contact": null,
+            "point_of_contact": 1,
             "revenue_percent": 50,
             "sbc_id": "456",
             "tax_id": "123",
