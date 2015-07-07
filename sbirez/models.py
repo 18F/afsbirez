@@ -22,10 +22,10 @@ class Address(models.Model):
 
 class Person(models.Model):
     name = models.TextField()
-    title = models.TextField(null=True)
-    email = models.TextField(null=True)
-    phone = models.TextField(null=True)
-    fax = models.TextField(null=True)
+    title = models.TextField(null=True, blank=True)
+    email = models.TextField(null=True, blank=True)
+    phone = models.TextField(null=True, blank=True)
+    fax = models.TextField(null=True, blank=True)
 
 class Firm(models.Model):
     name = models.TextField(unique=True)
@@ -34,25 +34,34 @@ class Firm(models.Model):
     duns_id = models.TextField(unique=True, blank=True, null=True)
     cage_code = models.TextField(blank=True, null=True)
     website = models.TextField(blank=True, null=True)
-    address = models.ForeignKey(Address, null=True)
-    point_of_contact = models.ForeignKey(Person, null=True)
-    founding_year = models.IntegerField(null=True)
-    phase1_count = models.IntegerField(null=True)
-    phase1_year = models.IntegerField(null=True)
-    phase2_count = models.IntegerField(null=True)
-    phase2_year = models.IntegerField(null=True)
-    phase2_employees = models.IntegerField(null=True)
-    current_employees = models.IntegerField(null=True)
-    patent_count = models.IntegerField(null=True)
-    total_revenue_range = models.TextField(null=True)
-    revenue_percent = models.IntegerField(null=True)
+    address = models.ForeignKey(Address, null=True, blank=True)
+    point_of_contact = models.ForeignKey(Person, null=True, blank=True)
+    founding_year = models.IntegerField(null=True, blank=True)
+    phase1_count = models.IntegerField(null=True, blank=True)
+    phase1_year = models.IntegerField(null=True, blank=True)
+    phase2_count = models.IntegerField(null=True, blank=True)
+    phase2_year = models.IntegerField(null=True, blank=True)
+    phase2_employees = models.IntegerField(null=True, blank=True)
+    current_employees = models.IntegerField(null=True, blank=True)
+    patent_count = models.IntegerField(null=True, blank=True)
+    total_revenue_range = models.TextField(null=True, blank=True)
+    revenue_percent = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.name
 
+class Naics(models.Model):
+    code = models.TextField(primary_key=True)
+    description = models.TextField(null=False)
+    firms = models.ManyToManyField('Firm', blank=True, null=True,
+                                   related_name='naics')
+
+    def __str__(self):
+        return "%s (%s)" % (self.code, self.description)
+
 class SbirezUser(AbstractEmailUser):
     name = models.TextField()
-    firm = models.ForeignKey(Firm, null=True)
+    firm = models.ForeignKey(Firm, null=True, blank=True)
 
 class Area(models.Model):
     area = models.TextField(unique=True)
@@ -155,7 +164,7 @@ class Element(models.Model):
     element_type = models.TextField(default='str')
     # workflow, group, line_item, read_only_text, or scalar type
     order = models.IntegerField(blank=False)
-    parent = models.ForeignKey('Element', related_name='children', null=True)
+    parent = models.ForeignKey('Element', related_name='children', null=True, blank=True)
     multiplicity = models.TextField(null=True, blank=True)
     # comma-separated list of names: collect one group for each name
     # integer: collect up to N unnamed groups
@@ -271,7 +280,8 @@ class Element(models.Model):
 class Jargon(models.Model):
     name = models.TextField(unique=True)
     html = models.TextField()
-    elements = models.ManyToManyField('Element', blank=True, null=True, related_name='jargons')
+    elements = models.ManyToManyField('Element', blank=True, null=True,
+                                      related_name='jargons')
 
 
 class Solicitation(models.Model):

@@ -4,7 +4,7 @@ import shlex
 from sbirez import validation_helpers
 from django.contrib.auth.models import User, Group
 from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person
-from sbirez.models import Address, Proposal, Address
+from sbirez.models import Address, Proposal, Address, Naics
 from sbirez.models import Element, Document, DocumentVersion, Solicitation, Jargon
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
@@ -61,6 +61,7 @@ class FirmSerializer(serializers.HyperlinkedModelSerializer):
         model = Firm
         fields = ('id', 'name', 'tax_id', 'sbc_id', 'duns_id', 'cage_code',
                   'website', 'address', 'point_of_contact', 'founding_year',
+                  'naics',
                   'phase1_count', 'phase1_year', 'phase2_count',
                   'phase2_year', 'phase2_employees', 'current_employees',
                   'patent_count', 'total_revenue_range', 'revenue_percent')
@@ -148,6 +149,12 @@ class FirmSerializer(serializers.HyperlinkedModelSerializer):
 
         instance.save()
         return instance
+
+
+class NaicsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Naics
+        fields = ('code', )
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
