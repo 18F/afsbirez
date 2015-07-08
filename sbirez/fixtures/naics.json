@@ -1,0 +1,34 @@
+[
+    {
+        "fields": {
+            "description": "Crop Production",
+            "firms": []
+        },
+        "model": "sbirez.naics",
+        "pk": "111"
+    },
+    {
+        "fields": {
+            "description": "Oilseed and Grain Farming",
+            "firms": []
+        },
+        "model": "sbirez.naics",
+        "pk": "1111"
+    },
+    {
+        "fields": {
+            "description": "Soybean Farming",
+            "firms": []
+        },
+        "model": "sbirez.naics",
+        "pk": "11111"
+    },
+    {
+        "fields": {
+            "description": "Soybean Farming",
+            "firms": []
+        },
+        "model": "sbirez.naics",
+        "pk": "111110"
+    }
+]

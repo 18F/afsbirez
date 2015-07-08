@@ -44,7 +44,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 else IsStaffOrTargetUser()),
 
 
-class NaicsViewSet(viewsets.ModelViewSet):
+class NaicsViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = Naics.objects.all()
     serializer_class = NaicsSerializer
@@ -57,9 +57,10 @@ class FirmViewSet(viewsets.ModelViewSet):
     queryset = Firm.objects.all()
     serializer_class = FirmSerializer
 
-    #def get_permissions(self):
+    def get_permissions(self):
         # allow non-authenticated user to create via POST
-        #return IsStaffOrFirmRelatedUser(),
+        return (AllowAny() if self.request.method == 'POST'
+            else IsStaffOrFirmRelatedUser()),
 
 
 class GroupViewSet(viewsets.ModelViewSet):

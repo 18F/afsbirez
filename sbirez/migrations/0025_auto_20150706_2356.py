@@ -112,6 +112,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='naics',
             name='firms',
-            field=models.ManyToManyField(blank=True, null=True, related_name='naics', to='sbirez.Firm'),
+            field=models.ManyToManyField(blank=True, null=True,
+                                         related_name='naics', to='sbirez.Firm'),
         ),
     ]

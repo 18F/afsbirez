@@ -53,7 +53,14 @@ class PersonSerializer(serializers.ModelSerializer):
         model = Person
         fields = ('name', 'title', 'email', 'phone', 'fax')
 
-class FirmSerializer(serializers.HyperlinkedModelSerializer):
+
+class NaicsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Naics
+        fields = ('code', 'description')
+
+
+class FirmSerializer(serializers.ModelSerializer):
     address = AddressSerializer(required=False, many=False)
     point_of_contact = PersonSerializer(required=False, many=False)
 
@@ -88,7 +95,14 @@ class FirmSerializer(serializers.HyperlinkedModelSerializer):
             point_of_contact = Person.objects.create(**point_of_contact_data)
         else:
             point_of_contact = None
+
+        naics = validated_data.pop('naics', [])
+
         firm = Firm.objects.create(point_of_contact=point_of_contact, address=address, **validated_data)
+        for naic in naics:
+            firm.naics.add(naic)
+        firm.save()
+
         self.update_user(firm.id)
         return firm
 
@@ -147,14 +161,13 @@ class FirmSerializer(serializers.HyperlinkedModelSerializer):
             address.save()
             instance.address = address
 
+        naics = validated_data.pop('naics', [])
+        instance.naics.all().delete()
+        for naic in naics:
+            instance.naics.add(naic)
+
         instance.save()
         return instance
-
-
-class NaicsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Naics
-        fields = ('code', )
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
