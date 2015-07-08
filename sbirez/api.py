@@ -58,9 +58,10 @@ class FirmViewSet(viewsets.ModelViewSet):
     serializer_class = FirmSerializer
 
     def get_permissions(self):
+        return (IsStaffOrFirmRelatedUser(), )
         # allow non-authenticated user to create via POST
-        return (AllowAny() if self.request.method == 'POST'
-            else IsStaffOrFirmRelatedUser()),
+        # return (AllowAny() if self.request.method == 'POST'
+        #     else IsStaffOrFirmRelatedUser()),
 
 
 class GroupViewSet(viewsets.ModelViewSet):
