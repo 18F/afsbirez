@@ -118,6 +118,16 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return deferred.promise;
   };
 
+  var submitProposal = function() {
+    var deferred = $q.defer();
+    $http.post(PROPOSAL_URI + proposal.id + '/submit/').success(function(data) {
+      deferred.resolve(data);
+    }).error(function(data) {
+      deferred.reject(new Error(data));
+    });
+    return deferred.promise;
+  };
+
   var buildIndex = function(workflow, parent) {
     workflow.parentId = parent;
     workflows.push(workflow);
@@ -350,6 +360,14 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
              (typeof data[elementName] === 'object' && data[elementName].length === undefined));
   };
 
+  var stringToBoolean = function(data){
+    switch(data.toLowerCase()){
+      case "true": case "yes": case "1": return true;
+      case "false": case "no": case "0": case null: return false;
+      default: return Boolean(data);
+    }
+  };
+
   var checkCompleteness = function(element, data) {
     var length = element.children.length;
     var index = 0;
@@ -576,17 +594,22 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     // if there is an ask if callback, add it to the askif structure
     if (askIfCallback !== null && askIfCallback !== undefined && element.ask_if !== null && element.ask_if !== undefined) {
       var askIfSplit = element.ask_if.split(' ');
+      var notLogic = askIfSplit[0] === 'not';
       fieldName = getFieldName(askIfSplit[askIfSplit.length - 1], multipleToken);
 
       if (askIfCallbacks[fieldName] === undefined) {
         askIfCallbacks[fieldName] = [];
       }
-      askIfCallbacks[fieldName].push(askIfCallback);
+      askIfCallbacks[fieldName].push({'cb':askIfCallback, 'not': notLogic});
 
       // check to see if the state was already set
-      order = getOrder(element, multipleToken, askIfSplit[askIfSplit.length - 1]);
-      var askIfData = getDataIndex(order, true, proposalData);
-      askIfCallback(askIfData[order[0]]);
+      var askIfOrder = getOrder(element, multipleToken, askIfSplit[askIfSplit.length - 1]);
+      var askIfData = getDataIndex(askIfOrder, true, proposalData);
+      if (notLogic && typeof askIfData[askIfOrder[0]] === 'string') {
+        askIfCallback(!stringToBoolean(askIfData[askIfOrder[0]]));
+      } else {
+        askIfCallback(askIfData[askIfOrder[0]]);
+      }
     }
     if (data[order[0]] === undefined) {
       data[order[0]] = {};
@@ -641,7 +664,11 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       // walk the askIf tree to see if any callbacks need to be called.
       if (askIfCallbacks[fieldName] !== undefined) {
         for (index = 0; index < askIfCallbacks[fieldName].length; index++) {
-          askIfCallbacks[fieldName][index](value);
+          if (askIfCallbacks[fieldName][index].not && typeof value ==='string') {
+            askIfCallbacks[fieldName][index].cb(!stringToBoolean(value));
+          } else {
+            askIfCallbacks[fieldName][index].cb(value);
+          }
         }
       }
     }
@@ -1066,6 +1093,28 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
             return removeDynamicDataItem(element, token);
           } else {
             deferred = $q.defer();
+            deferred.reject(new Error('Failed to authenticate'));
+            return deferred.promise;
+          }
+        });
+      }
+    },
+    submit: function() {
+      if (AuthenticationService.isAuthenticated) {
+        if (proposal.id) {
+          return submitProposal();
+        }
+        else {
+          var deferred = $q.defer();
+          deferred.reject(new Error('No proposal loaded.'));
+          return deferred.promise;
+        }
+      } else {
+        return DialogService.openLogin().then(function(data) {
+          if (data.value) {
+            return submitProposal();
+          } else {
+            var deferred = $q.defer();
             deferred.reject(new Error('Failed to authenticate'));
             return deferred.promise;
           }

@@ -15,11 +15,11 @@
                 <a href="#" ng-if="!element.children" ng-class="{'is-current': element.id === currentWorkflow.id}" ng-click="jumpTo(element.id)">
                   {{element.name}}
                 </a>
-                <span ng-if="element.children">{{element.name}}</span>
+                <span ng-if="element.children">{{::element.name}}</span>
                 <ol ng-if="element.children">
                   <li ng-class="{'is-error': child.errors, 'is-incomplete': !child.complete, 'is-complete': child.complete}" ng-repeat="child in element.children">
                     <a href="#" ng-class="{'is-current':child.id === currentWorkflow.id}" ng-click="jumpTo(child.id)"">
-                      {{child.name}}
+                      {{::child.name}}
                     </a>
                   </li>
                 </ol>
