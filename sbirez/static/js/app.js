@@ -9,7 +9,7 @@ angular.module('sbirezApp', [
   'ngDialog',
   'ui.router',
   'ngOrderObjectBy',
-  'hc.marked'
+  'ui.mask'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider.otherwise('/');
