@@ -4,7 +4,7 @@ import hashlib
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from sbirez.models import Topic, Firm, Proposal, Address, Person
+from sbirez.models import Topic, Firm, Proposal, Address, Person, Naics
 from sbirez.models import Element, Document, DocumentVersion, Jargon
 from rest_framework import viewsets, mixins, generics, status, permissions, exceptions
 from rest_framework.decorators import detail_route
@@ -16,7 +16,7 @@ from djmail import template_mail
 
 from sbirez.serializers import FirmSerializer, ProposalSerializer, PartialProposalSerializer
 from sbirez.serializers import AddressSerializer, ElementSerializer
-from sbirez.serializers import JargonSerializer
+from sbirez.serializers import JargonSerializer, NaicsSerializer
 from sbirez.serializers import PersonSerializer, DocumentSerializer, DocumentVersionSerializer
 import marshmallow as mm
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -44,6 +44,12 @@ class UserViewSet(viewsets.ModelViewSet):
                 else IsStaffOrTargetUser()),
 
 
+class NaicsViewSet(viewsets.ReadOnlyModelViewSet):
+
+    queryset = Naics.objects.all()
+    serializer_class = NaicsSerializer
+
+
 class FirmViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -52,8 +58,10 @@ class FirmViewSet(viewsets.ModelViewSet):
     serializer_class = FirmSerializer
 
     def get_permissions(self):
+        return (IsStaffOrFirmRelatedUser(), )
         # allow non-authenticated user to create via POST
-        return IsStaffOrFirmRelatedUser(),
+        # return (AllowAny() if self.request.method == 'POST'
+        #     else IsStaffOrFirmRelatedUser()),
 
 
 class GroupViewSet(viewsets.ModelViewSet):

@@ -9,6 +9,7 @@ from sbirez import api, models
 
 router = routers.DefaultRouter()
 router.register(r'users', api.UserViewSet)
+router.register(r'naics', api.NaicsViewSet)
 router.register(r'firms', api.FirmViewSet)
 router.register(r'groups', api.GroupViewSet)
 router.register(r'topics', api.TopicViewSet, 'topics')

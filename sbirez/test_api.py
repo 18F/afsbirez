@@ -344,11 +344,15 @@ def mock_sam_api_server(*arg, **kwarg):
 
 
 class FirmTests(APITestCase):
+
+    fixtures = ['naics.json', ]
+
     firm_data = {'name':'TestCo', 'tax_id':'12345', 'sbc_id':'12345',
          'duns_id':'12345', 'cage_code':'12345', 'website':'www.testco.com',
          'founding_year':'1982', 'phase1_count':'1', 'phase1_year':2014,
          'phase2_count': 1,'phase2_year': 2015, 'phase2_employees': 3,
          'current_employees':5, 'patent_count':1,
+         'naics': ['111110',],
          'total_revenue_range':'$1000', 'revenue_percent':12,
          'address': OrderedDict([('street', '123 Test St.'), ('street2', ''),
              ('city', 'Dayton'), ('state', 'OH'), ('zip', '45334')]),
@@ -629,6 +633,34 @@ class FirmTests(APITestCase):
     def test_firm_search_nonexisting_firm(self):
         response = self.client.get('/api/v1/firms/search/no_firm_has_this_silly_name')
         self.assertEqual([], response.data['results'])
+
+    def test_firm_patch_naics(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        patch_data = {"naics": ['111', '111110', ]}
+        response = self.client.patch('/api/v1/firms/' + str(firm.id) + '/',
+              json.dumps(patch_data), content_type='application/json')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        firm_after = Firm.objects.get(id=firm.id)
+        naics = [n.code for n in firm_after.naics.all()]
+        self.assertIn('111', naics)
+
+    def test_firm_patch_to_remove_naics(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        patch_data = {"naics": []}
+        response = self.client.patch('/api/v1/firms/' + str(firm.id) + '/',
+              json.dumps(patch_data), content_type='application/json')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        firm_after = Firm.objects.get(id=firm.id)
+        naics = [n.code for n in firm_after.naics.all()]
+        self.assertEqual([], naics)
 
 
 class TopicTests(APITestCase):
