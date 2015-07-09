@@ -388,6 +388,11 @@ div.field.field-checkbox+.is-branch{
     margin-bottom: 16px;
 }
 
+div.field.field-checkbox.is-branch label input[type=checkbox]{
+    position: relative;
+    margin-left: 0px;
+}
+
 div.element-aside{
     padding-left:3px;
 }
@@ -506,7 +511,7 @@ section.fieldset.fieldset-address div.field.field-zip input{
 
 .is-branch{
     padding: 8px 0 0 12px !important;
-    margin-top: -12px !important;
+    margin-top: -8px !important;
     position: relative;
     border: none !important;
 }

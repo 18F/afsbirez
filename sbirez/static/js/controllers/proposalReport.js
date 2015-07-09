@@ -62,6 +62,12 @@ angular.module('sbirezApp')
       });
     };
 
+    $scope.submit = function() {
+      ProposalService.submit().then(function(data) {
+        console.log('submit', data);
+      });
+    };
+
     $scope.delete = function() {
       ProposalService.remove($scope.proposalId);
       $state.go('app.proposals.list');
