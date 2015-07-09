@@ -23,6 +23,7 @@ module.exports = function(config) {
       'sbirez/static/lib/ngDialog/js/ngDialog.min.js',
       'sbirez/static/lib/angular-ui-router/release/angular-ui-router.js',
       'sbirez/static/lib/angular-order-object-by/src/ng-order-object-by.js',
+      'sbirez/static/lib/angular-ui-mask/dist/mask.min.js',
       'sbirez/static/jslib/parser/parser.js',
       'sbirez/static/js/app.js',
       'sbirez/static/js/controllers/*.js',
