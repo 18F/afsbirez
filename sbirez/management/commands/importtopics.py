@@ -19,7 +19,7 @@ class Command(BaseCommand):
         # example: DoD SBIR 2015.1
         parser.add_argument('--clear', action='store_true',
                             default=False,
-                            help='Firts, delete all records with this solicitation')
+                            help='First, delete all records with this solicitation')
 
     def handle(self, mdb_filename, solicitation_name, clear=False, **options):
 
