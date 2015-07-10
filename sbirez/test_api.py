@@ -4,11 +4,15 @@ from rest_framework import status
 from rest_framework_proxy.views import ProxyView
 from collections import OrderedDict
 from copy import deepcopy
+import collections
+import dbm
 import json
+import tempfile
 from unittest import mock
 
 from django.test import TestCase
 import django.core.mail
+from django.core.files import uploadedfile
 
 from sbirez.models import Firm
 from sbirez import api
@@ -340,11 +344,15 @@ def mock_sam_api_server(*arg, **kwarg):
 
 
 class FirmTests(APITestCase):
+
+    fixtures = ['naics.json', ]
+
     firm_data = {'name':'TestCo', 'tax_id':'12345', 'sbc_id':'12345',
          'duns_id':'12345', 'cage_code':'12345', 'website':'www.testco.com',
          'founding_year':'1982', 'phase1_count':'1', 'phase1_year':2014,
          'phase2_count': 1,'phase2_year': 2015, 'phase2_employees': 3,
          'current_employees':5, 'patent_count':1,
+         'naics': ['111110',],
          'total_revenue_range':'$1000', 'revenue_percent':12,
          'address': OrderedDict([('street', '123 Test St.'), ('street2', ''),
              ('city', 'Dayton'), ('state', 'OH'), ('zip', '45334')]),
@@ -626,6 +634,34 @@ class FirmTests(APITestCase):
         response = self.client.get('/api/v1/firms/search/no_firm_has_this_silly_name')
         self.assertEqual([], response.data['results'])
 
+    def test_firm_patch_naics(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        patch_data = {"naics": ['111', '111110', ]}
+        response = self.client.patch('/api/v1/firms/' + str(firm.id) + '/',
+              json.dumps(patch_data), content_type='application/json')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        firm_after = Firm.objects.get(id=firm.id)
+        naics = [n.code for n in firm_after.naics.all()]
+        self.assertIn('111', naics)
+
+    def test_firm_patch_to_remove_naics(self):
+        self.create_user_and_auth()
+        response = self.client.post('/api/v1/firms/',
+              json.dumps(self.firm_data), content_type='application/json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        firm = Firm.objects.get(name='TestCo')
+        patch_data = {"naics": []}
+        response = self.client.patch('/api/v1/firms/' + str(firm.id) + '/',
+              json.dumps(patch_data), content_type='application/json')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        firm_after = Firm.objects.get(id=firm.id)
+        naics = [n.code for n in firm_after.naics.all()]
+        self.assertEqual([], naics)
+
 
 class TopicTests(APITestCase):
 
@@ -781,12 +817,27 @@ class ElementTests(APITestCase):
         self.assertEqual(response.data["name"], 'holy_grail_workflow')
         self.assertEqual(response.data['children'][0]['human'], 'What is thy name?')
 
-    # Check that default value for `human` field working
-    def test_workflow_included(self):
-        response = self.client.get('/api/v1/elements/')
-        all_humans = [n['human'] for n in response.data['results']]
-        self.assertIn('Holy Grail Workflow', all_humans)
+    # Check that nested jargon is included
+    def test_jargon_present(self):
+        response = self.client.get('/api/v1/elements/8/')
+        self.assertEqual(len(response.data['jargons']), 1)
+        self.assertEqual(type(response.data['jargons'][0]),
+                         collections.OrderedDict)
 
+
+class JargonTests(APITestCase):
+
+    fixtures = ['elements.json', ]
+
+    # Check that the jargon index loads
+    def test_jargon_view_set(self):
+        response = self.client.get('/api/v1/jargons/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def test_get_single_jargon(self):
+        response = self.client.get('/api/v1/jargons/1/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data["name"], 'courage')
 
 
 class PersonTests(APITestCase):
@@ -1014,18 +1065,74 @@ class ProposalTests(APITestCase):
         self.assertEqual(response.data['owner'], 2)
         self.assertEqual(response.data['firm'], 1)
 
+    def _messages(self, messages):
+        result = {}
+        for message in messages:
+            if True:
+                pass
+        return result
+
     # test that submitting a proposal sends an email
     def test_email_upon_submission(self):
         user = _fixture_user(self)
+        response = _upload_death_star_plans(self)
 
         initial_emails_in_memory = len(django.core.mail.outbox)
         response = self.client.post('/api/v1/proposals/2/submit/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(len(django.core.mail.outbox), initial_emails_in_memory + 1)
-        message = django.core.mail.outbox[-1]
-        self.assertIn('submitted', message.subject)
-        self.assertIn('Title', message.body)
+        self.assertEqual(len(django.core.mail.outbox),
+                         initial_emails_in_memory + 2)
+        # Note: if mock_submission emails deleted, these 2s
+        # will become 1s
+        messages = {m.subject: m for m in django.core.mail.outbox[-2:]}
+        notification_message = messages['Your SBIR proposal has been submitted']
+        self.assertIn('submitted', notification_message.subject)
+        self.assertIn('Title', notification_message.body)
 
+    # test that submitting a proposal sends an
+    # email mocking the upstream submission
+    # delete this when actual upstream submission enabled
+    def test_mock_submission_email(self):
+        user = _fixture_user(self)
+        response = _upload_death_star_plans(self)
+        response = self.client.post('/api/v1/proposals/2/submit/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        messages = {m.subject: m for m in django.core.mail.outbox[-2:]}
+        message = messages['SBIR proposal submission: Title']
+        self.assertIn("'quest_thy_quest': 'To seek the Grail'",
+                      message.body)
+        self.assertEqual(message.attachments[0][1],
+                         "Don't shoot the exhaust port!")
+
+    def test_mock_submission_email_with_binary_attachment(self):
+        user = _fixture_user(self)
+
+        # create and attach a binary file: a dbm k:v database
+        shipfile = tempfile.NamedTemporaryFile(suffix='db')
+        ships = dbm.open(shipfile.name, 'n')
+        ships['Falcon'] = 'Solo'
+        ships['Serenity'] = 'Reynolds'
+        ships.close()
+
+        response = self.client.post('/api/v1/documents/', {
+        'name': 'ships.db',
+        'description': 'Keep an eye on these shady characters.',
+        'file': shipfile,
+        'proposals': 2})
+
+        response = self.client.post('/api/v1/proposals/2/submit/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        messages = {m.subject: m for m in django.core.mail.outbox[-2:]}
+        message = messages['SBIR proposal submission: Title']
+        self.assertEqual(len(message.attachments), 1)
+
+        # verify that the database can be reconstituted
+        # from the attachment
+        shipfile = tempfile.NamedTemporaryFile(suffix='db')
+        shipfile.write(message.attachments[0][1])
+        ships = dbm.open(shipfile.name, 'r')
+        self.assertEqual(ships['Falcon'], b'Solo')
 
 class ProposalValidationTests(APITestCase):
 
@@ -1049,11 +1156,13 @@ class ProposalValidationTests(APITestCase):
                       "name": "Phil",
                       "instrument": "phlute",
                       "kg": 77.1,
+                      "lb": 169.7,
                       },
                   "1": {
                       "name": "Sasha",
                       "instrument": "sackbut",
                       "kg": 55,
+                      "lb": 121,
                       },
                   }
              })
@@ -1138,13 +1247,13 @@ def _upload_death_star_plans(test_instance, login=True):
         user = _fixture_user(test_instance)
 
     # Write the death star plans
-    plans = open('deathstarplans.txt', 'wb')
     nobothans = bytearray("Don't shoot the exhaust port!", "UTF-8")
+    plans = uploadedfile.TemporaryUploadedFile(name='deathstarplans.txt',
+        size=len(nobothans), charset='utf-8', content_type='text/plain')
     plans.write(nobothans)
-    plans.close()
+    plans.seek(0)
 
     # Upload the plans to R2's memory banks
-    plans = open('deathstarplans.txt', 'rb')
     response = test_instance.client.post('/api/v1/documents/', {
         'name': 'Secret Death Star Plans',
         'description': 'Many bothan spies died to bring us this information.',
@@ -1254,5 +1363,3 @@ class PasswordHandlingTests(APITestCase):
                                     {'email': '  this is not an email address  '})
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual('Enter a valid email address.', response.data['email'][0])
-
-

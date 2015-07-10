@@ -4,8 +4,8 @@ import hashlib
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from sbirez.models import Topic, Firm, Proposal, Address, Person
-from sbirez.models import Element, Document, DocumentVersion
+from sbirez.models import Topic, Firm, Proposal, Address, Person, Naics
+from sbirez.models import Element, Document, DocumentVersion, Jargon
 from rest_framework import viewsets, mixins, generics, status, permissions, exceptions
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
@@ -16,6 +16,7 @@ from djmail import template_mail
 
 from sbirez.serializers import FirmSerializer, ProposalSerializer, PartialProposalSerializer
 from sbirez.serializers import AddressSerializer, ElementSerializer
+from sbirez.serializers import JargonSerializer, NaicsSerializer
 from sbirez.serializers import PersonSerializer, DocumentSerializer, DocumentVersionSerializer
 import marshmallow as mm
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -43,6 +44,12 @@ class UserViewSet(viewsets.ModelViewSet):
                 else IsStaffOrTargetUser()),
 
 
+class NaicsViewSet(viewsets.ReadOnlyModelViewSet):
+
+    queryset = Naics.objects.all()
+    serializer_class = NaicsSerializer
+
+
 class FirmViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -51,8 +58,10 @@ class FirmViewSet(viewsets.ModelViewSet):
     serializer_class = FirmSerializer
 
     def get_permissions(self):
+        return (IsStaffOrFirmRelatedUser(), )
         # allow non-authenticated user to create via POST
-        return IsStaffOrFirmRelatedUser(),
+        # return (AllowAny() if self.request.method == 'POST'
+        #     else IsStaffOrFirmRelatedUser()),
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -140,6 +149,14 @@ class ElementViewSet(viewsets.ReadOnlyModelViewSet):
         return [ReadOnlyUnlessStaff(), ]
 
 
+class JargonViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Jargon.objects.all()
+    serializer_class = JargonSerializer
+
+    def get_permissions(self):
+        return [ReadOnlyUnlessStaff(), ]
+
+
 class ProposalViewSet(viewsets.ModelViewSet):
     serializer_class = ProposalSerializer
     queryset = Proposal.objects.all()
@@ -158,6 +175,20 @@ class ProposalViewSet(viewsets.ModelViewSet):
         prop = self.get_object()
         email = mails.submit_notification(prop.owner.email,
                                           {'proposal': prop})
+        email.send()
+        email = mails.mock_submission(prop.owner.email,
+            {'proposal': prop, 'data':
+              json.dumps(prop.data, indent=2, sort_keys=True)
+            })
+        for doc in prop.document_set.all():
+            content = doc.file.read()
+            # decoding necessary due to an unfixed Django bug
+            # see https://code.djangoproject.com/ticket/24623
+            try:
+                content = content.decode('utf-8')
+            except (AttributeError, UnicodeDecodeError):
+                pass   # apparently it was not a 'bytes' type
+            email.attach(doc.file.name, content)
         email.send()
         return Response({'status': 'Submission completed'})
 
@@ -237,4 +268,3 @@ class DocumentVersionViewSet(viewsets.ModelViewSet):
     queryset = DocumentVersion.objects.all()
     serializer_class = DocumentVersionSerializer
     permission_classes = (IsAuthenticated,)
-

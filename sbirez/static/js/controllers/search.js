@@ -3,7 +3,7 @@
 angular.module('sbirezApp')
   .controller('SearchCtrl', function ($scope, $rootScope, SearchService) {
 
-    $rootScope.bodyClass = 'search-results';
+    $rootScope.bodyClass = 'topics';
  
     var loadState = function() {
       var state = SearchService.loadState();
@@ -12,6 +12,11 @@ angular.module('sbirezApp')
       $scope.itemCount = state.itemCount;
       $scope.numFound = state.numFound;
       $scope.results = state.results;
+      if ($scope.numFound > 0) {
+        $rootScope.bodyClass = 'topics';
+      } else {
+        $rootScope.bodyClass = 'topics-no-results';
+      }
     };
 
     loadState();

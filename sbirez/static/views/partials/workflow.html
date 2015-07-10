@@ -11,14 +11,14 @@
           <h1>Table <span class="preposition">of</span> contents</h1>
           <nav class="toc" role="navigation">
             <ol>
-              <li ng-class="{'toc-proposal-parent-element': element.children, 'is-incomplete': !element.children && !element.complete, 'is-complete': !element.children && element.complete}" ng-repeat="element in overview">
+              <li ng-class="{'toc-proposal-parent-element': element.children, 'is-error': element.errors, 'is-incomplete': !element.children && !element.complete, 'is-complete': !element.children && element.complete}" ng-repeat="element in overview">
                 <a href="#" ng-if="!element.children" ng-class="{'is-current': element.id === currentWorkflow.id}" ng-click="jumpTo(element.id)">
-                  {{::element.name}}
+                  {{element.name}}
                 </a>
                 <span ng-if="element.children">{{::element.name}}</span>
                 <ol ng-if="element.children">
-                  <li ng-class="{'is-incomplete': !child.complete, 'is-complete': child.complete}" ng-repeat="child in element.children">
-                    <a href="#" ng-class="{'is-current': child.id === currentWorkflow.id}" ng-click="jumpTo(child.id)">
+                  <li ng-class="{'is-error': child.errors, 'is-incomplete': !child.complete, 'is-complete': child.complete}" ng-repeat="child in element.children">
+                    <a href="#" ng-class="{'is-current':child.id === currentWorkflow.id}" ng-click="jumpTo(child.id)"">
                       {{::child.name}}
                     </a>
                   </li>
@@ -33,29 +33,30 @@
         </aside>
       <form>
         <h1>{{currentWorkflow.human}}</h1>
-        <summary ng-if="validationData" class="error-message">
-          <h1>We’ve detected {{validationData.length}} errors on this page.</h1> 
-          <details>
-            <ol>
-              <li ng-repeat="error in validationData">error.message</li>
-            </ol>
-          </details>
+        <summary ng-if="validationList.length" class="error-message">
+          <h1>We’ve detected {{validationList.length}} errors on this page.</h1> 
+          <ol>
+            <li ng-repeat="error in validationList">{{error.message}}: {{error.human}}</li>
+          </ol>
         </summary>
         <div ng-repeat="element in currentWorkflow.children">
-          <div str="element" ng-if="element.element_type === 'str' || element.element_type === 'long_str' || element.element_type === 'med_str' || element.element_type === 'short_str' || element.element_type === 'phone' || element.element_type === 'email' || element.element_type === 'int'  || element.element_type === 'dollars' || element.element_type === 'float' || element.element_type === 'percentage' || element.element_type === 'timespan' || element.element_type === 'big_str'"></div>
+          <div str="element" ng-if="element.element_type === 'str' || element.element_type === 'long_str' || element.element_type === 'med_str' || element.element_type === 'short_str' || element.element_type === 'phone' || element.element_type === 'email' || element.element_type === 'int'  || element.element_type === 'dollars' || element.element_type === 'float' || element.element_type === 'percentage' || element.element_type === 'timespan' || element.element_type === 'big_str' || element.element_type === 'integer' || element.element_type === 'integer_spans'"></div>
           <div text="element" ng-if="element.element_type === 'text'"></div>
           <div bool="element" ng-if="element.element_type === 'bool'"></div>
           <div checkbox="element" ng-if="element.element_type === 'checkbox'"></div>
+          <div calculated="element" ng-if="element.element_type === 'calculated'"></div>
           <div readonlytext="element" ng-if="element.element_type === 'read_only_text'"></div>
           <div group="element" method="jumpTo" ng-if="element.element_type === 'workflow' || element.element_type === 'group'"></div>
-          <div lineitem="element" ng-if="element.element_type === 'line_item'" proposal="{{proposalId}}"></div>
+          <div dynamiclineitem="element" ng-if="element.element_type === 'line_item' && element.multiplicityCount > 0" proposal="{{proposalId}}"></div>
+          <div lineitem="element" ng-if="element.element_type === 'line_item' && !element.multiplicityCount" proposal="{{proposalId}}"></div>
           <div upload="element" ng-if="element.element_type === 'file_upload'" proposal="{{proposalId}}"></div>
         </div>
         <footer>
-          <!-- <button ng-if="showBackButton()" type="button" id="prior_state" ng-click="jumpTo(backWorkflow)">Back</button>-->
+          <summary ng-if="validationList.length" class="error-message">
+            <h1>We’ve detected {{validationList.length}} errors on this page. Click the button again to continue.</h1>
+          </summary>
           <button ng-if="showNextButton()" type="button" id="next_state" ng-click="saveAndContinue(nextWorkflow)">Save and continue</button>
-          <!-- <a href="#" id="cancel" ng-click="exit()">Cancel</a>-->
-          <!-- <button type="button" id="save_exit" ng-click="saveAndExit()">Save and return to the proposal progress report</button>-->
+          <button ng-if="!showNextButton()" type="button" id="next_state" ng-click="saveAndExit()">Return to overview</button>
         </footer>
       </form>
     </div>

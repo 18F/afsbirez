@@ -4,8 +4,8 @@ import shlex
 from sbirez import validation_helpers
 from django.contrib.auth.models import User, Group
 from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person
-from sbirez.models import Address, Proposal, Address
-from sbirez.models import Element, Document, DocumentVersion, Solicitation
+from sbirez.models import Address, Proposal, Address, Naics
+from sbirez.models import Element, Document, DocumentVersion, Solicitation, Jargon
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_recursive.fields import RecursiveField
@@ -53,7 +53,14 @@ class PersonSerializer(serializers.ModelSerializer):
         model = Person
         fields = ('name', 'title', 'email', 'phone', 'fax')
 
-class FirmSerializer(serializers.HyperlinkedModelSerializer):
+
+class NaicsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Naics
+        fields = ('code', 'description')
+
+
+class FirmSerializer(serializers.ModelSerializer):
     address = AddressSerializer(required=False, many=False)
     point_of_contact = PersonSerializer(required=False, many=False)
 
@@ -61,6 +68,7 @@ class FirmSerializer(serializers.HyperlinkedModelSerializer):
         model = Firm
         fields = ('id', 'name', 'tax_id', 'sbc_id', 'duns_id', 'cage_code',
                   'website', 'address', 'point_of_contact', 'founding_year',
+                  'naics',
                   'phase1_count', 'phase1_year', 'phase2_count',
                   'phase2_year', 'phase2_employees', 'current_employees',
                   'patent_count', 'total_revenue_range', 'revenue_percent')
@@ -87,7 +95,14 @@ class FirmSerializer(serializers.HyperlinkedModelSerializer):
             point_of_contact = Person.objects.create(**point_of_contact_data)
         else:
             point_of_contact = None
+
+        naics = validated_data.pop('naics', [])
+
         firm = Firm.objects.create(point_of_contact=point_of_contact, address=address, **validated_data)
+        for naic in naics:
+            firm.naics.add(naic)
+        firm.save()
+
         self.update_user(firm.id)
         return firm
 
@@ -145,6 +160,11 @@ class FirmSerializer(serializers.HyperlinkedModelSerializer):
                 address.zip = address_data['zip']
             address.save()
             instance.address = address
+
+        naics = validated_data.pop('naics', [])
+        instance.naics.all().delete()
+        for naic in naics:
+            instance.naics.add(naic)
 
         instance.save()
         return instance
@@ -212,7 +232,7 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
             try:
                 return Proposal.objects.get(owner_id=current_user.id, topic_id=obj.id).id
             except ObjectDoesNotExist:
-                return None 
+                return None
 
     class Meta:
         model = Topic
@@ -223,9 +243,16 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
                     )
 
 
+class JargonSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Jargon
+
+
 class ElementSerializer(serializers.ModelSerializer):
 
     children = RecursiveField(many=True)
+    jargons = JargonSerializer(many=True)
 
     class Meta:
         model = Element
@@ -233,7 +260,7 @@ class ElementSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'order', 'element_type',
                   'required', 'default', 'human', 'help',
                   'validation', 'validation_msg', 'ask_if',
-                  'multiplicity', 'children', )
+                  'multiplicity', 'jargons', 'children' )
 
 
 class ProposalValidator(object):
@@ -345,4 +372,3 @@ class DocumentSerializer(serializers.ModelSerializer):
                   'updated_at', 'firm', 'proposals',
                   'versions',
                   )
-

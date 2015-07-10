@@ -9,6 +9,7 @@ from sbirez import api, models
 
 router = routers.DefaultRouter()
 router.register(r'users', api.UserViewSet)
+router.register(r'naics', api.NaicsViewSet)
 router.register(r'firms', api.FirmViewSet)
 router.register(r'groups', api.GroupViewSet)
 router.register(r'topics', api.TopicViewSet, 'topics')
@@ -19,6 +20,7 @@ router.register(r'persons', api.PersonViewSet)
 router.register(r'documents', api.DocumentViewSet)
 router.register(r'documentversions', api.DocumentVersionViewSet)
 router.register(r'elements', api.ElementViewSet)
+router.register(r'jargons', api.JargonViewSet)
 
 urlpatterns = patterns('',
     url(r'^api/v1/topics/(?P<pk>[0-9]+)/saved/$', api.SaveTopicView.as_view()),
@@ -59,6 +61,9 @@ urlpatterns = patterns('',
     url(r'^search/', 'sbirez.views.home', name='home'),
     url(r'^topic/', 'sbirez.views.home', name='home'),
     url(r'^app/', 'sbirez.views.home', name='home'),
+    url(r'^signin/', 'sbirez.views.home', name='home'),
+    url(r'^signup/', 'sbirez.views.home', name='home'),
+    url(r'^reset/', 'sbirez.views.home', name='home'),
 
     # proxy company info searches to SAM API
     url(r'^api/v1/firms/search/(?P<searchterms>.*)$',

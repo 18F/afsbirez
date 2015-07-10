@@ -34,10 +34,14 @@
       element_type: bool
     -
       name: how_courageous_exactly
-      human: On a scale of 1 to 10, how courageous?
+      human: "On a scale of 1 to 10, how <span class=\"jargon\" jargon=\"courage\">courageous</span>?"
       ask_if: is_courageous
       required: True
       element_type: int
+      jargons:
+        -
+          name: courage
+          html: "the ability to do something that frightens one"
   -
     name: minstrels
     element_type: line_item
@@ -56,4 +60,9 @@
       required: True
       element_type: float
       validation: not_less_than 0
-
+    -
+      name: lb
+      human: weight in lb
+      required: True
+      element_type: float
+      validation: "kg / 2.20462"

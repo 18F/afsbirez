@@ -17,6 +17,11 @@ angular.module('sbirezApp').directive('str', function() {
         $scope.options = [];
         $scope.visible = true;
         $scope.validationstorage = '';
+        
+        $scope.elementMask = '';
+        if ($scope.element.element_type === 'phone') {
+          $scope.elementMask = '(999) 999-9999';
+        }
 
         var validationCallback = function(data) {
           $scope.validationstorage = data;
@@ -56,7 +61,7 @@ angular.module('sbirezApp').directive('str', function() {
           var validationElements = $scope.element.validation.split(' ');
           if (validationElements[0] === 'one_of' && validationElements.length > 2) {
             validationElements.splice(0,1);
-            if (validationElements[0].slice(0, 1) == '"') {
+            if (validationElements[0].slice(0, 1) === '"') {
               var options = validationElements.join(' ');
               validationElements = options.split(',');
               for (var i = 0; i < validationElements.length; i++) {

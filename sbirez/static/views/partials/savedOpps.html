@@ -1,6 +1,7 @@
 <main class="h-feed">
   <div class="wrap">
-    <h1 class="p-name primary-header">My topics</h1>
+    <h1 class="p-name primary-header">My Proposals</h1>
+    <p ng-show="data.results.length === 0">You’ve yet to start a proposal! To get started, search for a topic and click "Start a proposal."</p>
     <div ng-repeat="topic in data.results">
       <div topic="topic" view-details="true" save-option="true" create-option="true"></div>
     </div>

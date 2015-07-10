@@ -1,4 +1,5 @@
 import hashlib
+import re
 import shlex
 
 from django.db import models
@@ -21,10 +22,10 @@ class Address(models.Model):
 
 class Person(models.Model):
     name = models.TextField()
-    title = models.TextField(null=True)
-    email = models.TextField(null=True)
-    phone = models.TextField(null=True)
-    fax = models.TextField(null=True)
+    title = models.TextField(null=True, blank=True)
+    email = models.TextField(null=True, blank=True)
+    phone = models.TextField(null=True, blank=True)
+    fax = models.TextField(null=True, blank=True)
 
 class Firm(models.Model):
     name = models.TextField(unique=True)
@@ -33,25 +34,34 @@ class Firm(models.Model):
     duns_id = models.TextField(unique=True, blank=True, null=True)
     cage_code = models.TextField(blank=True, null=True)
     website = models.TextField(blank=True, null=True)
-    address = models.ForeignKey(Address, null=True)
-    point_of_contact = models.ForeignKey(Person, null=True)
-    founding_year = models.IntegerField(null=True)
-    phase1_count = models.IntegerField(null=True)
-    phase1_year = models.IntegerField(null=True)
-    phase2_count = models.IntegerField(null=True)
-    phase2_year = models.IntegerField(null=True)
-    phase2_employees = models.IntegerField(null=True)
-    current_employees = models.IntegerField(null=True)
-    patent_count = models.IntegerField(null=True)
-    total_revenue_range = models.TextField(null=True)
-    revenue_percent = models.IntegerField(null=True)
+    address = models.ForeignKey(Address, null=True, blank=True)
+    point_of_contact = models.ForeignKey(Person, null=True, blank=True)
+    founding_year = models.IntegerField(null=True, blank=True)
+    phase1_count = models.IntegerField(null=True, blank=True)
+    phase1_year = models.IntegerField(null=True, blank=True)
+    phase2_count = models.IntegerField(null=True, blank=True)
+    phase2_year = models.IntegerField(null=True, blank=True)
+    phase2_employees = models.IntegerField(null=True, blank=True)
+    current_employees = models.IntegerField(null=True, blank=True)
+    patent_count = models.IntegerField(null=True, blank=True)
+    total_revenue_range = models.TextField(null=True, blank=True)
+    revenue_percent = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.name
 
+class Naics(models.Model):
+    code = models.TextField(primary_key=True)
+    description = models.TextField(null=False)
+    firms = models.ManyToManyField('Firm', blank=True, null=True,
+                                   related_name='naics')
+
+    def __str__(self):
+        return "%s (%s)" % (self.code, self.description)
+
 class SbirezUser(AbstractEmailUser):
     name = models.TextField()
-    firm = models.ForeignKey(Firm, null=True)
+    firm = models.ForeignKey(Firm, null=True, blank=True)
 
 class Area(models.Model):
     area = models.TextField(unique=True)
@@ -154,7 +164,7 @@ class Element(models.Model):
     element_type = models.TextField(default='str')
     # workflow, group, line_item, read_only_text, or scalar type
     order = models.IntegerField(blank=False)
-    parent = models.ForeignKey('Element', related_name='children', null=True)
+    parent = models.ForeignKey('Element', related_name='children', null=True, blank=True)
     multiplicity = models.TextField(null=True, blank=True)
     # comma-separated list of names: collect one group for each name
     # integer: collect up to N unnamed groups
@@ -200,6 +210,12 @@ class Element(models.Model):
                 and not accept_partial
                 and ((not self.ask_if) or datum.get(self.ask_if)))
 
+    # recognize "validations" that are actually calculations
+    # every calculation should include an operator (+-*/) surrounded by
+    # whitespace, or the validator will mistake it for a call to a validation
+    # function
+    _calc_pattern = re.compile(r"\S\s+[+-/*]\s+\S")
+
     def validation_errors(self, top_level, data, accept_partial):
         """
         Assemble a list of all errors found when this element's validation is
@@ -234,19 +250,22 @@ class Element(models.Model):
 
             if self.validation:
                 for validation in self.validation.split(';'):
+                    if self._calc_pattern.search(validation):
+                        # This "validation" is actually a calculation
+                        continue
                     args = shlex.split(validation)
                     function_name = args.pop(0)
                     try:
                         func = getattr(validation_helpers, function_name)
+                        if not func(top_level, found, *args):
+                            errors.append(
+                                '%s: %s' % (self.name, self.validation_msg or
+                                                       "failed %s" % function_name))
                     except AttributeError:
                         # validation refers to a function not found in helper library
                         errors.append(
-                            '%s: validation function %s absent from validation_helpers.py',
+                            '%s: validation function %s absent from validation_helpers.py' %
                             (self.name, function_name))
-                    if not func(top_level, found, *args):
-                        errors.append(
-                            '%s: %s' % (self.name, self.validation_msg or
-                                                   "failed %s" % function_name))
 
             if self.multiplicity:
                 # then the keys are not relevant, and we just want to validate values
@@ -256,6 +275,13 @@ class Element(models.Model):
                 errors.extend(child_element.validation_errors(top_level, found, accept_partial))
 
         return errors
+
+
+class Jargon(models.Model):
+    name = models.TextField(unique=True)
+    html = models.TextField()
+    elements = models.ManyToManyField('Element', blank=True, null=True,
+                                      related_name='jargons')
 
 
 class Solicitation(models.Model):

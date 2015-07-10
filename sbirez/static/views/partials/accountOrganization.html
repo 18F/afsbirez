@@ -1,62 +1,63 @@
 <main role="main">
   <div class="wrap">
     <form>
-      <h1>Firm Information</h1>
-      <h2>Basics</h2>
+      <h1>My Company</h1>
       <div class="field" ng-class="{'is-error': validationData.name}">
         <label for="firmName"><span class="label-text">Firm name</span>
           <input type="text" id="firmName" ng-model="firm.name">
         </label>
         <span ng-if="validationData.name" class="error-message">{{validationData.name[0]}}</span>
       </div>
-      <section class="fieldset fieldset-mailing-address">
+      <section class="fieldset fieldset-address fieldset-mailing-address">
         <h1>Mailing address</h1>
         <div class="field field-street" ng-class="{'is-error': validationData.address.street}">
           <label for="firmstreet">
-            <span class="label-text">Street</span>
+            <span class="label-text">Street address</span>
             <input type="text" id="firmstreet" ng-model="firm.address.street">
           </label>
           <span class="error-message" ng-if="validationData.address.street">{{validationData.address.street[0]}}</span>
-        </div> 
-        <div class="field field-city" ng-class="{'is-error': validationData.address.city}">
-          <label for="firmcity">
-            <span class="label-text">City</span>
-            <input type="text" id="firmcity" ng-model="firm.address.city">
-          </label>
-          <span class="error-message" ng-if="validationData.address.city">{{validationData.address.city[0]}}</span>
-        </div> 
-        <div class="field field-state" ng-class="{'is-error': validationData.address.state}">
-          <label for="firmstate">
-            <span class="label-text">State</span>
-            <select id="firmstate" class="form-control" ng-model="firm.address.state" size="1">
-              <option value="">Please Select State</option>
-              <option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option>
-              <option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option>
-              <option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="DC">Dist of Columbia</option>
-              <option value="FL">Florida</option><option value="GA">Georgia</option><option value="HI">Hawaii</option>
-              <option value="ID">Idaho</option><option value="IL">Illinois</option><option value="IN">Indiana</option>
-              <option value="IA">Iowa</option><option value="KS">Kansas</option><option value="KY">Kentucky</option>
-              <option value="LA">Louisiana</option><option value="ME">Maine</option><option value="MD">Maryland</option>
-              <option value="MA">Massachusetts</option><option value="MI">Michigan</option><option value="MN">Minnesota</option>
-              <option value="MS">Mississippi</option><option value="MO">Missouri</option><option value="MT">Montana</option>
-              <option value="NE">Nebraska</option><option value="NV">Nevada</option><option value="NH">New Hampshire</option>
-              <option value="NJ">New Jersey</option><option value="NM">New Mexico</option><option value="NY">New York</option>
-              <option value="NC">North Carolina</option><option value="ND">North Dakota</option><option value="OH">Ohio</option>
-              <option value="OK">Oklahoma</option><option value="OR">Oregon</option><option value="PA">Pennsylvania</option>
-              <option value="RI">Rhode Island</option><option value="SC">South Carolina</option><option value="SD">South Dakota</option>
-              <option value="TN">Tennessee</option><option value="TX">Texas</option><option value="UT">Utah</option>
-              <option value="VT">Vermont</option><option value="VA">Virginia</option><option value="WA">Washington</option>
-              <option value="WV">West Virginia</option><option value="WI">Wisconsin</option><option value="WY">Wyoming</option>
-            </select>
-          </label>
-          <span class="error-message" ng-if="validationData.address.state">{{validationData.address.state[0]}}</span>
         </div>
-        <div class="field field-zip" ng-class="{'is-error': validationData.address.zip}">
-          <label for="firmzip">
-            <span class="label-text">Zip</span>
-            <input type="text" id="firmzip" ng-model="firm.address.zip">
-          </label>
-          <span class="error-message" ng-if="validationData.address.zip">{{validationData.address.zip[0]}}</span>
+        <div class="field field-city-state-zip">
+          <div class="field field-city" ng-class="{'is-error': validationData.address.city}">
+            <label for="firmcity">
+              <span class="label-text">City</span>
+              <input type="text" id="firmcity" ng-model="firm.address.city">
+            </label>
+            <span class="error-message" ng-if="validationData.address.city">{{validationData.address.city[0]}}</span>
+          </div> 
+          <div class="field field-state" ng-class="{'is-error': validationData.address.state}">
+            <label for="firmstate">
+              <span class="label-text">State</span>
+              <select id="firmstate" class="form-control" ng-model="firm.address.state" size="1">
+                <option value="">Select State</option>
+                <option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="DC">Dist of Columbia</option>
+                <option value="FL">Florida</option><option value="GA">Georgia</option><option value="HI">Hawaii</option>
+                <option value="ID">Idaho</option><option value="IL">Illinois</option><option value="IN">Indiana</option>
+                <option value="IA">Iowa</option><option value="KS">Kansas</option><option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option><option value="ME">Maine</option><option value="MD">Maryland</option>
+                <option value="MA">Massachusetts</option><option value="MI">Michigan</option><option value="MN">Minnesota</option>
+                <option value="MS">Mississippi</option><option value="MO">Missouri</option><option value="MT">Montana</option>
+                <option value="NE">Nebraska</option><option value="NV">Nevada</option><option value="NH">New Hampshire</option>
+                <option value="NJ">New Jersey</option><option value="NM">New Mexico</option><option value="NY">New York</option>
+                <option value="NC">North Carolina</option><option value="ND">North Dakota</option><option value="OH">Ohio</option>
+                <option value="OK">Oklahoma</option><option value="OR">Oregon</option><option value="PA">Pennsylvania</option>
+                <option value="RI">Rhode Island</option><option value="SC">South Carolina</option><option value="SD">South Dakota</option>
+                <option value="TN">Tennessee</option><option value="TX">Texas</option><option value="UT">Utah</option>
+                <option value="VT">Vermont</option><option value="VA">Virginia</option><option value="WA">Washington</option>
+                <option value="WV">West Virginia</option><option value="WI">Wisconsin</option><option value="WY">Wyoming</option>
+              </select>
+            </label>
+            <span class="error-message" ng-if="validationData.address.state">{{validationData.address.state[0]}}</span>
+          </div>
+          <div class="field field-zip" ng-class="{'is-error': validationData.address.zip}">
+            <label for="firmzip">
+              <span class="label-text">Zip</span>
+              <input type="text" id="firmzip" ng-model="firm.address.zip" ui-mask="99999-9999">
+            </label>
+            <span class="error-message" ng-if="validationData.address.zip">{{validationData.address.zip[0]}}</span>
+          </div>
         </div>
       </section>
       <div class="field" ng-class="{'is-error': validationData.website}">
@@ -66,27 +67,54 @@
         </label>
         <span class="error-message" ng-if="validationData.website">{{validationData.website[0]}}</span>
       </div>
+      <section class="fieldset fieldset-point-of-contact">
+        <h1>Point of contact</h1>
+        <div class="field" ng-class="{'is-error': validationData.point_of_contact.name}">
+          <label for="firmpocname"><span class="label-text">Name</span>
+            <input type="text" id="firmpocname" ng-model="firm.point_of_contact.name">
+          </label>
+          <span class="error-message" ng-if="validationData.point_of_contact.name">{{validationData.point_of_contact.name[0]}}</span>
+        </div>
+        <div class="field field-email" ng-class="{'is-error': validationData.point_of_contact.email}">
+          <label for="firmpocemail"><span class="label-text">E-mail:</span>
+            <input type="text" id="firmpocemail" ng-model="firm.point_of_contact.email">
+          </label>
+          <span class="error-message" ng-if="validationData.point_of_contact.email">{{validationData.point_of_contact.email[0]}}</span>
+        </div>
+        <div class="field field-phone-number" ng-class="{'is-error': validationData.point_of_contact.phone}">
+          <label for="firmpocphone"><span class="label-text">Phone Number:</span>
+            <input type="text" id="firmpocphone" ng-model="firm.point_of_contact.phone" ui-mask="(999) 999-9999">
+          </label>
+          <span class="error-message" ng-if="validationData.point_of_contact.phone">{{validationData.point_of_contact.phone[0]}}</span>
+        </div>
+        <div class="field field-fax-number" ng-class="{'is-error': validationData.point_of_contact.fax}">
+          <label for="firmpocfax"><span class="label-text">Fax Number:</span>
+            <input type="text" id="firmpocfax" ng-model="firm.point_of_contact.fax" ui-mask="(999) 999-9999">
+          </label>
+          <span class="error-message" ng-if="validationData.point_of_contact.fax">{{validationData.point_of_contact.fax[0]}}</span>
+        </div>
+      </section>
 
-      <h2>Identifiers</h2>
-      <div class="field" ng-class="{'is-error': validationData.tax_id}">
+      <h1>Identifiers</h1>
+      <div class="field field-federal-tax-id" ng-class="{'is-error': validationData.tax_id}">
         <label for="firmtaxid"><span class="label-text">Federal Tax ID</span>
           <input type="text" id="firmtaxid" ng-model="firm.tax_id">
         </label>
         <span class="error-message" ng-if="validationData.tax_id">{{validationData.tax_id[0]}}</span>
       </div>
-      <div class="field" ng-class="{'is-error': validationData.sbc_id}">
+      <div class="field field-sbc-id" ng-class="{'is-error': validationData.sbc_id}">
         <label for="firmsbaid"><span class="label-text">SBA SBC ID Number</span>
           <input type="text" id="firmsbaid" ng-model="firm.sbc_id">
         </label>
         <span class="error-message" ng-if="validationData.sbc_id">{{validationData.sbc_id[0]}}</span>
       </div>
-      <div class="field" ng-class="{'is-error': validationData.duns_id}">
+      <div class="field field-duns-number" ng-class="{'is-error': validationData.duns_id}">
         <label for="firmduns"><span class="label-text">DUNS Number</span>
           <input type="text" id="firmduns" ng-model="firm.duns_id">
         </label>
         <span class="error-message" ng-if="validationData.duns_id">{{validationData.duns_id[0]}}</span>
       </div>
-      <div class="field" ng-class="{'is-error': validationData.cage_code}">
+      <div class="field field-cage-code" ng-class="{'is-error': validationData.cage_code}">
         <label for="firmcagecode"><span class="label-text">CAGE Code</span>
           <input type="text" id="firmcagecode" ng-model="firm.cage_code">
         </label>
@@ -105,76 +133,49 @@
         </div>
       </div>
 -->   
-      <section class="fieldset fieldset-point-of-contact">
-        <h1>Point Of Contact</h1>
-        <div class="field" ng-class="{'is-error': validationData.point_of_contact.name}">
-          <label for="firmpocname"><span class="label-text">Name</span>
-            <input type="text" id="firmpocname" ng-model="firm.point_of_contact.name">
-          </label>
-          <span class="error-message" ng-if="validationData.point_of_contact.name">{{validationData.point_of_contact.name[0]}}</span>
-        </div>
-        <div class="field" ng-class="{'is-error': validationData.point_of_contact.email}">
-          <label for="firmpocemail"><span class="label-text">E-mail:</span>
-            <input type="text" id="firmpocemail" ng-model="firm.point_of_contact.email">
-          </label>
-          <span class="error-message" ng-if="validationData.point_of_contact.email">{{validationData.point_of_contact.email[0]}}</span>
-        </div>
-        <div class="field" ng-class="{'is-error': validationData.point_of_contact.phone}">
-          <label for="firmpocphone"><span class="label-text">Phone Number:</span>
-            <input type="text" id="firmpocphone" ng-model="firm.point_of_contact.phone">
-          </label>
-          <span class="error-message" ng-if="validationData.point_of_contact.phone">{{validationData.point_of_contact.phone[0]}}</span>
-        </div>
-        <div class="field" ng-class="{'is-error': validationData.point_of_contact.fax}">
-          <label for="firmpocfax"><span class="label-text">Fax Number:</span>
-            <input type="text" id="firmpocfax" ng-model="firm.point_of_contact.fax">
-          </label>
-          <span class="error-message" ng-if="validationData.point_of_contact.fax">{{validationData.point_of_contact.fax[0]}}</span>
-        </div>
-      </section>
 
-      <h2>Background</h2>
-      <div class="field field-year" ng-class="{'is-error': validationData.founding_year}">
+      <h1>Background</h1>
+      <div class="field field-number-short" ng-class="{'is-error': validationData.founding_year}">
         <label for="firmfoundingyear"><span class="label-text">The year your company was founded:</span>
           <input type="text" id="firmfoundingyear" ng-model="firm.founding_year">
         </label>
         <span class="error-message" ng-if="validationData.founding_year">{{validationData.founding_year[0]}}</span>
       </div>
-      <div class="field field-number" ng-class="{'is-error': validationData.phase1_count}">
+      <div class="field field-number field-number-short" ng-class="{'is-error': validationData.phase1_count}">
         <p>How many SBIR and/or STTR awards has your firm received from the Federal Government (including DoD)? (The answer "0" will not affect your ability to obtain an SBIR award.):</p>
         <label for="firmphase1count"><span class="label-text">Phase I:</span>
-          <input type="text" id="firmphase1count" ng-model="firm.phase1_count">
+          <input type="number" id="firmphase1count" ng-model="firm.phase1_count">
         </label>
         <span class="error-message" ng-if="validationData.phase1_count">{{validationData.phase1_count[0]}}</span>
       </div>
-      <div class="field field-year" ng-class="{'is-error': validationData.phase1_year}">
+      <div class="field field-number-short" ng-class="{'is-error': validationData.phase1_year}">
         <label for="firmphase1year"><span class="label-text">What year did you receive your first Phase I Award?</span>
           <input type="text" id="firmphase1year" ng-model="firm.phase1_year">
         </label>
         <span class="error-message" ng-if="validationData.phase1_year">{{validationData.phase1_year[0]}}</span>
       </div>
-      <div class="field field-number" ng-class="{'is-error': validationData.phase2_count}">
+      <div class="field field-number field-number-short" ng-class="{'is-error': validationData.phase2_count}">
         <label for="firmphase2count"><span class="label-text">Phase II:</span>
-          <input type="text" id="firmphase2count" ng-model="firm.phase2_count">
+          <input type="number" id="firmphase2count" ng-model="firm.phase2_count">
         </label>
         <span class="error-message" ng-if="validationData.phase2_count">{{validationData.phase2_count[0]}}</span>
       </div>
-      <div class="field field-year" ng-class="{'is-error': validationData.phase2_year}">
+      <div class="field field-number field-number-short" ng-class="{'is-error': validationData.phase2_year}">
         <label for="firmphase2year"><span class="label-text">What year did you receive your first Phase II Award?</span>
           <input type="text" id="firmphase2year" ng-model="firm.phase2_year">
         </label>
         <span class="error-message" ng-if="validationData.phase2_year">{{validationData.phase2_year[0]}}</span>
       </div>
-      <div class="field field-number" ng-class="{'is-error': validationData.phase2_employees}">
+      <div class="field field-number field-number-short" ng-class="{'is-error': validationData.phase2_employees}">
         <p>Number of firm employees (including all affiliates):</p>
         <label for="firmemployeesphase2"><span class="label-text">(a) At the time of your firm's first Phase 2 Award:</span>
-          <input type="text" id="firmemployeesphase2" ng-model="firm.phase2_employees">
+          <input type="number" id="firmemployeesphase2" ng-model="firm.phase2_employees">
         </label>
         <span class="error-message" ng-if="validationData.phase2_employees">{{validationData.phase2_employees[0]}}</span>
       </div>
-      <div class="field field-number" ng-class="{'is-error': validationData.current_employees}">
+      <div class="field field-number field-number-short" ng-class="{'is-error': validationData.current_employees}">
         <label for="firmemployeesphase2"><span class="label-text">(b) Currently:</span>
-          <input type="text" id="firmemployeesnow" ng-model="firm.current_employees">
+          <input type="number" id="firmemployeesnow" ng-model="firm.current_employees">
         </label>
         <span class="error-message" ng-if="validationData.current_employees">{{validationData.current_employees[0]}}</span>
       </div>
@@ -188,13 +189,13 @@
         </label>
         <span class="error-message" ng-if="validationData.ipo_completed">{{validationData.ipo_completed[0]}}</span>
       </div>
-      <div class="field field-number" ng-class="{'is-error': validationData.patent_count}">
+      <div class="field field-number field-number-short" ng-class="{'is-error': validationData.patent_count}">
         <label for="firmpatents"><span class="label-text">How many patents have resulted, at least in part, from your firm's SBIR andd/or STTR awards?</span>
-          <input type="text" id="firmpatents" ng-model="firm.patent_count">
+          <input type="number" id="firmpatents" ng-model="firm.patent_count">
         </label>
         <span class="error-message" ng-if="validationData.patent_count">{{validationData.patent_count[0]}}</span>
       </div>
-      <div class="field field-number" ng-class="{'is-error': validationData.total_revenue_range}">
+      <div class="field field-select field-total-revenue" ng-class="{'is-error': validationData.total_revenue_range}">
         <label for="firmtotalrevenue"><span class="label-text">Your firm's total revenue for the last fiscal year:</span>
           <select id="firmtotalrevenue" ng-model="firm.total_revenue_range">
             <option value="">Please select a value</option>
@@ -209,9 +210,9 @@
         </label>
         <span class="error-message" ng-if="validationData.total_revenue_range">{{validationData.total_revenue_range[0]}}</span>
       </div>
-      <div class="field field-year" ng-class="{'is-error': validationData.revenue_percent}">
+      <div class="field field-number field-number-short" ng-class="{'is-error': validationData.revenue_percent}">
         <label for="firmrevenuepercent"><span class="label-text">What percentage of your firm's revenues during its last fiscal year is Federal SBIR and/or STTR funding (Phase I and/or Phase II)?</span>
-          <input type="text" id="firmrevenuepercent" ng-model="firm.revenue_percent">
+          <input type="number" id="firmrevenuepercent" ng-model="firm.revenue_percent">
         </label>
         <span class="error-message" ng-if="validationData.revenue_percent">{{validationData.revenue_percent[0]}}</span>
       </div>

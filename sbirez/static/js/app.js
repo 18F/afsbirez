@@ -9,7 +9,7 @@ angular.module('sbirezApp', [
   'ngDialog',
   'ui.router',
   'ngOrderObjectBy',
-  'hc.marked'
+  'ui.mask'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider.otherwise('/');
@@ -30,6 +30,33 @@ angular.module('sbirezApp', [
           '': {
             templateUrl: 'static/views/partials/search.html',
             controller: 'SearchCtrl'
+          }
+        }
+      })
+      .state('signin', {
+        url: '/signin/',
+        views: {
+          '': {
+            templateUrl: 'static/views/partials/signin.html',
+            controller: 'SignInCtrl'
+          }
+        }
+      })
+      .state('signup', {
+        url: '/signup/',
+        views: {
+          '': {
+            templateUrl: 'static/views/partials/signup.html',
+            controller: 'SignUpCtrl'
+          }
+        }
+      })
+      .state('reset', {
+        url: '/reset/',
+        views: {
+          '': {
+            templateUrl: 'static/views/partials/reset.html',
+            controller: 'ResetCtrl'
           }
         }
       })
@@ -59,6 +86,16 @@ angular.module('sbirezApp', [
           'tabContent': {
             templateUrl: 'static/views/partials/search.html',
             controller: 'SearchCtrl'
+          }
+        },
+        access: { requiredAuthentication: true }
+      })
+      .state('app.landing', {
+        url: '/landing',
+        views: {
+          'tabContent': {
+            templateUrl: 'static/views/partials/landing.html',
+            controller: 'LandingCtrl'
           }
         },
         access: { requiredAuthentication: true }
