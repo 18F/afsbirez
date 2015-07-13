@@ -14,7 +14,7 @@ from django.test import TestCase
 import django.core.mail
 from django.core.files import uploadedfile
 
-from sbirez.models import Firm
+from sbirez.models import Firm, Naics
 from sbirez import api
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -635,6 +635,7 @@ class FirmTests(APITestCase):
         self.assertEqual([], response.data['results'])
 
     def test_firm_patch_naics(self):
+        initial_num_naics = Naics.objects.count()
         self.create_user_and_auth()
         response = self.client.post('/api/v1/firms/',
               json.dumps(self.firm_data), content_type='application/json')
@@ -647,6 +648,7 @@ class FirmTests(APITestCase):
         firm_after = Firm.objects.get(id=firm.id)
         naics = [n.code for n in firm_after.naics.all()]
         self.assertIn('111', naics)
+        self.assertEqual(initial_num_naics, Naics.objects.count())
 
     def test_firm_patch_to_remove_naics(self):
         self.create_user_and_auth()
