@@ -120,6 +120,27 @@
         </label>
         <span class="error-message" ng-if="validationData.cage_code">{{validationData.cage_code[0]}}</span>
       </div>
+      <div class="field field-naics" ng-class="{'is-error': validationData.naics}">
+        <label for="firmnaics1"><span class="label-text">NAICS Codes</span>
+          <div>
+            <input type="text" id="firmnaics1" ng-change="applyNaics(0)" ng-class="{'is-error': naicsdata[0].error}" ng-model="firm.naics[0]">
+            <span class="naics-description" ng-class="{'error-message': naicsdata[0].error}" id="naics1data">{{naicsdata[0].detail}}</span>
+          </div>
+          <div>
+            <input type="text" id="firmnaics2" ng-change="applyNaics(1)" ng-class="{'is-error': naicsdata[1].error}" ng-model="firm.naics[1]">
+            <span class="naics-description" ng-class="{'error-message': naicsdata[1].error}" id="naics2data">{{naicsdata[1].detail}}</span>
+          </div>
+          <div>
+            <input type="text" id="firmnaics3" ng-change="applyNaics(2)" ng-class="{'is-error': naicsdata[2].error}" ng-model="firm.naics[2]">
+            <span class="naics-description" ng-class="{'error-message': naicsdata[2].error}" id="naics3data">{{naicsdata[2].detail}}</span>
+          </div>
+          <div>
+            <input type="text" id="firmnaics4" ng-change="applyNaics(3)" ng-class="{'is-error': naicsdata[3].error}" ng-model="firm.naics[3]">
+            <span class="naics-description" ng-class="{'error-message': naicsdata[3].error}" id="naics4data">{{naicsdata[3].detail}}</span>
+          </div>
+        </label>
+        <span class="error-message" ng-if="validationData.naics">{{validationData.naics[0]}}</span>
+      </div>
 <!--    <div class="form-group">
         <label for="firmsic" class="control-label col-md-2">SIC Codes:</label>
         <div class="col-md-4">
