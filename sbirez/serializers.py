@@ -162,7 +162,7 @@ class FirmSerializer(serializers.ModelSerializer):
             instance.address = address
 
         naics = validated_data.pop('naics', [])
-        instance.naics.all().delete()
+        instance.naics.clear()
         for naic in naics:
             instance.naics.add(naic)
 
