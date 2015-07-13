@@ -398,6 +398,7 @@ div.element-aside{
 }
 
 div.field.is-error input,
+div.field input.is-error,
 div.field.is-error textarea{
     background: #fff7f4;
     background: repeating-linear-gradient(
@@ -411,18 +412,24 @@ div.field.is-error textarea{
 }
 
 div.field.is-error span.error-message,
+div.field input.is-error+span.error-message,
 section.fieldset.fieldset-radio.is-error span.error-message{
     color: #990017;	
     display: block;
 }
 
 div.field.is-error span.error-message,
+div.field input.is-error+span.error-message,
 section.fieldset.fieldset-radio.is-error span.error-message{
     color: #af1830;	
     font-size: 14px;
     padding-top: 6px;
     display: block;
     font-style: italic;	
+}
+
+div.field-naics input.is-error+span.error-message {
+    display: inline;
 }
 
 section.fieldset.fieldset-address div.field-city-state-zip::after{
@@ -493,9 +500,20 @@ section.fieldset.fieldset-address div.field.field-zip input{
 .field-percentage input,
 .field-proposed-dta-amount input,
 .field-contract-number input,
-.field-short_str,
+.field-short_str input,
+.field-naics input,
 .field-num-phase-2-awards input{
     width: 33%;
+}
+
+.field-naics input {
+    margin-bottom: 8px;
+}
+.field-naics input:last-child{ margin-bottom: 0;}
+
+span.naics-description {
+    margin-left: 8px;
+    font-size: 14px;
 }
 
 .field-phone-number input,
