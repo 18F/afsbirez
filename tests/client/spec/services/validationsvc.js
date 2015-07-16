@@ -343,4 +343,73 @@ describe('Service: ValidationService', function () {
     expect(validationData.dollar_field1).toEqual('Must not exceed 100');
   });
   // validateElement
+
+  var conditionally_required_elements = {
+    'id': 1,
+    'name': 'nestedworkflow',
+    'order': 1,
+    'element_type': 'workflow',
+    'required': false,
+    'default': null,
+    'human': 'Nested Workflow',
+    'help': null,
+    'validation': null,
+    'validation_msg': null,
+    'ask_if': null,
+    'multiplicity': null,
+    'children': [
+      {
+        'id': 3,
+        'name': 'bool_field1',
+        'order': 1,
+        'element_type': 'bool',
+        'required': false,
+        'default': null,
+        'human': 'Do you feel like answering the next question?',
+        'help': null,
+        'validation': null,
+        'validation_msg': null,
+        'ask_if': null,
+        'multiplicity': null,
+        'children': [
+          {
+            'id': 6,
+            'name': 'str_field1',
+            'order': 1,
+            'element_type': 'med_str',
+            'required': true,
+            'default': null,
+            'human': 'Why did you answer this question?',
+            'help': null,
+            'validation': null,
+            'validation_msg': null,
+            'ask_if': 'bool_field1',
+            'multiplicity': null,
+            'children': []
+          }
+        ]
+      }]
+  };
+
+  it('should ignore required flag when its ask_if condition is not met', function() {
+    var elemData = {
+      'bool_field1' : false,
+      'str_field1': ''
+    };
+    var validationData = {};
+    ValidationService.validate(conditionally_required_elements, elemData, validationData);
+    expect(validationData).toEqual({});
+  });
+
+  xit('should honor required flag when its ask_if condition is met', function() {
+    var elemData = {
+      'bool_field1' : true,
+      'str_field1': ''
+    };
+    var validationData = {};
+    ValidationService.validate(conditionally_required_elements, elemData, validationData);
+    console.log(validationData);
+    expect(validationData.str_field1).toEqual('This field is required');
+  });
+
 });
