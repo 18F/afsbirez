@@ -1,0 +1,346 @@
+'use strict';
+
+describe('Service: ValidationService', function () {
+
+  // load the controller's module
+  beforeEach(module('sbirezApp'));
+
+  var ValidationService;
+
+  var elemData = {
+    'id': 1,
+    'name': 'nestedworkflow',
+    'order': 1,
+    'element_type': 'workflow',
+    'required': false,
+    'default': null,
+    'human': 'Nested Workflow',
+    'help': null,
+    'validation': null,
+    'validation_msg': null,
+    'ask_if': null,
+    'multiplicity': null,
+    'children': [
+      {
+        'id': 2,
+        'name': 'nested_workflow1',
+        'order': 1,
+        'element_type': 'workflow',
+        'required': false,
+        'default': null,
+        'human': 'Nested 1',
+        'help': null,
+        'validation': null,
+        'validation_msg': null,
+        'ask_if': null,
+        'multiplicity': null,
+        'children': [
+          {
+            'id': 4,
+            'name': 'bool_field1',
+            'order': 1,
+            'element_type': 'bool',
+            'required': true,
+            'default': null,
+            'human': 'Bool Field',
+            'help': null,
+            'validation': null,
+            'validation_msg': null,
+            'ask_if': null,
+            'multiplicity': null,
+            'children': []
+          },
+          {
+            'id': 6,
+            'name': 'dollar_field1',
+            'order': 1,
+            'element_type': 'dollar',
+            'required': false,
+            'default': null,
+            'human': 'Dollar Field',
+            'help': null,
+            'validation': null,
+            'validation_msg': null,
+            'ask_if': 'bool_field1',
+            'multiplicity': null,
+            'children': []
+          },
+          {
+            'id': 7,
+            'name': 'calculated_field1',
+            'order': 1,
+            'element_type': 'calculated',
+            'required': false,
+            'default': null,
+            'human': 'Calculated Field',
+            'help': null,
+            'validation': 'dollar_field1 * 5',
+            'validation_msg': null,
+            'ask_if': 'bool_field1',
+            'multiplicity': null,
+            'children': []
+          }]
+      },
+      {
+        'id': 3,
+        'name': 'nested_workflow2',
+        'order': 1,
+        'element_type': 'workflow',
+        'required': false,
+        'default': null,
+        'human': 'Nested 2',
+        'help': null,
+        'validation': null,
+        'validation_msg': null,
+        'ask_if': null,
+        'multiplicity': null,
+        'children': [
+          {
+            'id': 5,
+            'name': 'bool_field2',
+            'order': 1,
+            'element_type': 'bool',
+            'required': true,
+            'default': null,
+            'human': 'Bool Field 2',
+            'help': null,
+            'validation': null,
+            'validation_msg': null,
+            'ask_if': null,
+            'multiplicity': null,
+            'children': []
+          }]
+      },
+      {
+        'id': 8,
+        'name': 'nested_workflow3',
+        'order': 1,
+        'element_type': 'workflow',
+        'required': false,
+        'default': null,
+        'human': 'Nested 2',
+        'help': null,
+        'validation': null,
+        'validation_msg': null,
+        'ask_if': null,
+        'multiplicity': null,
+        'children': [
+          {
+            'id': 9,
+            'name': 'line_item1',
+            'order': 1,
+            'element_type': 'line_item',
+            'required': true,
+            'default': null,
+            'human': 'Line Item 1',
+            'help': null,
+            'validation': null,
+            'validation_msg': null,
+            'ask_if': null,
+            'multiplicity': 6,
+            'children': [
+              {
+                'id': 10,
+                'name': 'dollar_field2',
+                'order': 1,
+                'element_type': 'dollar',
+                'required': true,
+                'default': null,
+                'human': 'Dollar Field 2',
+                'help': null,
+                'validation': null,
+                'validation_msg': null,
+                'ask_if': null,
+                'multiplicity': null,
+                'children': []
+              },
+              {
+                'id': 11,
+                'name': 'hour_field1',
+                'order': 1,
+                'element_type': 'float',
+                'required': true,
+                'default': null,
+                'human': 'Hour Field 1',
+                'help': null,
+                'validation': null,
+                'validation_msg': null,
+                'ask_if': null,
+                'multiplicity': null,
+                'children': []
+              },
+              {
+                'id': 12,
+                'name': 'calculated_field2',
+                'order': 1,
+                'element_type': 'calculated',
+                'required': false,
+                'default': null,
+                'human': 'Calculated Field 2',
+                'help': null,
+                'validation': 'hour_field1 * dollar_field2',
+                'validation_msg': null,
+                'ask_if': null,
+                'multiplicity': null,
+                'children': []
+              }
+            ]
+          },
+          {
+            'id': 12,
+            'name': 'calculated_field3',
+            'order': 1,
+            'element_type': 'calculated',
+            'required': false,
+            'default': null,
+            'human': 'Calculated Field 3',
+            'help': null,
+            'validation': 'sum(calculated_field2)',
+            'validation_msg': null,
+            'ask_if': null,
+            'multiplicity': null,
+            'children': []
+          }]
+      }
+    ]
+  };
+
+  // Initialize the controller and a mock scope
+  beforeEach(inject(function (_ValidationService_) {
+    ValidationService = _ValidationService_;
+  }));
+
+  // validate
+  it('should honor basic required flag functionality', function() {
+    var elements = {
+      'id': 1,
+      'name': 'nestedworkflow',
+      'order': 1,
+      'element_type': 'workflow',
+      'required': false,
+      'default': null,
+      'human': 'Nested Workflow',
+      'help': null,
+      'validation': null,
+      'validation_msg': null,
+      'ask_if': null,
+      'multiplicity': null,
+      'children': [
+        {
+          'id': 2,
+          'name': 'bool_field1',
+          'order': 1,
+          'element_type': 'bool',
+          'required': true,
+          'default': null,
+          'human': 'Bool Field',
+          'help': null,
+          'validation': null,
+          'validation_msg': null,
+          'ask_if': null,
+          'multiplicity': null,
+          'children': []
+        },
+        {
+          'id': 3,
+          'name': 'dollar_field1',
+          'order': 1,
+          'element_type': 'dollar',
+          'required': true,
+          'default': null,
+          'human': 'Dollar Field',
+          'help': null,
+          'validation': null,
+          'validation_msg': null,
+          'ask_if': null,
+          'multiplicity': null,
+          'children': []
+        }]
+    };
+    var elemData = {
+      'bool_field1': 'true'
+    };
+    var validationData = {};
+    ValidationService.validate(elements, elemData, validationData);
+    expect(validationData.bool_field1).toEqual({});
+    expect(validationData.dollar_field1).toEqual('This field is required');
+  });
+
+  it('should prefer required error over other validation error logic', function() {
+    var elements = {
+      'id': 1,
+      'name': 'nestedworkflow',
+      'order': 1,
+      'element_type': 'workflow',
+      'required': false,
+      'default': null,
+      'human': 'Nested Workflow',
+      'help': null,
+      'validation': null,
+      'validation_msg': null,
+      'ask_if': null,
+      'multiplicity': null,
+      'children': [
+        {
+          'id': 3,
+          'name': 'dollar_field1',
+          'order': 1,
+          'element_type': 'dollar',
+          'required': true,
+          'default': null,
+          'human': 'Dollar Field',
+          'help': null,
+          'validation': 'not_more_than 100',
+          'validation_msg': 'Must not exceed 100',
+          'ask_if': null,
+          'multiplicity': null,
+          'children': []
+        }]
+    };
+    var elemData = {
+    };
+    var validationData = {};
+    ValidationService.validate(elements, elemData, validationData);
+    expect(validationData.dollar_field1).toEqual('This field is required');
+  });
+
+  it('should return a not more than error if it fails the test', function() {
+    var elements = {
+      'id': 1,
+      'name': 'nestedworkflow',
+      'order': 1,
+      'element_type': 'workflow',
+      'required': false,
+      'default': null,
+      'human': 'Nested Workflow',
+      'help': null,
+      'validation': null,
+      'validation_msg': null,
+      'ask_if': null,
+      'multiplicity': null,
+      'children': [
+        {
+          'id': 3,
+          'name': 'dollar_field1',
+          'order': 1,
+          'element_type': 'dollar',
+          'required': true,
+          'default': null,
+          'human': 'Dollar Field',
+          'help': null,
+          'validation': 'not_more_than 100',
+          'validation_msg': 'Must not exceed 100',
+          'ask_if': null,
+          'multiplicity': null,
+          'children': []
+        }]
+    };
+    var elemData = {
+      'dollar_field1': '333'
+    };
+    var validationData = {};
+    ValidationService.validate(elements, elemData, validationData);
+    expect(validationData.dollar_field1).toEqual('Must not exceed 100');
+  });
+  // validateElement
+});
