@@ -2,7 +2,7 @@
   <h1 class="label-text">{{element.human}}</h1>
   <div class="field field-upload" ng-class="{'is-error': validationstorage}">
     <label>
-      <input id="{{fieldToken}}" name="{{fieldToken}}" type="file" ng-file-select="onFileSelect($files)" size="40">
+      <input id="{{fieldToken}}" name="{{fieldToken}}" type="file" accept="application/pdf" ng-file-select="onFileSelect($files)" size="40">
       <div class="sel-file" ng-repeat="f in selectedFiles">
         <label class="question" for="filename">
           <span class="label-text">File Name:</span>
