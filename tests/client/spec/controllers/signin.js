@@ -58,4 +58,32 @@ describe('Controller: SignInCtrl', function () {
     expect(window.sessionStorage.token).toNotBe(data.data.token);
     expect(scope.errorMsg).toBeDefined();
   });
+
+  it ('should honor the target query string, if present', function () {
+    var mockDeferred = $q.defer();
+    spyOn(UserService, 'logIn').andReturn(mockDeferred.promise);
+    spyOn(UserService, 'getUserDetails').andReturn(mockDeferred.promise);
+    scope.intention = {'target': '/app/proposals/5'};
+    scope.email = data.data.username;
+    scope.password = '123';
+    scope.logIn();
+    mockDeferred.resolve(data);
+    scope.$root.$digest();
+    expect(window.sessionStorage.token).toBe(data.data.token);
+    expect($location.path()).toBe('/app/proposals/5');
+  });
+
+  it ('should honor the target query string, if present, even if url encoded', function () {
+    var mockDeferred = $q.defer();
+    spyOn(UserService, 'logIn').andReturn(mockDeferred.promise);
+    spyOn(UserService, 'getUserDetails').andReturn(mockDeferred.promise);
+    scope.intention = {'target': '%2Fapp%2Fproposals%2F5'};
+    scope.email = data.data.username;
+    scope.password = '123';
+    scope.logIn();
+    mockDeferred.resolve(data);
+    scope.$root.$digest();
+    expect(window.sessionStorage.token).toBe(data.data.token);
+    expect($location.path()).toBe('/app/proposals/5');
+  });
 });

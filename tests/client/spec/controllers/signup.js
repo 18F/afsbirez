@@ -45,7 +45,39 @@ describe('Controller: SignUpCtrl', function () {
     expect(window.sessionStorage.token).toBe(data.data.token);
     expect($location.path).toHaveBeenCalledWith('/');
   });
-  
+
+  it ('should honor the target query string, if present', function () {
+    var mockDeferred = $q.defer();
+    spyOn(UserService, 'createUser').andReturn(mockDeferred.promise);
+    spyOn(UserService, 'logIn').andReturn(mockDeferred.promise);
+    spyOn(UserService, 'getUserDetails').andReturn(mockDeferred.promise);
+    scope.intention = {'target': '/app/proposals/5'};
+    scope.email = data.data.username;
+    scope.name = 'Test User';
+    scope.password = 'Abc123!2';
+    scope.signUp();
+    mockDeferred.resolve(data);
+    scope.$root.$digest();
+    expect(window.sessionStorage.token).toBe(data.data.token);
+    expect($location.path()).toBe('/app/proposals/5');
+  });
+
+  it ('should honor the target query string, if present, even if url encoded', function () {
+    var mockDeferred = $q.defer();
+    spyOn(UserService, 'createUser').andReturn(mockDeferred.promise);
+    spyOn(UserService, 'logIn').andReturn(mockDeferred.promise);
+    spyOn(UserService, 'getUserDetails').andReturn(mockDeferred.promise);
+    scope.intention = {'target': '%2Fapp%2Fproposals%2F5'};
+    scope.email = data.data.username;
+    scope.name = 'Test User';
+    scope.password = 'Abc123!2';
+    scope.signUp();
+    mockDeferred.resolve(data);
+    scope.$root.$digest();
+    expect(window.sessionStorage.token).toBe(data.data.token);
+    expect($location.path()).toBe('/app/proposals/5');
+  });
+
   it('should not redirect and it should return an error', function () {
     var mockDeferred = $q.defer();
     spyOn(UserService, 'createUser').andReturn(mockDeferred.promise);

@@ -34,7 +34,7 @@ angular.module('sbirezApp', [
         }
       })
       .state('signin', {
-        url: '/signin/',
+        url: '/signin?target&current',
         views: {
           '': {
             templateUrl: 'static/views/partials/signin.html',
@@ -43,7 +43,7 @@ angular.module('sbirezApp', [
         }
       })
       .state('signup', {
-        url: '/signup/',
+        url: '/signup?target&current',
         views: {
           '': {
             templateUrl: 'static/views/partials/signup.html',
@@ -168,16 +168,6 @@ angular.module('sbirezApp', [
           '': {
             templateUrl: 'static/views/partials/documentDetails.html',
             controller: 'DocumentCtrl'
-          }
-        },
-        access: { requiredAuthentication: true }
-      })
-      .state('app.savedSearches', {
-        url: '/savedSearches',
-        views: {
-          'tabContent': {
-            templateUrl: 'static/views/partials/savedSearches.html',
-            controller: 'SavedSearchesCtrl'
           }
         },
         access: { requiredAuthentication: true }

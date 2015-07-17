@@ -78,7 +78,7 @@ angular.module('sbirezApp').factory('SearchService', function($http, $q, Proposa
           }
         });
       }).error(function(data) {
-        deferred.reject(new Error(data));
+        deferred.reject(data);
       });
       return deferred.promise;
     },
