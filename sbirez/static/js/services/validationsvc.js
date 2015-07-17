@@ -177,21 +177,42 @@ angular.module('sbirezApp').factory('ValidationService', function() {
     return !(data === undefined ||
              data[elementName] === null ||
              data[elementName] === undefined ||
-             data[elementName] === '' ||
+             (typeof data[elementName] === 'string' && data[elementName].trim() === '') ||
              (typeof data[elementName] === 'object' && data[elementName].length === undefined));
+  };
+
+  // Similar function in proposalsvc.js.  Moving to a single location would
+  // be a good refactoring task
+  var stringToBoolean = function(data){
+    try {
+      switch(data.toLowerCase()){
+        case "true": case "yes": case "1": return true;
+        case "false": case "no": case "0": case null: return false;
+        default: return Boolean(data);
+      }
+    } catch (err) {
+      if (err instanceof TypeError) {
+        return Boolean(data);
+      }
+      else {
+        throw err;
+      }
+    }
   };
 
   // as with processValidation, returns true if  it passes, false if it fails
   var processRequired = function(element, data) {
     // if it has a condition, and that condition is set
-    if (element.ask_if && isSet(data, element.ask_if) && data[element.ask_if] === true) {
-      return isSet(data, element.name);
-    } else if (!element.ask_if) { 
-      return isSet(data, element.name); 
-    }
-    else {
-      return true;
-    }
+    if (element.ask_if && isSet(data, element.ask_if)) {
+        if (stringToBoolean(data[element.ask_if]) === true) {
+          return isSet(data, element.name);   // usual handling of `required`
+        } else {
+          return true;    // `ask_if` proved false, so do not check for `required`
+        }
+      }
+      else { // no `ask_if`, so check `required` normally
+        return isSet(data, element.name);
+      }
   };
 
   return {
@@ -207,7 +228,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
           } else {
             validationResults[element.name] = {};
           }
-        } 
+        }
         if (element.validation !== null && data && data[element.name] && !requiredSet) {
           if (!processValidation(element.validation, data[element.name])) {
             validationResults[element.name] = element.validation_msg;
@@ -258,7 +279,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
         } else {
           validationResults[element.name] = {};
         }
-      } 
+      }
       if (element.validation !== null && data && data[element.name] && !requiredSet) {
         if (!processValidation(element.validation, data[element.name])) {
           validationResults[element.name] = element.validation_msg;

@@ -371,44 +371,64 @@ describe('Service: ValidationService', function () {
         'validation_msg': null,
         'ask_if': null,
         'multiplicity': null,
-        'children': [
-          {
-            'id': 6,
-            'name': 'str_field1',
-            'order': 1,
-            'element_type': 'med_str',
-            'required': true,
-            'default': null,
-            'human': 'Why did you answer this question?',
-            'help': null,
-            'validation': null,
-            'validation_msg': null,
-            'ask_if': 'bool_field1',
-            'multiplicity': null,
-            'children': []
-          }
-        ]
-      }]
+        'children': []
+      },
+      {
+        'id': 6,
+        'name': 'str_field1',
+        'order': 1,
+        'element_type': 'med_str',
+        'required': true,
+        'default': null,
+        'human': 'Why did you answer this question?',
+        'help': null,
+        'validation': null,
+        'validation_msg': null,
+        'ask_if': 'bool_field1',
+        'multiplicity': null,
+        'children': []
+      }
+    ]
   };
 
-  it('should ignore required flag when its ask_if condition is not met', function() {
+  it('should recognize data entered as meeting the `required` condition', function() {
     var elemData = {
-      'bool_field1' : false,
-      'str_field1': ''
+      'bool_field1' : true,
+      'str_field1': 'my answer'
     };
     var validationData = {};
     ValidationService.validate(conditionally_required_elements, elemData, validationData);
-    expect(validationData).toEqual({});
+    expect(validationData).toEqual({'str_field1' : {  }});
   });
 
-  xit('should honor required flag when its ask_if condition is met', function() {
+  it('should consider a whitespace-only answer to fail a `required` check', function() {
+    var elemData = {
+      'bool_field1' : true,
+      'str_field1': '   \t\t   \n'
+    };
+    var validationData = {};
+    ValidationService.validate(conditionally_required_elements, elemData, validationData);
+    expect(validationData.str_field1).toEqual('This field is required');
+  });
+
+
+  it('should honor required flag when its ask_if condition is met', function() {
     var elemData = {
       'bool_field1' : true,
       'str_field1': ''
     };
     var validationData = {};
     ValidationService.validate(conditionally_required_elements, elemData, validationData);
-    console.log(validationData);
+    expect(validationData.str_field1).toEqual('This field is required');
+  });
+
+  it('should honor required flag when bools in data are in string form', function() {
+    var elemData = {
+      'bool_field1' : 'true',
+      'str_field1': ''
+    };
+    var validationData = {};
+    ValidationService.validate(conditionally_required_elements, elemData, validationData);
     expect(validationData.str_field1).toEqual('This field is required');
   });
 
