@@ -225,10 +225,10 @@ angular.module('sbirezApp').factory('ValidationService', function() {
       return isSet(data, element.name);
     }
     else {
-      var words = element.required.split(/\s/);
-      if words[0] === 'unless' {
+      var words = element.required.split(/\s+/);
+      if (words[0] === 'unless') {
         return (isSet(data, element.name) || isSet(data, words[1]));
-      } else if words[0] === 'xor' {
+      } else if (words[0] === 'xor') {
         return xor(isSet(data, element.name), isSet(data, words[1]));
       }
     }
