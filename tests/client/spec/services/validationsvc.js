@@ -432,4 +432,80 @@ describe('Service: ValidationService', function () {
     expect(validationData.str_field1).toEqual('This field is required');
   });
 
+  var interdependent_elements = {
+    'id': 1,
+    'name': 'nestedworkflow',
+    'order': 1,
+    'element_type': 'workflow',
+    'required': false,
+    'default': null,
+    'human': 'Nested Workflow',
+    'help': null,
+    'validation': null,
+    'validation_msg': null,
+    'ask_if': null,
+    'multiplicity': null,
+    'children': [
+      {
+        'id': 3,
+        'name': 'bool_field1',
+        'order': 1,
+        'element_type': 'bool',
+        'required': false,
+        'default': null,
+        'human': 'Please check this box.',
+        'help': null,
+        'validation': 'required_unless str_field1',
+        'validation_msg': 'Check this box or explain yourself!',
+        'ask_if': null,
+        'multiplicity': null,
+        'children': []
+      },
+      {
+        'id': 6,
+        'name': 'str_field1',
+        'order': 1,
+        'element_type': 'med_str',
+        'required': false,
+        'default': null,
+        'human': 'Reason for refusing to check the box',
+        'help': null,
+        'validation': 'required_unless bool_field1',
+        'validation_msg': 'Check the box above or explain yourself!',
+        'multiplicity': null,
+        'children': []
+      }
+    ]
+  };
+
+  xit('should pass the `required_unless` validation if first item is true', function() {
+    var elemData = {
+      'bool_field1' : 'true',
+      'str_field1': ''
+    };
+    var validationData = {};
+    ValidationService.validate(interdependent_elements, elemData, validationData);
+    expect(validationData.bool_field1).toEqual({ });
+  });
+
+  xit('should pass the `required_unless` validation if second item is true', function() {
+    var elemData = {
+      'bool_field1' : 'false',
+      'str_field1': ' i believe in free will'
+    };
+    var validationData = {};
+    ValidationService.validate(interdependent_elements, elemData, validationData);
+    expect(validationData.bool_field1).toEqual({ });
+  });
+
+  it('should fail the `required_unless` validation if neither item is true', function() {
+    var elemData = {
+      'bool_field1' : 'false',
+      'str_field1': ''
+    };
+    var validationData = {};
+    ValidationService.validate(interdependent_elements, elemData, validationData);
+    expect(validationData.bool_field1).toEqual('Check this box or explain yourself!');
+  });
+
 });

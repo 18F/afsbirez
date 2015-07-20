@@ -139,11 +139,44 @@ angular.module('sbirezApp').factory('ValidationService', function() {
     }
   };
 
+  var forceToBool = function(value) {
+    if (value === null) {
+      return false;
+    }
+    value = String(value).trim();
+    if (value === '') {
+      return false;
+    }
+    if (isNaN(value)) {
+      var titlecase_value = value[0].toUpperCase() + value.slice(1).toLowerCase();
+      var falsey_strings = ['N', 'No', 'False', 'F'];
+      return (falsey_strings.indexOf(titlecase_value) == -1);
+    } else {
+      return (Number(value) !== 0);  // zeroes considered false
+    }
+  };
+
+  var requiredUnless = function(value, data, commands) {
+    // Demands that either `value` or any of the fields in `commands` be true-ish
+    console.log('requiredUnless ' + value + ' ' + commands)
+    console.log(data);
+    var all_values = [forceToBool(value), ];
+    console.log('all_values starts at ' + all_values);
+    for (var i = 0; i < commands.length; i++) {
+      console.log('force to bool: ' + data[commands[i]]);
+      all_values.push(forceToBool(data[commands[i]]));
+    }
+    console.log('is there a true in here? ' + all_values);
+    var result = all_values.indexOf(true) > -1;
+    console.log('validation result: ' + result);
+    return result;
+  };
+
   var oneOf = function(value, params) {
     return params.indexOf(value) !== -1;
   };
 
-  var processValidation = function(validationString, value) {
+  var processValidation = function(validationString, value, data) {
     var commands = validationString.split(' ');
     if (typeof value === 'object' && value.length ===  undefined) {
       value = '';
@@ -165,6 +198,9 @@ angular.module('sbirezApp').factory('ValidationService', function() {
       }
       else if (command === 'one_of') {
         return oneOf(value, commands);
+      }
+      else if (command === 'required_unless') {
+        return requiredUnless(value, data, commands);
       }
     }
     else {
@@ -217,6 +253,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
 
   return {
     validate: function(workflow, data, validationResults) {
+      console.log('validating');
       var length = workflow.children.length;
       var requiredSet = false;
       for (var i = 0; i < length; i++) {
@@ -230,7 +267,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
           }
         }
         if (element.validation !== null && data && data[element.name] && !requiredSet) {
-          if (!processValidation(element.validation, data[element.name])) {
+          if (!processValidation(element.validation, data[element.name], data)) {
             validationResults[element.name] = element.validation_msg;
           } else {
             validationResults[element.name] = {};
@@ -281,7 +318,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
         }
       }
       if (element.validation !== null && data && data[element.name] && !requiredSet) {
-        if (!processValidation(element.validation, data[element.name])) {
+        if (!processValidation(element.validation, data[element.name], data)) {
           validationResults[element.name] = element.validation_msg;
         } else {
           validationResults[element.name] = {};

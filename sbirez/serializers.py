@@ -1,7 +1,6 @@
 import json
 import re
 import shlex
-from sbirez import validation_helpers
 from django.contrib.auth.models import User, Group
 from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person
 from sbirez.models import Address, Proposal, Address, Naics
