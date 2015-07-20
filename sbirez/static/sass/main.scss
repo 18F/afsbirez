@@ -336,6 +336,10 @@ div.field span.label-text{
     color: inherit;
 }
 
+section.fieldset-standalone {
+    margin-top: 36px;
+}
+
 div.field.field-radio{ 
     display: inline-block; 
     vertical-align: middle;
@@ -462,7 +466,14 @@ section.fieldset.fieldset-address div.field.field-zip input{
 	min-width: 0;
 }
 
+div.field-upload {
+    margin-bottom: 0;
+}
 
+div.field-upload input#filename,
+div.field-upload input[type=file] {
+    margin-bottom: 12px;
+}
 
 /* @group widths */
 
