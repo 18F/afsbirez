@@ -1,14 +1,18 @@
-<div class="field field-upload" ng-class="{'is-error': validationstorage}">
-  <label>
-    <span class="label-text">{{element.human}}</span>
-    <input id="{{fieldToken}}" name="{{fieldToken}}" type="file" ng-file-select="onFileSelect($files)" size="40">
-    <div class="sel-file" ng-repeat="f in selectedFiles">
-      <label class="question" for="filename">
-        <span class="label-text">File Name:</span>
-        <input id="filename" class="form-control" ng-model="f.filename" type="text"></input>
-      </label>
-      <button type="button" ng-click="start($index)" ng-show="progress[$index] < 0">Upload</button>
-    </div>
-  </label>
-  <span ng-show="validationstorage" class="error-message">{{validationstorage}}</span>
-</div>
+<section class="fieldset fieldset-standalone">
+  <h1 class="label-text">{{element.human}}</h1>
+  <div class="field field-upload" ng-class="{'is-error': validationstorage}">
+    <label>
+      <input id="{{fieldToken}}" name="{{fieldToken}}" type="file" accept="application/pdf" ng-file-select="onFileSelect($files)" size="40">
+      <div class="sel-file" ng-repeat="f in selectedFiles">
+        <label class="question" for="filename">
+          <span class="label-text">File Name:</span>
+          <input id="filename" class="form-control" ng-model="f.filename" type="text"></input>
+        </label>
+        <button type="button" ng-click="start($index)" ng-show="progress[$index] < 0">Upload</button>
+        <span class="progress-status" ng-if="progress[$index] > 0 && progress[$index] < 100">{{progress[$index]}}%</span>
+        <span class="progress-status" ng-if="progress[$index] === 100">Upload Complete</span>
+      </div>
+    </label>
+    <span ng-show="validationstorage" class="error-message">{{validationstorage}}</span>
+  </div>
+</section>
