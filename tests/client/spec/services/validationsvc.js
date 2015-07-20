@@ -451,12 +451,10 @@ describe('Service: ValidationService', function () {
         'name': 'bool_field1',
         'order': 1,
         'element_type': 'bool',
-        'required': false,
+        'required': 'unless str_field1',
         'default': null,
         'human': 'Please check this box.',
         'help': null,
-        'validation': 'required_unless str_field1',
-        'validation_msg': 'Check this box or explain yourself!',
         'ask_if': null,
         'multiplicity': null,
         'children': []
@@ -464,21 +462,71 @@ describe('Service: ValidationService', function () {
       {
         'id': 6,
         'name': 'str_field1',
-        'order': 1,
+        'order': 2,
         'element_type': 'med_str',
-        'required': false,
+        'required': 'xor bool_field1',
         'default': null,
         'human': 'Reason for refusing to check the box',
         'help': null,
-        'validation': 'required_unless bool_field1',
-        'validation_msg': 'Check the box above or explain yourself!',
+        'multiplicity': null,
+        'children': []
+      },
+        {
+        'id': 7,
+        'name': 'str_field2',
+        'order': 3,
+        'element_type': 'med_str',
+        'required': 'unless bool_field1',
+        'default': null,
+        'human': 'Reason one might consider refusing to check the box',
+        'help': null,
         'multiplicity': null,
         'children': []
       }
     ]
   };
 
-  xit('should pass the `required_unless` validation if first item is true', function() {
+  it('should pass the `unless` requirement if first item is true', function() {
+    var elemData = {
+      'bool_field2' : 'true',
+      'str_field1': ''
+    };
+    var validationData = {};
+    ValidationService.validate(interdependent_elements, elemData, validationData);
+    expect(validationData.bool_field1).toEqual({ });
+  });
+
+  it('should pass the `unless` requirement if second item is true', function() {
+    var elemData = {
+      'bool_field2' : 'false',
+      'str_field1': ' i believe in free will'
+    };
+    var validationData = {};
+    ValidationService.validate(interdependent_elements, elemData, validationData);
+    expect(validationData.bool_field1).toEqual({ });
+  });
+
+  it('should pass the `unless` requirement if both items are true', function() {
+    var elemData = {
+      'bool_field2' : 'true',
+      'str_field1': ' i believe in free will'
+    };
+    var validationData = {};
+    ValidationService.validate(interdependent_elements, elemData, validationData);
+    expect(validationData.bool_field1).toEqual({ });
+  });
+
+  it('should fail the `unless` requirement if neither item is true', function() {
+    var elemData = {
+      'bool_field2' : 'false',
+      'str_field1': ''
+    };
+    var validationData = {};
+    ValidationService.validate(interdependent_elements, elemData, validationData);
+    expect(validationData.bool_field1).toEqual('Check this box or explain yourself!');
+  });
+
+  it('should pass the `xor` requirement if first item is true', function() {
     var elemData = {
       'bool_field1' : 'true',
       'str_field1': ''
@@ -488,7 +536,7 @@ describe('Service: ValidationService', function () {
     expect(validationData.bool_field1).toEqual({ });
   });
 
-  xit('should pass the `required_unless` validation if second item is true', function() {
+  it('should pass the `xor` requirement if second item is true', function() {
     var elemData = {
       'bool_field1' : 'false',
       'str_field1': ' i believe in free will'
@@ -498,10 +546,20 @@ describe('Service: ValidationService', function () {
     expect(validationData.bool_field1).toEqual({ });
   });
 
-  it('should fail the `required_unless` validation if neither item is true', function() {
+  it('should fail the `xor` requirement if neither item is true', function() {
     var elemData = {
       'bool_field1' : 'false',
       'str_field1': ''
+    };
+    var validationData = {};
+    ValidationService.validate(interdependent_elements, elemData, validationData);
+    expect(validationData.bool_field1).toEqual('Check this box or explain yourself!');
+  });
+
+  it('should fail the `xor` requirement if both items are true', function() {
+    var elemData = {
+      'bool_field1' : 'true',
+      'str_field1': 'I checked it'
     };
     var validationData = {};
     ValidationService.validate(interdependent_elements, elemData, validationData);

@@ -170,7 +170,7 @@ class Element(models.Model):
     # integer: collect up to N unnamed groups
     # null: just collect one
 
-    required = models.NullBooleanField(default=False)
+    required = models.TextField(default='False')
     default = models.TextField(null=True, blank=True)
     help = models.TextField(null=True, blank=True)
     validation = models.TextField(null=True, blank=True)

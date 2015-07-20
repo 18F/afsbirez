@@ -260,15 +260,13 @@
         -
           name: dcaa_review_info_no
           human: If no, please provide the date for when such a review was last performed
-          validation: required_unless dcaa_review_info_never
-          validation_msg: Please provide date (if ever)
+          required: xor dcaa_review_info_never
           element_type: timespan
           ask_if: not dcaa_review
         -
           name: dcaa_review_info_never
           human: or if never reviewed, check here
-          validation: required_unless dcaa_review_info_no
-          validation_msg: Check if never reviewed
+          required: xor dcaa_review_info_no
           element_type: checkbox
           ask_if: not dcaa_review
       -

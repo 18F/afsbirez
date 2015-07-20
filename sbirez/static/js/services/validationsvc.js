@@ -158,6 +158,8 @@ angular.module('sbirezApp').factory('ValidationService', function() {
 
   var requiredUnless = function(value, data, commands) {
     // Demands that either `value` or any of the fields in `commands` be true-ish
+    // NOTE: processValidation currently never called on a blank field...
+    //
     console.log('requiredUnless ' + value + ' ' + commands)
     console.log(data);
     var all_values = [forceToBool(value), ];
@@ -176,7 +178,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
     return params.indexOf(value) !== -1;
   };
 
-  var processValidation = function(validationString, value, data) {
+  var processValidation = function(validationString, value) {
     var commands = validationString.split(' ');
     if (typeof value === 'object' && value.length ===  undefined) {
       value = '';
@@ -199,9 +201,6 @@ angular.module('sbirezApp').factory('ValidationService', function() {
       else if (command === 'one_of') {
         return oneOf(value, commands);
       }
-      else if (command === 'required_unless') {
-        return requiredUnless(value, data, commands);
-      }
     }
     else {
       console.log('Invalid validation string');
@@ -216,6 +215,24 @@ angular.module('sbirezApp').factory('ValidationService', function() {
              (typeof data[elementName] === 'string' && data[elementName].trim() === '') ||
              (typeof data[elementName] === 'object' && data[elementName].length === undefined));
   };
+
+  var xor = function(foo, bar) {
+    return ( ( foo || bar ) && !( foo && bar ) );
+  };
+
+  var meetsRequirement = function(data, element) {
+    if (element.required === 'True') {
+      return isSet(data, element.name);
+    }
+    else {
+      var words = element.required.split(/\s/);
+      if words[0] === 'unless' {
+        return (isSet(data, element.name) || isSet(data, words[1]));
+      } else if words[0] === 'xor' {
+        return xor(isSet(data, element.name), isSet(data, words[1]));
+      }
+    }
+  }
 
   // Similar function in proposalsvc.js.  Moving to a single location would
   // be a good refactoring task
@@ -241,24 +258,23 @@ angular.module('sbirezApp').factory('ValidationService', function() {
     // if it has a condition, and that condition is set
     if (element.ask_if && isSet(data, element.ask_if)) {
         if (stringToBoolean(data[element.ask_if]) === true) {
-          return isSet(data, element.name);   // usual handling of `required`
+          return meetsRequirement(data, element);   // usual handling of `required`
         } else {
           return true;    // `ask_if` proved false, so do not check for `required`
         }
       }
       else { // no `ask_if`, so check `required` normally
-        return isSet(data, element.name);
+        return meetsRequirement(data, element);
       }
   };
 
   return {
     validate: function(workflow, data, validationResults) {
-      console.log('validating');
       var length = workflow.children.length;
       var requiredSet = false;
       for (var i = 0; i < length; i++) {
         var element = workflow.children[i];
-        if (element.required === true) {
+        if (element.required !== 'False') {
           if (!processRequired(element, data)) {
             validationResults[element.name] = 'This field is required';
             requiredSet = true;
@@ -267,7 +283,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
           }
         }
         if (element.validation !== null && data && data[element.name] && !requiredSet) {
-          if (!processValidation(element.validation, data[element.name], data)) {
+          if (!processValidation(element.validation, data[element.name])) {
             validationResults[element.name] = element.validation_msg;
           } else {
             validationResults[element.name] = {};
@@ -308,7 +324,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
 
     validateElement: function(element, data, validationResults) {
       var requiredSet = false;
-      if (element.required === true) {
+      if (element.required !== 'False') {
         if (!processRequired(element, data)) {
           validationResults[element.name] = 'This field is required';
           console.log('Field is required', element.name);
@@ -318,7 +334,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
         }
       }
       if (element.validation !== null && data && data[element.name] && !requiredSet) {
-        if (!processValidation(element.validation, data[element.name], data)) {
+        if (!processValidation(element.validation, data[element.name])) {
           validationResults[element.name] = element.validation_msg;
         } else {
           validationResults[element.name] = {};
