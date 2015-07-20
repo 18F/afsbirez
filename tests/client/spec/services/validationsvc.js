@@ -342,5 +342,476 @@ describe('Service: ValidationService', function () {
     ValidationService.validate(elements, elemData, validationData);
     expect(validationData.dollar_field1).toEqual('Must not exceed 100');
   });
+
+  var percentageElements = {
+    'id': 1,
+    'name': 'nestedworkflow',
+    'order': 1,
+    'element_type': 'workflow',
+    'required': false,
+    'default': null,
+    'human': 'Nested Workflow',
+    'help': null,
+    'validation': null,
+    'validation_msg': null,
+    'ask_if': null,
+    'multiplicity': null,
+    'children': [
+      {
+        'id': 3,
+        'name': 'percentage_field1',
+        'order': 1,
+        'element_type': 'percentage',
+        'required': true,
+        'default': null,
+        'human': 'Field',
+        'help': null,
+        'validation': null,
+        'validation_msg': null,
+        'ask_if': null,
+        'multiplicity': null,
+        'children': []
+      }]
+  }
+
+  it('should correctly validate that a valid percentage field is valid', function() {
+    var elemData = {
+      'percentage_field1': '80'
+    };
+    var validationData = {};
+    ValidationService.validate(percentageElements, elemData, validationData);
+    expect(validationData.percentage_field1).toEqual({});
+  });
+
+  it('should correctly validate an invalid percentage field greater than 100', function() {
+    var elemData = {
+      'percentage_field1': '180'
+    };
+    var validationData = {};
+    ValidationService.validate(percentageElements, elemData, validationData);
+    expect(validationData.percentage_field1).toEqual('Invalid percentage');
+  });
+
+  it('should correctly validate that an negative percentage field is invalid', function() {
+    var elemData = {
+      'percentage_field1': '-20'
+    };
+    var validationData = {};
+    ValidationService.validate(percentageElements, elemData, validationData);
+    expect(validationData.percentage_field1).toEqual('Invalid percentage');
+  });
+
+  it('should correctly validate that an string percentage field is invalid', function() {
+    var elemData = {
+      'percentage_field1': '9abc'
+    };
+    var validationData = {};
+    ValidationService.validate(percentageElements, elemData, validationData);
+    expect(validationData.percentage_field1).toEqual('Invalid percentage');
+  });
+
+  var integerElements = {
+    'id': 1,
+    'name': 'nestedworkflow',
+    'order': 1,
+    'element_type': 'workflow',
+    'required': false,
+    'default': null,
+    'human': 'Nested Workflow',
+    'help': null,
+    'validation': null,
+    'validation_msg': null,
+    'ask_if': null,
+    'multiplicity': null,
+    'children': [
+      {
+        'id': 3,
+        'name': 'integer_field1',
+        'order': 1,
+        'element_type': 'integer',
+        'required': true,
+        'default': null,
+        'human': 'Field',
+        'help': null,
+        'validation': null,
+        'validation_msg': null,
+        'ask_if': null,
+        'multiplicity': null,
+        'children': []
+      }]
+  }
+
+  it('should correctly validate that a valid integer field is valid', function() {
+    var elemData = {
+      'integer_field1': '80'
+    };
+    var validationData = {};
+    ValidationService.validate(integerElements, elemData, validationData);
+    expect(validationData.integer_field1).toEqual({});
+  });
+
+  it('should correctly validate an invalid integer field greater that is a float', function() {
+    var elemData = {
+      'integer_field1': '180.43'
+    };
+    var validationData = {};
+    ValidationService.validate(integerElements, elemData, validationData);
+    expect(validationData.integer_field1).toEqual('Invalid number');
+  });
+
+  it('should correctly validate that an negative integer field is valid', function() {
+    var elemData = {
+      'integer_field1': '-20'
+    };
+    var validationData = {};
+    ValidationService.validate(integerElements, elemData, validationData);
+    expect(validationData.integer_field1).toEqual({});
+  });
+
+  it('should correctly validate that an string integer field is invalid', function() {
+    var elemData = {
+      'integer_field1': '9abc'
+    };
+    var validationData = {};
+    ValidationService.validate(integerElements, elemData, validationData);
+    expect(validationData.integer_field1).toEqual('Invalid number');
+  });
+
+  var emailElements = {
+    'id': 1,
+    'name': 'nestedworkflow',
+    'order': 1,
+    'element_type': 'workflow',
+    'required': false,
+    'default': null,
+    'human': 'Nested Workflow',
+    'help': null,
+    'validation': null,
+    'validation_msg': null,
+    'ask_if': null,
+    'multiplicity': null,
+    'children': [
+      {
+        'id': 3,
+        'name': 'email_field1',
+        'order': 1,
+        'element_type': 'email',
+        'required': true,
+        'default': null,
+        'human': 'Field',
+        'help': null,
+        'validation': null,
+        'validation_msg': null,
+        'ask_if': null,
+        'multiplicity': null,
+        'children': []
+      }]
+  }
+
+  it('should correctly validate that a valid email field is valid', function() {
+    var elemData = {
+      'email_field1': 'name@example.com'
+    };
+    var validationData = {};
+    ValidationService.validate(emailElements, elemData, validationData);
+    expect(validationData.email_field1).toEqual({});
+  });
+
+  it('should correctly validate that a valid email field is valid even with a plus sign', function() {
+    var elemData = {
+      'email_field1': 'name+last@example.com'
+    };
+    var validationData = {};
+    ValidationService.validate(emailElements, elemData, validationData);
+    expect(validationData.email_field1).toEqual({});
+  });
+
+  it('should correctly validate that a valid email field is valid even with a . in local', function() {
+    var elemData = {
+      'email_field1': 'name.LAST@example.com'
+    };
+    var validationData = {};
+    ValidationService.validate(emailElements, elemData, validationData);
+    expect(validationData.email_field1).toEqual({});
+  });
+
+  it('should correctly validate that an email field without @ or . is invalid', function() {
+    var elemData = {
+      'email_field1': 'abc'
+    };
+    var validationData = {};
+    ValidationService.validate(emailElements, elemData, validationData);
+    expect(validationData.email_field1).toEqual('Invalid email address');
+  });
+
+  it('should correctly validate that an email field without . is invalid', function() {
+    var elemData = {
+      'email_field1': 'abc@'
+    };
+    var validationData = {};
+    ValidationService.validate(emailElements, elemData, validationData);
+    expect(validationData.email_field1).toEqual('Invalid email address');
+  });
+
+  it('should correctly validate that an email field with two @ is invalid', function() {
+    var elemData = {
+      'email_field1': 'abc@@abc.com'
+    };
+    var validationData = {};
+    ValidationService.validate(emailElements, elemData, validationData);
+    expect(validationData.email_field1).toEqual('Invalid email address');
+  });
+
+  it('should correctly validate that an email field with two consecutive . is invalid', function() {
+    var elemData = {
+      'email_field1': 'abc@bdc..com'
+    };
+    var validationData = {};
+    ValidationService.validate(emailElements, elemData, validationData);
+    expect(validationData.email_field1).toEqual('Invalid email address');
+  });
+
+  var zipElements = {
+    'id': 1,
+    'name': 'nestedworkflow',
+    'order': 1,
+    'element_type': 'workflow',
+    'required': false,
+    'default': null,
+    'human': 'Nested Workflow',
+    'help': null,
+    'validation': null,
+    'validation_msg': null,
+    'ask_if': null,
+    'multiplicity': null,
+    'children': [
+      {
+        'id': 3,
+        'name': 'zip_field1',
+        'order': 1,
+        'element_type': 'zip',
+        'required': true,
+        'default': null,
+        'human': 'Field',
+        'help': null,
+        'validation': null,
+        'validation_msg': null,
+        'ask_if': null,
+        'multiplicity': null,
+        'children': []
+      }]
+  }
+
+  it('should correctly validate that a valid 5 digit zip field is valid', function() {
+    var elemData = {
+      'zip_field1': '11111'
+    };
+    var validationData = {};
+    ValidationService.validate(zipElements, elemData, validationData);
+    expect(validationData.zip_field1).toEqual({});
+  });
+
+  it('should correctly validate that a valid 5+4 digit zip field is valid', function() {
+    var elemData = {
+      'zip_field1': '11111-1111'
+    };
+    var validationData = {};
+    ValidationService.validate(zipElements, elemData, validationData);
+    expect(validationData.zip_field1).toEqual({});
+  });
+
+  it('should correctly validate that an zip field with letters is invalid', function() {
+    var elemData = {
+      'zip_field1': 'abc-d2342'
+    };
+    var validationData = {};
+    ValidationService.validate(zipElements, elemData, validationData);
+    expect(validationData.zip_field1).toEqual('Invalid zip code');
+  });
+
+  it('should correctly validate that an zip field with insufficient length is invalid', function() {
+    var elemData = {
+      'zip_field1': '1111-1111'
+    };
+    var validationData = {};
+    ValidationService.validate(zipElements, elemData, validationData);
+    expect(validationData.zip_field1).toEqual('Invalid zip code');
+  });
+
+  var phoneElements = {
+    'id': 1,
+    'name': 'nestedworkflow',
+    'order': 1,
+    'element_type': 'workflow',
+    'required': false,
+    'default': null,
+    'human': 'Nested Workflow',
+    'help': null,
+    'validation': null,
+    'validation_msg': null,
+    'ask_if': null,
+    'multiplicity': null,
+    'children': [
+      {
+        'id': 3,
+        'name': 'phone_field1',
+        'order': 1,
+        'element_type': 'phone',
+        'required': true,
+        'default': null,
+        'human': 'Field',
+        'help': null,
+        'validation': null,
+        'validation_msg': null,
+        'ask_if': null,
+        'multiplicity': null,
+        'children': []
+      }]
+  }
+
+  it('should correctly validate a valid seven digit phone number', function() {
+    var elemData = {
+      'phone_field1': '1234567'
+    };
+    var validationData = {};
+    ValidationService.validate(phoneElements, elemData, validationData);
+    expect(validationData.phone_field1).toEqual({});
+  });
+
+  it('should correctly validate a valid space separated seven digit phone number', function() {
+    var elemData = {
+      'phone_field1': '123 4567'
+    };
+    var validationData = {};
+    ValidationService.validate(phoneElements, elemData, validationData);
+    expect(validationData.phone_field1).toEqual({});
+  });
+
+  it('should correctly validate a valid hyphen separated seven digit phone number', function() {
+    var elemData = {
+      'phone_field1': '123-4567'
+    };
+    var validationData = {};
+    ValidationService.validate(phoneElements, elemData, validationData);
+    expect(validationData.phone_field1).toEqual({});
+  });
+
+  it('should correctly validate a valid period separated seven digit phone number', function() {
+    var elemData = {
+      'phone_field1': '123.4567'
+    };
+    var validationData = {};
+    ValidationService.validate(phoneElements, elemData, validationData);
+    expect(validationData.phone_field1).toEqual({});
+  });
+
+  it('should correctly validate a valid ten digit phone number', function() {
+    var elemData = {
+      'phone_field1': '1111234567'
+    };
+    var validationData = {};
+    ValidationService.validate(phoneElements, elemData, validationData);
+    expect(validationData.phone_field1).toEqual({});
+  });
+
+  it('should correctly validate a valid space separated ten digit phone number', function() {
+    var elemData = {
+      'phone_field1': '111 123 4567'
+    };
+    var validationData = {};
+    ValidationService.validate(phoneElements, elemData, validationData);
+    expect(validationData.phone_field1).toEqual({});
+  });
+
+  it('should correctly validate a valid space separated ten digit phone number with parens', function() {
+    var elemData = {
+      'phone_field1': '(111) 123 4567'
+    };
+    var validationData = {};
+    ValidationService.validate(phoneElements, elemData, validationData);
+    expect(validationData.phone_field1).toEqual({});
+  });
+
+  it('should correctly validate a valid hyphen separated ten digit phone number', function() {
+    var elemData = {
+      'phone_field1': '111-123-4567'
+    };
+    var validationData = {};
+    ValidationService.validate(phoneElements, elemData, validationData);
+    expect(validationData.phone_field1).toEqual({});
+  });
+
+  it('should correctly validate a valid hyphen separated ten digit phone number with parens', function() {
+    var elemData = {
+      'phone_field1': '(111) 123-4567'
+    };
+    var validationData = {};
+    ValidationService.validate(phoneElements, elemData, validationData);
+    expect(validationData.phone_field1).toEqual({});
+  });
+
+  it('should correctly validate a valid period separated ten digit phone number', function() {
+    var elemData = {
+      'phone_field1': '111.123.4567'
+    };
+    var validationData = {};
+    ValidationService.validate(phoneElements, elemData, validationData);
+    expect(validationData.phone_field1).toEqual({});
+  });
+
+  it('should correctly validate a valid period separated ten digit phone number with parens', function() {
+    var elemData = {
+      'phone_field1': '(111) 123.4567'
+    };
+    var validationData = {};
+    ValidationService.validate(phoneElements, elemData, validationData);
+    expect(validationData.phone_field1).toEqual({});
+  });
+
+  it('should correctly validate a valid ten digit phone number with an "ext" extension', function() {
+    var elemData = {
+      'phone_field1': '1111234567 ext 1234'
+    };
+    var validationData = {};
+    ValidationService.validate(phoneElements, elemData, validationData);
+    expect(validationData.phone_field1).toEqual({});
+  });
+
+  it('should correctly validate a valid ten digit phone number with an "x" extension', function() {
+    var elemData = {
+      'phone_field1': '1111234567x123'
+    };
+    var validationData = {};
+    ValidationService.validate(phoneElements, elemData, validationData);
+    expect(validationData.phone_field1).toEqual({});
+  });
+
+  it('should correctly validate a valid hyphen separated ten digit phone number with parens and extension', function() {
+    var elemData = {
+      'phone_field1': '(111) 123-4567 EXT 432'
+    };
+    var validationData = {};
+    ValidationService.validate(phoneElements, elemData, validationData);
+    expect(validationData.phone_field1).toEqual({});
+  });
+
+  it('should correctly validate that a phone number with six digits is invalid', function() {
+    var elemData = {
+      'phone_field1': '123456'
+    };
+    var validationData = {};
+    ValidationService.validate(phoneElements, elemData, validationData);
+    expect(validationData.phone_field1).toEqual('Invalid phone number');
+  });
+
+  it('should correctly validate that a phone number with letters is invalid', function() {
+    var elemData = {
+      'phone_field1': 'abc'
+    };
+    var validationData = {};
+    ValidationService.validate(phoneElements, elemData, validationData);
+    expect(validationData.phone_field1).toEqual('Invalid phone number');
+  });
+
   // validateElement
 });

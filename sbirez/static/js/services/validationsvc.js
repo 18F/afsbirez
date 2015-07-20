@@ -194,13 +194,76 @@ angular.module('sbirezApp').factory('ValidationService', function() {
     }
   };
 
+
+  var phoneRegex = new RegExp(/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i);
+  var emailRegex = new RegExp(/^[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i);
+  var zipRegex = new RegExp(/^\d{5}(-\d{4})?$/);
+
+  var processTypeValidation = function(element, data) {
+    if (isSet(data, element.name)) {
+      var value;
+      var response;
+      if (element.element_type === 'percentage') {
+        response = 'Invalid percentage';
+        value = data[element.name];
+        if (isFinite(value)) {
+          value = parseInt(value);
+          if (value >= 0 && value <= 100) {
+            return true;
+          }
+        }
+        return response;
+      } else if (element.element_type === 'integer') {
+        response = 'Invalid number';
+        value = data[element.name];
+        if (isFinite(value)) {
+          value = parseInt(value);
+          if (value === parseFloat(data[element.name])) {
+            return true;
+          }
+        }
+        return response;
+      } else if (element.element_type === 'email') {
+        response = 'Invalid email address';
+        value = data[element.name];
+        if (emailRegex.test(value)) {
+          return true;
+        }
+        return response;
+      } else if (element.element_type === 'zip') {
+        response = 'Invalid zip code';
+        value = data[element.name];
+        if (zipRegex.test(value)) {
+          return true;
+        }
+        return response;
+      } else if (element.element_type === 'phone') {
+        response = 'Invalid phone number';
+        value = data[element.name];
+        if (phoneRegex.test(value) && value.length > 6) {
+          return true;
+        }
+        return response;
+      } else {
+        return true;
+      }
+    }
+    return true;
+  };
+
   return {
     validate: function(workflow, data, validationResults) {
       var length = workflow.children.length;
-      var requiredSet = false;
+      var response;
       for (var i = 0; i < length; i++) {
+        var requiredSet = false;
         var element = workflow.children[i];
-        if (element.required === true) {
+        response = processTypeValidation(element, data);
+        if (typeof response === 'string') {
+          validationResults[element.name] = response;
+          requiredSet = true;
+        }
+        if (element.required === true && !requiredSet) {
           if (!processRequired(element, data)) {
             validationResults[element.name] = 'This field is required';
             requiredSet = true;
