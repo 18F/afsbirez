@@ -172,7 +172,7 @@
           -
             name: firm_affiliated_zip
             human: Affiliate Zip
-            element_type: med_str
+            element_type: zip
             required: True
           -
             name: firm_affiliated_employeecount
@@ -235,7 +235,7 @@
           -
             name: dcaa_review_zipcode
             human: Zip Code
-            element_type: med_str
+            element_type: zip
             required: True
           -
             name: dcaa_review_auditor
@@ -441,7 +441,7 @@
         -
           name: pi_time_percentage
           human: What percentage of the principal investigator's total time will be on the project?
-          element_type: integer
+          element_type: percentage
           required: True
         -
           name: pi_is_woman
