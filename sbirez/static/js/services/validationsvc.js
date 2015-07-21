@@ -139,45 +139,6 @@ angular.module('sbirezApp').factory('ValidationService', function() {
     }
   };
 
-  var forceToBool = function(value) {
-    if (value === null) {
-      return false;
-    }
-    value = String(value).trim();
-    if (value === '') {
-      return false;
-    }
-    if (isNaN(value)) {
-      var titlecase_value = value[0].toUpperCase() + value.slice(1).toLowerCase();
-      var falsey_strings = ['N', 'No', 'False', 'F'];
-      return (falsey_strings.indexOf(titlecase_value) == -1);
-    } else {
-      return (Number(value) !== 0);  // zeroes considered false
-    }
-  };
-
-  var requiredUnless = function(value, data, commands) {
-    // Demands that either `value` or any of the fields in `commands` be true-ish
-    // NOTE: processValidation currently never called on a blank field...
-    //
-    console.log('requiredUnless ' + value + ' ' + commands)
-    console.log(data);
-    var all_values = [forceToBool(value), ];
-    console.log('all_values starts at ' + all_values);
-    for (var i = 0; i < commands.length; i++) {
-      console.log('force to bool: ' + data[commands[i]]);
-      all_values.push(forceToBool(data[commands[i]]));
-    }
-    console.log('is there a true in here? ' + all_values);
-    var result = all_values.indexOf(true) > -1;
-    console.log('validation result: ' + result);
-    return result;
-  };
-
-  var oneOf = function(value, params) {
-    return params.indexOf(value) !== -1;
-  };
-
   var processValidation = function(validationString, value) {
     var commands = validationString.split(' ');
     if (typeof value === 'object' && value.length ===  undefined) {
@@ -216,23 +177,34 @@ angular.module('sbirezApp').factory('ValidationService', function() {
              (typeof data[elementName] === 'object' && data[elementName].length === undefined));
   };
 
+  var isTrueIsh = function(data, elementName) {
+    return !(data === undefined ||
+             data[elementName] === null ||
+             data[elementName] === undefined ||
+             data[elementName] === false ||
+             (typeof data[elementName] === 'string' && data[elementName].trim() === '') ||
+             (typeof data[elementName] === 'object' && data[elementName].length === undefined));
+  }
+
   var xor = function(foo, bar) {
     return ( ( foo || bar ) && !( foo && bar ) );
   };
 
   var meetsRequirement = function(data, element) {
-    if (element.required === 'True') {
+    if ((element.required === 'True') || (element.required === true)) {
       return isSet(data, element.name);
+    } else if ((element.required === 'False') || (element.required === false)) {
+      return true;
     }
     else {
       var words = element.required.split(/\s+/);
       if (words[0] === 'unless') {
-        return (isSet(data, element.name) || isSet(data, words[1]));
+        return (isTrueIsh(data, element.name) || isTrueIsh(data, words[1]));
       } else if (words[0] === 'xor') {
-        return xor(isSet(data, element.name), isSet(data, words[1]));
+        return xor(isTrueIsh(data, element.name), isTrueIsh(data, words[1]));
       }
     }
-  }
+  };
 
   // Similar function in proposalsvc.js.  Moving to a single location would
   // be a good refactoring task
@@ -268,6 +240,51 @@ angular.module('sbirezApp').factory('ValidationService', function() {
       }
   };
 
+  var parseRequirement = function(element) {
+    // from a .required string, produces
+    // [validation_type, [related_element_names]]
+    try {
+      var words = element.required.split(/\s+/);
+      var requirement_type = words[0];
+      var related_element_names = words.slice(1);
+      return [requirement_type, related_element_names];
+    } catch(err) {
+      return [element.requirement, []];
+    }
+  };
+
+  var splitOnWhitespace = function(txt) {
+    try {
+      return txt.split(/\s+/);
+    } catch(err) {
+      return [txt];
+    }
+  };
+
+  var requirementFailureMessage = function(element) {
+    var requirement_type = splitOnWhitespace(element.required)[0];
+    if (requirement_type === 'unless') {
+      return 'One of these fields is required.';
+    } else if (requirement_type === 'xor') {
+      return 'Exactly one of these fields is required.';
+    } else {
+      return 'This field is required';
+    }
+  };
+
+  var elementsRelated = function(workflow, element) {
+    // An element's `.required` field may indicate that it can only be
+    // validated in conjunction with other elements, like in the case
+    // of `.required` === 'unless element2'.  Find such elements, if any.
+    var words = splitOnWhitespace(element.required);
+    var element_names = words.slice(1);
+    var result = [];
+    for (i = 0; i < element_names.length; i++) {
+      result.append(workflow);
+    }
+    return words.slice(1);
+  };
+
   return {
     validate: function(workflow, data, validationResults) {
       var length = workflow.children.length;
@@ -276,7 +293,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
         var element = workflow.children[i];
         if (element.required !== 'False') {
           if (!processRequired(element, data)) {
-            validationResults[element.name] = 'This field is required';
+            validationResults[element.name] = requirementFailureMessage(element);
             requiredSet = true;
           } else {
             validationResults[element.name] = {};
@@ -323,11 +340,12 @@ angular.module('sbirezApp').factory('ValidationService', function() {
     },
 
     validateElement: function(element, data, validationResults) {
+      // calling this single validation should also trigger re-validation
+      // of fields linked through `unless`, `xor`, etc
       var requiredSet = false;
       if (element.required !== 'False') {
         if (!processRequired(element, data)) {
-          validationResults[element.name] = 'This field is required';
-          console.log('Field is required', element.name);
+          validationResults[element.name] = requirementFailureMessage(element);
           requiredSet = true;
         } else {
           validationResults[element.name] = {};
