@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sbirezApp').factory('SavedOpportunityService', function($http, $window, $q, DialogService, AuthenticationService) {
+angular.module('sbirezApp').factory('SavedOpportunityService', function($http, $window, $q, AuthenticationService) {
 
   var SAVEDTOPIC_URI = 'api/v1/topics/';
 
@@ -17,7 +17,7 @@ angular.module('sbirezApp').factory('SavedOpportunityService', function($http, $
     $http.post(SAVEDTOPIC_URI + opportunityId + '/saved/').success(function(data) {
       deferred.resolve(data);
     }).error(function(data) {
-      deferred.reject(new Error(data));
+      deferred.reject(data);
     });
     return deferred.promise;
   };
@@ -27,41 +27,17 @@ angular.module('sbirezApp').factory('SavedOpportunityService', function($http, $
     $http.delete(SAVEDTOPIC_URI + opportunityId + '/saved/').success(function(data) {
       deferred.resolve(data);
     }).error(function(data) {
-      deferred.reject(new Error(data));
+      deferred.reject(data);
     });
     return deferred.promise;
   };
 
   return {
     save: function(opportunityId) {
-      if (!AuthenticationService.isAuthenticated) {
-        return DialogService.openLogin().then(function(data) {
-          if (data.value) {
-            return saveOpportunity(opportunityId);
-          } else {
-            var deferred = $q.defer();
-            deferred.reject(new Error('Failed to authenticate'));
-            return deferred.promise;
-          }
-        });
-      } else {
-        return saveOpportunity(opportunityId);
-      }
+      return saveOpportunity(opportunityId);
     },
     remove: function(opportunityId) {
-      if (!AuthenticationService.isAuthenticated) {
-        return DialogService.openLogin().then(function(data) {
-          if (data.value) {
-            return removeOpportunity(opportunityId);
-          } else {
-            var deferred = $q.defer();
-            deferred.reject(new Error('Failed to authenticate'));
-            return deferred.promise;
-          }
-        });
-      } else {
-        return removeOpportunity(opportunityId);
-      }
+      return removeOpportunity(opportunityId);
     },
     list: function() {
       return getOpportunities();

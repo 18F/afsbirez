@@ -5,8 +5,8 @@ angular.module('sbirezApp').directive('header', function() {
     restrict: 'A',
     replace: true,
     templateUrl: 'static/views/partials/header.html',
-    controller: ['$scope', '$filter', '$window', '$location', '$state', 'AuthenticationService', 'DialogService', 'UserService', 'SearchService',
-      function ($scope, $filter, $window, $location, $state, AuthenticationService, DialogService, UserService, SearchService) {
+    controller: ['$scope', '$filter', '$window', '$location', '$state', 'AuthenticationService', 'UserService', 'SearchService',
+      function ($scope, $filter, $window, $location, $state, AuthenticationService, UserService, SearchService) {
         $scope.menu = [];
         $scope.query = '';
 
@@ -31,7 +31,7 @@ angular.module('sbirezApp').directive('header', function() {
               'click':$scope.openLogout
             }];
           } else {
-            $scope.menu = [{'title': 'Sign in', 'link':'/signin/', 'class':'sign-in'}];
+            $scope.menu = [{'title': 'Sign in', 'link':'/signin', 'class':'sign-in'}];
           }
         };
 

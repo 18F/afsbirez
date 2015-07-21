@@ -1,12 +1,15 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('SignUpCtrl', function ($scope, $rootScope, $window, $state, UserService, AuthenticationService) {
+  .controller('SignUpCtrl', function ($scope, $rootScope, $window, $state, $location, UserService, AuthenticationService) {
     $rootScope.bodyClass = 'sign-up';
     $scope.name = '';
     $scope.email = '';
     $scope.password = '';
-
+    $scope.intention = $location.search();
+    if (!$scope.intention.target) {
+      $scope.intention = null;
+    }
     var isStrongPassword = function(password) {
         var regExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*()]).{8,}/;
         var validPassword = regExp.test(password);
@@ -33,7 +36,11 @@ angular.module('sbirezApp')
             UserService.getUserDetails(data.data.id).then(function(data) {
               $window.sessionStorage.firmid = data.firm;
             });
-            $state.go('app.landing');
+            if ($scope.intention && $scope.intention.target) {
+              $location.path($scope.intention.target.replace(/%2F/g, '/')).search('target', null);
+            } else {
+              $state.go('app.landing');
+            }
           });
         }, function(status) {
           if (status && status.data && status.data.non_field_errors) {
