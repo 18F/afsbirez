@@ -1,4 +1,4 @@
-<article id="topic.topic_number" class="topic h-entry" ng-class="{'is-favorite': topic.saved === true}">
+<article id="topic.topic_number" ng-show="topic.id" class="topic h-entry" ng-class="{'is-favorite': topic.saved === true}">
   <a ui-sref="topic({id:topic.id})" class="topic-content">
     <h1>{{::topic.title}}</h1>
     <h2>{{::topic.topic_number}}</h2>

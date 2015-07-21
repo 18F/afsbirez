@@ -40,7 +40,7 @@
           </ol>
         </summary>
         <div ng-repeat="element in currentWorkflow.children">
-          <div str="element" ng-if="element.element_type === 'str' || element.element_type === 'long_str' || element.element_type === 'med_str' || element.element_type === 'short_str' || element.element_type === 'phone' || element.element_type === 'email' || element.element_type === 'int'  || element.element_type === 'dollars' || element.element_type === 'float' || element.element_type === 'percentage' || element.element_type === 'timespan' || element.element_type === 'big_str' || element.element_type === 'integer' || element.element_type === 'integer_spans'"></div>
+          <div str="element" ng-if="element.element_type === 'str' || element.element_type === 'long_str' || element.element_type === 'med_str' || element.element_type === 'short_str' || element.element_type === 'phone' || element.element_type === 'email' || element.element_type === 'int'  || element.element_type === 'dollars' || element.element_type === 'float' || element.element_type === 'percentage' || element.element_type === 'timespan' || element.element_type === 'big_str' || element.element_type === 'integer' || element.element_type === 'integer_spans' || element.element_type === 'zip'"></div>
           <div text="element" ng-if="element.element_type === 'text'"></div>
           <div bool="element" ng-if="element.element_type === 'bool'"></div>
           <div checkbox="element" ng-if="element.element_type === 'checkbox'"></div>

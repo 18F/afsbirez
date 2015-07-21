@@ -39,7 +39,7 @@ describe('Service: DocumentService', function () {
 
   it('should open the login dialog if not authenticated on create', function() {
     DocumentService.upload(1, 'title', 1);
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -56,7 +56,7 @@ describe('Service: DocumentService', function () {
   it('should open a login dialog if not authed on remove', function() {
     AuthenticationService.setAuthenticated(false);
     var response = DocumentService.remove(1);
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -84,7 +84,7 @@ describe('Service: DocumentService', function () {
   it('should open a login dialog if not authed on list', function() {
     AuthenticationService.setAuthenticated(false);
     var response = DocumentService.list();
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -100,7 +100,7 @@ describe('Service: DocumentService', function () {
   it('should open a login dialog if not authed on get', function() {
     AuthenticationService.setAuthenticated(false);
     var response = DocumentService.get(1);
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 

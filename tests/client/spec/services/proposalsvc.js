@@ -464,7 +464,7 @@ describe('Service: ProposalService', function () {
 
   it('should open the login dialog if not authenticated on create', function() {
     ProposalService.create(1, 'title', 1);
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -480,7 +480,7 @@ describe('Service: ProposalService', function () {
   it('should open a login dialog if not authed on remove', function() {
     AuthenticationService.setAuthenticated(false);
     ProposalService.remove(1);
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -496,7 +496,7 @@ describe('Service: ProposalService', function () {
   it('should open a login dialog if not authed on list', function() {
     AuthenticationService.setAuthenticated(false);
     ProposalService.list();
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -512,7 +512,7 @@ describe('Service: ProposalService', function () {
   it('should open a login dialog if not authed on get', function() {
     AuthenticationService.setAuthenticated(false);
     ProposalService.get(1);
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -538,7 +538,7 @@ describe('Service: ProposalService', function () {
   it('should open a login dialog if not authed on complete', function() {
     AuthenticationService.setAuthenticated(false);
     ProposalService.complete();
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -560,7 +560,7 @@ describe('Service: ProposalService', function () {
   it('should open a login dialog if not authed on save', function() {
     AuthenticationService.setAuthenticated(false);
     ProposalService.saveData();
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -589,7 +589,7 @@ describe('Service: ProposalService', function () {
     AuthenticationService.setAuthenticated(false);
     var title = 'Title';
     ProposalService.saveTitle(1, title);
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -604,7 +604,7 @@ describe('Service: ProposalService', function () {
   it('should open a login dialog if not authed on submit', function() {
     AuthenticationService.setAuthenticated(false);
     ProposalService.submit();
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -649,7 +649,7 @@ describe('Service: ProposalService', function () {
   it('should open a login dialog if not authed on load', function() {
     AuthenticationService.setAuthenticated(false);
     ProposalService.load(1);
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -679,7 +679,19 @@ describe('Service: ProposalService', function () {
   it('should open a login dialog if not authed on unload', function() {
     AuthenticationService.setAuthenticated(false);
     ProposalService.unload();
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
+    $httpBackend.flush();
+  });
+
+  it('should call unload if setAuthenticated is called', function() {
+    successfulLoad();
+    AuthenticationService.setAuthenticated(false);
+    AuthenticationService.setAuthenticated(true);
+    ProposalService.load(1);
+    $httpBackend.expectGET('api/v1/proposals/1/').respond(propData);
+    $httpBackend.expectGET('api/v1/elements/1/').respond(elemData);
+    $httpBackend.expectGET('api/v1/topics/1/').respond(topicData);
+    $rootScope.$digest();
     $httpBackend.flush();
   });
 
@@ -720,7 +732,7 @@ describe('Service: ProposalService', function () {
   it('should open a login dialog if not authed on getWorkflow', function() {
     AuthenticationService.setAuthenticated(false);
     ProposalService.getWorkflow(1);
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -754,7 +766,7 @@ describe('Service: ProposalService', function () {
   it('should open a login dialog if not authed on getOverview', function() {
     AuthenticationService.setAuthenticated(false);
     ProposalService.getOverview(1);
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -787,7 +799,7 @@ describe('Service: ProposalService', function () {
   it('should open a login dialog if not authed on register', function() {
     AuthenticationService.setAuthenticated(false);
     ProposalService.getOverview(1);
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -870,7 +882,7 @@ describe('Service: ProposalService', function () {
   it('should open a login dialog if not authed on apply', function() {
     AuthenticationService.setAuthenticated(false);
     ProposalService.apply();
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -913,7 +925,7 @@ describe('Service: ProposalService', function () {
   it('should open a login dialog if not authed on validate', function() {
     AuthenticationService.setAuthenticated(false);
     ProposalService.validate();
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -981,7 +993,7 @@ describe('Service: ProposalService', function () {
   it('should open a login dialog if not authed on getDynamicCount', function() {
     AuthenticationService.setAuthenticated(false);
     ProposalService.getDynamicCount();
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -1025,7 +1037,7 @@ describe('Service: ProposalService', function () {
   it('should open a login dialog if not authed on addDynamicItem', function() {
     AuthenticationService.setAuthenticated(false);
     ProposalService.addDynamicItem();
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 
@@ -1071,7 +1083,7 @@ describe('Service: ProposalService', function () {
   it('should open a login dialog if not authed on removeDynamicItem', function() {
     AuthenticationService.setAuthenticated(false);
     ProposalService.removeDynamicItem();
-    $httpBackend.expectGET('static/views/partials/login.html').respond(200);
+    $httpBackend.expectGET('static/views/partials/signin.html').respond(200);
     $httpBackend.flush();
   });
 });

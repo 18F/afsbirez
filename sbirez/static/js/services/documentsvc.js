@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sbirezApp').factory('DocumentService', function($http, $window, $q, $upload, DialogService, AuthenticationService) {
+angular.module('sbirezApp').factory('DocumentService', function($http, $window, $q, $upload, $location, AuthenticationService) {
 
   var DOCUMENT_URI = 'api/v1/documents/';
 
@@ -17,7 +17,7 @@ angular.module('sbirezApp').factory('DocumentService', function($http, $window, 
     $http.get(DOCUMENT_URI + documentId + '/').success(function(data) {
       deferred.resolve(data);
     }).error(function(data) {
-      deferred.reject(new Error(data));
+      deferred.reject(data);
     });
     return deferred.promise;
   };
@@ -27,7 +27,7 @@ angular.module('sbirezApp').factory('DocumentService', function($http, $window, 
     $http.get('api/v1/documentversions/' + versionId + '/').success(function(data) {
       deferred.resolve(data);
     }).error(function(data) {
-      deferred.reject(new Error(data));
+      deferred.reject(data);
     });
     return deferred.promise;
   };
@@ -47,7 +47,7 @@ angular.module('sbirezApp').factory('DocumentService', function($http, $window, 
     }).success(function(data) {
       deferred.resolve(data);
     }).error(function(data) {
-      deferred.reject(new Error(data));
+      deferred.reject(data);
     });
     return deferred.promise;
   };
@@ -57,7 +57,7 @@ angular.module('sbirezApp').factory('DocumentService', function($http, $window, 
     $http.delete(DOCUMENT_URI + documentId + '/').success(function(data) {
       deferred.resolve(data);
     }).error(function(data) {
-      deferred.reject(new Error(data));
+      deferred.reject(data);
     });
     return deferred.promise;
   };
@@ -75,15 +75,8 @@ angular.module('sbirezApp').factory('DocumentService', function($http, $window, 
   return {
     upload: function(selectedFile, fileName, fileDescription, proposalId, documentId, progressCB) {
       if (!AuthenticationService.isAuthenticated) {
-        return DialogService.openLogin().then(function(data) {
-          if (data.value) {
-            return uploadDocument(selectedFile, fileName, fileDescription, proposalId, documentId, progressCB);
-          } else {
-            var deferred = $q.defer();
-            deferred.reject(new Error('Failed to authenticate'));
-            return deferred.promise;
-          }
-        });
+        var path = $location.path();
+        $location.path('signin').search('target', path);
       } else {
         return uploadDocument(selectedFile, fileName, fileDescription, proposalId, documentId, progressCB);
       }
@@ -93,15 +86,8 @@ angular.module('sbirezApp').factory('DocumentService', function($http, $window, 
         if (AuthenticationService.isAuthenticated) {
           return removeDocument(documentId);
         } else {
-          return DialogService.openLogin().then(function(data) {
-            if (data.value) {
-              return removeDocument(documentId);
-            } else {
-              var deferred = $q.defer();
-              deferred.reject(new Error('Failed to authenticate'));
-              return deferred.promise;
-            }
-          });
+          var path = $location.path();
+          $location.path('signin').search('target', path);
         }
       } else {
         var deferred = $q.defer();
@@ -113,15 +99,8 @@ angular.module('sbirezApp').factory('DocumentService', function($http, $window, 
       if (AuthenticationService.isAuthenticated) {
         return getDocuments();
       } else {
-        return DialogService.openLogin().then(function(data) {
-          if (data.value) {
-            return getDocuments();
-          } else {
-            var deferred = $q.defer();
-            deferred.reject(new Error('Failed to authenticate'));
-            return deferred.promise;
-          }
-        });
+        var path = $location.path();
+        $location.path('signin').search('target', path);
       }
     },
     get: function(documentId) {
@@ -129,15 +108,8 @@ angular.module('sbirezApp').factory('DocumentService', function($http, $window, 
         if (AuthenticationService.isAuthenticated) {
           return getDocument(documentId);
         } else {
-          return DialogService.openLogin().then(function(data) {
-            if (data.value) {
-              return getDocument(documentId);
-            } else {
-              var deferred = $q.defer();
-              deferred.reject(new Error('Failed to authenticate'));
-              return deferred.promise;
-            }
-          });
+          var path = $location.path();
+          $location.path('signin').search('target', path);
         }
       } else {
         var deferred = $q.defer();
@@ -150,15 +122,8 @@ angular.module('sbirezApp').factory('DocumentService', function($http, $window, 
         if (AuthenticationService.isAuthenticated) {
           return getDocumentVersion(versionId);
         } else {
-          return DialogService.openLogin().then(function(data) {
-            if (data.value) {
-              return getDocumentVersion(versionId);
-            } else {
-              var deferred = $q.defer();
-              deferred.reject(new Error('Failed to authenticate'));
-              return deferred.promise;
-            }
-          });
+          var path = $location.path();
+          $location.path('signin').search('target', path);
         }
       } else {
         var deferred = $q.defer();
@@ -171,15 +136,8 @@ angular.module('sbirezApp').factory('DocumentService', function($http, $window, 
         if (AuthenticationService.isAuthenticated) {
           return saveDocumentData(documentId, documentData);
         } else {
-          return DialogService.openLogin().then(function(data) {
-            if (data.value) {
-              return saveDocumentData(documentId, documentData);
-            } else {
-              var deferred = $q.defer();
-              deferred.reject(new Error('Failed to authenticate'));
-              return deferred.promise;
-            }
-          });
+          var path = $location.path();
+          $location.path('signin').search('target', path);
         }
       } else {
         var deferred = $q.defer();

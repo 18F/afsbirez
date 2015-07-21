@@ -272,26 +272,84 @@ angular.module('sbirezApp').factory('ValidationService', function() {
     }
   };
 
-  var elementsRelated = function(workflow, element) {
-    // An element's `.required` field may indicate that it can only be
-    // validated in conjunction with other elements, like in the case
-    // of `.required` === 'unless element2'.  Find such elements, if any.
-    var words = splitOnWhitespace(element.required);
-    var element_names = words.slice(1);
-    var result = [];
-    for (i = 0; i < element_names.length; i++) {
-      result.append(workflow);
+  var matchValidationResults = function(element, validationResults) {
+    // `required` results for `unless` and `xor` should match across the
+    // elements that are related by them
+    var related_element_names = splitOnWhitespace(element.required);
+    for (i = 1; i < related_element_names.length; i++) {
+       validationResults[related_element_names[i]] = validationResults[element.name];
     }
-    return words.slice(1);
+  };
+
+  var phoneRegex = new RegExp(/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i);
+  var emailRegex = new RegExp(/^[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i);
+  var zipRegex = new RegExp(/^\d{5}(-\d{4})?$/);
+
+  var processTypeValidation = function(element, data) {
+    if (isSet(data, element.name)) {
+      var value;
+      var response;
+      if (element.element_type === 'percentage') {
+        response = 'Invalid percentage';
+        value = data[element.name];
+        if (isFinite(value)) {
+          value = parseInt(value);
+          if (value >= 0 && value <= 100) {
+            return true;
+          }
+        }
+        return response;
+      } else if (element.element_type === 'integer') {
+        response = 'Invalid number';
+        value = data[element.name];
+        if (isFinite(value)) {
+          value = parseInt(value);
+          if (value === parseFloat(data[element.name])) {
+            return true;
+          }
+        }
+        return response;
+      } else if (element.element_type === 'email') {
+        response = 'Invalid email address';
+        value = data[element.name];
+        if (emailRegex.test(value)) {
+          return true;
+        }
+        return response;
+      } else if (element.element_type === 'zip') {
+        response = 'Invalid zip code';
+        value = data[element.name];
+        if (zipRegex.test(value)) {
+          return true;
+        }
+        return response;
+      } else if (element.element_type === 'phone') {
+        response = 'Invalid phone number';
+        value = data[element.name];
+        if (phoneRegex.test(value) && value.length > 6) {
+          return true;
+        }
+        return response;
+      } else {
+        return true;
+      }
+    }
+    return true;
   };
 
   return {
     validate: function(workflow, data, validationResults) {
       var length = workflow.children.length;
-      var requiredSet = false;
+      var response;
       for (var i = 0; i < length; i++) {
+        var requiredSet = false;
         var element = workflow.children[i];
-        if (element.required !== 'False') {
+        response = processTypeValidation(element, data);
+        if (typeof response === 'string') {
+          validationResults[element.name] = response;
+          requiredSet = true;
+        }
+        if (element.required !== 'False' && !requiredSet) {
           if (!processRequired(element, data)) {
             validationResults[element.name] = requirementFailureMessage(element);
             requiredSet = true;
@@ -346,6 +404,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
       if (element.required !== 'False') {
         if (!processRequired(element, data)) {
           validationResults[element.name] = requirementFailureMessage(element);
+          matchValidationResults(element, validationResults);
           requiredSet = true;
         } else {
           validationResults[element.name] = {};
