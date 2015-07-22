@@ -178,12 +178,24 @@ angular.module('sbirezApp').factory('ValidationService', function() {
   };
 
   var isTrueIsh = function(data, elementName) {
-    return !(data === undefined ||
+    var reverse = false;
+    if (splitOnWhitespace(elementName)[0] === 'not') {
+      elementName = splitOnWhitespace(elementName)[1];
+      reverse = true;
+    }
+    var result = !(data === undefined ||
              data[elementName] === null ||
              data[elementName] === undefined ||
              data[elementName] === false ||
+             data[elementName] === 'false' ||
              (typeof data[elementName] === 'string' && data[elementName].trim() === '') ||
              (typeof data[elementName] === 'object' && data[elementName].length === undefined));
+
+    if (reverse) {
+      return !result;
+    } else {
+      return result;
+    }
   }
 
   var xor = function(foo, bar) {
@@ -227,29 +239,14 @@ angular.module('sbirezApp').factory('ValidationService', function() {
 
   // as with processValidation, returns true if  it passes, false if it fails
   var processRequired = function(element, data) {
-    // if it has a condition, and that condition is set
-    if (element.ask_if && isSet(data, element.ask_if)) {
-        if (stringToBoolean(data[element.ask_if]) === true) {
-          return meetsRequirement(data, element);   // usual handling of `required`
-        } else {
-          return true;    // `ask_if` proved false, so do not check for `required`
-        }
-      }
-      else { // no `ask_if`, so check `required` normally
+    if (element.ask_if) {
+      if(isTrueIsh(data, element.ask_if)) {
         return meetsRequirement(data, element);
+      } else {
+        return true;  // ask_if condition not met, cannot be required
       }
-  };
-
-  var parseRequirement = function(element) {
-    // from a .required string, produces
-    // [validation_type, [related_element_names]]
-    try {
-      var words = element.required.split(/\s+/);
-      var requirement_type = words[0];
-      var related_element_names = words.slice(1);
-      return [requirement_type, related_element_names];
-    } catch(err) {
-      return [element.requirement, []];
+    } else {  // this element has no ask_if
+      return meetsRequirement(data, element);
     }
   };
 
@@ -276,7 +273,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
     // `required` results for `unless` and `xor` should match across the
     // elements that are related by them
     var related_element_names = splitOnWhitespace(element.required);
-    for (i = 1; i < related_element_names.length; i++) {
+    for (var i = 1; i < related_element_names.length; i++) {
        validationResults[related_element_names[i]] = validationResults[element.name];
     }
   };
@@ -408,6 +405,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
           requiredSet = true;
         } else {
           validationResults[element.name] = {};
+          matchValidationResults(element, validationResults);
         }
       }
       if (element.validation !== null && data && data[element.name] && !requiredSet) {
