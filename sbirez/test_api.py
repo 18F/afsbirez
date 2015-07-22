@@ -1136,6 +1136,7 @@ class ProposalTests(APITestCase):
         ships = dbm.open(shipfile.name, 'r')
         self.assertEqual(ships['Falcon'], b'Solo')
 
+
 class ProposalValidationTests(APITestCase):
 
     fixtures = ['thin.json', ]
@@ -1165,6 +1166,8 @@ class ProposalValidationTests(APITestCase):
                       "instrument": "sackbut",
                       "kg": 55,
                       "lb": 121,
+                      "sings": "True",
+                      "singing_part": "bass",
                       },
                   }
              })
@@ -1185,6 +1188,30 @@ class ProposalValidationTests(APITestCase):
         response = self.client.post('/api/v1/proposals/', data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(response.data, {'non_field_errors': ['Required field kg not found']})
+
+    def test_missing_xor_fails(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        del(data["data"]['minstrels']['1']['singing_part'])
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertIn('Required field singing_part not found',
+                      response.data['non_field_errors'])
+
+    def test_too_many_answers_for_xor_fails(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]['minstrels']['1']['singing_part_unidentifiable'] = True
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertIn('singing_part_unidentifiable should not be filled',
+                      response.data['non_field_errors'])
 
     def test_validation_violated(self):
         user = _fixture_user(self)
