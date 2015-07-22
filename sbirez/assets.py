@@ -74,7 +74,7 @@ angular_js = Bundle(
 
 combined_sass = Bundle(
     "sass/main.scss",
-    filters="scss",
+    filters="pyscss",
     output="css/main.min.css"
 )
 
