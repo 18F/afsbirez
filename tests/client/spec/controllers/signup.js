@@ -100,6 +100,10 @@ describe('Controller: SignUpCtrl', function () {
     scope.password = 'badpass';
     scope.signUp();
     expect(scope.errorPassword).toBe('Password does not meet requirements.');
+    expect(scope.errorProblems[0]).toBe('The password is missing a number.');
+    expect(scope.errorProblems[1]).toBe('The password is missing a capital letter.');
+    expect(scope.errorProblems[2]).toBe('The password is missing a special character.');
+    expect(scope.errorProblems[3]).toBe('The password is too short.');
   });
  
   it('should require all fields.', function() {
