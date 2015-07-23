@@ -7,6 +7,7 @@ angular.module('sbirezApp')
     $scope.email = '';
     $scope.password = '';
     $scope.intention = $location.search();
+    $scope.errorProblems = [];
     if (!$scope.intention.target) {
       $scope.intention = null;
     }
@@ -14,16 +15,45 @@ angular.module('sbirezApp')
         var regExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*()]).{8,}/;
         var validPassword = regExp.test(password);
         return validPassword;
-    }
+    };
+
+    var containsNumber = function(password) {
+      return /.*\d/.test(password);
+    };
+
+    var containsCapital = function(password) {
+      return /.*[A-Z]/.test(password);
+    };
+
+    var containsSpecialCharacter = function(password) {
+      return /.*[!@#$%&*()]/.test(password);
+    };
+
+    var isLongEnough = function(password) {
+      return password.length > 7;
+    };
 
     $scope.signUp = function signUp() {
       $scope.errorMsg = '';
       $scope.errorName = '';
       $scope.errorEmail = '';
       $scope.errorPassword = '';
+      $scope.errorProblems = [];
       if ($scope.name !== '' && $scope.email !== '' && $scope.password !== '') {
         if (!isStrongPassword($scope.password)) {
           $scope.errorPassword = 'Password does not meet requirements.';
+          if (!containsNumber($scope.password)) {
+            $scope.errorProblems.push('The password is missing a number.');
+          }
+          if (!containsCapital($scope.password)) {
+            $scope.errorProblems.push('The password is missing a capital letter.');
+          }
+          if (!containsSpecialCharacter($scope.password)) {
+            $scope.errorProblems.push('The password is missing a special character.');
+          }
+          if (!isLongEnough($scope.password)) {
+            $scope.errorProblems.push('The password is too short.');
+          }
           return;
         }
         UserService.createUser($scope.name, $scope.email, $scope.password).then(function() {
