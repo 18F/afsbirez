@@ -1,16 +1,16 @@
 -
   name: dod_workflow
   element_type: workflow
-  human: DoD Workflow 
+  human: DoD Workflow
   children:
     -
       name: dod_coversheet
-      element_type: workflow 
+      element_type: workflow
       human: Coversheet
       children:
       -
         name: eligibility
-        element_type: workflow 
+        element_type: workflow
         children:
         -
           name: release_to_edc
@@ -132,7 +132,7 @@
           element_type: read_only_text
       -
         name: business_information
-        element_type: workflow 
+        element_type: workflow
         children:
         -
           name: employee_count
@@ -260,16 +260,18 @@
         -
           name: dcaa_review_info_no
           human: If no, please provide the date for when such a review was last performed
+          required: xor dcaa_review_info_never
           element_type: timespan
-          ask_if: not dcaa_review 
+          ask_if: not dcaa_review
         -
           name: dcaa_review_info_never
           human: or if never reviewed, check here
+          required: xor dcaa_review_info_no
           element_type: checkbox
           ask_if: not dcaa_review
       -
         name: proposal_information
-        element_type: workflow 
+        element_type: workflow
         children:
         -
           name: proposed_cost
@@ -310,7 +312,7 @@
                  restriction does not apply to routine handling of proposals for
                  administrative purposes by Government support contractors as indicated
                  in Section 5.3 of the solicitation. The data subject to this restriction
-                 is contained on the pages of the proposal listed on the line below. 
+                 is contained on the pages of the proposal listed on the line below.
         -
           name: proprietary_info_page_numbers
           element_type: integer_spans
@@ -391,7 +393,7 @@
           validation_msg: Maximum of 8 keywords
       -
         name: project_team_information
-        element_type: workflow 
+        element_type: workflow
         children:
         -
           name: teaming_partners_yn
@@ -410,7 +412,7 @@
           -
             name: is_teaming_with
             human: "%multiple%"
-            element_type: checkbox 
+            element_type: checkbox
           -
             name: name
             element_type: med_str
@@ -435,7 +437,7 @@
             html: "<p>Foreign Nationals (also known as Foreign Persons) as defined by 22 CFR 120.16 means any natural person who is not a lawful permanent resident as defined by 8 U.S.C. § 1101(a)(20) or who is not a protected individual as defined by 8 U.S.C. § 1324b(a)(3). It also means any foreign corporation, business association, partnership, trust, society or any other entity or group that is not incorporated or organized to do business in the United States, as well as international organizations, foreign governments and any agency or subdivision of foreign governments (e.g., diplomatic missions).</p><p>\"Lawfully admitted for permanent residence\" means the status of having been lawfully accorded the privilege of residing permanently in the United States as an immigrant in accordance with the immigration laws, such status not having changed.</p><p>\"Protected individual\" means an individual who (A) is a citizen or national of the United States, or (B) is an alien who is lawfully admitted for permanent residence, is granted the status of an alien lawfully admitted for temporary residence under 8 U.S.C. § 1160(a) or 8 U.S.C. § 1255a(a)(1), is admitted as a refugee under 8 U.S.C. § 1157, or is granted asylum under Section 8 U.S.C. § 1158; but does not include (i) an alien who fails to apply for naturalization within six months of the date the alien first becomes eligible (by virtue of period of lawful permanent residence) to apply for naturalization or, if later, within six months after November 6, 1986, and (ii) an alien who has applied on a timely basis, but has not been naturalized as a citizen within 2 years after the date of the application, unless the alien can establish that the alien is actively pursuing naturalization, except that time consumed in the Service&rsquo;s processing the application shall not be counted toward the 2-year period.</p>"
       -
         name: pi_info
-        element_type: workflow 
+        element_type: workflow
         human: Principal Investigator/Corporate Official Information
         children:
         -
@@ -496,7 +498,7 @@
         -
           name: co_contact_info
           element_type: line_item
-          human: Corporate Official 
+          human: Corporate Official
           children:
           -
             name: co_honorific
@@ -530,22 +532,22 @@
     -
       name: dod_technicalvolume
       human: Technical Volume
-      element_type: workflow 
+      element_type: workflow
       children:
         -
-          name: reviewed_requirement 
+          name: reviewed_requirement
           element_type: bool
-          human: Have you reviewed all the requirements in the Air Force and 
+          human: Have you reviewed all the requirements in the Air Force and
                  DoD Solicitation instructions?
           required: True
         -
-          name: is_pdf 
+          name: is_pdf
           element_type: bool
-          human: Is the Technical Volume a single Portable Document Format 
+          human: Is the Technical Volume a single Portable Document Format
                  (PDF) file, including graphics?
           required: True
         -
-          name: was_virus_scanned 
+          name: was_virus_scanned
           element_type: bool
           human: Did you virus scan the document?
           required: True
@@ -555,24 +557,24 @@
           human: Is the document less than or equal to twenty pages in length?
           required: True
         -
-          name: is_font_and_paper_correct 
+          name: is_font_and_paper_correct
           element_type: bool
           human: Is the font 10 pt. or larger on 8-1/2" x 11" paper with one-inch margins?
           required: True
         -
-          name: contains_header 
-          element_type: bool 
+          name: contains_header
+          element_type: bool
           human: Does it contain a header with the company name, topic number, and
                  proposal number? This header can exist in the margin.
           required: True
         -
-          name: tech_volume_upload 
-          element_type: file_upload 
-          human: Upload Technical Volume          
+          name: tech_volume_upload
+          element_type: file_upload
+          human: Upload Technical Volume
           required: True
     -
-      name: dod_cost_volume 
-      element_type: workflow 
+      name: dod_cost_volume
+      element_type: workflow
       human: Cost Volume
       children:
       -
@@ -640,7 +642,7 @@
         -
           name: payment_desired
           human: Specify the type of payment desired
-          element_type: big_str 
+          element_type: big_str
           required: True
           validation: one_of "partial payments (monthly) as work progresses (recommended)",
                       "progress payments"
@@ -648,7 +650,7 @@
           name: false_statements
           human: Knowingly and willfully making any false, ficticious, or fraudulent
                  statements or representations may be a felony under the Federal Criminal
-                 False Statement Act (18 USC Sec 1001), punishable by a fine of up to 
+                 False Statement Act (18 USC Sec 1001), punishable by a fine of up to
                  $10,000, up to five years in prison, or both.
           element_type: read_only_text
       -
@@ -681,12 +683,12 @@
             human: Cost
             element_type: calculated
             validation: "hourly_rate * estimated_hours"
-            required: False 
+            required: False
         -
-          name: subtotal_direct_labor 
-          element_type: calculated 
+          name: subtotal_direct_labor
+          element_type: calculated
           required: False
-          validation: "sum(labor_cost)" 
+          validation: "sum(labor_cost)"
           human: "Subtotal Direct Labor (DL)"
         -
           name: fringe_benefit_percentage
@@ -695,9 +697,9 @@
           human: "Fringe Benefits Rate, if not included in Overhead (%)"
         -
           name: fringe_benefit
-          element_type: calculated 
-          required: False 
-          validation: "subtotal_direct_labor * fringe_benefit_percentage * .01" 
+          element_type: calculated
+          required: False
+          validation: "subtotal_direct_labor * fringe_benefit_percentage * .01"
           human: "Fringe Benefits (rate x DL)"
         -
           name: labor_overhead_percentage
@@ -706,16 +708,16 @@
           required: True
         -
           name: labor_overhead
-          element_type: calculated 
+          element_type: calculated
           human: "Labor Overhead (rate * (DL + Fringe))"
-          validation: "(subtotal_direct_labor + fringe_benefit) * labor_overhead_percentage * .01" 
+          validation: "(subtotal_direct_labor + fringe_benefit) * labor_overhead_percentage * .01"
           required: True
         -
           name: total_direct_labor
-          element_type: calculated 
+          element_type: calculated
           human: "Total Direct Labor (TDL)"
-          validation: "subtotal_direct_labor + fringe_benefit + labor_overhead" 
-          required: False 
+          validation: "subtotal_direct_labor + fringe_benefit + labor_overhead"
+          required: False
       -
         name: cv_direct_material
         element_type: workflow
@@ -729,7 +731,7 @@
           -
             name: name
             element_type: big_str
-            human: "Item Description" 
+            human: "Item Description"
             required: True
           -
             name: material_cost
@@ -738,9 +740,9 @@
             required: True
         -
           name: subtotal_direct_material
-          element_type: calculated 
+          element_type: calculated
           required: False
-          validation: "sum(material_cost)" 
+          validation: "sum(material_cost)"
           human: "Subtotal Direct Material Costs (DM)"
         -
           name: material_overhead_percentage
@@ -749,16 +751,16 @@
           required: True
         -
           name: material_overhead
-          element_type: calculated 
+          element_type: calculated
           human: "Material Overhead (rate * DM)"
-          validation: "subtotal_direct_material * material_overhead_percentage * .01" 
-          required: False 
+          validation: "subtotal_direct_material * material_overhead_percentage * .01"
+          required: False
         -
           name: total_direct_material
-          element_type: calculated 
+          element_type: calculated
           human: "Total Direct Material (TDM)"
-          validation: "subtotal_direct_material + material_overhead" 
-          required: False 
+          validation: "subtotal_direct_material + material_overhead"
+          required: False
       -
         name: cv_other_direct
         element_type: workflow
@@ -814,17 +816,17 @@
           required: True
         -
           name: general_admin_rate_labor
-          element_type: checkbox 
+          element_type: checkbox
           human: Apply G & A rate to Total Direct Labor (TDL)
           required: False
         -
           name: general_admin_rate_materials
-          element_type: checkbox 
+          element_type: checkbox
           required: False
           human: Apply G & A rate to Total Direct Materials (TDM)
         -
           name: general_admin_rate_other
-          element_type: checkbox 
+          element_type: checkbox
           required: False
           human: Apply G & A rate to Total Other Direct Costs (TODC)
         -
@@ -834,11 +836,11 @@
           human: General & Administrative Cost
           validation: "(general_admin_rate * general_admin_rate_labor * .01 * total_direct_labor) + (general_admin_rate * general_admin_rate_materials * .01 * total_direct_material) + (general_admin_rate * general_admin_rate_other * .01 * total_other_direct)"
         -
-          name: total_cost 
-          element_type: calculated 
+          name: total_cost
+          element_type: calculated
           human: "Total Cost"
           validation: "total_other_direct + total_direct_material + total_direct_labor + general_admin"
-          required: False 
+          required: False
         -
           name: fee_or_profit_rate
           element_type: percentage
@@ -851,18 +853,18 @@
           required: False
           validation: "total_cost * fee_or_profit_rate * .01"
         -
-          name: estimated_total_cost 
-          element_type: calculated 
+          name: estimated_total_cost
+          element_type: calculated
           human: "Estimated Total Cost"
           validation: "total_cost + fee_or_profit"
-          required: False 
+          required: False
         -
           name: discretionary_technical_assistance
           element_type: dollars
           required: True
     -
       name: dod_company_commercialization_report
-      element_type: workflow 
+      element_type: workflow
       human: Company Commercialization Report
       children:
       -
@@ -894,6 +896,6 @@
           element_type: email
       -
         name: brief_narrative
-        element_type: text 
+        element_type: text
         human: Brief Narrative describing commercialization track record
         required: True

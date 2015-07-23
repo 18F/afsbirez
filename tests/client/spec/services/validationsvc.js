@@ -258,7 +258,7 @@ describe('Service: ValidationService', function () {
         }]
     };
     var elemData = {
-      'bool_field1': 'true'
+      'bool_field1': true
     };
     var validationData = {};
     ValidationService.validate(elements, elemData, validationData);
@@ -814,4 +814,256 @@ describe('Service: ValidationService', function () {
   });
 
   // validateElement
+
+  var conditionally_required_elements = {
+    'id': 1,
+    'name': 'nestedworkflow',
+    'order': 1,
+    'element_type': 'workflow',
+    'required': false,
+    'default': null,
+    'human': 'Nested Workflow',
+    'help': null,
+    'validation': null,
+    'validation_msg': null,
+    'ask_if': null,
+    'multiplicity': null,
+    'children': [
+      {
+        'id': 3,
+        'name': 'bool_field1',
+        'order': 1,
+        'element_type': 'bool',
+        'required': false,
+        'default': null,
+        'human': 'Do you feel like answering the next question?',
+        'help': null,
+        'validation': null,
+        'validation_msg': null,
+        'ask_if': null,
+        'multiplicity': null,
+        'children': []
+      },
+      {
+        'id': 6,
+        'name': 'str_field1',
+        'order': 1,
+        'element_type': 'med_str',
+        'required': true,
+        'default': null,
+        'human': 'Why did you answer this question?',
+        'help': null,
+        'validation': null,
+        'validation_msg': null,
+        'ask_if': 'bool_field1',
+        'multiplicity': null,
+        'children': []
+      }
+    ]
+  };
+
+  it('should recognize data entered as meeting the `required` condition', function() {
+    var elemData = {
+      'bool_field1' : true,
+      'str_field1': 'my answer'
+    };
+    var validationData = {};
+    ValidationService.validate(conditionally_required_elements, elemData, validationData);
+    expect(validationData).toEqual({'bool_field1': {  }, 'str_field1' : {  }});
+  });
+
+  it('should consider a whitespace-only answer to fail a `required` check', function() {
+    var elemData = {
+      'bool_field1' : true,
+      'str_field1': '   \t\t   \n'
+    };
+    var validationData = {};
+    ValidationService.validate(conditionally_required_elements, elemData, validationData);
+    expect(validationData.str_field1).toEqual('This field is required');
+  });
+
+
+  it('should honor required flag when its ask_if condition is met', function() {
+    var elemData = {
+      'bool_field1' : true,
+      'str_field1': ''
+    };
+    var validationData = {};
+    ValidationService.validate(conditionally_required_elements, elemData, validationData);
+    expect(validationData.str_field1).toEqual('This field is required');
+  });
+
+  it('should honor required flag when bools in data are in string form', function() {
+    var elemData = {
+      'bool_field1' : true,
+      'str_field1': ''
+    };
+    var validationData = {};
+    ValidationService.validate(conditionally_required_elements, elemData, validationData);
+    expect(validationData.str_field1).toEqual('This field is required');
+  });
+
+  var interdependent_elements = {
+    'id': 1,
+    'name': 'nestedworkflow',
+    'order': 1,
+    'element_type': 'workflow',
+    'required': false,
+    'default': null,
+    'human': 'Nested Workflow',
+    'help': null,
+    'validation': null,
+    'validation_msg': null,
+    'ask_if': null,
+    'multiplicity': null,
+    'children': [
+      {
+        'id': 3,
+        'name': 'bool_field1',
+        'order': 1,
+        'element_type': 'bool',
+        'required': 'xor str_field1',
+        'validation': null,
+        'validation_msg': null,
+        'default': null,
+        'human': 'Please check this box.',
+        'help': null,
+        'ask_if': null,
+        'multiplicity': null,
+        'children': []
+      },
+      {
+        'id': 6,
+        'name': 'str_field1',
+        'order': 2,
+        'element_type': 'med_str',
+        'required': 'xor bool_field1',
+        'validation': null,
+        'validation_msg': null,
+        'default': null,
+        'human': 'Reason for refusing to check the box',
+        'help': null,
+        'multiplicity': null,
+        'children': []
+      },
+        {
+        'id': 7,
+        'name': 'bool_field2',
+        'order': 3,
+        'element_type': 'med_str',
+        'required': 'unless str_field2',
+        'validation': null,
+        'validation_msg': null,
+        'default': null,
+        'human': 'Consider checking this box.',
+        'help': null,
+        'multiplicity': null,
+        'children': []
+      },
+        {
+        'id': 8,
+        'name': 'str_field2',
+        'order': 4,
+        'element_type': 'med_str',
+        'required': 'unless bool_field2',
+        'validation': null,
+        'validation_msg': null,
+        'default': null,
+        'human': 'Thoughts on not checking the box above',
+        'help': null,
+        'multiplicity': null,
+        'children': []
+      }
+    ]
+  };
+
+  it('should pass the `unless` requirement if first item is true', function() {
+    var elemData = {
+      'bool_field1': true,
+      'str_field1': '',
+      'bool_field2' : true,
+      'str_field2': ''
+    };
+    var validationData = {};
+    ValidationService.validate(interdependent_elements, elemData, validationData);
+    expect(validationData.bool_field1).toEqual({ });
+  });
+
+  it('should pass the `unless` requirement if second item is true', function() {
+    var elemData = {
+      'bool_field1': true,
+      'str_field1': '',
+      'bool_field2' : false,
+      'str_field2': ' i believe in free will'
+    };
+    var validationData = {};
+    ValidationService.validate(interdependent_elements, elemData, validationData);
+    expect(validationData.bool_field1).toEqual({ });
+  });
+
+  it('should pass the `unless` requirement if both items are true', function() {
+    var elemData = {
+      'bool_field1': true,
+      'str_field1': '',
+      'bool_field2' : true,
+      'str_field2': ' i believe in free will'
+    };
+    var validationData = {};
+    ValidationService.validate(interdependent_elements, elemData, validationData);
+    expect(validationData.bool_field1).toEqual({ });
+  });
+
+  it('should fail the `unless` requirement if neither item is true', function() {
+    var elemData = {
+      'bool_field1': true,
+      'str_field1': '',
+      'bool_field2' : false,
+      'str_field2': ''
+    };
+    var validationData = {};
+    ValidationService.validate(interdependent_elements, elemData, validationData);
+    expect(validationData.bool_field2).toEqual('One of these fields is required.');
+  });
+
+  it('should pass the `xor` requirement if first item is true', function() {
+    var elemData = {
+      'bool_field1' : true,
+      'str_field1': '',
+    };
+    var validationData = {};
+    ValidationService.validate(interdependent_elements, elemData, validationData);
+    expect(validationData.bool_field1).toEqual({ });
+  });
+
+  it('should pass the `xor` requirement if second item is true', function() {
+    var elemData = {
+      'bool_field1' : false,
+      'str_field1': ' i believe in free will',
+    };
+    var validationData = {};
+    ValidationService.validate(interdependent_elements, elemData, validationData);
+    expect(validationData.bool_field1).toEqual({ });
+  });
+
+  it('should fail the `xor` requirement if neither item is true', function() {
+    var elemData = {
+      'bool_field1' : false,
+      'str_field1': '',
+    };
+    var validationData = {};
+    ValidationService.validate(interdependent_elements, elemData, validationData);
+    expect(validationData.bool_field1).toEqual('Exactly one of these fields is required.');
+  });
+
+  it('should fail the `xor` requirement if both items are true', function() {
+    var elemData = {
+      'bool_field2': true,
+      'str_field2': ''
+    };
+    var validationData = {};
+    ValidationService.validate(interdependent_elements, elemData, validationData);
+    expect(validationData.bool_field1).toEqual('Exactly one of these fields is required.');
+    // except really that's not what the message should be
+  });
+
 });

@@ -139,10 +139,6 @@ angular.module('sbirezApp').factory('ValidationService', function() {
     }
   };
 
-  var oneOf = function(value, params) {
-    return params.indexOf(value) !== -1;
-  };
-
   var processValidation = function(validationString, value) {
     var commands = validationString.split(' ');
     if (typeof value === 'object' && value.length ===  undefined) {
@@ -177,23 +173,110 @@ angular.module('sbirezApp').factory('ValidationService', function() {
     return !(data === undefined ||
              data[elementName] === null ||
              data[elementName] === undefined ||
-             data[elementName] === '' ||
+             (typeof data[elementName] === 'string' && data[elementName].trim() === '') ||
              (typeof data[elementName] === 'object' && data[elementName].length === undefined));
+  };
+
+  var isTrueIsh = function(data, elementName) {
+    var reverse = false;
+    if (splitOnWhitespace(elementName)[0] === 'not') {
+      elementName = splitOnWhitespace(elementName)[1];
+      reverse = true;
+    }
+    var result = !(data === undefined ||
+             data[elementName] === null ||
+             data[elementName] === undefined ||
+             data[elementName] === false ||
+             data[elementName] === 'false' ||
+             (typeof data[elementName] === 'string' && data[elementName].trim() === '') ||
+             (typeof data[elementName] === 'object' && data[elementName].length === undefined));
+
+    if (reverse) {
+      return !result;
+    } else {
+      return result;
+    }
+  }
+
+  var xor = function(foo, bar) {
+    return ( ( foo || bar ) && !( foo && bar ) );
+  };
+
+  var meetsRequirement = function(data, element) {
+    if ((element.required === 'True') || (element.required === true)) {
+      return isSet(data, element.name);
+    } else if ((element.required === 'False') || (element.required === false)) {
+      return true;
+    }
+    else {
+      var words = element.required.split(/\s+/);
+      if (words[0] === 'unless') {
+        return (isTrueIsh(data, element.name) || isTrueIsh(data, words[1]));
+      } else if (words[0] === 'xor') {
+        return xor(isTrueIsh(data, element.name), isTrueIsh(data, words[1]));
+      }
+    }
+  };
+
+  // Similar function in proposalsvc.js.  Moving to a single location would
+  // be a good refactoring task
+  var stringToBoolean = function(data){
+    try {
+      switch(data.toLowerCase()){
+        case "true": case "yes": case "1": return true;
+        case "false": case "no": case "0": case null: return false;
+        default: return Boolean(data);
+      }
+    } catch (err) {
+      if (err instanceof TypeError) {
+        return Boolean(data);
+      }
+      else {
+        throw err;
+      }
+    }
   };
 
   // as with processValidation, returns true if  it passes, false if it fails
   var processRequired = function(element, data) {
-    // if it has a condition, and that condition is set
-    if (element.ask_if && isSet(data, element.ask_if) && data[element.ask_if] === true) {
-      return isSet(data, element.name);
-    } else if (!element.ask_if) { 
-      return isSet(data, element.name); 
-    }
-    else {
-      return true;
+    if (element.ask_if) {
+      if(isTrueIsh(data, element.ask_if)) {
+        return meetsRequirement(data, element);
+      } else {
+        return true;  // ask_if condition not met, cannot be required
+      }
+    } else {  // this element has no ask_if
+      return meetsRequirement(data, element);
     }
   };
 
+  var splitOnWhitespace = function(txt) {
+    try {
+      return txt.split(/\s+/);
+    } catch(err) {
+      return [txt];
+    }
+  };
+
+  var requirementFailureMessage = function(element) {
+    var requirement_type = splitOnWhitespace(element.required)[0];
+    if (requirement_type === 'unless') {
+      return 'One of these fields is required.';
+    } else if (requirement_type === 'xor') {
+      return 'Exactly one of these fields is required.';
+    } else {
+      return 'This field is required';
+    }
+  };
+
+  var matchValidationResults = function(element, validationResults) {
+    // `required` results for `unless` and `xor` should match across the
+    // elements that are related by them
+    var related_element_names = splitOnWhitespace(element.required);
+    for (var i = 1; i < related_element_names.length; i++) {
+       validationResults[related_element_names[i]] = validationResults[element.name];
+    }
+  };
 
   var phoneRegex = new RegExp(/^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i);
   var emailRegex = new RegExp(/^[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i);
@@ -263,14 +346,14 @@ angular.module('sbirezApp').factory('ValidationService', function() {
           validationResults[element.name] = response;
           requiredSet = true;
         }
-        if (element.required === true && !requiredSet) {
+        if (element.required !== 'False' && !requiredSet) {
           if (!processRequired(element, data)) {
-            validationResults[element.name] = 'This field is required';
+            validationResults[element.name] = requirementFailureMessage(element);
             requiredSet = true;
           } else {
             validationResults[element.name] = {};
           }
-        } 
+        }
         if (element.validation !== null && data && data[element.name] && !requiredSet) {
           if (!processValidation(element.validation, data[element.name])) {
             validationResults[element.name] = element.validation_msg;
@@ -312,16 +395,19 @@ angular.module('sbirezApp').factory('ValidationService', function() {
     },
 
     validateElement: function(element, data, validationResults) {
+      // calling this single validation should also trigger re-validation
+      // of fields linked through `unless`, `xor`, etc
       var requiredSet = false;
-      if (element.required === true) {
+      if (element.required !== 'False') {
         if (!processRequired(element, data)) {
-          validationResults[element.name] = 'This field is required';
-          console.log('Field is required', element.name);
+          validationResults[element.name] = requirementFailureMessage(element);
+          matchValidationResults(element, validationResults);
           requiredSet = true;
         } else {
           validationResults[element.name] = {};
+          matchValidationResults(element, validationResults);
         }
-      } 
+      }
       if (element.validation !== null && data && data[element.name] && !requiredSet) {
         if (!processValidation(element.validation, data[element.name])) {
           validationResults[element.name] = element.validation_msg;

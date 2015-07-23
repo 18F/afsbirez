@@ -99,5 +99,53 @@ def to_days(data):
 def to_months(data):
     return int(to_days(data) / 30.)
 
+def to_bool(val):
+    """
+    Interprets Boolean implication of any English string
+
+    >>> to_bool('True')
+    True
+    >>> to_bool('False')
+    False
+    >>> to_bool(' 1000')
+    True
+    >>> to_bool('0.0')
+    False
+    >>> to_bool('')
+    False
+    >>> to_bool('    ')
+    False
+    >>> to_bool('Belgium')
+    True
+    >>> to_bool('  yeS')
+    True
+    >>> to_bool('  NO ')
+    False
+    >>> to_bool('f')
+    False
+    >>> to_bool(None)
+    False
+    >>> to_bool(42)
+    True
+    >>> to_bool(0)
+    False
+    """
+    if not val:
+        return False
+    val = str(val).strip().title()
+    if not val:
+        return False
+    try:
+        val = int(val)
+        return bool(val)
+    except ValueError:
+        try:
+            val = float(val)
+            return bool(val)
+        except ValueError:
+            if val in ('N', 'No', 'False', 'F'):
+                return False
+    return True
+
 if __name__ == '__main__':
     testmod(optionflags=NORMALIZE_WHITESPACE)
