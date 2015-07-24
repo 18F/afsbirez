@@ -1,4 +1,4 @@
-language: python 
+language: python
 python:
   - '3.4'
 services: postgresql
@@ -13,7 +13,7 @@ before_script:
   - 'gem install sass'
   - 'gem install compass'
   - 'bower install'
-  - psql -c 'create user afsbirez;' -U postgres
+  - psql -c 'create user afsbirez with superuser;' -U postgres
   - psql -c "alter user afsbirez with password 'afsbirez'" -U postgres
   - psql -c "alter user afsbirez createdb" -U postgres
   - psql -c 'create database afsbirez owner=afsbirez;' -U postgres
