@@ -605,6 +605,103 @@
         "model": "sbirez.element",
         "pk": 16
     },
+
+
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "email",
+            "help": null,
+            "human": "Email",
+            "ask_if": null,
+            "multiplicity": null,
+            "name": "email",
+            "order": 3,
+            "parent": 9,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 17
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "phone",
+            "help": null,
+            "human": "Phone",
+            "ask_if": null,
+            "multiplicity": null,
+            "name": "phone",
+            "order": 4,
+            "parent": 9,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 18
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "zip",
+            "help": null,
+            "human": "Zip code",
+            "ask_if": null,
+            "multiplicity": null,
+            "name": "zip",
+            "order": 5,
+            "parent": 9,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 19
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "integer",
+            "help": null,
+            "human": "Number of teeth",
+            "ask_if": null,
+            "multiplicity": null,
+            "name": "teeth",
+            "order": 6,
+            "parent": 9,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 20
+    },
+      {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "percent",
+            "help": null,
+            "human": "Skill percentile",
+            "ask_if": null,
+            "multiplicity": null,
+            "name": "skill",
+            "order": 7,
+            "parent": 9,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 21
+    },
     {
         "fields": {
             "data": {"quest_thy_name": "Galahad", "subquest": {"quest_thy_quest": "To seek the Grail", "quest_thy_favorite_color": "yellow"}},

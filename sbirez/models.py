@@ -177,6 +177,20 @@ class Element(models.Model):
     validation_msg = models.TextField(null=True, blank=True)
     ask_if = models.TextField(null=True, blank=True)
 
+    type_validators = {
+        'phone': re.compile(
+            '''^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$'''
+            , re.IGNORECASE),
+        'email': re.compile(
+            '''^[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$'''
+            , re.IGNORECASE),
+        'zip': re.compile(
+            '''^\d{5}(-\d{4})?$'''
+            , re.IGNORECASE),
+        'percent': lambda x: 0 <= x <= 100,
+        'integer': lambda x: isinstance(x, int),
+    }
+
     class Meta:
         ordering = ['order',]
 
@@ -298,6 +312,19 @@ class Element(models.Model):
             if required == 'forbidden':
                 if found is not None:
                     errors.append('%s should not be filled' % self.name)
+                    continue
+
+            type_validator = self.type_validators.get(self.element_type)
+            if type_validator:
+                if callable(type_validator):
+                    try:
+                        valid = type_validator(datum[self.name])
+                    except Exception as e:
+                        valid = False
+                else:
+                    valid = type_validator.search(datum[self.name])
+                if not valid:
+                    errors.append('Not a valid %s' % self.element_type)
                     continue
 
             if self.validation:
