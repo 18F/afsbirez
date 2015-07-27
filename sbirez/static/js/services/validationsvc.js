@@ -139,6 +139,10 @@ angular.module('sbirezApp').factory('ValidationService', function() {
     }
   };
 
+  var oneOf = function(value, params) {
+    return params.indexOf(value) !== -1;
+  };
+
   var processValidation = function(validationString, value) {
     var commands = validationString.split(' ');
     if (typeof value === 'object' && value.length ===  undefined) {
