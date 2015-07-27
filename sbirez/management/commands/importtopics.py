@@ -28,7 +28,7 @@ class Command(BaseCommand):
 
         # Confirm that solicitation_name is for solicitation in the database
         proc = subprocess.Popen(#'ls',
-                                '/usr/bin/psql -t -c "SELECT name FROM sbirez_solicitation" %s' %
+                                'psql -t -c "SELECT name FROM sbirez_solicitation" %s' %
                                 settings.DATABASES['default']['NAME'],
                                 stdout=subprocess.PIPE, shell=True)
         solicitation_names = [s.decode("utf-8").strip()
