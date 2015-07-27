@@ -35,6 +35,7 @@ angular_js = Bundle(
     "js/directives/elements/checkbox.js",
     "js/directives/elements/group.js",
     "js/directives/elements/lineitem.js",
+    "js/directives/elements/singlelineitem.js",
     "js/directives/elements/dynamiclineitem.js",
     "js/directives/elements/readonlytext.js",
     "js/directives/elements/upload.js",

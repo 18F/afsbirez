@@ -200,7 +200,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
     } else {
       return result;
     }
-  }
+  };
 
   var xor = function(foo, bar) {
     return ( ( foo || bar ) && !( foo && bar ) );
@@ -227,8 +227,8 @@ angular.module('sbirezApp').factory('ValidationService', function() {
   var stringToBoolean = function(data){
     try {
       switch(data.toLowerCase()){
-        case "true": case "yes": case "1": return true;
-        case "false": case "no": case "0": case null: return false;
+        case 'true': case 'yes': case '1': return true;
+        case 'false': case 'no': case '0': case null: return false;
         default: return Boolean(data);
       }
     } catch (err) {
@@ -365,7 +365,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
             validationResults[element.name] = {};
           }
         }
-        if (element.element_type === 'line_item' && element.multiplicity && element.multiplicity.length > 0 &&
+        if (element.element_type === 'line_item' && element.multiplicity && element.multiplicity.length > 0 && element.multiplicityCount !== 1 &&
             (!element.ask_if || element.ask_if && isSet(data, element.ask_if) && data[element.ask_if] === 'true')) {
           for (var j = 0; j < element.multiplicity.length; j++) {
             if (data[element.name] === undefined) {
@@ -383,7 +383,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
             this.validate(element, data[element.name][element.multiplicity[j].token], validationResults[element.name][element.multiplicity[j].token]);
           }
         }
-        if (element.children.length > 0 && element.element_type === 'workflow') {
+        if (element.children.length > 0 && element.element_type === 'workflow' ||  (element.element_type === 'line_item' && element.multiplicityCount === 1 && (!element.ask_if || element.ask_if && isSet(data, element.ask_if) && data[element.ask_if] === 'true'))) {
           //console.log('validate precall', element.name);
           if (validationResults[element.name] === undefined) {
             validationResults[element.name] = {};
