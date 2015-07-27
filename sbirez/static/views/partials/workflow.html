@@ -47,7 +47,8 @@
           <div calculated="element" ng-if="element.element_type === 'calculated'"></div>
           <div readonlytext="element" ng-if="element.element_type === 'read_only_text'"></div>
           <div group="element" method="jumpTo" ng-if="element.element_type === 'workflow' || element.element_type === 'group'"></div>
-          <div dynamiclineitem="element" ng-if="element.element_type === 'line_item' && element.multiplicityCount > 0" proposal="{{proposalId}}"></div>
+          <div dynamiclineitem="element" ng-if="element.element_type === 'line_item' && element.multiplicityCount > 1" proposal="{{proposalId}}"></div>
+          <div singlelineitem="element" ng-if="element.element_type === 'line_item' && element.multiplicityCount ===  1" proposal="{{proposalId}}"></div>
           <div lineitem="element" ng-if="element.element_type === 'line_item' && !element.multiplicityCount" proposal="{{proposalId}}"></div>
           <div upload="element" ng-if="element.element_type === 'file_upload'" proposal="{{proposalId}}"></div>
         </div>
@@ -55,8 +56,9 @@
           <summary ng-if="validationList.length" class="error-message">
             <h1>We’ve detected {{validationList.length}} errors on this page. Click the button again to continue.</h1>
           </summary>
+          <button ng-if="showNextButton()" type="button" id="next_state" ng-click="save()">Save</button>
           <button ng-if="showNextButton()" type="button" id="next_state" ng-click="saveAndContinue(nextWorkflow)">Save and continue</button>
-          <button ng-if="!showNextButton()" type="button" id="next_state" ng-click="saveAndExit()">Return to overview</button>
+          <button ng-if="!showNextButton()" type="button" id="next_state" ng-click="saveAndExit()">Save and Return to Overview</button>
         </footer>
       </form>
     </div>

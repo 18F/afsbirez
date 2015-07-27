@@ -127,6 +127,11 @@ angular.module('sbirezApp').directive('workflow', function() {
           return $scope.nextWorkflow !== null;
         };
 
+        $scope.save = function() {
+          ProposalService.validate($scope.currentWorkflow);
+          ProposalService.saveData(false);
+        };
+
         $scope.saveAndContinue = function(next) {
           var advanceAnyway = $scope.validationList.length > 0;
           ProposalService.validate($scope.currentWorkflow);

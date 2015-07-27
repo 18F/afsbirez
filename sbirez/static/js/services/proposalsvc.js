@@ -150,6 +150,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
         if (workflows[i].multiplicity === null) {
           workflows[i].multiplicity = [];
           workflows[i].multiplicity[0] = {'token':0, 'value':0};
+          workflows[i].multiplicityCount = 1;
         } else if (isFinite(workflows[i].multiplicity)) {
           count = parseInt(workflows[i].multiplicity);
           var dataCount = Math.max(1, getDynamicDataCount(workflows[i]));
@@ -364,8 +365,10 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
   };
 
   var isSet = function(data, elementName) {
-    return !(data === undefined || data[elementName] === null ||
-             data[elementName] === undefined || data[elementName] === '' ||
+    return !(data === undefined ||
+             data[elementName] === null ||
+             data[elementName] === undefined ||
+             (typeof data[elementName] === 'string' && data[elementName].trim() === '') ||
              (typeof data[elementName] === 'object' && data[elementName].length === undefined));
   };
 
@@ -385,11 +388,11 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       return false;
     }
     for (index; index < length && complete; index++) {
-      if (element.children[index].required && element.children[index].ask_if) {
+      if ((element.children[index].required && element.children[index].required !== 'False') && element.children[index].ask_if) {
         if (data[element.children[index].ask_if] === true || data[element.children[index].ask_if] === 'true') {
           complete = isSet(data, element.children[index].name);
         }
-      } else if (element.children[index].required) {
+      } else if (element.children[index].required && element.children[index].required !== 'False') {
         complete = isSet(data, element.children[index].name);
       }
     }
