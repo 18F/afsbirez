@@ -1270,6 +1270,47 @@ class ProposalValidationTests(APITestCase):
         self.assertEqual({'non_field_errors': ['Required field how_courageous_exactly not found']},
                          response.data)
 
+    def test_element_type_phone_validation_pass(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["phone"] = "123-456-7890"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def test_element_type_phone_validation_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["phone"] = "Pennsylvania 6-5000"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid phone']})
+
+    def test_element_type_email_validation_pass(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["email"] = "phil@peasantry.com"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def test_element_type_email_validation_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["email"] = "I am not literate"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid email']})
 
 def _upload_death_star_plans(test_instance, login=True):
     if login:

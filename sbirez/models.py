@@ -177,6 +177,18 @@ class Element(models.Model):
     validation_msg = models.TextField(null=True, blank=True)
     ask_if = models.TextField(null=True, blank=True)
 
+    type_validation_patterns = {
+        'phone': re.compile(
+            '''^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$'''
+            , re.IGNORECASE),
+        'email': re.compile(
+            '''^[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$'''
+            , re.IGNORECASE),
+        'zip': re.compile(
+            '''^\d{5}(-\d{4})?$'''
+            , re.IGNORECASE),
+    }
+
     class Meta:
         ordering = ['order',]
 
@@ -298,6 +310,13 @@ class Element(models.Model):
             if required == 'forbidden':
                 if found is not None:
                     errors.append('%s should not be filled' % self.name)
+                    continue
+
+            type_validator = self.type_validation_patterns.get(self.element_type)
+            if type_validator:
+                # import ipdb; ipdb.set_trace()
+                if not type_validator.search(datum[self.name]):
+                    errors.append('Not a valid %s' % self.element_type)
                     continue
 
             if self.validation:
