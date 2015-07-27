@@ -971,10 +971,14 @@ nav.toc ol li{
     border-bottom: 1px solid #f3f3f3;
 }
 
-nav.toc ol li.toc-proposal-cover-sheet,
 nav.toc ol li > span{
     border: none;
     padding-bottom: 0;
+    font-weight: 500;
+}
+
+nav.toc ol li a.top-level-link {
+    font-weight: 500;
 }
 
 nav.toc ol li ol{ 
@@ -1032,6 +1036,7 @@ nav.toc ol li span.toc-error-count{
     text-decoration: none;
     color: #aaa;
     font-size: 14px;
+    font-weight: 400;
 }
 
 

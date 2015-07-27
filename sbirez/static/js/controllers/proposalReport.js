@@ -8,8 +8,11 @@ angular.module('sbirezApp')
     $scope.overview = {};
     $scope.goodStartWorkflow = null;
     $scope.buttonMessage = 'Get Started';
+    $scope.verifyButton = 'Verify this proposal';
+    $scope.submitButton = 'Submit';
     $rootScope.bodyClass = 'proposal proposal-overview';
     $scope.showContinue = true;
+    $scope.showSubmit = false;
     var first = true;
 
     var goodStartElement = function() {
@@ -56,9 +59,30 @@ angular.module('sbirezApp')
       });
     });
 
+    var checkForErrors = function(data) {
+      var error = false;
+      for (var i = 0; i < data.length && !error; i++) {
+        if (data[i].errors && data[i].errors > 0) {
+          return true;
+        }
+        if (data[i].children && data[i].children.length > 0) {
+          error = checkForErrors(data[i].children);
+        }
+      }
+      return error;
+    };
+
     $scope.validate = function() {
-      ProposalService.getOverview(true).then(function(data) {
-        $scope.overview = data;
+      ProposalService.complete().then(function(data) {
+        ProposalService.getOverview(true).then(function(data) {
+          $scope.overview = data;
+          if (!checkForErrors(data)) {
+            $scope.verifyButton = 'Verified';
+            $scope.showSubmit = true;
+	  } else {
+            $scope.verifyButton = 'Errors Detected';
+          }
+        });
       });
     };
 
