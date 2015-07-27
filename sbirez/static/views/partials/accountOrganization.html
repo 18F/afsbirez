@@ -54,7 +54,7 @@
           <div class="field field-zip" ng-class="{'is-error': validationData.address.zip}">
             <label for="firmzip">
               <span class="label-text">Zip</span>
-              <input type="text" id="firmzip" ng-model="firm.address.zip" ui-mask="99999-9999">
+              <input type="text" id="firmzip" ng-model="firm.address.zip">
             </label>
             <span class="error-message" ng-if="validationData.address.zip">{{validationData.address.zip[0]}}</span>
           </div>
@@ -83,13 +83,13 @@
         </div>
         <div class="field field-phone-number" ng-class="{'is-error': validationData.point_of_contact.phone}">
           <label for="firmpocphone"><span class="label-text">Phone Number:</span>
-            <input type="text" id="firmpocphone" ng-model="firm.point_of_contact.phone" ui-mask="(999) 999-9999">
+            <input type="text" id="firmpocphone" ng-model="firm.point_of_contact.phone">
           </label>
           <span class="error-message" ng-if="validationData.point_of_contact.phone">{{validationData.point_of_contact.phone[0]}}</span>
         </div>
         <div class="field field-fax-number" ng-class="{'is-error': validationData.point_of_contact.fax}">
           <label for="firmpocfax"><span class="label-text">Fax Number:</span>
-            <input type="text" id="firmpocfax" ng-model="firm.point_of_contact.fax" ui-mask="(999) 999-9999">
+            <input type="text" id="firmpocfax" ng-model="firm.point_of_contact.fax">
           </label>
           <span class="error-message" ng-if="validationData.point_of_contact.fax">{{validationData.point_of_contact.fax[0]}}</span>
         </div>
@@ -119,6 +119,27 @@
           <input type="text" id="firmcagecode" ng-model="firm.cage_code">
         </label>
         <span class="error-message" ng-if="validationData.cage_code">{{validationData.cage_code[0]}}</span>
+      </div>
+      <div class="field field-naics" ng-class="{'is-error': validationData.naics}">
+        <label for="firmnaics1"><span class="label-text">NAICS Codes</span>
+          <div>
+            <input type="text" id="firmnaics1" ng-change="applyNaics(0)" ng-class="{'is-error': naicsdata[0].error}" ng-model="firm.naics[0]">
+            <span class="naics-description" ng-class="{'error-message': naicsdata[0].error}" id="naics1data">{{naicsdata[0].detail}}</span>
+          </div>
+          <div>
+            <input type="text" id="firmnaics2" ng-change="applyNaics(1)" ng-class="{'is-error': naicsdata[1].error}" ng-model="firm.naics[1]">
+            <span class="naics-description" ng-class="{'error-message': naicsdata[1].error}" id="naics2data">{{naicsdata[1].detail}}</span>
+          </div>
+          <div>
+            <input type="text" id="firmnaics3" ng-change="applyNaics(2)" ng-class="{'is-error': naicsdata[2].error}" ng-model="firm.naics[2]">
+            <span class="naics-description" ng-class="{'error-message': naicsdata[2].error}" id="naics3data">{{naicsdata[2].detail}}</span>
+          </div>
+          <div>
+            <input type="text" id="firmnaics4" ng-change="applyNaics(3)" ng-class="{'is-error': naicsdata[3].error}" ng-model="firm.naics[3]">
+            <span class="naics-description" ng-class="{'error-message': naicsdata[3].error}" id="naics4data">{{naicsdata[3].detail}}</span>
+          </div>
+        </label>
+        <span class="error-message" ng-if="validationData.naics">{{validationData.naics[0]}}</span>
       </div>
 <!--    <div class="form-group">
         <label for="firmsic" class="control-label col-md-2">SIC Codes:</label>

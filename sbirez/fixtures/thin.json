@@ -326,7 +326,7 @@
             "name": "holy_grail_workflow",
             "order": 1,
             "parent": null,
-            "required": false,
+            "required": "False",
             "validation": null,
             "validation_msg": null
         },
@@ -344,7 +344,7 @@
             "name": "quest_thy_name",
             "order": 1,
             "parent": 1,
-            "required": true,
+            "required": "True",
             "validation": null,
             "validation_msg": null
         },
@@ -362,7 +362,7 @@
             "name": "subquest",
             "order": 2,
             "parent": 1,
-            "required": false,
+            "required": "False",
             "validation": null,
             "validation_msg": null
         },
@@ -380,7 +380,7 @@
             "name": "quest_thy_quest",
             "order": 1,
             "parent": 3,
-            "required": false,
+            "required": "False",
             "validation": null,
             "validation_msg": null
         },
@@ -398,7 +398,7 @@
             "name": "quest_thy_favorite_color",
             "order": 2,
             "parent": 3,
-            "required": true,
+            "required": "True",
             "validation": "does_not_equal blue",
             "validation_msg": "Lancelot already said blue"
         },
@@ -416,7 +416,7 @@
             "name": "knights",
             "order": 3,
             "parent": 1,
-            "required": false,
+            "required": "False",
             "validation": null,
             "validation_msg": null
         },
@@ -434,7 +434,7 @@
             "name": "is_courageous",
             "order": 1,
             "parent": 6,
-            "required": false,
+            "required": "False",
             "validation": null,
             "validation_msg": null
         },
@@ -452,7 +452,7 @@
             "name": "how_courageous_exactly",
             "order": 2,
             "parent": 6,
-            "required": true,
+            "required": "True",
             "validation": null,
             "validation_msg": null
         },
@@ -470,7 +470,7 @@
             "name": "minstrels",
             "order": 4,
             "parent": 1,
-            "required": false,
+            "required": "False",
             "validation": null,
             "validation_msg": null
         },
@@ -488,7 +488,7 @@
             "name": "name",
             "order": 1,
             "parent": 9,
-            "required": false,
+            "required": "False",
             "validation": null,
             "validation_msg": null
         },
@@ -506,7 +506,7 @@
             "name": "instrument",
             "order": 2,
             "parent": 9,
-            "required": false,
+            "required": "False",
             "validation": null,
             "validation_msg": null
         },
@@ -524,7 +524,7 @@
             "name": "kg",
             "order": 3,
             "parent": 9,
-            "required": true,
+            "required": "True",
             "validation": "not_less_than 0",
             "validation_msg": null
         },
@@ -542,12 +542,165 @@
             "name": "lb",
             "order": 4,
             "parent": 9,
-            "required": true,
+            "required": "True",
             "validation": "kg / 2.20462",
             "validation_msg": null
         },
         "model": "sbirez.element",
         "pk": 13
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "bool",
+            "help": null,
+            "human": "Sings?",
+            "multiplicity": null,
+            "name": "sings",
+            "order": 5,
+            "parent": 9,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 14
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "short_str",
+            "help": null,
+            "human": "Sings what part?",
+            "ask_if": "sings",
+            "multiplicity": null,
+            "name": "singing_part",
+            "order": 1,
+            "parent": 9,
+            "required": "xor singing_part_unidentifiable",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 15
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "bool",
+            "help": null,
+            "human": "Or check here if unidentifiable tuneless keening",
+            "ask_if": "sings",
+            "multiplicity": null,
+            "name": "singing_part_unidentifiable",
+            "order": 2,
+            "parent": 9,
+            "required": "xor singing_part",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 16
+    },
+
+
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "email",
+            "help": null,
+            "human": "Email",
+            "ask_if": null,
+            "multiplicity": null,
+            "name": "email",
+            "order": 3,
+            "parent": 9,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 17
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "phone",
+            "help": null,
+            "human": "Phone",
+            "ask_if": null,
+            "multiplicity": null,
+            "name": "phone",
+            "order": 4,
+            "parent": 9,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 18
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "zip",
+            "help": null,
+            "human": "Zip code",
+            "ask_if": null,
+            "multiplicity": null,
+            "name": "zip",
+            "order": 5,
+            "parent": 9,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 19
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "integer",
+            "help": null,
+            "human": "Number of teeth",
+            "ask_if": null,
+            "multiplicity": null,
+            "name": "teeth",
+            "order": 6,
+            "parent": 9,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 20
+    },
+      {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "percent",
+            "help": null,
+            "human": "Skill percentile",
+            "ask_if": null,
+            "multiplicity": null,
+            "name": "skill",
+            "order": 7,
+            "parent": 9,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 21
     },
     {
         "fields": {

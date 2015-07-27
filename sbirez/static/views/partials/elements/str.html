@@ -1,7 +1,7 @@
 <div class="field field-{{::str.element_type}}" ng-show="visible" ng-class="{'is-branch': element.ask_if, 'field-select': options.length > 0, 'field-text': options.length === 0, 'is-error': validationstorage}">
   <label for="{{::fieldToken}}"><span jargon="element" class="label-text"></span></label>
   <div ng-show="options.length === 0">
-    <input id="{{::fieldToken}}" class="form-control" ng-change="apply()" ng-model="storage" type="text" ui-mask="{{::elementMask}}"></input>
+    <input id="{{::fieldToken}}" class="form-control" ng-change="apply()" ng-model="storage" type="text"></input>
   </div>
   <div ng-show="options.length > 0">
     <select id="{{::fieldToken}}" class="form-control" ng-change="apply()" ng-options="opt as opt for opt in options" ng-model="storage"></select>

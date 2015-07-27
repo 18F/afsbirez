@@ -17,11 +17,6 @@ angular.module('sbirezApp').directive('str', function() {
         $scope.options = [];
         $scope.visible = true;
         $scope.validationstorage = '';
-        
-        $scope.elementMask = '';
-        if ($scope.element.element_type === 'phone') {
-          $scope.elementMask = '(999) 999-9999';
-        }
 
         var validationCallback = function(data) {
           $scope.validationstorage = data;

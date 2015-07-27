@@ -11,7 +11,6 @@ bower_js = Bundle(
     "lib/angular-route/angular-route.js",
     "lib/ng-file-upload/angular-file-upload.js",
     "lib/ngDialog/js/ngDialog.min.js",
-    "lib/angular-ui-mask/dist/mask.min.js",
     "lib/angular-ui-router/release/angular-ui-router.js",
     "lib/angular-order-object-by/src/ng-order-object-by.js",
     "lib/base64/base64.min.js",
@@ -36,6 +35,7 @@ angular_js = Bundle(
     "js/directives/elements/checkbox.js",
     "js/directives/elements/group.js",
     "js/directives/elements/lineitem.js",
+    "js/directives/elements/singlelineitem.js",
     "js/directives/elements/dynamiclineitem.js",
     "js/directives/elements/readonlytext.js",
     "js/directives/elements/upload.js",
@@ -51,7 +51,6 @@ angular_js = Bundle(
     "js/controllers/accountUser.js",
     "js/controllers/accountOrganization.js",
     "js/controllers/savedOpps.js",
-    "js/controllers/savedSearches.js",
     "js/controllers/history.js",
     "js/controllers/notification.js",
     "js/controllers/documentList.js",
@@ -66,7 +65,6 @@ angular_js = Bundle(
     "js/services/usersvc.js",
     "js/services/oppsvc.js",
     "js/services/searchsvc.js",
-    "js/services/savedSearchsvc.js",
     "js/services/tokensvc.js",
     "js/services/proposalsvc.js",
     "js/services/documentsvc.js",
@@ -77,7 +75,7 @@ angular_js = Bundle(
 
 combined_sass = Bundle(
     "sass/main.scss",
-    filters="scss",
+    filters="pyscss",
     output="css/main.min.css"
 )
 

@@ -170,12 +170,26 @@ class Element(models.Model):
     # integer: collect up to N unnamed groups
     # null: just collect one
 
-    required = models.NullBooleanField(default=False)
+    required = models.TextField(default='False')
     default = models.TextField(null=True, blank=True)
     help = models.TextField(null=True, blank=True)
     validation = models.TextField(null=True, blank=True)
     validation_msg = models.TextField(null=True, blank=True)
     ask_if = models.TextField(null=True, blank=True)
+
+    type_validators = {
+        'phone': re.compile(
+            '''^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$'''
+            , re.IGNORECASE),
+        'email': re.compile(
+            '''^[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$'''
+            , re.IGNORECASE),
+        'zip': re.compile(
+            '''^\d{5}(-\d{4})?$'''
+            , re.IGNORECASE),
+        'percent': lambda x: 0 <= x <= 100,
+        'integer': lambda x: isinstance(x, int),
+    }
 
     class Meta:
         ordering = ['order',]
@@ -205,10 +219,53 @@ class Element(models.Model):
         result.append(self)
         return result
 
-    def _actually_required(self, accept_partial, datum):
-        return (    self.required
-                and not accept_partial
-                and ((not self.ask_if) or datum.get(self.ask_if)))
+    def is_trueish(self, field_name, dct):
+        if field_name not in dct:
+            return False
+        datum = dct[field_name]
+        try:
+            datum = datum.strip().lower()
+            if datum == 'false':
+                return False
+        except:
+            pass
+        return bool(datum)
+
+    def should_ask(self, datum):
+        if not self.ask_if:
+            return True
+        reverse = False
+        ask_if = self.ask_if
+        if ask_if.split()[0] == 'not':
+            reverse = True
+            ask_if = ask_if.split()[1]
+        result = self.is_trueish(ask_if, datum)
+        if reverse:
+            result = not result
+        return result
+
+    def data_required(self, accept_partial, datum):
+        if (accept_partial
+            or (not self.should_ask(datum))
+            or (self.required.lower() == 'false')):
+            return 'optional'
+        if self.required.lower() == 'true':
+            return 'required'
+        required = self.required.split()
+        (operator, fields) = (required[0], required[1:])
+        field_trueness = [self.is_trueish(f, datum) for f in fields]
+        if operator == 'unless':
+            if field_trueness.count(True) == 0:
+                return 'required'
+            else:
+                return 'optional'
+        elif operator == 'xor':
+            if field_trueness.count(True) == 0:
+                return 'required'
+            else:
+                return 'forbidden'
+        raise NotImplementedError('could not interpret %s for %s' %
+                                  (self.required, self.name))
 
     # recognize "validations" that are actually calculations
     # every calculation should include an operator (+-*/) surrounded by
@@ -237,16 +294,38 @@ class Element(models.Model):
             data = [data, ]
 
         for datum in data:
-            try:
-                found = datum[self.name]
-            except KeyError:
-                if self._actually_required(accept_partial, datum):
-                    errors.append('Required field %s not found' % self.name)
-                continue
 
-            if (found is None) and self._actually_required(accept_partial, datum):
-                errors.append('%s is blank' % self.name)
-                return errors
+            required = self.data_required(accept_partial, datum)
+
+            if required == 'required':
+                if self.name not in datum:
+                    errors.append('Required field %s not found' % self.name)
+                    continue
+                elif datum[self.name] is None:
+                    errors.append('%s is blank' % self.name)
+                    continue
+
+            if self.name not in datum:
+                continue
+            found = datum[self.name]
+
+            if required == 'forbidden':
+                if found is not None:
+                    errors.append('%s should not be filled' % self.name)
+                    continue
+
+            type_validator = self.type_validators.get(self.element_type)
+            if type_validator:
+                if callable(type_validator):
+                    try:
+                        valid = type_validator(datum[self.name])
+                    except Exception as e:
+                        valid = False
+                else:
+                    valid = type_validator.search(datum[self.name])
+                if not valid:
+                    errors.append('Not a valid %s' % self.element_type)
+                    continue
 
             if self.validation:
                 for validation in self.validation.split(';'):

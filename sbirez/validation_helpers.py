@@ -8,7 +8,7 @@ returning a `bool`
 `all_fields`: a dict containing all submitted data (for functions that
               check the value of more than one field)
 `data`:       the specific field value of interest.  Can be in dirty string form.
-`target`:     the value to commpare `data` against
+`target`:     the value to compare `data` against
 `unit`:       A named transformation to apply to `data` to quantify it for comparison.
               currently defined transformations are in `validation_helpers.quantifiers`
 
@@ -26,7 +26,7 @@ from doctest import testmod, NORMALIZE_WHITESPACE
 import re
 import shlex
 
-from sbirez.quantity_helpers import to_integer, to_decimal, to_days, to_months
+from .quantity_helpers import to_integer, to_decimal, to_days, to_months, to_bool
 
 # for custom validators to call
 
@@ -119,6 +119,31 @@ def one_of(all_fields, data, target):
     """
     targets = target.lower().split()
     return data.lower().strip() in targets
+
+def required_unless(all_fields, data, target):
+    """
+    Something in here should be true-ish - either `data` or one of the
+    fields named in `target`
+    >>> required_unless({'x': True, 'y': False}, 'True', 'x')
+    True
+    >>> required_unless({'x': False, 'y': False}, 'True', 'x')
+    True
+    >>> required_unless({'x': True, 'y': False}, '', 'x')
+    True
+    >>> required_unless({'x': False, 'y': False}, '', 'x')
+    False
+    >>> required_unless({'x': False, 'y': False, 'z': True}, '', 'x y')
+    False
+    >>> required_unless({'x': False, 'y': True, 'z': True}, '', 'x y')
+    True
+    """
+    if to_bool(data):
+        return True
+    for field_name in target.split():
+        if to_bool(all_fields.get(target)):
+            return True
+    else:
+        return False
 
 if __name__ == '__main__':
     testmod(optionflags=NORMALIZE_WHITESPACE)

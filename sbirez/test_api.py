@@ -14,7 +14,7 @@ from django.test import TestCase
 import django.core.mail
 from django.core.files import uploadedfile
 
-from sbirez.models import Firm
+from sbirez.models import Firm, Naics
 from sbirez import api
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -635,6 +635,7 @@ class FirmTests(APITestCase):
         self.assertEqual([], response.data['results'])
 
     def test_firm_patch_naics(self):
+        initial_num_naics = Naics.objects.count()
         self.create_user_and_auth()
         response = self.client.post('/api/v1/firms/',
               json.dumps(self.firm_data), content_type='application/json')
@@ -647,6 +648,7 @@ class FirmTests(APITestCase):
         firm_after = Firm.objects.get(id=firm.id)
         naics = [n.code for n in firm_after.naics.all()]
         self.assertIn('111', naics)
+        self.assertEqual(initial_num_naics, Naics.objects.count())
 
     def test_firm_patch_to_remove_naics(self):
         self.create_user_and_auth()
@@ -1134,6 +1136,7 @@ class ProposalTests(APITestCase):
         ships = dbm.open(shipfile.name, 'r')
         self.assertEqual(ships['Falcon'], b'Solo')
 
+
 class ProposalValidationTests(APITestCase):
 
     fixtures = ['thin.json', ]
@@ -1163,6 +1166,8 @@ class ProposalValidationTests(APITestCase):
                       "instrument": "sackbut",
                       "kg": 55,
                       "lb": 121,
+                      "sings": "True",
+                      "singing_part": "bass",
                       },
                   }
              })
@@ -1183,6 +1188,30 @@ class ProposalValidationTests(APITestCase):
         response = self.client.post('/api/v1/proposals/', data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(response.data, {'non_field_errors': ['Required field kg not found']})
+
+    def test_missing_xor_fails(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        del(data["data"]['minstrels']['1']['singing_part'])
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertIn('Required field singing_part not found',
+                      response.data['non_field_errors'])
+
+    def test_too_many_answers_for_xor_fails(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]['minstrels']['1']['singing_part_unidentifiable'] = True
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertIn('singing_part_unidentifiable should not be filled',
+                      response.data['non_field_errors'])
 
     def test_validation_violated(self):
         user = _fixture_user(self)
@@ -1241,6 +1270,110 @@ class ProposalValidationTests(APITestCase):
         self.assertEqual({'non_field_errors': ['Required field how_courageous_exactly not found']},
                          response.data)
 
+    def test_element_type_phone_validation_pass(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["phone"] = "123-456-7890"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def test_element_type_phone_validation_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["phone"] = "Pennsylvania 6-5000"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid phone']})
+
+    def test_element_type_email_validation_pass(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["email"] = "phil@peasantry.com"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def test_element_type_email_validation_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["email"] = "I am not literate"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid email']})
+
+    def test_element_type_zip_validation_pass(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["zip"] = "12345"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def test_element_type_zip_validation_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["zip"] = "12345678987654321"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid zip']})
+
+    def test_element_type_integer_validation_pass(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["teeth"] = 17
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def test_element_type_integer_validation_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["teeth"] = "Maybe"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid integer']})
+
+    def test_element_type_percent_validation_pass(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["skill"] = 22
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def test_element_type_percent_validation_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["skill"] = -22
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid percent']})
 
 def _upload_death_star_plans(test_instance, login=True):
     if login:
