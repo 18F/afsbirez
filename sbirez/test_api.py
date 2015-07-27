@@ -1312,6 +1312,69 @@ class ProposalValidationTests(APITestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(response.data, {'non_field_errors': ['Not a valid email']})
 
+    def test_element_type_zip_validation_pass(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["zip"] = "12345"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def test_element_type_zip_validation_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["zip"] = "12345678987654321"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid zip']})
+
+    def test_element_type_integer_validation_pass(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["teeth"] = 17
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def test_element_type_integer_validation_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["teeth"] = "Maybe"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid integer']})
+
+    def test_element_type_percent_validation_pass(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["skill"] = 22
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def test_element_type_percent_validation_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["skill"] = -22
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid percent']})
+
 def _upload_death_star_plans(test_instance, login=True):
     if login:
         user = _fixture_user(test_instance)

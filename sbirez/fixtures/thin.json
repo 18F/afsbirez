@@ -666,6 +666,44 @@
     },
     {
         "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "integer",
+            "help": null,
+            "human": "Number of teeth",
+            "ask_if": null,
+            "multiplicity": null,
+            "name": "teeth",
+            "order": 6,
+            "parent": 9,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 20
+    },
+      {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "percent",
+            "help": null,
+            "human": "Skill percentile",
+            "ask_if": null,
+            "multiplicity": null,
+            "name": "skill",
+            "order": 7,
+            "parent": 9,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 21
+    },
+    {
+        "fields": {
             "data": {"quest_thy_name": "Galahad", "subquest": {"quest_thy_quest": "To seek the Grail", "quest_thy_favorite_color": "yellow"}},
             "firm": 1,
             "owner": 2,
