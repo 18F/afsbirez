@@ -9,11 +9,11 @@
     <div class="wrap">
       <section>
         <h1 class="primary-header">Overview</h1>
-        <p>Proposals are comprised of four parts, listed below. We&rsquo;ll help you submit your proposal by filling out the necessary paperwork, one step at a time.</p>
+        <p>Proposals are comprised of four parts, the Coversheet, Cost Volume, Technical Volume, and the Company Commercialization Report. We&rsquo;ll help you submit your proposal by filling out the necessary paperwork, one step at a time.</p>
         <nav class="toc" role="navigation">
           <ol>
             <li ng-class="{'parent-element': element.children, 'is-error': element.errors, 'is-incomplete': !element.children && !element.complete, 'is-complete': !element.children && element.complete}" ng-repeat="element in overview">
-              <a href="#" ng-if="!element.children" ui-sref="app.proposals.detail({id: proposalId, current: element.id})">
+              <a href="#" ng-if="!element.children" class="top-level-link" ui-sref="app.proposals.detail({id: proposalId, current: element.id})">
                 {{::element.name}}
                 <span class="toc-error-count" ng-if="element.errors">{{element.errors}} errors</span>
               </a>
@@ -30,20 +30,20 @@
           </ol>
         </nav>
         <button ng-if="showContinue" type="button" id="start" ui-sref="app.proposals.detail({id: proposalId, current: goodStartWorkflow})">{{buttonMessage}}</button>
-        <button type="button" id="validate_state" ng-click="validate()">Verify this proposal</button>          
-        <button ng-if="!showContinue" type="button" id="submit" ng-click="submit()">Submit</button>
+        <button type="button" id="validate_state" ng-click="validate()">{{verifyButton}}</button>          
+        <button ng-if="showSubmit" type="button" id="submit" ng-click="submit()">{{submitButton}}</button>
         <div ng-if="!showContinue" class="notice">
           <p><strong>Note:</strong> You&rsquo;ll need to fill in <a ui-sref="app.account.organization">your company information</a> before you can submit a proposal.</p>
         </div>
       </section>
-      <aside>
+      <!--<aside>
         <h1><span class="technical-point">Technical point</span><span class="preposition">of</span> contact</h1>
         <div class="hcard">
           <span>Dr. Soandso McSmartpants</span>
           <span>1-888-222-2222</span>
           <span>test@email.com</span>
         </div>
-      </aside>
+      </aside>-->
     </div>
   </main>
   <footer class="proposal-footer">

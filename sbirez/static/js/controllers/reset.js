@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('ResetCtrl', function ($scope, $rootScope, $window, $state, UserService, AuthenticationService) {
+  .controller('ResetCtrl', function ($scope, $rootScope, $window, $state, UserService) {
     $rootScope.bodyClass = 'sign-up';
     $scope.email = '';
     $scope.errorMsg = '';

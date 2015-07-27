@@ -82,8 +82,8 @@
           required: True
         -
           name: pi_fraud_conviction
-          human: Has your firm's Principal Investigator (PI) or Corporate Official (CO) listed
-                 below, or owner been convicted of a fraud-related crime involving SBIR and/or
+          human: Has your firm's Principal Investigator (PI) or Corporate Official (CO)
+                 or owner been convicted of a fraud-related crime involving SBIR and/or
                  STTR funds or found civilly liable for a fraud-related violation involving
                  Federal funds?
           element_type: bool
@@ -615,19 +615,19 @@
           -
             name: reviewing_office
             element_type: med_str
-            required: True
+            required: False
           -
             name: individual
             element_type: med_str
-            required: True
+            required: False
           -
             name: address
             element_type: text
-            required: True
+            required: False
           -
             name: phone
             element_type: phone
-            required: True
+            required: False
         -
           name: use_government_property_yn
           human: Will you require the use of any government property
