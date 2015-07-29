@@ -24,10 +24,19 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
   var PROPOSAL_URI = 'api/v1/proposals/';
   var TOPIC_URI = 'api/v1/topics/';
 
+
+  /*
+   * AuthenticationService will call this callback whenever a user
+   * authenticates or logs out. Without this, logging out and logging
+   * in as a different user could leave the prior user's data visible.
+   */
   AuthenticationService.registerObserverCallback(function() {
     unloadProposal();
   });
 
+  /*
+   * Returns the list of proposals that the user is authorized to access.
+   */
   var getProposals = function() {
     var deferred = $q.defer();
     $http.get(PROPOSAL_URI).success(function(data) {
@@ -36,6 +45,10 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return deferred.promise;
   };
 
+  /*
+   * Retrieves the requested proposal, if the user is authorized to access
+   * it. If the proposal is already, loaded, return the cached version.
+   */
   var getProposal = function(proposalId) {
     var deferred = $q.defer();
     if (proposal.id === proposalId) {
@@ -51,6 +64,9 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return deferred.promise;
   };
 
+  /*
+   * Creates a new proposal for the user, based on the opportunity.
+   */
   var createProposal = function(opportunityId, opportunityTitle, workflowId) {
     var deferred = $q.defer();
     var propData = {
@@ -70,6 +86,9 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return deferred.promise;
   };
 
+  /*
+   * Removes a proposal based on the requested proposal id.
+   */
   var removeProposal = function(proposalId) {
     var deferred = $q.defer();
     $http.delete(PROPOSAL_URI + proposalId + '/').success(function(data) {
@@ -80,6 +99,10 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return deferred.promise;
   };
 
+  /*
+   * Saves a complete proposal with data. Will request server-side validation
+   * based on the validation flag.
+   */
   var saveProposalData = function(validate) {
     var deferred = $q.defer();
     var url = PROPOSAL_URI + proposal.id + (validate ? '/' : '/partial/');
@@ -102,6 +125,9 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return deferred.promise;
   };
 
+  /*
+   * Updates/saves the proposal data, and triggers server side validation.
+   */
   var saveCompleteData = function() {
     var deferred = $q.defer();
     $http.patch(PROPOSAL_URI + proposal.id + '/', {'data':JSON.stringify(proposalData)}).success(function(data) {
@@ -112,6 +138,9 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return deferred.promise;
   };
 
+  /*
+   * Updates the proposal title. Does not trigger server side validation.
+   */
   var saveProposalTitle = function(proposalId, proposalTitle) {
     var deferred = $q.defer();
     $http.patch(PROPOSAL_URI + proposalId + '/partial/', {'title':proposalTitle}).success(function(data) {
@@ -122,6 +151,9 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return deferred.promise;
   };
 
+  /*
+   * Triggers the proposal submission process on the server.
+   */
   var submitProposal = function() {
     var deferred = $q.defer();
     $http.post(PROPOSAL_URI + proposal.id + '/submit/').success(function(data) {
@@ -132,6 +164,11 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return deferred.promise;
   };
 
+  /*
+   * Recursively walks the workflow tree to generate an array of elements.
+   * The array of elements is used to speed up access to the elements
+   * and make them easier to work with internally.
+   */
   var buildIndex = function(workflow, parent) {
     workflow.parentId = parent;
     workflows.push(workflow);
@@ -142,15 +179,32 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     }
   };
 
+  /*
+   * Walks the workflow index to expand line item elements that can have 
+   * multiplicities. Line item elements take one of three forms: 
+   *   Single line item - no multiplicity defined, line item acts as
+   *  a logical container for related fields, i.e. an address or contact
+   *  info. Data for these elements are stored like workflow elements,
+   *  directly as a child object.
+   *   Dynamic line item - numeric multiplicity. The number represents
+   *  the maximum number of entries for the line item, and the form allows
+   *  the user to add/remove additional entries via the [add/remove]DynamicDataItem
+   *  methods. Data is stored in a object indexed by the multiplicity index.
+   *   Normal line item - csv multiplicity. Each item's data is stored in a
+   *  subobject indicated by the 'token' value.
+   * Does not return anything, but modifies the workflow index (workflows).
+   */
   var buildMultiplicities = function() {
     var count;
     var iter;
     for (var i = 0; i < workflowLength; i++) {
       if (workflows[i].element_type === 'line_item') {
+        // Single line item
         if (workflows[i].multiplicity === null) {
           workflows[i].multiplicity = [];
           workflows[i].multiplicity[0] = {'token':0, 'value':0};
           workflows[i].multiplicityCount = 1;
+        // Dynamic line item
         } else if (isFinite(workflows[i].multiplicity)) {
           count = parseInt(workflows[i].multiplicity);
           var dataCount = Math.max(1, getDynamicDataCount(workflows[i]));
@@ -159,6 +213,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
           for (iter = 0; iter < dataCount; iter++) {
             workflows[i].multiplicity[iter] = {'token': iter, 'value': iter};
           }
+        // Normal line item
         } else if (typeof workflows[i].multiplicity === 'string') {
           workflows[i].multiplicity = workflows[i].multiplicity.split(', ');
           count = workflows[i].multiplicity.length;
@@ -172,6 +227,10 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     }
   };
 
+  /*
+   * Adds a new dynamic line item to a line item. Does not return
+   * anything. It modifies the workflow index.
+   */
   var addDynamicDataItem = function(element) {
     var data = getDataIndex(getOrder(element), true, proposalData);
     var length = objectLengthCount(data[element.name], false);
@@ -183,16 +242,22 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     }
   };
 
+  /*
+   * Removes a dynamic line item, reindexes the remaining entries and
+   * calls any relevant calculated field callbacks.
+   */
   var removeDynamicDataItem = function(element, multipleToken) {
     var data = getDataIndex(getOrder(element), true, proposalData);
     var length = objectLengthCount(data[element.name], false);
     var index;
     var workingElement;
+    // move any elements after the removed item 'up'
     if (multipleToken < length-1) {
       for (index = multipleToken; index + 1 < length; index++) {
         data[element.name][index] = data[element.name][index + 1];
       }
     }
+    // delete the last element from the data
     delete data[element.name][length - 1];
     for (index = 0; index < workflowLength; index++) {
       if (workflows[index].id === element.id) {
@@ -200,10 +265,14 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
         break;
       }
     }
+    // remove an element from the workflow and reindex
     workingElement.multiplicity.splice(multipleToken, 1);
     for (index = 0; index < workingElement.multiplicity.length; index++) {
       workingElement.multiplicity[index] = {'token': index, 'value': index};
     }
+
+    // remove any callbacks tied to the child elements of this item, and
+    // trigger any calculation callbacks tied to the set of elements.
     var fieldName = getFieldName(workingElement.name, multipleToken);
     for (var i = 0; i < workingElement.children.length; i++) {
       var varName = getFieldName(workingElement.children[i].name, multipleToken);
@@ -215,28 +284,43 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     delete calculatedCallbacks[fieldName];
   };
 
+  /*
+   * Returns the number of items in a dynamic line item.
+   */
   var getDynamicDataCount = function(element) {
     var data = getDataIndex(getOrder(element), true, proposalData);
     return objectLengthCount(data[element.name], false);
   };
 
+  /*
+   * The primary entry point for the proposal service. This loads the
+   * requested proposal, its corresponding workflow, and the topic. The
+   * method also does all the setup work, creating the element index and
+   * populating any multiplicities. It returns the constructed proposal
+   * object.
+   */
   var loadProposal = function(proposalId) {
     // retrieves workflow and data
     if (proposal.id !== proposalId) {
+      // clear out any existing proposal info.
       overview = [];
       validationData = {};
       validationCallbacks = [];
       askIfCallbacks = {};
       calculatedCallbacks = {};
       loadingPromise = $q.defer();
+      // retrieve the proposal
       $http.get(PROPOSAL_URI + proposalId + '/').success(function(propData) {
         proposal = propData;
         proposalData = propData.data;
+        // retrieve the related workflow
         $http.get('api/v1/elements/' + proposal.workflow + '/').success(function(data) {
+          // save the workflow info and do the post-processing on the workflow (index + multiplicity)
           workflow = data;
           buildIndex(workflow, null);
           workflowLength = workflows.length;
           buildMultiplicities();
+          // if the topic isn't already loaded, load it.
           if (typeof proposal.topic !== 'object' && proposal.topic.id === undefined) {
             if (topic.id === proposal.topic) {
               proposal.topic = topic;
@@ -267,6 +351,10 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return loadingPromise.promise;
   };
 
+  /*
+   * Unload the current proposal. This clears out the all the local 
+   * buffers.
+   */
   var unloadProposal = function() {
     // clears workflow & data
     var deferred = $q.defer();
@@ -281,6 +369,11 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return deferred.promise;
   };
 
+  /*
+   * Functions as a page turn mechanism. 'Selects' the element and clears
+   * the callbacks related to the prior selected element. Returns the current
+   * element and the ids of the prior and next elements to the application.
+   */
   var getWorkflowElement = function(elementId) {
     var deferred = $q.defer();
     elementId = parseInt(elementId);
@@ -312,10 +405,14 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       askIfCallbacks = {};
       calculatedCallbacks = {};
       var index;
+      // find the prior and next workflows
       if (currentWorkflowIndex >= 0) {
         previousWorkflow = null;
         for (index = currentWorkflowIndex - 1; index >= 0; --index) {
-          if (workflows[index].element_type === 'workflow' && workflows[index].children && workflows[index].children[0] && workflows[index].children[0].element_type !== 'workflow') {
+          if (workflows[index].element_type === 'workflow' &&
+              workflows[index].children &&
+              workflows[index].children[0] &&
+              workflows[index].children[0].element_type !== 'workflow') {
             previousWorkflow = workflows[index].id;
             break;
           }
@@ -324,7 +421,9 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       if (currentWorkflowIndex < workflowLength) {
         nextWorkflow = null;
         for (index = currentWorkflowIndex + 1; index < workflowLength; ++index) {
-          if (workflows[index].element_type === 'workflow' && workflows[index].children && workflows[index].children[0] && workflows[index].children[0].element_type !== 'workflow') {
+          if (workflows[index].element_type === 'workflow' &&
+              workflows[index].children && workflows[index].children[0] &&
+              workflows[index].children[0].element_type !== 'workflow') {
             nextWorkflow = workflows[index].id;
             break;
           }
@@ -340,6 +439,11 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return deferred.promise;
   };
 
+  /*
+   * Helper method to count the number of properties on an object.
+   * Used for generating the overview and working with dynamic
+   * line items. Returns the number of properties.
+   */
   var objectLengthCount = function(object, recurse) {
     recurse = typeof recurse !== 'undefined' ? recurse : true;
     var length = 0;
@@ -354,7 +458,11 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     }
     return length;
   };
-    
+
+  /*
+   * Helper method to determine if an object is 'empty'.
+   * Returns a boolean.
+   */
   var isEmpty = function(obj) {
     for(var prop in obj) {
       if(obj.hasOwnProperty(prop)) {
@@ -364,6 +472,10 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return true;
   };
 
+  /*
+   * Helper method to determine if an array element is set.
+   * Returns a boolean.
+   */
   var isSet = function(data, elementName) {
     return !(data === undefined ||
              data[elementName] === null ||
@@ -372,6 +484,21 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
              (typeof data[elementName] === 'object' && data[elementName].length === undefined));
   };
 
+  /*
+   * Helper method to determine if an element is required.
+   * Returns a boolean.
+   */
+  var isRequired = function(element) {
+    return element && 
+           element.required && 
+           element.required !== 'False' &&
+           element.required !== 'false';
+  };
+
+  /*
+   * Helper method to derive a boolean from a string.
+   * Returns a boolean.
+   */
   var stringToBoolean = function(data){
     switch(data.toLowerCase()){
       case 'true': case 'yes': case '1': return true;
@@ -380,7 +507,14 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     }
   };
 
+  /*
+   * Checks to see if an element and its children are complete. A 
+   * 'complete' element has all required elements filled in. This is a
+   * rough heuristic; a proposal should be validated to determine actual
+   * completeness. Returns a boolean.
+   */
   var checkCompleteness = function(element, data) {
+    //console.log('complete', element.name, element, data)
     var length = element.children.length;
     var index = 0;
     var complete = true;
@@ -388,65 +522,86 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
       return false;
     }
     for (index; index < length && complete; index++) {
-      if ((element.children[index].required && element.children[index].required !== 'False') && element.children[index].ask_if) {
-        if (data[element.children[index].ask_if] === true || data[element.children[index].ask_if] === 'true') {
+      if (isRequired(element.children[index])) {
+        if (element.children[index].ask_if && 
+            (data[element.children[index].ask_if] === true || data[element.children[index].ask_if] === 'true')) {
           complete = isSet(data, element.children[index].name);
         }
-      } else if (element.children[index].required && element.children[index].required !== 'False') {
-        complete = isSet(data, element.children[index].name);
+        else if (!element.children[index].ask_if) {
+          complete = isSet(data, element.children[index].name);
+        }
       }
     }
     return complete;
   };
 
+  /*
+   * Recursive method for building an overview tree. The overview tree
+   * contains names, ids, 'completeness', and (if requested) number of
+   * errors (based on the client side validation logic). Will recurse
+   * `depth` levels into the workflow. Returns the constructed part of
+   * the overview tree.
+   */
+  var getOverviewLevel = function(element, localProposalData, localValidationData, depth, level) {
+    var localOverview = [];
+    var firstLevel, overviewElement;
+    for (var index = 0; index < element.children.length; index++) {
+      firstLevel = element.children[index];
+      overviewElement = {
+                          'name': firstLevel.human,
+                          'id': firstLevel.id
+                        };
+      // is the child also a workflow? if so, should we follow it?
+      if (firstLevel.children && 
+          firstLevel.children[0] && 
+          firstLevel.children[0].element_type === 'workflow' &&
+          level < depth) {
+        overviewElement.children = getOverviewLevel(firstLevel, 
+                                                    localProposalData[firstLevel.name], 
+                                                    localValidationData ? localValidationData[firstLevel.name] : undefined, 
+                                                    depth, 
+                                                    level + 1);
+      }
+      else {
+        // if we have validation data, get the number of errors
+        if (localValidationData) {
+          overviewElement.errors = objectLengthCount(localValidationData[firstLevel.name]);
+        }
+        // if we have data (we should, except on a newly constructed 
+        // proposal) check for 'completeness'
+        if (localProposalData) {
+          overviewElement.complete = checkCompleteness(firstLevel, localProposalData[firstLevel.name]);
+        } else {
+          overviewElement.complete = false;
+        }
+      }
+      localOverview.push(overviewElement);
+    }
+    return localOverview;
+  };
+
+  /*
+   * Non-recursive caller of `getOverviewLevel`. Clears out the 
+   * existing overview, calls validate if requested, and then
+   * jumps into getOverviewLevel to do the real work.
+   */
   var getProposalOverview = function(validate) {
     var deferred = $q.defer();
-    var element, child;
     if (overview.length === 0 || validate || validationMode) {
       overview = [];
       if (validate) {
         validateWorkflow();
       }
-      for (var index = 0; index < workflow.children.length; index++) {
-        element = {
-                    'name':workflow.children[index].human,
-                    'id':workflow.children[index].id
-                  };
-        if (workflow.children[index].children && workflow.children[index].children[0] && workflow.children[index].children[0].element_type === 'workflow') {
-          element.children = [];
-          for (var subindex = 0; subindex < workflow.children[index].children.length; subindex++) {
-            child = {
-                      'name': workflow.children[index].children[subindex].human,
-                      'id':workflow.children[index].children[subindex].id
-                    };
-            if (validationData && validationData[workflow.name] && validationData[workflow.name][workflow.children[index].name]) {
-              child.errors = objectLengthCount(validationData[workflow.name][workflow.children[index].name][workflow.children[index].children[subindex].name]);
-            }
-            if (proposalData && proposalData[workflow.name] && proposalData[workflow.name][workflow.children[index].name]) {
-              child.complete = checkCompleteness(workflow.children[index].children[subindex], proposalData[workflow.name][workflow.children[index].name][workflow.children[index].children[subindex].name]);
-            } else {
-              child.complete = false;
-            }
-            element.children.push(child);
-          }
-        }
-        else {
-          if (validationData && validationData[workflow.name] && validationData[workflow.name][workflow.children[index].name]) {
-            element.errors = objectLengthCount(validationData[workflow.name][workflow.children[index].name]);
-          }
-          if (proposalData && proposalData[workflow.name]) {
-            element.complete = checkCompleteness(workflow.children[index], proposalData[workflow.name][workflow.children[index].name]);
-          } else {
-            element.complete = false;
-          }
-        }
-        overview.push(element);
-      }
     }
+    overview = getOverviewLevel(workflow, proposalData[workflow.name], validationData[workflow.name], 2, 1);
     deferred.resolve(overview);
     return deferred.promise;
   };
 
+  /*
+   * Helper method to retrieve an element based on its name. Returns the
+   * element, or null if not found.
+   */
   var getElement = function(elementName) {
     for (var i = 0; i < workflowLength; i++) {
       if (workflows[i].name === elementName) {
@@ -456,6 +611,10 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return null;
   };
 
+  /*
+   * Retrieves the 'breadcrumbs' needed to navigate the data or 
+   * validation tree to the element.
+   */
   var getOrder = function(element, multipleToken, altName) {
     var order = [];
     order.push(altName !== undefined ? altName : element.name);
@@ -474,6 +633,10 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return order;
   };
 
+  /*
+   * Takes an order (as returned by getOrder) and returns a 
+   * reference to that point in the source data structure.
+   */
   var getDataIndex = function(order, leaveOne, source) {
     var data = source;
     var floor = leaveOne ? 1 : 0;
@@ -486,6 +649,9 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return data;
   };
 
+  /*
+   * Helper function to build a field name + token.
+   */
   var getFieldName = function(name, token) {
     if (token !== null && token !== undefined) {
       return name + '_' + token;
@@ -494,6 +660,11 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     }
   };
 
+  /*
+   * Special calculated field calculation. It wasn't built into the 
+   * expression parser we are using. Takes a parameter array and returns
+   * the sum of the values.
+   */
   var sum = function(params) {
     var value = 0;
     var tempVal;
@@ -504,6 +675,9 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return value;
   };
 
+  /*
+   * Helper to return the numeric representation of a value.
+   */
   var numericValue = function(value) {
     var type = typeof value;
     if (type === 'string') {
@@ -517,9 +691,13 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     }
   };
 
+  /*
+   * registerElement is how the controller or directive indicates to
+   * the proposalService that it is currently working with a proposal
+   * field. The method sets up an requested callbacks (validation or
+   * ask_if logic) and returns the current value for the field.
+   */
   var registerElement = function(element, validationCallback, askIfCallback, multipleToken) {
-    // return data, and set validation & ask_if callbacks
-    // find or create the proposal data in the correct spot, taking into account the multipleToken, if present.
     var order = getOrder(element, multipleToken);
     var data = getDataIndex(order, true, proposalData);
     var fieldName;
@@ -546,12 +724,15 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
           };
         }
       } else {
+        // parser is a third party expression parser that we use to process calculated fields
         var expr = Parser.parse(element.validation);
         var variables = expr.variables();
         expr = expr.toJSFunction(variables);
         var params = [];
         for (var index = 0; index < variables.length; index++) {
           var variableName = getFieldName(variables[index], multipleToken);
+          // sum is not a built in function for the parser library, so 
+          // we need to handle it slightly differently.
           if (variableName === 'sum') {
             // loop over the existing keys, adding them to the list if they look like the next variable
             for (var key in calculatedCallbacks) {
@@ -568,6 +749,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
             });
             params.push(calculatedCallbacks[variableName].value);
           }
+          // not a 'sum' field
           else {
             var variableElement = getElement(variables[index]);
             if (variableElement) {
@@ -586,6 +768,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
             }
           }
         }
+        // apply the calculated field expression
         if (variables[0] === 'sum') {
           data[order[0]] = sum(params);
         } else {
@@ -629,6 +812,10 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return data[order[0]];
   };
 
+  /*
+   * Triggers all necessary calculated field callbacks based on a
+   * value change. This is not usually called directly.
+   */
   var applyCalculatedCallback = function(fieldName, value, name, multipleToken) {
     var record, index, varIndex, params;
     if (calculatedCallbacks[fieldName] !== undefined) {
@@ -664,6 +851,12 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     }
   };
 
+  /*
+   * Called by the controller or directive to save an updated value
+   * into the proposal data. This will trigger any callbacks for 
+   * ask_if logic, validations (if we have entered validation mode),
+   * and calculated fields.
+   */
   var applyElementValue = function(element, value, multipleToken) {
     // apply the value to the proposal data structure
     var order = getOrder(element, multipleToken); 
@@ -704,6 +897,12 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     applyCalculatedCallback(fieldName, value, element.name, multipleToken);
   };
 
+  /*
+   * Called by the controller or directive to validate a proposal,
+   * either from the root or from a particular element. This calls
+   * into the validation service and reports the results via all
+   * registered validation callbacks.
+   */
   var validateWorkflow = function(element) {
     validationMode = true;
     var data;
@@ -735,6 +934,10 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     }
   };
 
+  /*
+   * Returns the current validation data for the requested element (and
+   * child elements) without triggering validation.
+   */
   var currentValidationData = function(element) {
     var deferred = $q.defer();
     var order = getOrder(element);
@@ -743,6 +946,11 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
     return deferred.promise;
   };
 
+  /*
+   * Public interface methods. Provide access to the above methods
+   * while honoring the authentication status and some flow
+   * expections. i.e. you must have a proposal loaded to save data.
+   */
   return {
     create: function(opportunityId, opportunityTitle, workflowId) {
       if (!AuthenticationService.isAuthenticated) {
