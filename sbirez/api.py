@@ -178,7 +178,7 @@ class ProposalViewSet(viewsets.ModelViewSet):
         response['Content-Disposition'] = \
             'attachment; filename="somefilename.pdf"'
 
-        proposal_pdf(proposal=self.get_object,
+        proposal_pdf(proposal=self.get_object(),
                      output_file=response)
         return response
 

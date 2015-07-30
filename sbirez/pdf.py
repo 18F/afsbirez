@@ -1,3 +1,4 @@
+from html import escape
 from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
@@ -22,13 +23,21 @@ def myLaterPages(canvas, doc):
     canvas.drawString(inch, 0.75 * inch, "Page %d %s" % (doc.page, pageinfo))
     canvas.restoreState()
 
+def render_element(proposal, element, story, style):
+    # import ipdb; ipdb.set_trace()
+    # if element.element_type not in ('workflow', 'group')
+    p = Paragraph(escape(element.human or element.name),
+                  style)
+    story.append(p)
+    story.append(Spacer(1,0.2*inch))
+    for child in element.children.all(): # order?
+        render_element(proposal, child, story, style)
+
 def proposal_pdf(proposal, output_file):
     doc = SimpleDocTemplate(output_file)
-    Story = [Spacer(1,2*inch)]
+    story = [Spacer(1,2*inch)]
     style = styles["Normal"]
-    for i in range(100):
-        bogustext = ("This is Paragraph number %s. " % i) *20
-        p = Paragraph(bogustext, style)
-        Story.append(p)
-        Story.append(Spacer(1,0.2*inch))
-    doc.build(Story, onFirstPage=myFirstPage, onLaterPages=myLaterPages)
+    render_element(proposal, proposal.workflow, story, style)
+
+    doc.build(story, onFirstPage=myLaterPages,
+              onLaterPages=myLaterPages)
