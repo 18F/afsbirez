@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('ProposalReportCtrl', function ($scope, $rootScope, $state, AuthenticationService, ProposalService) {
+  .controller('ProposalReportCtrl', function ($scope, $rootScope, $state, $window, AuthenticationService, ProposalService) {
+    $scope.jwt = $window.sessionStorage.token;
     $scope.proposalId = parseInt($state.params.id);
     $scope.proposal = {};
     $scope.workflow = {};
@@ -45,6 +46,10 @@ angular.module('sbirezApp')
 
     ProposalService.load($scope.proposalId).then(function(data) {
       $scope.proposal = data;
+      if ($scope.proposal.submitted_at) {
+        console.log($scope.proposal.submitted_at);
+        $scope.submitButton = 'Resubmit';
+      }
       $scope.workflow = ProposalService.getWorkflow(parseInt($scope.proposal.workflow)).then(function(data) {
         $scope.workflow = data.current;
       });

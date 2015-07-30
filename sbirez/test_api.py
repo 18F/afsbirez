@@ -14,7 +14,7 @@ from django.test import TestCase
 import django.core.mail
 from django.core.files import uploadedfile
 
-from sbirez.models import Firm, Naics
+from sbirez.models import Firm, Naics, Proposal
 from sbirez import api
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -905,6 +905,40 @@ class ProposalTests(APITestCase):
         self.assertEqual(response.data['data']['subquest']
                          ['quest_thy_favorite_color'], 'green')
 
+    def test_good_partial_update_proposal(self):
+        user = _fixture_user(self)
+
+        response = self.client.post('/api/v1/proposals/',
+            {'owner': 2, 'firm': 1, 'workflow': 1,
+             'title': 'Title!', 'topic': 1, 'data': json.dumps(
+                    {"quest_thy_name": "Galahad",
+                     "subquest": {
+                         "quest_thy_quest": "To seek the Grail",
+                         "quest_thy_favorite_color":
+                             "#0000FF"}})
+             })
+        proposal_id = response.data['id']
+        proposal = Proposal.objects.get(id=proposal_id)
+
+        response = self.client.patch('/api/v1/proposals/%s/partial/' % proposal_id,
+            {
+             'data': json.dumps(
+                    {
+                     "subquest": {
+                         "quest_thy_favorite_color": "green", }})
+             })
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+        response = self.client.get('/api/v1/proposals/%s/' % proposal_id)
+        new_proposal = Proposal.objects.get(id=proposal_id)
+        self.assertEqual(response.data['data']['subquest']
+                         ['quest_thy_favorite_color'], 'green')
+
+        self.assertNotEqual(None, proposal.verified_at)
+        self.assertEqual(None, proposal.submitted_at)
+        self.assertEqual(None, new_proposal.verified_at)
+        self.assertEqual(None, new_proposal.submitted_at)
+
     def test_bad_update_proposal(self):
         user = _fixture_user(self)
 
@@ -974,7 +1008,11 @@ class ProposalTests(APITestCase):
                          "quest_thy_favorite_color":
                              "#0000FF"}})
              })
+        proposal = Proposal.objects.get(id=response.data['id'])
+
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        self.assertEqual(None, proposal.verified_at)
+        self.assertEqual(None, proposal.submitted_at)
 
     # patch a deliberately incomplete proposal with /partial/
     def test_intentionally_incomplete_patch(self):
@@ -989,6 +1027,7 @@ class ProposalTests(APITestCase):
                              "#0000FF"}})
              })
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        proposal = Proposal.objects.get(id=response.data['id'])
 
         response = self.client.patch('/api/v1/proposals/%d/partial/' %
                                      response.data['id'],
@@ -998,12 +1037,17 @@ class ProposalTests(APITestCase):
                      "subquest": {
                          "quest_thy_quest": "Grail-thingie.  Get.", }})
              })
+        new_proposal = Proposal.objects.get(id=response.data['id'])
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data['data']['subquest']['quest_thy_quest'],
                          'Grail-thingie.  Get.')
         self.assertEqual(response.data['data']['subquest']
                          ['quest_thy_favorite_color'], "#0000FF")
         self.assertEqual(response.data['title'], 'Title!')
+        self.assertEqual(None, proposal.verified_at)
+        self.assertEqual(None, proposal.submitted_at)
+        self.assertEqual(None, new_proposal.verified_at)
+        self.assertEqual(None, new_proposal.submitted_at)
 
     # patch a subquest-less proposal with /partial/
     def test_intentionally_incomplete_patch_missing_component(self):
@@ -1043,9 +1087,13 @@ class ProposalTests(APITestCase):
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
         response = self.client.get('/api/v1/proposals/%s/' % response.data['id'])
+        proposal = Proposal.objects.get(id=response.data['id'])
+
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data['data']['subquest']['quest_thy_favorite_color'],
             "#0000FF")
+        self.assertNotEqual(None, proposal.verified_at)
+        self.assertEqual(None, proposal.submitted_at)
 
     def test_ownership_automatically_assigned(self):
         user = _fixture_user(self)
@@ -1079,8 +1127,10 @@ class ProposalTests(APITestCase):
         user = _fixture_user(self)
         response = _upload_death_star_plans(self)
 
+        proposal = Proposal.objects.get(id=2)
         initial_emails_in_memory = len(django.core.mail.outbox)
         response = self.client.post('/api/v1/proposals/2/submit/')
+        new_proposal = Proposal.objects.get(id=2)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(len(django.core.mail.outbox),
                          initial_emails_in_memory + 2)
@@ -1090,6 +1140,8 @@ class ProposalTests(APITestCase):
         notification_message = messages['Your SBIR proposal has been submitted']
         self.assertIn('submitted', notification_message.subject)
         self.assertIn('Title', notification_message.body)
+        self.assertEqual(None, proposal.submitted_at)
+        self.assertNotEqual(None, new_proposal.submitted_at)
 
     def test_get_pdf(self):
         user = _fixture_user(self)
@@ -1186,6 +1238,9 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         response = self.client.post('/api/v1/proposals/', self.data)
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        proposal = Proposal.objects.get(id=response.data['id'])
+        self.assertNotEqual(None, proposal.verified_at)
+        self.assertEqual(None, proposal.submitted_at)
 
     def test_missing_required(self):
         user = _fixture_user(self)
@@ -1250,34 +1305,56 @@ class ProposalValidationTests(APITestCase):
     def test_correct_patch_is_valid(self):
         user = _fixture_user(self)
         response = self.client.post('/api/v1/proposals/', self.data)
+        proposal_id = response.data['id']
+        proposal = Proposal.objects.get(id=proposal_id)
         patch_data = {"data": json.dumps({"minstrels": {"0": {"kg": 95}}})}
         response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+        new_proposal = Proposal.objects.get(id=proposal_id)
+        self.assertNotEqual(None, proposal.verified_at)
+        self.assertNotEqual(new_proposal.verified_at, proposal.verified_at)
+        self.assertNotEqual(None, new_proposal.verified_at)
 
     def test_incorrect_patch_is_invalid(self):
         user = _fixture_user(self)
         response = self.client.post('/api/v1/proposals/', self.data)
+        proposal_id = response.data['id']
+        proposal = Proposal.objects.get(id=proposal_id)
         patch_data = {"data": json.dumps({"minstrels": {"0": {"kg": -95}}})}
         response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual({'non_field_errors': ['kg: failed not_less_than']}, response.data)
+        new_proposal = Proposal.objects.get(id=proposal_id)
+        self.assertNotEqual(None, proposal.verified_at)
+        self.assertEqual(new_proposal.verified_at, proposal.verified_at)
 
     def test_patch_add_complete_is_valid(self):
         user = _fixture_user(self)
         response = self.client.post('/api/v1/proposals/', self.data)
+        proposal_id = response.data['id']
+        proposal = Proposal.objects.get(id=proposal_id)
         patch_data = {"data": json.dumps({"knights": {"2": {"is_courageous": True,
                                                             "how_courageous_exactly": 8}}})}
         response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-
+        new_proposal = Proposal.objects.get(id=proposal_id)
+        self.assertNotEqual(None, proposal.verified_at)
+        self.assertNotEqual(new_proposal.verified_at, proposal.verified_at)
+        self.assertNotEqual(None, new_proposal.verified_at)
+        
     def test_patch_add_incomplete_is_invalid(self):
         user = _fixture_user(self)
         response = self.client.post('/api/v1/proposals/', self.data)
+        proposal_id = response.data['id']
+        proposal = Proposal.objects.get(id=proposal_id)
         patch_data = {"data": json.dumps({"knights": {"2": {"is_courageous": True}}})}
         response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual({'non_field_errors': ['Required field how_courageous_exactly not found']},
                          response.data)
+        new_proposal = Proposal.objects.get(id=proposal_id)
+        self.assertNotEqual(None, proposal.verified_at)
+        self.assertEqual(new_proposal.verified_at, proposal.verified_at)
 
     def test_element_type_phone_validation_pass(self):
         user = _fixture_user(self)
