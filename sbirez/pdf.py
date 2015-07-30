@@ -1,4 +1,6 @@
 from html import escape
+from io import BytesIO
+from PyPDF2 import PdfFileMerger
 from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
@@ -34,10 +36,18 @@ def render_element(proposal, element, story, style):
         render_element(proposal, child, story, style)
 
 def proposal_pdf(proposal, output_file):
-    doc = SimpleDocTemplate(output_file)
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer)
     story = [Spacer(1,2*inch)]
     style = styles["Normal"]
     render_element(proposal, proposal.workflow, story, style)
 
     doc.build(story, onFirstPage=myLaterPages,
               onLaterPages=myLaterPages)
+
+    merger = PdfFileMerger()
+    coverfile = open('sbirez/static/coverpage.pdf', 'rb')
+    merger.append(coverfile)
+    merger.append(buffer)
+    merger.write(output_file)
+    coverfile.close()

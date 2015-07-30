@@ -1097,7 +1097,7 @@ class ProposalTests(APITestCase):
 
         response = self.client.get('/api/v1/proposals/2/pdf/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertIn(b'ReportLab Generated PDF document',
+        self.assertIn(b'Content-Type: application/pdf',
                       response.serialize())
 
     # test that submitting a proposal sends an

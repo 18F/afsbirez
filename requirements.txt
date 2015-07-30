@@ -18,6 +18,7 @@ djorm-ext-pgfulltext==0.9.3
 jsmin==2.1.1
 marshmallow==1.2.2
 psycopg2==2.6
+PyPDF2==1.25.1
 reportlab==3.2.0
 waitres s==0.8.9
 whitenoise==1.0.6
