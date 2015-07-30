@@ -1143,6 +1143,15 @@ class ProposalTests(APITestCase):
         self.assertEqual(None, proposal.submitted_at)
         self.assertNotEqual(None, new_proposal.submitted_at)
 
+    def test_get_pdf(self):
+        user = _fixture_user(self)
+        response = _upload_death_star_plans(self)
+
+        response = self.client.get('/api/v1/proposals/2/pdf/')
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertIn(b'ReportLab Generated PDF document',
+                      response.serialize())
+
     # test that submitting a proposal sends an
     # email mocking the upstream submission
     # delete this when actual upstream submission enabled

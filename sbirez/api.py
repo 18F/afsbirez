@@ -4,6 +4,7 @@ import hashlib
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.http import HttpResponse
 from sbirez.models import Topic, Firm, Proposal, Address, Person, Naics
 from sbirez.models import Element, Document, DocumentVersion, Jargon
 from rest_framework import viewsets, mixins, generics, status, permissions, exceptions
@@ -23,6 +24,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser
 from .permissions import HasObjectEditPermissions, ReadOnlyUnlessStaff
 from .utils import nested_update
+from .pdf import proposal_pdf
 
 mails = template_mail.MagicMailBuilder()
 # To send new types of emails from views, simply call
@@ -170,6 +172,16 @@ class ProposalViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         return [HasObjectEditPermissions(),]
 
+    @detail_route(methods=['get',])
+    def pdf(self, request, pk):
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = \
+            'attachment; filename="somefilename.pdf"'
+
+        proposal_pdf(proposal=self.get_object(),
+                     output_file=response)
+        return response
+
     @detail_route(methods=['post',])
     def submit(self, request, pk):
         prop = self.get_object()
@@ -182,6 +194,7 @@ class ProposalViewSet(viewsets.ModelViewSet):
             {'proposal': prop, 'data':
               json.dumps(prop.data, indent=2, sort_keys=True)
             })
+
         for doc in prop.document_set.all():
             content = doc.file.read()
             # decoding necessary due to an unfixed Django bug
