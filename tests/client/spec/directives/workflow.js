@@ -16,7 +16,7 @@ describe('Directive: WorkflowDirective', function () {
     'firm': 2,
     'id': 3,
     'owner': 3,
-    'submitted_at': '2015-04-14T00:48:55.023678Z',
+    'created_at': '2015-04-14T00:48:55.023678Z',
     'title': 'Proposal for Test Workflow',
     'topic': 8,
     'workflow': 1
