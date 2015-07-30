@@ -41,3 +41,5 @@ EMAIL_USE_SSL = True
 # store email credentials in `credentials.py` (outside version control)
 
 REST_PROXY['API_KEY'] = SAM_API_KEY
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
