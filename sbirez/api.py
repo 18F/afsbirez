@@ -173,6 +173,8 @@ class ProposalViewSet(viewsets.ModelViewSet):
     @detail_route(methods=['post',])
     def submit(self, request, pk):
         prop = self.get_object()
+        prop.submitted_at = timezone.now()
+        prop.save()
         email = mails.submit_notification(prop.owner.email,
                                           {'proposal': prop})
         email.send()
@@ -201,6 +203,7 @@ class PartialProposalViewSet(ProposalViewSet):
             try:
                 instance = self.get_object()
                 data = nested_update(instance.data, json.loads(request.data['data']))
+                instance.verified_at = None
                 request.data['data'] = json.dumps(data)
             except AttributeError:
                 pass

@@ -55,7 +55,6 @@ angular_js = Bundle(
     "js/controllers/notification.js",
     "js/controllers/documentList.js",
     "js/controllers/document.js",
-    "js/controllers/proposalList.js",
     "js/controllers/proposal.js",
     "js/controllers/proposalReport.js",
     "js/controllers/adminuser.js",

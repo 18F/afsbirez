@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_recursive.fields import RecursiveField
 from .utils import nested_update
+from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 
 class UserSerializer(serializers.ModelSerializer):
@@ -291,7 +292,12 @@ class ProposalValidator(object):
                                                     accept_partial=self.accept_partial))
 
         if errors:
+            proposal['verified_at'] = None
             raise serializers.ValidationError(errors)
+        elif self.accept_partial == False:
+            proposal['verified_at'] = timezone.now()
+        elif self.accept_partial == True:
+            proposal['verified_at'] = None
 
         return proposal
 
@@ -328,6 +334,9 @@ class ProposalSerializer(serializers.ModelSerializer):
     firm = serializers.PrimaryKeyRelatedField(
         read_only = True,
         default = CurrentFirmDefault())
+
+    submitted_at = serializers.DateTimeField(required=False, allow_null=True, read_only=True)
+    verified_at = serializers.DateTimeField(required=False, allow_null=True, read_only=True)
 
     data = JsonField()
 

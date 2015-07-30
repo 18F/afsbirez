@@ -45,6 +45,10 @@ angular.module('sbirezApp')
 
     ProposalService.load($scope.proposalId).then(function(data) {
       $scope.proposal = data;
+      if ($scope.proposal.submitted_at) {
+        console.log($scope.proposal.submitted_at);
+        $scope.submitButton = 'Resubmit';
+      }
       $scope.workflow = ProposalService.getWorkflow(parseInt($scope.proposal.workflow)).then(function(data) {
         $scope.workflow = data.current;
       });
