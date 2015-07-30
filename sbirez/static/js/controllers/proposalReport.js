@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('ProposalReportCtrl', function ($scope, $rootScope, $state, AuthenticationService, ProposalService) {
+  .controller('ProposalReportCtrl', function ($scope, $rootScope, $state, $window, AuthenticationService, ProposalService) {
+    $scope.jwt = $window.sessionStorage.token;
     $scope.proposalId = parseInt($state.params.id);
     $scope.proposal = {};
     $scope.workflow = {};
