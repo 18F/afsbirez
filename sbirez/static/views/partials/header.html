@@ -3,11 +3,14 @@
     <h1><span class="icon-logo"></span>SBIR-EZ</h1>
     <form ng-submit="search()">
       <div class="field">
-        <label>
+        <label for="header-query">
           <span class="label-text">Query</span>
-          <input type="search" id="query" name="query" ng-model="query" value="" />
+          <input type="search" id="header-query" name="query" ng-model="query" value="" />
         </label>
       </div>
+      <footer>
+        <input type="submit" class="button" value="Search" />
+      </footer>
     </form>
     <nav class="primary">
       <a class="{{item.title}}" ng-repeat="item in menu" ng-click="item.click()" href="{{item.link}}">{{item.title}}</a>
