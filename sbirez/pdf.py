@@ -25,23 +25,49 @@ def myLaterPages(canvas, doc):
     canvas.drawString(inch, 0.75 * inch, "Page %d %s" % (doc.page, pageinfo))
     canvas.restoreState()
 
-def render_element(proposal, element, story, style):
-    # import ipdb; ipdb.set_trace()
-    # if element.element_type not in ('workflow', 'group')
-    p = Paragraph(escape(element.human or element.name),
+def render_proposal_header(proposal, story, style):
+    p = Paragraph('Proposal Number: %s' % proposal.proposal_number,
                   style)
     story.append(p)
-    story.append(Spacer(1,0.2*inch))
-    for child in element.children.all(): # order?
-        render_element(proposal, child, story, style)
+    p = Paragraph('Date Submitted: %s' % proposal.date_submitted,
+                  style)
+    story.append(p)
+    p = Paragraph(str(proposal.topic.solicitation),
+                  style)
+    story.append(p)
+
+def render_agency_info(proposal, story, style):
+    story.append(Paragraph('Agency Information', style))
+    story.append(Paragraph('Agency Name: %s' % proposal.topic.agency, style))
+    story.append(Paragraph('Command: %s' % '', style)) # TODO
+    story.append(Paragraph('Topic Number: %s' % proposal.topic.topic_number, style))
+    story.append(Paragraph('Proposal Title: %s' % proposal.title, style))
+
+def render_firm_info(proposal, story, style):
+    story.append(Paragraph('Firm Information', style))
+    story.append(Paragraph('Firm Name: %s' % proposal.firm.name, style))
+    story.append(Paragraph('Mail Address: %s' % proposal.firm.address, style))
+    story.append(Paragraph('Website Address: %s' % proposal.firm.website, style))
+    story.append(Paragraph('DUNS: %s' % proposal.firm.duns_id, style))
+    story.append(Paragraph('CAGE: %s' % proposal.firm.cage_code, style))
+    story.append(Paragraph('SBA SBC Identification Number: %s' %
+        proposal.firm.sbc_id, style))
+
+def render_workflow(proposal, story, style):
+    for (el, data) in proposal.workflow.bound(proposal.data[proposal.workflow.name]):
+        story.append(Paragraph(el.human or el.name, style))
+        if (not isinstance(data, list) and not isinstance(data, dict)):
+            story.append(Paragraph(str(data), style))
 
 def proposal_pdf(proposal, output_file):
     buffer = BytesIO()
     doc = SimpleDocTemplate(buffer)
     story = [Spacer(1,2*inch)]
     style = styles["Normal"]
-    render_element(proposal, proposal.workflow, story, style)
-
+    render_proposal_header(proposal, story, style)
+    render_agency_info(proposal, story, style)
+    render_firm_info(proposal, story, style)
+    render_workflow(proposal, story, style)
     doc.build(story, onFirstPage=myLaterPages,
               onLaterPages=myLaterPages)
 

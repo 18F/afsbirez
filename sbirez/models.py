@@ -20,6 +20,14 @@ class Address(models.Model):
     state = models.TextField()
     zip = models.TextField()
 
+    def __str__(self):
+        street = self.street
+        if self.street2:
+            street = '%s\n%s' % self.street2
+        return '%s\n%s, %s %s' % (
+            street, self.city, self.state, self.zip)
+
+
 class Person(models.Model):
     name = models.TextField()
     title = models.TextField(null=True, blank=True)
@@ -46,6 +54,33 @@ class Firm(models.Model):
     patent_count = models.IntegerField(null=True, blank=True)
     total_revenue_range = models.TextField(null=True, blank=True)
     revenue_percent = models.IntegerField(null=True, blank=True)
+
+    @property
+    def complete(self):
+        return bool(
+            self.name and
+            self.sbc_id and
+            self.duns_id and
+            self.cage_code and
+            self.website and
+            self.address and
+            self.point_of_contact and
+            self.founding_year and
+            (self.phase1_count is not None) and
+            self.phase1_year  and
+            (self.phase2_count is not None) and
+            self.phase2_year and
+            (self.phase2_employees is not None) and
+            (self.current_employees is not None) and
+            (self.patent_count is not None) and
+            self.total_revenue_range and
+            (self.revenue_percent is not None) and
+            self.point_of_contact and
+            self.point_of_contact.name and
+            self.point_of_contact.title and
+            self.point_of_contact.email and
+            self.point_of_contact.phone and
+            self.point_of_contact.name )
 
     def __str__(self):
         return self.name
@@ -355,6 +390,43 @@ class Element(models.Model):
 
         return errors
 
+    def bound(self, data):
+        """ Yields (element, datum) tuples
+        for the entire workflow from this point
+        downward, pairing each workflow element
+        with corresponding data from a proposal.
+        Elements with multiplicity will appear once
+        for each value in ``data``.  If they are
+        missing from ``data``, they will be returned
+        once as (element, None).
+        """
+        if self.multiplicity:
+            any_this_level = False
+            if hasattr(self.multiplicity, 'split'):
+                for k in self.multiplicity.split(','):
+                    if k in data:
+                        yield (self, data[k])
+                        any_this_level = True
+                        for child in self.children.all():
+                            for y in child.bound(data[k].get(child.name, {})):
+                                yield y
+            else:
+                for inst in data:
+                    yield (self, inst)
+                    any_this_level = True
+                    for child in self.children.all():
+                        for y in child.bound(inst.get(child.name, {})):
+                            yield y
+            if not any_this_level:
+                for child in self.children.all():
+                    for y in child.bound({}):
+                        yield y
+        else:  # no multiplicity
+            yield (self, data)
+            for child in self.children.all():
+                for y in child.bound(data.get(child.name, {})):
+                    yield y
+
 
 class Jargon(models.Model):
     name = models.TextField(unique=True)
@@ -374,6 +446,10 @@ class Solicitation(models.Model):
     def days_to_close(self):
         return (self.proposals_end_date - timezone.now()).days
 
+    def __str__(self):
+        return '%s due %s' % (self.name or '',
+                              self.proposals_end_date.strftime(
+                              '%d %B %Y'))
 
     @property
     def status(self):
@@ -418,6 +494,17 @@ class Proposal(models.Model):
     verified_at = models.DateTimeField(blank=True, null=True)
     title = models.TextField()
     data = JsonField(null=True, blank=True)
+
+    @property
+    def proposal_number(self):
+        return '%s-%04d' % (self.topic.topic_number, self.id)
+
+    @property
+    def date_submitted(self):
+        if self.submitted_at:
+            return self.submitted_at.strftime('%m-%d-%Y')
+        else:
+            return '(Not Submitted)'
 
 
 class Document(models.Model):
