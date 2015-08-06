@@ -337,19 +337,37 @@
         "fields": {
             "ask_if": null,
             "default": null,
+            "element_type": "group",
+            "help": null,
+            "human": "Needless Explanation",
+            "multiplicity": null,
+            "name": "get_on_with_it",
+            "order": 1,
+            "parent": 1,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
             "element_type": "med_str",
             "help": "Thy moniker",
             "human": "What is thy name?",
             "multiplicity": null,
             "name": "quest_thy_name",
             "order": 1,
-            "parent": 1,
+            "parent": 2,
             "required": "True",
             "validation": null,
             "validation_msg": null
         },
         "model": "sbirez.element",
-        "pk": 2
+        "pk": 3 
     },
     {
         "fields": {
@@ -361,25 +379,7 @@
             "multiplicity": null,
             "name": "subquest",
             "order": 2,
-            "parent": 1,
-            "required": "False",
-            "validation": null,
-            "validation_msg": null
-        },
-        "model": "sbirez.element",
-        "pk": 3
-    },
-    {
-        "fields": {
-            "ask_if": null,
-            "default": null,
-            "element_type": "med_str",
-            "help": null,
-            "human": "What is thy quest?",
-            "multiplicity": null,
-            "name": "quest_thy_quest",
-            "order": 1,
-            "parent": 3,
+            "parent": 2,
             "required": "False",
             "validation": null,
             "validation_msg": null
@@ -393,17 +393,35 @@
             "default": null,
             "element_type": "med_str",
             "help": null,
+            "human": "What is thy quest?",
+            "multiplicity": null,
+            "name": "quest_thy_quest",
+            "order": 1,
+            "parent": 4,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "med_str",
+            "help": null,
             "human": "What is thy favorite color?",
             "multiplicity": null,
             "name": "quest_thy_favorite_color",
             "order": 2,
-            "parent": 3,
+            "parent": 4,
             "required": "True",
             "validation": "does_not_equal blue",
             "validation_msg": "Lancelot already said blue"
         },
         "model": "sbirez.element",
-        "pk": 5
+        "pk": 6
     },
     {
         "fields": {
@@ -415,13 +433,13 @@
             "multiplicity": "Lancelot, Galahad, Robin",
             "name": "knights",
             "order": 3,
-            "parent": 1,
+            "parent": 2,
             "required": "False",
             "validation": null,
             "validation_msg": null
         },
         "model": "sbirez.element",
-        "pk": 6
+        "pk": 7
     },
     {
         "fields": {
@@ -433,13 +451,13 @@
             "multiplicity": null,
             "name": "is_courageous",
             "order": 1,
-            "parent": 6,
+            "parent": 7,
             "required": "False",
             "validation": null,
             "validation_msg": null
         },
         "model": "sbirez.element",
-        "pk": 7
+        "pk": 8
     },
     {
         "fields": {
@@ -451,13 +469,13 @@
             "multiplicity": null,
             "name": "how_courageous_exactly",
             "order": 2,
-            "parent": 6,
+            "parent": 7,
             "required": "True",
             "validation": null,
             "validation_msg": null
         },
         "model": "sbirez.element",
-        "pk": 8
+        "pk": 9
     },
     {
         "fields": {
@@ -469,25 +487,7 @@
             "multiplicity": "3",
             "name": "minstrels",
             "order": 4,
-            "parent": 1,
-            "required": "False",
-            "validation": null,
-            "validation_msg": null
-        },
-        "model": "sbirez.element",
-        "pk": 9
-    },
-    {
-        "fields": {
-            "ask_if": null,
-            "default": null,
-            "element_type": "med_str",
-            "help": null,
-            "human": "Name",
-            "multiplicity": null,
-            "name": "name",
-            "order": 1,
-            "parent": 9,
+            "parent": 2,
             "required": "False",
             "validation": null,
             "validation_msg": null
@@ -501,17 +501,35 @@
             "default": null,
             "element_type": "med_str",
             "help": null,
-            "human": "Instrument",
+            "human": "Name",
             "multiplicity": null,
-            "name": "instrument",
-            "order": 2,
-            "parent": 9,
+            "name": "name",
+            "order": 1,
+            "parent": 10,
             "required": "False",
             "validation": null,
             "validation_msg": null
         },
         "model": "sbirez.element",
         "pk": 11
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "med_str",
+            "help": null,
+            "human": "Instrument",
+            "multiplicity": null,
+            "name": "instrument",
+            "order": 2,
+            "parent": 10,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 12
      },
      {
         "fields": {
@@ -523,13 +541,13 @@
             "multiplicity": null,
             "name": "kg",
             "order": 3,
-            "parent": 9,
+            "parent": 10,
             "required": "True",
             "validation": "not_less_than 0",
             "validation_msg": null
         },
         "model": "sbirez.element",
-        "pk": 12
+        "pk": 13
     },
     {
         "fields": {
@@ -541,13 +559,13 @@
             "multiplicity": null,
             "name": "lb",
             "order": 4,
-            "parent": 9,
+            "parent": 10,
             "required": "True",
             "validation": "kg / 2.20462",
             "validation_msg": null
         },
         "model": "sbirez.element",
-        "pk": 13
+        "pk": 14
     },
     {
         "fields": {
@@ -559,13 +577,13 @@
             "multiplicity": null,
             "name": "sings",
             "order": 5,
-            "parent": 9,
+            "parent": 10,
             "required": "False",
             "validation": null,
             "validation_msg": null
         },
         "model": "sbirez.element",
-        "pk": 14
+        "pk": 15
     },
     {
         "fields": {
@@ -578,13 +596,13 @@
             "multiplicity": null,
             "name": "singing_part",
             "order": 1,
-            "parent": 9,
+            "parent": 10,
             "required": "xor singing_part_unidentifiable",
             "validation": null,
             "validation_msg": null
         },
         "model": "sbirez.element",
-        "pk": 15
+        "pk": 16
     },
     {
         "fields": {
@@ -597,13 +615,13 @@
             "multiplicity": null,
             "name": "singing_part_unidentifiable",
             "order": 2,
-            "parent": 9,
+            "parent": 10,
             "required": "xor singing_part",
             "validation": null,
             "validation_msg": null
         },
         "model": "sbirez.element",
-        "pk": 16
+        "pk": 17
     },
 
 
@@ -618,13 +636,13 @@
             "multiplicity": null,
             "name": "email",
             "order": 3,
-            "parent": 9,
+            "parent": 10,
             "required": "False",
             "validation": null,
             "validation_msg": null
         },
         "model": "sbirez.element",
-        "pk": 17
+        "pk": 18
     },
     {
         "fields": {
@@ -637,13 +655,13 @@
             "multiplicity": null,
             "name": "phone",
             "order": 4,
-            "parent": 9,
+            "parent": 10,
             "required": "False",
             "validation": null,
             "validation_msg": null
         },
         "model": "sbirez.element",
-        "pk": 18
+        "pk": 19
     },
     {
         "fields": {
@@ -656,13 +674,13 @@
             "multiplicity": null,
             "name": "zip",
             "order": 5,
-            "parent": 9,
+            "parent": 10,
             "required": "False",
             "validation": null,
             "validation_msg": null
         },
         "model": "sbirez.element",
-        "pk": 19
+        "pk": 20
     },
     {
         "fields": {
@@ -675,13 +693,13 @@
             "multiplicity": null,
             "name": "teeth",
             "order": 6,
-            "parent": 9,
+            "parent": 10,
             "required": "False",
             "validation": null,
             "validation_msg": null
         },
         "model": "sbirez.element",
-        "pk": 20
+        "pk": 21
     },
       {
         "fields": {
@@ -694,13 +712,13 @@
             "multiplicity": null,
             "name": "skill",
             "order": 7,
-            "parent": 9,
+            "parent": 10,
             "required": "False",
             "validation": null,
             "validation_msg": null
         },
         "model": "sbirez.element",
-        "pk": 21
+        "pk": 22
     },
     {
         "fields": {
