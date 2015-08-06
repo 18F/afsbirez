@@ -242,6 +242,15 @@ class Element(models.Model):
         else:
             return self.name
 
+    _tag_pattern= re.compile(r'<.*?>', re.DOTALL)
+    @property
+    def human_plain(self):
+        "A plain human-friendly name, scrubbed of tags"
+        if self.human:
+            return self._tag_pattern.sub('', self.human)
+        else:
+            return self.name.replace('_', ' ')
+
     def parentage(self):
         """
         Returns a list of each element in the workflow's hierarchy
