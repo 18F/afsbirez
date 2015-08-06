@@ -16,5 +16,14 @@
       <a href="#" ng-hide="topic.saved" ng-click="saveOpportunity()" title="Save {{::topic.topic_number}} for later">Add to my topics</a>
       <a href="#" ng-show="topic.saved" ng-click="removeOpportunity()" title="Remove {{::topic.topic_number}}">Remove from my topics</a>
     </span>
+    <span ng-if="topic.proposal_created">
+      <span class="stats">Created: {{::topic.proposal_created | date}}</span>
+    </span>
+    <span ng-if="topic.proposal_verified">
+      <span class="stats">Verified: {{::topic.proposal_verified | date}}</span>
+    </span>
+    <span ng-if="topic.proposal_submitted">
+      <span class="stats">Submitted: {{::topic.proposal_submitted | date}}</span>
+    </span>
   </nav>
 </article>

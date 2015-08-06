@@ -8,7 +8,7 @@
     </div>
     <div ng-show="results && results.results && numFound === 0">
       <h1 class="primary-header">No Results for <span class="query">{{searchTerm}}</span></h1>
-      <p>We couldn’t find any solicitations matching your search term.</p>
+      <p>We couldn’t find any topics matching your search term.</p>
     </div>
     <div ng-repeat="topic in results.results">
       <div topic="topic" ng-show="topic.id" id="topic.topic_number" view-details="true" save-option="true" create-option="true"></div>

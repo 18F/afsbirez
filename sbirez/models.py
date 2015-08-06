@@ -413,7 +413,7 @@ class Proposal(models.Model):
     firm = models.ForeignKey(Firm, related_name='proposals')
     workflow = models.ForeignKey(Element, related_name='proposals')
     topic = models.ForeignKey(Topic, related_name='proposals')
-    created_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     submitted_at = models.DateTimeField(blank=True, null=True)
     verified_at = models.DateTimeField(blank=True, null=True)
     title = models.TextField()
