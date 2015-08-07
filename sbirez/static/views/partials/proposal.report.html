@@ -1,5 +1,5 @@
 <div class="proposal-progress-report">
-  <header class="proposal-banner">
+  <header class="proposal-header">
     <div class="wrap">
       <h1>{{::proposal.title}}</h1>
     </div>
@@ -9,7 +9,7 @@
     <div class="wrap">
       <section>
         <h1 class="primary-header">Overview</h1>
-        <p>Proposals are comprised of four parts, the Coversheet, Cost Volume, Technical Volume, and the Company Commercialization Report. We&rsquo;ll help you submit your proposal by filling out the necessary paperwork, one step at a time.</p>
+        <p>Proposals are comprised of four parts, listed below. We&rsquo;ll help you submit your proposal by filling out the necessary paperwork, one step at a time.</p>
         <nav class="toc" role="navigation">
           <ol>
             <li ng-class="{'parent-element': element.children, 'is-error': element.errors, 'is-incomplete': !element.children && !element.complete, 'is-complete': !element.children && element.complete}" ng-repeat="element in overview">

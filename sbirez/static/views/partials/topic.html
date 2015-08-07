@@ -4,7 +4,7 @@
     <h2>{{::topic.topic_number}}</h2>
     <p class="entry-summary">{{::topic.description|truncate:500}}</p>
   </a>
-  <nav>
+  <nav class="topic-nav">
     <span ng-if="viewDetails">
       <a ui-sref="topic({id:topic.id})">View details</a>
     </span>

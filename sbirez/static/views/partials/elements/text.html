@@ -1,6 +1,6 @@
 <div class="field field-{{::text.element_type}} field-textarea" ng-class="{'is-error':validationstorage}" ng-show="visible">
   <label class="question" for="{{::fieldToken}}">
-    <span jargon="element"></span>
+    <span jargon="element" class="label-text"></span>
     <textarea id="{{::fieldToken}}" name="{{::fieldToken}}" class="form-control" ng-change="apply()" ng-model="storage"></textarea>
   </label>
   <span class="error-message" ng-show="validationstorage">{{validationstorage}}</span>

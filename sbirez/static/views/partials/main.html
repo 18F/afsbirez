@@ -1,18 +1,16 @@
 <div class="wrap">
-  <div id="hero">
-    <h1>Let&rsquo;s work together</h1>
-    <p>The Small Business Innovation Research (SBIR) and Small Business Technology Transfer (STTR) programs encourage domestic small businesses to engage in Federal Research/Research and Development with the potential for commercialization. This site contains the list of Air Force topics.</p>
-    <p>Use the search form below to find projects that dovetail with the work that you do.</p>
-    <form ng-submit="search()">
-      <div class="field">
-        <label for="query">
-          <span class="label-text">Query</span>
-          <input type="search" id="query" name="query" ng-model="query" value="" />
-        </label>
-      </div>
-      <footer>
-        <input class="button" type="submit" value="Search">          
-      </footer>
-    </form>
-  </div>
+  <h1 class="primary-header">Let&rsquo;s work together</h1>
+  <p>The Small Business Innovation Research (SBIR) and Small Business Technology Transfer (STTR) programs encourage domestic small businesses to engage in Federal Research/Research and Development with the potential for commercialization. This site contains the list of Air Force topics.</p>
+  <p>Use the search form below to find projects that dovetail with the work that you do.</p>
+  <form ng-submit="search()">
+    <div class="field">
+      <label for="query">
+        <span class="label-text">Query</span>
+        <input type="text" id="query" name="query" ng-model="query" value="" />
+      </label>
+    </div>
+    <footer>
+      <input class="button" type="submit" value="Search">          
+    </footer>
+  </form>
 </div>

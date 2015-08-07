@@ -3,8 +3,8 @@
 angular.module('sbirezApp')
   .controller('TopicCtrl', function ($scope, $rootScope, $http, $state, AuthenticationService, SavedOpportunityService, ProposalService) {
     $scope.topicId = $state.params.id;
+    $rootScope.bodyClass = 'topic-show';
     $scope.data = {};
-    $rootScope.bodyClass = 'topic';
 
     $scope.saveOpportunity = function() {
       SavedOpportunityService.save($scope.topicId).then(function() {
