@@ -187,7 +187,7 @@ class Element(models.Model):
         'zip': re.compile(
             '''^\d{5}(-\d{4})?$'''
             , re.IGNORECASE),
-        'percent': lambda x: 0 <= x <= 100,
+        'percent': lambda x: 0 <= x <= 1000,
         'integer': lambda x: isinstance(x, int),
     }
 
