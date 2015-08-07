@@ -20,11 +20,11 @@ angular.module('sbirezApp').directive('header', function() {
             $scope.menu = [{
               'class': 'my-topics',
               'title': 'My Proposals',
-              'link': '/app/proposals'
+              'link': '/~/proposals'
             }, {
               'class': 'my-company',
               'title': 'My Company',
-              'link': '/app/account/organization'
+              'link': '/~/company'
             }, {
               'class': 'sign-out',
               'title': 'Sign Out',
