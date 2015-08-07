@@ -192,7 +192,7 @@ describe('Directive: WorkflowDirective', function () {
     $httpBackend.expectGET('api/v1/proposals/1/').respond(propData);
     $httpBackend.flush();
     // validate title
-    var title = formElement.find('header.proposal-banner div.wrap h1');
+    var title = formElement.find('header.proposal-header div.wrap h1');
     expect(title.text()).toBe('Proposal for Test Workflow');
 
     // validate that the child elements create workflow elements
