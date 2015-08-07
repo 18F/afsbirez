@@ -14,7 +14,7 @@ angular.module('sbirezApp')
 
     if ($scope.isLoggedIn && $state.includes('home')) {
       console.log($state);
-      $location.path('/app/proposals');
+      $location.path('/~/proposals');
     } else if ($rootScope.preproduction) {
       DialogService.openIntroMessage();
     }
