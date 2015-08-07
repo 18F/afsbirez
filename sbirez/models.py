@@ -485,7 +485,7 @@ class Element(models.Model):
         once as (element, None).
         """
         if self.multiplicity:
-            # import ipdb; ipdb.set_trace()
+            import ipdb; ipdb.set_trace()
             any_this_level = False
             if hasattr(self.multiplicity, 'split'):
                 for k in self.multiplicity.split(','):
@@ -509,12 +509,8 @@ class Element(models.Model):
         else:  # no multiplicity
             yield (self, data)
             for child in self.children.all():
-                if self.name in data:
-                    datum = data[self.name].get(child.name, {})
-                else:
-                    datum = {}
-                for y in child.bound(datum):
-                    yield y
+                if child.name in data[self.name]:
+                    yield child.bound(data[self.name][child.name])
 
 
 class Jargon(models.Model):

@@ -1205,33 +1205,37 @@ class ProposalValidationTests(APITestCase):
     data = {
          'workflow': 1,
          'title': 'Title!', 'topic': 1, 'data': json.dumps(
-             {"quest_thy_name": "Galahad",
-              "knights": {
-                  "Galahad": {
-                      "is_courageous": True,
-                      "how_courageous_exactly": 9,
-                      },
-                  "Robin": {
-                      "is_courageous": False,
-                      },
-                  },
-              "minstrels": {
-                  "0": {
-                      "name": "Phil",
-                      "instrument": "phlute",
-                      "kg": 77.1,
-                      "lb": 169.7,
-                      },
-                  "1": {
-                      "name": "Sasha",
-                      "instrument": "sackbut",
-                      "kg": 55,
-                      "lb": 121,
-                      "sings": "True",
-                      "singing_part": "bass",
-                      },
-                  }
-             })
+             {"holy_grail_workflow":
+                 {"get_on_with_it":
+                     {"quest_thy_name": "Galahad",
+                      "knights": {
+                          "Galahad": {
+                              "is_courageous": True,
+                              "how_courageous_exactly": 9,
+                              },
+                          "Robin": {
+                              "is_courageous": False,
+                              },
+                          },
+                      "minstrels": {
+                          "0": {
+                              "name": "Phil",
+                              "instrument": "phlute",
+                              "kg": 77.1,
+                              "lb": 169.7,
+                              },
+                          "1": {
+                              "name": "Sasha",
+                              "instrument": "sackbut",
+                              "kg": 55,
+                              "lb": 121,
+                              "sings": "True",
+                              "singing_part": "bass",
+                              },
+                          }
+                    }
+                }
+             })  # end of `data`
          }
 
     def test_correct_submission_is_valid(self):
@@ -1269,7 +1273,7 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         data = deepcopy(self.data)
         data["data"] = json.loads(data["data"])
-        data["data"]['minstrels']['1']['singing_part_unidentifiable'] = True
+        data["data"]['holy_grail_workflow']['get_on_with_it']['minstrels']['1']['singing_part_unidentifiable'] = True
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1341,7 +1345,7 @@ class ProposalValidationTests(APITestCase):
         self.assertNotEqual(None, proposal.verified_at)
         self.assertNotEqual(new_proposal.verified_at, proposal.verified_at)
         self.assertNotEqual(None, new_proposal.verified_at)
-        
+
     def test_patch_add_incomplete_is_invalid(self):
         user = _fixture_user(self)
         response = self.client.post('/api/v1/proposals/', self.data)
