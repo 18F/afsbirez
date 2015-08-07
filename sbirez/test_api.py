@@ -1375,6 +1375,27 @@ class ProposalValidationTests(APITestCase):
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(response.data, {'non_field_errors': ['Not a valid percent']})
 
+    def test_element_type_percent_validation_greater_than_100_pass(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["skill"] = 122
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def test_element_type_percent_validation_greater_than_1000_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(self.data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["minstrels"]["0"]["skill"] = 1001
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid percent']})
+
 def _upload_death_star_plans(test_instance, login=True):
     if login:
         user = _fixture_user(test_instance)
