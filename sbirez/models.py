@@ -317,6 +317,81 @@ class Element(models.Model):
     # function
     _calc_pattern = re.compile(r"\S\s+[+-/*]\s+\S")
 
+    def validation_errors2(self, data, accept_partial):
+        """
+        Assemble a list of all errors found when this workflow's
+        validation is applied to ``data`` from proposal.
+
+        Args:
+            data: directory of data submitted with proposal
+            accept_partial: If ``True``, then missing elements won't trigger errors
+                            even when ``.required == True``
+        Returns:
+            List of strings describing errors
+        """
+
+        errors = []
+
+        # Designed to be called for a full workflow only
+        assert self.element_type == 'workflow'
+
+        import ipdb; ipdb.set_trace()
+
+        # This is a special hack for the fact
+        # that many of our unit tests' data don't include
+        # the workflow as the top element, but the
+        # app does.  Eventually the tests should be
+        # fixed.  TODO
+
+        if self.name not in data:
+            data = {self.name: data}
+
+        for (el, datum) in self.bound(data):
+            required = el.data_required(accept_partial, datum)
+
+            if not datum:
+                if required == 'required':
+                    errors.append('Required field %s not found' % el.name)
+                continue
+
+            if required == 'forbidden' and datum:
+                errors.append('%s should not be filled' % el.name)
+                continue
+
+            type_validator = self.type_validators.get(el.element_type)
+            if type_validator:
+                if callable(type_validator):
+                    try:
+                        valid = type_validator(datum)
+                    except Exception as e:
+                        valid = False
+                else:
+                    valid = type_validator.search(datum)
+                if not valid:
+                    errors.append('Not a valid %s' % el.element_type)
+                    continue
+
+            if el.validation:
+                for validation in el.validation.split(';'):
+                    if el._calc_pattern.search(validation):
+                        # This "validation" is actually a calculation
+                        continue
+                    args = shlex.split(validation)
+                    function_name = args.pop(0)
+                    try:
+                        func = getattr(validation_helpers, function_name)
+                        if not func(data, datum, *args):
+                            errors.append(
+                                '%s: %s' % (el.name, el.validation_msg or
+                                                       "failed %s" % function_name))
+                    except AttributeError:
+                        # validation refers to a function not found in helper library
+                        errors.append(
+                            '%s: validation function %s absent from validation_helpers.py' %
+                            (el.name, function_name))
+
+        return errors
+
     def validation_errors(self, top_level, data, accept_partial):
         """
         Assemble a list of all errors found when this element's validation is
@@ -410,6 +485,7 @@ class Element(models.Model):
         once as (element, None).
         """
         if self.multiplicity:
+            # import ipdb; ipdb.set_trace()
             any_this_level = False
             if hasattr(self.multiplicity, 'split'):
                 for k in self.multiplicity.split(','):
@@ -433,7 +509,11 @@ class Element(models.Model):
         else:  # no multiplicity
             yield (self, data)
             for child in self.children.all():
-                for y in child.bound(data.get(child.name, {})):
+                if self.name in data:
+                    datum = data[self.name].get(child.name, {})
+                else:
+                    datum = {}
+                for y in child.bound(datum):
                     yield y
 
 
