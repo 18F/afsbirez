@@ -116,6 +116,21 @@ class Reference(models.Model):
     reference = models.TextField()
     topic = models.ForeignKey('Topic', related_name='references')
 
+def _walk_path(dct, path):
+    if path:
+        step = path.pop(0)
+        if step:
+            dct = dct[step]
+            return _walk_path(dct, path)
+    else:
+        return dct
+
+class TreeAware(object):
+    parent = None
+
+    @classmethod
+    def make(cls, obj):
+        pass
 
 class Element(models.Model):
     """
@@ -278,7 +293,7 @@ class Element(models.Model):
             pass
         return bool(datum)
 
-    def should_ask(self, datum):
+    def should_ask(self, data, path):
         if not self.ask_if:
             return True
         reverse = False
@@ -286,21 +301,22 @@ class Element(models.Model):
         if ask_if.split()[0] == 'not':
             reverse = True
             ask_if = ask_if.split()[1]
-        result = self.is_trueish(ask_if, datum)
+        parent = _walk_path(data, path[:-1])
+        result = self.is_trueish(ask_if, parent)
         if reverse:
             result = not result
         return result
 
-    def data_required(self, accept_partial, datum):
+    def data_required(self, accept_partial, data, path):
         if (accept_partial
-            or (not self.should_ask(datum))
+            or (not self.should_ask(data, path))
             or (self.required.lower() == 'false')):
             return 'optional'
         if self.required.lower() == 'true':
             return 'required'
         required = self.required.split()
         (operator, fields) = (required[0], required[1:])
-        field_trueness = [self.is_trueish(f, datum) for f in fields]
+        field_trueness = [self.is_trueish(f, data) for f in fields]
         if operator == 'unless':
             if field_trueness.count(True) == 0:
                 return 'required'
@@ -348,11 +364,10 @@ class Element(models.Model):
             data = {self.name: data}
 
         import ipdb; ipdb.set_trace()
-        
-        for (el, datum) in self.bound(data[self.name]):
-            required = el.data_required(accept_partial, datum)
+        for (el, datum, path) in self.bound(data[self.name], []):
+            required = el.data_required(accept_partial, data, path)
 
-            if not datum:
+            if not datum:  # or children with data, hmm TODO
                 if required == 'required':
                     errors.append('Required field %s not found' % el.name)
                 continue
@@ -477,15 +492,17 @@ class Element(models.Model):
 
         return errors
 
-    def bound_children(self, data):
+    def bound_children(self, data, path):
         for child in self.children.all():
             if child.name in data:
-                for (e, d) in child.bound(data[child.name]):
-                    yield (e, d)
+                for (e, d, c) in child.bound(data[child.name], path):
+                    yield (e, d, c)
+            else:
+                yield (child, None, path + [None])
 
     _comma_and_space = re.compile(r',\s+')
 
-    def bound(self, data):
+    def bound(self, data, path=None):
         """ Yields (element, datum) tuples
         for the entire workflow from this point
         downward, pairing each workflow element
@@ -495,34 +512,29 @@ class Element(models.Model):
         missing from ``data``, they will be returned
         once as (element, None).
         """
+        if not path:
+            path = []
         if self.multiplicity:
             any_this_level = False
-            if hasattr(self.multiplicity, 'split'):
+            if hasattr(self.multiplicity, 'split'):  # TODO: actually multiplicity can come in as '3'
                 for k in self._comma_and_space.split(self.multiplicity):
                     if k in data:
-                        yield (self, data[k])
+                        yield (self, data[k], path + [self.name, k])
                         any_this_level = True
-                        for (e, d) in self.bound_children(data):
-                            yield (e, d)
+                        for (e, d, c) in self.bound_children(data[k], path + [self.name, k]):
+                            yield (e, d, c)
             else:
-                for inst in data:
+                for (i, inst) in enumerate(data):
                     yield (self, inst)
                     any_this_level = True
-                    for (e, d) in self.bound_children(data):
-                        yield (e, d)
+                    for (e, d, c) in self.bound_children(data, path + [self.name, i]):
+                        yield (e, d, c)
             if not any_this_level:
-                pass # Stop moving down
+                yield (self, None, path + [self.name, None])
         else:  # no multiplicity
-            yield (self, data)
-            for (e, d) in self.bound_children(data):
-                yield (e, d)
-            """
-            for child in self.children.all():
-                if child.name in data:
-                    for (e, d) in child.bound(data[child.name]):
-                        yield (e, d)
-                    # yield child.bound(data[child.name])
-            """
+            yield (self, data, path + [self.name])
+            for (e, d, c) in self.bound_children(data, path + [self.name]):
+                yield (e, d, c)
 
 
 class Jargon(models.Model):
