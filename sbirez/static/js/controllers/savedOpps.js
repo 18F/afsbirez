@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('SavedOppsCtrl', function ($scope, $rootScope, SavedOpportunityService) {
+  .controller('SavedOppsCtrl', function ($scope, $rootScope, $state, SavedOpportunityService, SearchService) {
     $scope.data = {};
+    $scope.queryData = '';
     $rootScope.bodyClass = 'proposals';
 
     SavedOpportunityService.list().then(function(data){
@@ -13,4 +14,12 @@ angular.module('sbirezApp')
         $rootScope.bodyClass = 'proposals';
       }
     });
+
+    $scope.search = function() {
+      SearchService.search(1, $scope.queryData, 10).then(function(data) {
+        $state.go('app.search', {}, {'reload':true});
+      }, function(error) {
+        console.log(error);
+      });
+    };
   });
