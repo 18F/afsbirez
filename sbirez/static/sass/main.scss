@@ -261,54 +261,173 @@ button.button-remove:active{
 
 form > h1 ,
 body.sign-up-post main h1,
-.fieldset-dynamic > header > h1 {
-    margin-top: 32px;
-    margin-bottom: 16px;
-    font-size: 28px;
-    line-height: 32px;
-    color: #444;
-    font-family: Georgia;
+.labor-related-costs > h1,
+.direct-material-costs > h1{
+  margin-top: 32px;
+  margin-bottom: 16px;
+  font-size: 28px;
+  line-height: 32px;
+  color: #444;
+  font-family: Georgia;
+}
+
+form > h1:first-of-type{
+  margin-top: 0;
+  padding-top: 24px;
 }
 
 form a.a-return + h1{
     margin-top: 1em !important;	
 }
 
+div.fieldset{
+  border: 1px solid #cfcfcf;
+  padding: 20px 16px 16px;
+  position: relative;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+div.fieldset > h1,
+div.fieldset > header > h1{
+  position: absolute;
+  background: white;
+  margin: 0 0 -3px;
+  bottom: 100%;
+  left: 8px;
+  padding: 0 1px;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 600;
+  color: #777;
+}
+
 div.field,
 section.fieldset,
-section.fieldset.fieldset-radio{ margin-bottom: 24px; }
-
-div.field+section.fieldset{ margin-top: 32px; }
+section.fieldset.fieldset-radio,
+.fieldset-radio{ margin-bottom: 24px; }
 
 section.fieldset{
-    border: 1px solid #cfcfcf;
-    padding: 20px 16px 16px;
-    position: relative;
-    margin-bottom: 20px;
-    border-radius: 4px;
+  border: 1px solid #cfcfcf;
+  padding: 20px 16px 16px;
+  position: relative;
+  margin-bottom: 20px;
+  border-radius: 4px;
 }
 
 .fieldset+.fieldset:not(.fieldset-radio){ margin-top: 32px; }
 
+.fieldset-dynamic section.fieldset-dynamic-item a.remove{
+  position: absolute;
+  right: 16px;
+  font-size: 14px;
+  color: #e51600;
+  border-radius: 3px;
+  padding: 4px 6px;
+}
+
+.fieldset-dynamic section.fieldset-dynamic-item a.remove:hover{
+  background: #cc1602; 
+  color: white;
+  text-decoration: none;
+}
+
 .fieldset-principal-investigator .fieldset:last-of-type,
 .fieldset-dynamic-item.field:last-of-type{
-    margin-bottom: 2px;
+  margin-bottom: 2px;
 }
 
 section.fieldset > h1,
 section.fieldset > header > h1{
-    position: absolute;
-    background: white;
-    margin: 0 0 -3px;
-    bottom: 100%;
-    left: 8px;
-    padding: 0 1px;
-    font-size: 14px;
-    line-height: 16px;
-    font-weight: 600;
-    color: #777;
+  position: absolute;
+  background: white;
+  margin: 0 0 -3px;
+  bottom: 100%;
+  left: 8px;
+  padding: 0 1px;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 600;
+  color: #777;
 }
 
+.fieldset-dynamic > header{
+  margin-bottom: 24px;
+}
+
+.fieldset-dynamic > header a{
+  background: none;
+  border: 1px solid;
+  color: #a50;
+  font: inherit;
+  padding: 6px 8px;
+  font-size: 14px;
+  margin: 4px 0 0 0.4em;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  border-radius: 3px;
+}
+
+div.fieldset-dynamic > header h1 {
+    display: inline-block;
+    vertical-align: middle;
+    font: inherit;
+    color: #555;
+    font-size: 21px;
+    line-height: 16px;
+    margin: 0;
+    position: static;
+}
+
+div.field+section.fieldset,
+div.field+fieldset,
+fieldset.fieldset-checkbox{ margin-top: 36px; }
+
+fieldset.fieldset-principal-investigator,
+fieldset.fieldset-corporate-official,
+fieldset.fieldset-point-of-contact,
+fieldset.fieldset-contact-information,
+fieldset.fieldset-checkbox,
+fieldset.labor-related-cost,
+fieldset.direct-material-cost{
+  border: 1px solid #cfcfcf;
+  padding: 20px 16px 16px;
+  position: relative;
+  margin-bottom: 24px;
+  border-radius: 4px;
+}
+
+fieldset.fieldset-corporate-official{ margin-bottom: 24px; }
+
+.fieldset-principal-investigator fieldset:last-of-type,
+.labor-related-cost .field:last-of-type,
+.direct-material-cost .field:last-of-type{
+  margin-bottom: 0;
+}
+
+fieldset.fieldset-principal-investigator > legend,
+fieldset.fieldset-corporate-official > legend,
+fieldset.fieldset-point-of-contact > legend,
+fieldset.fieldset-contact-information > legend,
+fieldset.fieldset-checkbox > legend,
+fieldset.labor-related-cost > legend,
+fieldset.direct-material-cost > legend{
+  position: absolute;
+  background: white;
+  margin: 0 0 -3px;
+  bottom: 100%;
+  left: 8px;
+  padding: 0 1px;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 600;
+  color: #777;
+}
+
+fieldset.fieldset-point-of-contact,
 section.fieldset div.field:last-of-type+section.fieldset{
     margin-top: 24px;
 }
@@ -509,6 +628,7 @@ div.field-upload input[type=file] {
 .field-calculated input,
 .field-timespan input,
 .field-percentage input,
+.field-proposed-cost input,
 .field-proposed-dta-amount input,
 .field-contract-number input,
 .field-short_str input,
@@ -533,6 +653,16 @@ span.naics-description {
     width: 10em;
 }
 
+.field-naics input {
+  margin-bottom: 8px;
+}
+.field-naics input:last-child{ margin-bottom: 0;}
+
+span.naics-description {
+  margin-left: 8px;
+  font-size: 14px;
+  width: 33%;
+}
 
 .field-number-short input { width: 2em; }
 
@@ -754,12 +884,12 @@ header.banner form div.field input {
         margin-top: 4px;
     }
 
-    header.banner nav a{  padding: 0 8px; }
-    header.banner h1{
-        width: 112px;
-        margin: 0;
-        margin-left: -124px;
-    }
+  header.banner nav a{  padding: 0 8px; }
+  header.banner h1{
+    width: 112px;
+    margin: 0;
+    margin-left: -124px;
+  }
 }
 
 
@@ -889,8 +1019,6 @@ article.topic.is-favorite h1{
     color: #b03a00;
 }
 
-/* @end */
-
 @media screen and (min-width: 711.11px) {
     article.topic{
         padding-right: 208px;
@@ -906,22 +1034,22 @@ article.topic.is-favorite h1{
 
     article.topic nav form{ display: block; }
 
-    article.topic nav a,
-    article.topic nav button,
-    article.topic nav span.stats{
-        display: block;
-        width: 100%;
-        padding: 0.4em 0;
-        margin: 0;
-        border-bottom: 1px solid #eee !important;
-    }
-    
-    article.topic nav a:hover,
-    article.topic nav button:hover{
-        background: #f8f8f8;
-        cursor: pointer;
-    }
-    
+  .topic .topic-nav a,
+  .topic .topic-nav button, 
+  .topic .topc-nav span.stats {
+    display: block;
+    width: 100%;
+    padding: 0.4em 0;
+    margin: 0;
+    border-bottom: 1px solid #eee !important;
+  }
+  
+  .topic .topic-nav a:hover,
+  .topic .topic-nav button:hover{
+    background: #f8f8f8;
+    cursor: pointer;
+  }
+  
 }
 
 /* @end */
@@ -1662,13 +1790,13 @@ body .bigfoot-footnote__button:after {
 }
 
 .bigfoot-footnote__wrapper {
-    width: 50em;
+  width: 50em;
 }
 
-@media screen {	
-    body.bigfoot section.footnotes{
-        display: none;
-    }	
+@media screen { 
+  body.bigfoot section.footnotes{
+    display: none;
+  } 
 }
 
 /* @end */
