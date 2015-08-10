@@ -1260,8 +1260,9 @@ class ProposalValidationTests(APITestCase):
     def test_missing_xor_fails(self):
         user = _fixture_user(self)
         data = deepcopy(self.data)
+        import ipdb; ipdb.set_trace()
         data["data"] = json.loads(data["data"])
-        del(data["data"]['minstrels']['1']['singing_part'])
+        del(data["data"]['holy_grail_workflow']['get_on_with_it']['minstrels']['1']['singing_part'])
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)

@@ -229,6 +229,9 @@ class Element(models.Model):
     class Meta:
         ordering = ['order',]
 
+    def __str__(self):
+        return self.name
+
     def save(self, *args, **kwargs):
         """Human-readable should derive from ``name`` by default."""
         if not self.human:
@@ -335,8 +338,6 @@ class Element(models.Model):
         # Designed to be called for a full workflow only
         assert self.element_type == 'workflow'
 
-        import ipdb; ipdb.set_trace()
-
         # This is a special hack for the fact
         # that many of our unit tests' data don't include
         # the workflow as the top element, but the
@@ -346,7 +347,9 @@ class Element(models.Model):
         if self.name not in data:
             data = {self.name: data}
 
-        for (el, datum) in self.bound(data):
+        import ipdb; ipdb.set_trace()
+        
+        for (el, datum) in self.bound(data[self.name]):
             required = el.data_required(accept_partial, datum)
 
             if not datum:
@@ -474,6 +477,14 @@ class Element(models.Model):
 
         return errors
 
+    def bound_children(self, data):
+        for child in self.children.all():
+            if child.name in data:
+                for (e, d) in child.bound(data[child.name]):
+                    yield (e, d)
+
+    _comma_and_space = re.compile(r',\s+')
+
     def bound(self, data):
         """ Yields (element, datum) tuples
         for the entire workflow from this point
@@ -485,32 +496,33 @@ class Element(models.Model):
         once as (element, None).
         """
         if self.multiplicity:
-            import ipdb; ipdb.set_trace()
             any_this_level = False
             if hasattr(self.multiplicity, 'split'):
-                for k in self.multiplicity.split(','):
+                for k in self._comma_and_space.split(self.multiplicity):
                     if k in data:
                         yield (self, data[k])
                         any_this_level = True
-                        for child in self.children.all():
-                            for y in child.bound(data[k].get(child.name, {})):
-                                yield y
+                        for (e, d) in self.bound_children(data):
+                            yield (e, d)
             else:
                 for inst in data:
                     yield (self, inst)
                     any_this_level = True
-                    for child in self.children.all():
-                        for y in child.bound(inst.get(child.name, {})):
-                            yield y
+                    for (e, d) in self.bound_children(data):
+                        yield (e, d)
             if not any_this_level:
-                for child in self.children.all():
-                    for y in child.bound({}):
-                        yield y
+                pass # Stop moving down
         else:  # no multiplicity
             yield (self, data)
+            for (e, d) in self.bound_children(data):
+                yield (e, d)
+            """
             for child in self.children.all():
-                if child.name in data[self.name]:
-                    yield child.bound(data[self.name][child.name])
+                if child.name in data:
+                    for (e, d) in child.bound(data[child.name]):
+                        yield (e, d)
+                    # yield child.bound(data[child.name])
+            """
 
 
 class Jargon(models.Model):
