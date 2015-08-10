@@ -1250,7 +1250,7 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         data = deepcopy(self.data)
         data["data"] = json.loads(data["data"])
-        del(data["data"]["minstrels"]["0"]["kg"])
+        del(data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["kg"])
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1285,7 +1285,7 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         data = deepcopy(self.data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["kg"] = -22
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["kg"] = -22
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1296,8 +1296,8 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         data = deepcopy(self.data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["kg"] = -22
-        del(data["data"]["knights"]["Galahad"]["how_courageous_exactly"])
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["kg"] = -22
+        del(data["data"]['holy_grail_workflow']['get_on_with_it']["knights"]["Galahad"]["how_courageous_exactly"])
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1324,7 +1324,7 @@ class ProposalValidationTests(APITestCase):
         response = self.client.post('/api/v1/proposals/', self.data)
         proposal_id = response.data['id']
         proposal = Proposal.objects.get(id=proposal_id)
-        patch_data = {"data": json.dumps({"minstrels": {"0": {"kg": -95}}})}
+        patch_data = {"data": json.dumps({"holy_grail_workflow":{"get_on_with_it":{"minstrels": {"1": {"kg": -95}}}}})}
         response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual({'non_field_errors': ['kg: failed not_less_than']}, response.data)
@@ -1351,7 +1351,7 @@ class ProposalValidationTests(APITestCase):
         response = self.client.post('/api/v1/proposals/', self.data)
         proposal_id = response.data['id']
         proposal = Proposal.objects.get(id=proposal_id)
-        patch_data = {"data": json.dumps({"knights": {"2": {"is_courageous": True}}})}
+        patch_data = {"data": json.dumps({"holy_grail_workflow": {"get_on_with_it": {"knights": {"Robin": {"is_courageous": True}}}}})}
         response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual({'non_field_errors': ['Required field how_courageous_exactly not found']},
@@ -1364,7 +1364,7 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         data = deepcopy(self.data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["phone"] = "123-456-7890"
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["phone"] = "123-456-7890"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1374,7 +1374,7 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         data = deepcopy(self.data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["phone"] = "Pennsylvania 6-5000"
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["phone"] = "Pennsylvania 6-5000"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1385,7 +1385,7 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         data = deepcopy(self.data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["email"] = "phil@peasantry.com"
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["email"] = "phil@peasantry.com"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1395,7 +1395,7 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         data = deepcopy(self.data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["email"] = "I am not literate"
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["email"] = "I am not literate"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1406,7 +1406,7 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         data = deepcopy(self.data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["zip"] = "12345"
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["zip"] = "12345"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1416,7 +1416,7 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         data = deepcopy(self.data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["zip"] = "12345678987654321"
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["zip"] = "12345678987654321"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1427,7 +1427,7 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         data = deepcopy(self.data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["teeth"] = 17
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["teeth"] = 17
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1437,7 +1437,7 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         data = deepcopy(self.data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["teeth"] = "Maybe"
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["teeth"] = "Maybe"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1448,7 +1448,7 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         data = deepcopy(self.data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["skill"] = 22
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["skill"] = 22
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1458,7 +1458,7 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         data = deepcopy(self.data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["skill"] = -22
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["skill"] = -22
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)

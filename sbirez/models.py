@@ -316,7 +316,9 @@ class Element(models.Model):
             return 'required'
         required = self.required.split()
         (operator, fields) = (required[0], required[1:])
-        field_trueness = [self.is_trueish(f, data) for f in fields]
+        parent = _walk_path(data, path[:-1])
+        # assumes that all unless / xor are at same level in data
+        field_trueness = [self.is_trueish(f, parent) for f in fields]
         if operator == 'unless':
             if field_trueness.count(True) == 0:
                 return 'required'
@@ -363,12 +365,14 @@ class Element(models.Model):
         if self.name not in data:
             data = {self.name: data}
 
-        import ipdb; ipdb.set_trace()
         for (el, datum, path) in self.bound(data[self.name], []):
             required = el.data_required(accept_partial, data, path)
 
             if not datum:  # or children with data, hmm TODO
                 if required == 'required':
+                    if (None in path[:-1]):
+                        import ipdb; ipdb.set_trace()
+                    # None in path ---> a parent missing from data
                     errors.append('Required field %s not found' % el.name)
                 continue
 
@@ -516,18 +520,16 @@ class Element(models.Model):
             path = []
         if self.multiplicity:
             any_this_level = False
-            if hasattr(self.multiplicity, 'split'):  # TODO: actually multiplicity can come in as '3'
-                for k in self._comma_and_space.split(self.multiplicity):
-                    if k in data:
-                        yield (self, data[k], path + [self.name, k])
-                        any_this_level = True
-                        for (e, d, c) in self.bound_children(data[k], path + [self.name, k]):
-                            yield (e, d, c)
-            else:
-                for (i, inst) in enumerate(data):
-                    yield (self, inst)
+            try:
+                int(self.multiplicity)
+                keys = data.keys()
+            except ValueError:
+                keys = self._comma_and_space.split(self.multiplicity)
+            for k in keys:
+                if k in data:
+                    yield (self, data[k], path + [self.name, k])
                     any_this_level = True
-                    for (e, d, c) in self.bound_children(data, path + [self.name, i]):
+                    for (e, d, c) in self.bound_children(data[k], path + [self.name, k]):
                         yield (e, d, c)
             if not any_this_level:
                 yield (self, None, path + [self.name, None])
