@@ -36,7 +36,8 @@ describe('Controller: SavedOppsCtrl', function () {
         'pre_release_date':'',
         'proposals_begin_date':'',
         'proposals_end_date':''
-      }]
+      }],
+    'count': 2
   };
 
   propData = {
@@ -73,6 +74,7 @@ describe('Controller: SavedOppsCtrl', function () {
     AuthenticationService.setAuthenticated(true);
     expect(scope.data).toEqual({});
     $httpBackend.expectGET('api/v1/topics/?closed=true&saved=true').respond(data);
+    $httpBackend.expectGET('api/v1/proposals/').respond(data);
     $httpBackend.flush();
     expect(scope.data.results[0].proposal).toBe(2);
   });

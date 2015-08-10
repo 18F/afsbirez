@@ -5,8 +5,8 @@ angular.module('sbirezApp').directive('header', function() {
     restrict: 'A',
     replace: true,
     templateUrl: 'static/views/partials/header.html',
-    controller: ['$scope', '$filter', '$window', '$location', '$state', 'AuthenticationService', 'UserService', 'SearchService',
-      function ($scope, $filter, $window, $location, $state, AuthenticationService, UserService, SearchService) {
+    controller: ['$scope', '$window', '$location', '$state', 'AuthenticationService', 'UserService', 'SearchService', 'SavedOpportunityService',
+      function ($scope, $window, $location, $state, AuthenticationService, UserService, SearchService, SavedOpportunityService) {
         $scope.menu = [];
         $scope.query = '';
 
@@ -17,19 +17,24 @@ angular.module('sbirezApp').directive('header', function() {
         var setMenu = function() {
           if ($window.sessionStorage.token !== undefined && $window.sessionStorage.token !== null && $window.sessionStorage.token !== '' &&
               AuthenticationService.isAuthenticated) {
-            $scope.menu = [{
-              'class': 'my-topics',
-              'title': 'My Proposals',
-              'link': '/~/proposals'
-            }, {
-              'class': 'my-company',
-              'title': 'My Company',
-              'link': '/~/company'
-            }, {
-              'class': 'sign-out',
-              'title': 'Sign Out',
-              'click':$scope.openLogout
-            }];
+            SavedOpportunityService.count().then(function(data) {
+              $scope.menu = [{
+                'class': 'proposals',
+                'title': 'My Proposals',
+                'link': '/~/proposals'
+              }, {
+                'class': 'company',
+                'title': 'My Company',
+                'link': '/~/company'
+              }, {
+                'class': 'sign-out',
+                'title': 'Sign Out',
+                'click':$scope.openLogout
+              }];
+              if (data > 0) {
+                $scope.menu[0].title = 'My Proposals (' + data + ')';
+              }
+            });
           } else {
             $scope.menu = [{'title': 'Sign in', 'link':'/signin', 'class':'sign-in'}];
           }
@@ -38,6 +43,7 @@ angular.module('sbirezApp').directive('header', function() {
         setMenu();
 
         AuthenticationService.registerObserverCallback(setMenu);
+        SavedOpportunityService.registerCountObserverCallback(setMenu);
 
         $scope.search = function() {
           if(AuthenticationService.isAuthenticated &&

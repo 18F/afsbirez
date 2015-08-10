@@ -31,5 +31,3 @@ Untitled*.ipynb
 *.egg-info/
 sbirez/media/*
 afbirez/settings/credentials.py
-data/
-sbirez/migrations/

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('TopicCtrl', function ($scope, $rootScope, $http, $state, AuthenticationService, SavedOpportunityService, ProposalService) {
+  .controller('TopicCtrl', function ($scope, $rootScope, $http, $state, $window, AuthenticationService, SavedOpportunityService, ProposalService) {
     $scope.topicId = $state.params.id;
     $rootScope.bodyClass = 'topic-show';
     $scope.data = {};
@@ -38,6 +38,10 @@ angular.module('sbirezApp')
         }
       }
       return keywords;
+    };
+
+    $scope.back = function() {
+      $window.history.back();
     };
 
     $http.get('api/v1/topics/' + $scope.topicId + '/').success(function(data) {

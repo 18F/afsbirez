@@ -13,7 +13,7 @@
       </footer>
     </form>
     <nav class="primary">
-      <a class="{{item.title}}" ng-repeat="item in menu" ng-click="item.click()" href="{{item.link}}">{{item.title}}</a>
+      <a class="{{::item.class}}" ng-repeat="item in menu" ng-click="item.click()" href="{{::item.link}}">{{::item.title}}</a>
     </nav>
   </div>
 </header>

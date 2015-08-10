@@ -307,16 +307,113 @@ body.sign-up-post main h1,
 form > h1:first-of-type{
   margin-top: 0;
   padding-top: 24px;
-  
 }
 
 form a.a-return + h1{
   margin-top: 1em !important; 
 }
 
+div.fieldset{
+  border: 1px solid #cfcfcf;
+  padding: 20px 16px 16px;
+  position: relative;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+div.fieldset > h1,
+div.fieldset > header > h1{
+  position: absolute;
+  background: white;
+  margin: 0 0 -3px;
+  bottom: 100%;
+  left: 8px;
+  padding: 0 1px;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 600;
+  color: #777;
+}
+
 div.field,
 section.fieldset,
+section.fieldset.fieldset-radio,
 .fieldset-radio{ margin-bottom: 24px; }
+
+section.fieldset{
+  border: 1px solid #cfcfcf;
+  padding: 20px 16px 16px;
+  position: relative;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.fieldset+.fieldset:not(.fieldset-radio){ margin-top: 32px; }
+
+.fieldset-dynamic section.fieldset-dynamic-item a.remove{
+  position: absolute;
+  right: 16px;
+  font-size: 14px;
+  color: #e51600;
+  border-radius: 3px;
+  padding: 4px 6px;
+}
+
+.fieldset-dynamic section.fieldset-dynamic-item a.remove:hover{
+  background: #cc1602; 
+  color: white;
+  text-decoration: none;
+}
+
+.fieldset-principal-investigator .fieldset:last-of-type,
+.fieldset-dynamic-item.field:last-of-type{
+  margin-bottom: 2px;
+}
+
+section.fieldset > h1,
+section.fieldset > header > h1{
+  position: absolute;
+  background: white;
+  margin: 0 0 -3px;
+  bottom: 100%;
+  left: 8px;
+  padding: 0 1px;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 600;
+  color: #777;
+}
+
+.fieldset-dynamic > header{
+  margin-bottom: 24px;
+}
+
+.fieldset-dynamic > header a{
+  background: none;
+  border: 1px solid;
+  color: #a50;
+  font: inherit;
+  padding: 6px 8px;
+  font-size: 14px;
+  margin: 4px 0 0 0.4em;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  border-radius: 3px;
+}
+
+div.fieldset-dynamic > header h1 {
+    display: inline-block;
+    vertical-align: middle;
+    font: inherit;
+    color: #555;
+    font-size: 21px;
+    line-height: 16px;
+    margin: 0;
+    position: static;
+}
 
 div.field+section.fieldset,
 div.field+fieldset,
@@ -546,6 +643,10 @@ fieldset.fieldset-mailing-address div.field.field-zip input{
 .field-year input,
 .field-number input,
 .field-fringe-benefits input,
+.field-dollars input,
+.field-calculated input,
+.field-timespan input,
+.field-percentage input,
 .field-proposed-cost input,
 .field-proposed-dta-amount input,
 .field-contract-number input,
@@ -558,6 +659,16 @@ fieldset.fieldset-mailing-address div.field.field-zip input{
   width: 10em;
 }
 
+.field-naics input {
+  margin-bottom: 8px;
+}
+.field-naics input:last-child{ margin-bottom: 0;}
+
+span.naics-description {
+  margin-left: 8px;
+  font-size: 14px;
+  width: 33%;
+}
 
 .field-number-short input{ width: 2em; }
 
@@ -719,10 +830,12 @@ header.banner nav a:hover{
   color: #a3d3ff; 
 }
 
-body.proposals header.banner nav a.my-proposals,
+body.proposals header.banner nav a.proposals,
 body.notifications header.banner nav a.notifications,
-body.my-company header.banner nav a.my-company {
-  text-decoration: none;
+body.company header.banner nav a.company {
+    color: #fefefe;
+    background: #002152;
+    text-decoration: none;
 }
 header.banner form span.label-text,
 header.banner form button{ position: absolute; left: -9999em; }
@@ -784,7 +897,7 @@ header.banner form div.field input {
     margin-top: 4px;
   }
 
-  header.banner nav a{  padding: 0 10px; }
+  header.banner nav a{  padding: 0 8px; }
   header.banner h1{
     width: 112px;
     margin: 0;
@@ -902,14 +1015,11 @@ header.banner form div.field input {
   box-shadow: none;
 }
 
-.topic .topic-nav a:hover,
-.topic .topic-nav button:hover{ 
-  color: #032353; 
-  border-color: inherit;
-  text-decoration: none;
-}
+/* @group is-favorite */
 
-.topic.is-favorite h1{ color: #b03a00; }
+article.topic.is-favorite h1{
+    color: #b03a00;
+}
 
 @media screen and (min-width: 711.11px) {
   article.topic{
@@ -927,7 +1037,8 @@ header.banner form div.field input {
   .topic .topic-nav form{ display: block; }
 
   .topic .topic-nav a,
-  .topic .topic-nav button{
+  .topic .topic-nav button, 
+  .topic .topc-nav span.stats {
     display: block;
     width: 100%;
     padding: 0.4em 0;
@@ -1789,6 +1900,10 @@ body .bigfoot-footnote__button:after {
   content: '';
   display: table;
   clear: both;
+}
+
+.bigfoot-footnote__wrapper {
+  width: 50em;
 }
 
 @media screen { 
