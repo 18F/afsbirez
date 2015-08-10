@@ -294,8 +294,8 @@ angular.module('sbirezApp').factory('ValidationService', function() {
         response = 'Invalid percentage';
         value = data[element.name];
         if (isFinite(value)) {
-          value = parseInt(value);
-          if (value >= 0 && value <= 100) {
+          value = parseFloat(value);
+          if (value >= 0 && value <= 1000) {
             return true;
           }
         }

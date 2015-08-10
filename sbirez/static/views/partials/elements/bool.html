@@ -1,5 +1,5 @@
-<section ng-show="visible" ng-class="{'is-branch': element.ask_if}" class="fieldset fieldset-radio field" aria-describedby="{{::fieldToken}}-legend">
-  <h1 id="{{::fieldToken}}-legend" jargon="element"></h1>
+<fieldset ng-show="visible" ng-class="{'is-branch': element.ask_if}" class="fieldset fieldset-radio field">
+  <legend jargon="element"></legend>
   <div class="field field-radio">
     <label>
       <input type="radio" ng-model="storage" name="{{::fieldToken}}" id="{{::fieldToken}}-yes" ng-click="apply()" value="true"> 
@@ -13,4 +13,4 @@
     </label>
   </div>
   <div ng-show="validationstorage" class="field" ng-class="{'is-error':validationstorage}"><span class="error-message">{{validationstorage}}</span></div>
-</section>
+</fieldset>

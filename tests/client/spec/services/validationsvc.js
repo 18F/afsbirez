@@ -376,7 +376,7 @@ describe('Service: ValidationService', function () {
 
   it('should correctly validate that a valid percentage field is valid', function() {
     var elemData = {
-      'percentage_field1': '80'
+      'percentage_field1': '80.5'
     };
     var validationData = {};
     ValidationService.validate(percentageElements, elemData, validationData);
@@ -385,7 +385,7 @@ describe('Service: ValidationService', function () {
 
   it('should correctly validate an invalid percentage field greater than 100', function() {
     var elemData = {
-      'percentage_field1': '180'
+      'percentage_field1': '1800'
     };
     var validationData = {};
     ValidationService.validate(percentageElements, elemData, validationData);

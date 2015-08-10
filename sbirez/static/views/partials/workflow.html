@@ -1,5 +1,5 @@
 <div class="proposal-details">
-  <header class="proposal-banner">
+  <header class="proposal-header">
     <div class="wrap">
       <h1><a href="#" ui-sref="app.proposals.report({id: proposalId})">{{proposal.title}}</a></h1>
     </div>
@@ -31,10 +31,9 @@
             <button class="button form-nav-next" ng-click="jumpTo(nextWorkflow)" type="submit">Next</button>
           </div>
         </aside>
-      <form>
         <h1>{{currentWorkflow.human}}</h1>
         <summary ng-if="validationList.length" class="error-message">
-          <h1>We’ve detected {{validationList.length}} errors on this page.</h1> 
+          <h1>We&rsquo;ve detected {{validationList.length}} errors on this page.</h1> 
           <ol>
             <li ng-repeat="error in validationList">{{error.message}}: {{error.human}}</li>
           </ol>
@@ -54,7 +53,7 @@
         </div>
         <footer>
           <summary ng-if="validationList.length" class="error-message">
-            <h1>We’ve detected {{validationList.length}} errors on this page. Click the button again to continue.</h1>
+            <h1>We&rsquo;ve detected {{validationList.length}} errors on this page. Click the button again to continue.</h1>
           </summary>
           <button ng-if="showNextButton()" type="button" id="next_state" ng-click="save()">Save</button>
           <button ng-if="showNextButton()" type="button" id="next_state" ng-click="saveAndContinue(nextWorkflow)">Save and continue</button>

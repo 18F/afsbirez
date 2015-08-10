@@ -32,18 +32,14 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container">
-      <div class="skip-nav">
-        <a tab-index="1" href="#sbir-main">Skip to main content</a>
+    <a tab-index="1" href="#sbir-main" class="skip-nav">Skip to main content</a>
+    <div header></div>
+    <main id="sbir-main">
+      <div ui-view>
+        
       </div>
-      <div header></div>
-      <main id="sbir-main">
-        <div ui-view>
-          
-        </div>
-      </main>
-      <div footer></div>
-    </div>
+    </main>
+    <div footer></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>

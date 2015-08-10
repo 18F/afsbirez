@@ -10,10 +10,10 @@ class Command(BaseCommand):
         cursor.execute('''\
             WITH subq AS (
               SELECT t.id,
-                     setweight(to_tsvector(string_agg(coalesce(t.title, ''), ' ')), 'A') ||
-                     setweight(to_tsvector(string_agg(coalesce(t.description, ''), ' ')), 'B') ||
-                     setweight(to_tsvector(string_agg(coalesce(a.area, ''), ' ')), 'A') ||
-                     setweight(to_tsvector(string_agg(coalesce(k.keyword, ''), ' ')), 'A')
+                     setweight(to_tsvector('english', string_agg(coalesce(t.title, ''), ' ')), 'A') ||
+                     setweight(to_tsvector('english', string_agg(coalesce(t.description, ''), ' ')), 'B') ||
+                     setweight(to_tsvector('english', string_agg(coalesce(a.area, ''), ' ')), 'A') ||
+                     setweight(to_tsvector('english', string_agg(coalesce(k.keyword, ''), ' ')), 'A')
                      AS weights
               FROM sbirez_topic t
               LEFT JOIN sbirez_area_topics ta ON (t.id = ta.topic_id)

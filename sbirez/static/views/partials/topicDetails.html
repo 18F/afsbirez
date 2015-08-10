@@ -8,7 +8,7 @@
     <header class="topic-header">
       <h1>{{data.title}}</h1>
       <h2>{{data.program}} {{data.topic_number}}</h2>
-      <nav>
+      <nav class="topic-nav">
         <span ng-if="data.saved">
           <a href="#" ng-hide="data.proposal" ng-click="createProposal()" title="Start Proposal for {{data.topic_number}}">Start a proposal</a>
           <a href="#" ng-show="data.proposal" ui-sref="app.proposals.report({id: data.proposal})" title="Goto Proposal for {{data.topic_number}}">View proposal</a>

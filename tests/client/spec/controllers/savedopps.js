@@ -85,13 +85,4 @@ describe('Controller: SavedOppsCtrl', function () {
     $httpBackend.flush();
   });
 
-  xit('clicking the remove button should remove a topic if logged in', function () {
-    AuthenticationService.setAuthenticated(true);
-    expect(scope.data).toEqual({});
-    $httpBackend.expectGET('api/v1/topics/?closed=true&saved=true').respond(data);
-    $httpBackend.expectGET('api/v1/proposals/').respond({});
-    $httpBackend.flush();
-    scope.removeOpportunity(1);
-    $httpBackend.expectDELETE('api/v1/topics/1/saved').respond(200);
-  });
 });
