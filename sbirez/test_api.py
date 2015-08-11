@@ -1077,11 +1077,12 @@ class ProposalTests(APITestCase):
             {
              'data': json.dumps(
                     {
+                    "holy_grail_workflow": {"get_on_with_it": {
                      "subquest": {
-                         "quest_thy_quest": "Grail-thingie.  Get.", }})
+                         "quest_thy_quest": "Grail-thingie.  Get.", }}}})
              })
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data['data']['subquest']['quest_thy_quest'],
+        self.assertEqual(response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']['quest_thy_quest'],
                          'Grail-thingie.  Get.')
         self.assertEqual(response.data['title'], 'Title!')
 
@@ -1092,11 +1093,12 @@ class ProposalTests(APITestCase):
         response = self.client.post('/api/v1/proposals/',
             {'owner': 2, 'firm': 1, 'workflow': 1,
              'title': 'Title!', 'topic': 1, 'data': json.dumps(
+                    {"holy_grail_workflow": {"get_on_with_it":
                     {"quest_thy_name": "Galahad",
                      "subquest": {
                          "quest_thy_quest": "To seek the Grail",
                          "quest_thy_favorite_color":
-                             "#0000FF"}})
+                             "#0000FF"}}}})
              })
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
@@ -1105,7 +1107,7 @@ class ProposalTests(APITestCase):
         proposal = Proposal.objects.get(id=response.data['id'])
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data['data']['subquest']['quest_thy_favorite_color'],
+        self.assertEqual(response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']['quest_thy_favorite_color'],
             "#0000FF")
         self.assertNotEqual(None, proposal.verified_at)
         self.assertEqual(None, proposal.submitted_at)
@@ -1116,11 +1118,12 @@ class ProposalTests(APITestCase):
         response = self.client.post('/api/v1/proposals/',
             {'workflow': 1,
              'title': 'Title!', 'topic': 1, 'data': json.dumps(
+                    {"holy_grail_workflow": {"get_on_with_it":
                     {"quest_thy_name": "Galahad",
                      "subquest": {
                          "quest_thy_quest": "To seek the Grail",
                          "quest_thy_favorite_color":
-                             "#0000FF"}})
+                             "#0000FF"}}}})
              })
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
@@ -1484,7 +1487,7 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         data = deepcopy(self.data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["skill"] = 122
+        data["data"]["holy_grail_workflow"]["get_on_with_it"]["minstrels"]["0"]["skill"] = 122
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1494,7 +1497,7 @@ class ProposalValidationTests(APITestCase):
         user = _fixture_user(self)
         data = deepcopy(self.data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["skill"] = 1001
+        data["data"]["holy_grail_workflow"]["get_on_with_it"]["minstrels"]["0"]["skill"] = 1001
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)

@@ -409,16 +409,7 @@ class Element(models.Model):
         # Designed to be called for a full workflow only
         assert self.element_type == 'workflow'
 
-        # This is a special hack for the fact
-        # that many of our unit tests' data don't include
-        # the workflow as the top element, but the
-        # app does.  Eventually the tests should be
-        # fixed.  TODO
-
-        if self.name not in data:
-            data = {self.name: data}
-
-        for (el, datum, path) in self.with_data(data[self.name], []):
+        for (el, datum, path) in self.with_data(data.get(self.name, {}), []):
             required = el.data_required(accept_partial, data, path)
 
             if not datum:  # or children with data, hmm TODO
