@@ -282,6 +282,21 @@ class Element(models.Model):
         return result
 
     def is_trueish(self, field_name, dct):
+        """``field`` name in ``dct`` and True
+
+        ``True`` if ``field_name`` in ``dct``
+        and its value is considered True
+
+        Args:
+            field_name: Name of the key
+                in question
+            dct: Dictionary that may include
+                ``field_name``
+        Return:
+            boolean - whether ``field_name`` is
+                present and with a value representing
+                True
+        """
         if field_name not in dct:
             return False
         datum = dct[field_name]
@@ -289,11 +304,29 @@ class Element(models.Model):
             datum = datum.strip().lower()
             if datum == 'false':
                 return False
-        except:
+        except AttributeError: # was not a string
             pass
         return bool(datum)
 
     def should_ask(self, data, path):
+        """Applies ``self.ask_if`` to ``data``
+
+        Applies logic in ``self.ask`` to
+        ``data`` from proposal, walking down
+        ``path`` to locate the dict nested at
+        this element's parent level.
+
+        Args:
+            data: Proposal's full data tree,
+                from top
+            path: Series of keys to walk down
+                data tree to this element's
+                corresponding datum
+        Return:
+            bool: Whether an element is a relevant
+            question in this context (and thus,
+            whether ``required`` fields should
+            actually be required, etc.) """
         if not self.ask_if:
             return True
         reverse = False
@@ -308,6 +341,22 @@ class Element(models.Model):
         return result
 
     def data_required(self, accept_partial, data, path):
+        """Applies ``self.required`` to ``data``.
+
+        Interprets ``self.required`` with regard to
+        ``data`` from proposal, deciding whether to
+        actually require data in this case.
+
+        Args:
+            accept_partial: Whether a partial submission
+                should be accepted
+            data: The submission's data, from the top
+            path: Series of strings to walk down nested
+               ``data`` structure to this element's level
+        Return:
+            'optional', 'required', or 'forbidden'
+        """
+
         if (accept_partial
             or (not self.should_ask(data, path))
             or (self.required.lower() == 'false')):
@@ -339,14 +388,18 @@ class Element(models.Model):
     _calc_pattern = re.compile(r"\S\s+[+-/*]\s+\S")
 
     def validation_errors(self, data, accept_partial):
-        """
-        Assemble a list of all errors found when this workflow's
+        """List of validation errors from applying to ``data``
+
+        Return a list of all errors found when this workflow's
         validation is applied to ``data`` from proposal.
+
+        Should only be called on top-level "workflow"
+        element.
 
         Args:
             data: directory of data submitted with proposal
-            accept_partial: If ``True``, then missing elements won't trigger errors
-                            even when ``.required == True``
+            accept_partial: If ``True``, then missing elements
+                won't trigger errors even when ``.required == True``
         Returns:
             List of strings describing errors
         """
@@ -365,7 +418,7 @@ class Element(models.Model):
         if self.name not in data:
             data = {self.name: data}
 
-        for (el, datum, path) in self.bound(data[self.name], []):
+        for (el, datum, path) in self.with_data(data[self.name], []):
             required = el.data_required(accept_partial, data, path)
 
             if not datum:  # or children with data, hmm TODO
@@ -414,25 +467,31 @@ class Element(models.Model):
 
         return errors
 
-    def bound_children(self, data, path):
+    def children_with_data(self, data, path):
         for child in self.children.all():
             if child.name in data:
-                for (e, d, c) in child.bound(data[child.name], path):
-                    yield (e, d, c)
+                yield from child.with_data(data[child.name], path)
             else:
                 yield (child, None, path + [None])
 
     _comma_and_space = re.compile(r',\s+')
 
-    def bound(self, data, path=None):
+    def with_data(self, data, path=None):
         """ Yields (element, datum, path) tuples
+
+        Yields (element, data, path) tuples
         for the entire workflow from this point
-        downward, pairing each workflow element
-        with corresponding data from a proposal.
-        Elements with multiplicity will appear once
-        for each value in ``data``.  If they are
-        missing from ``data``, they will be returned
-        once as (element, None).
+        downward.  Each item in the tree of ``data``
+        is paired with its corresponding workflow
+        element.  When items are absent from ``data``,
+        they will still be returned, with values of
+        ``None``.
+
+        Args:
+            data: Nested dictionary of submitted proposal data,
+                from the top
+            path: Sequence of key names to navigate ``data``
+                to the point corresponding to this element
         """
         if not path:
             path = []
@@ -447,14 +506,12 @@ class Element(models.Model):
                 if k in data:
                     yield (self, data[k], path + [self.name, k])
                     any_this_level = True
-                    for (e, d, c) in self.bound_children(data[k], path + [self.name, k]):
-                        yield (e, d, c)
+                    yield from self.children_with_data(data[k], path + [self.name, k])
             if not any_this_level:
                 yield (self, None, path + [self.name, None])
         else:  # no multiplicity
             yield (self, data, path + [self.name])
-            for (e, d, c) in self.bound_children(data, path + [self.name]):
-                yield (e, d, c)
+            yield from self.children_with_data(data, path + [self.name])
 
 
 class Jargon(models.Model):
