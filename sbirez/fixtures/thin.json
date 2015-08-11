@@ -367,7 +367,7 @@
             "validation_msg": null
         },
         "model": "sbirez.element",
-        "pk": 3 
+        "pk": 3
     },
     {
         "fields": {
@@ -586,7 +586,8 @@
         "pk": 15
     },
     {
-        "fields": {
+        "fields":
+        {
             "ask_if": null,
             "default": null,
             "element_type": "short_str",
@@ -722,7 +723,7 @@
     },
     {
         "fields": {
-            "data": {"quest_thy_name": "Galahad", "subquest": {"quest_thy_quest": "To seek the Grail", "quest_thy_favorite_color": "yellow"}},
+            "data": {"holy_grail_workflow": {"get_on_with_it": {"quest_thy_name": "Galahad", "subquest": {"quest_thy_quest": "To seek the Grail", "quest_thy_favorite_color": "yellow"}}}},
             "firm": 1,
             "owner": 2,
             "created_at": "2015-03-17T19:26:44.365Z",

@@ -287,7 +287,7 @@ class ProposalValidator(object):
         else:
             raise serializers.ValidationError(['no workflow supplied'])
 
-        errors.extend(workflow.validation_errors2(data,
+        errors.extend(workflow.validation_errors(data,
             accept_partial=self.accept_partial))
 
         """

@@ -887,22 +887,22 @@ class ProposalTests(APITestCase):
 
         response = self.client.get('/api/v1/proposals/2/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data["data"]["quest_thy_name"],
+        self.assertEqual(response.data["data"]['holy_grail_workflow']['get_on_with_it']["quest_thy_name"],
             'Galahad')
 
     def test_good_update_proposal(self):
         user = _fixture_user(self)
 
         response = self.client.get('/api/v1/proposals/2/')
-        self.assertEqual(response.data['data']['subquest']
+        self.assertEqual(response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']
                          ['quest_thy_favorite_color'], 'yellow')
-        response.data['data']['subquest']['quest_thy_favorite_color'] = 'green'
+        response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']['quest_thy_favorite_color'] = 'green'
         response.data['data'] = json.dumps(response.data['data'])
         response = self.client.put('/api/v1/proposals/2/', response.data)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         response = self.client.get('/api/v1/proposals/2/')
-        self.assertEqual(response.data['data']['subquest']
+        self.assertEqual(response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']
                          ['quest_thy_favorite_color'], 'green')
 
     def test_good_partial_update_proposal(self):
@@ -911,11 +911,13 @@ class ProposalTests(APITestCase):
         response = self.client.post('/api/v1/proposals/',
             {'owner': 2, 'firm': 1, 'workflow': 1,
              'title': 'Title!', 'topic': 1, 'data': json.dumps(
+                    {"holy_grail_workflow":
+                    {"get_on_with_it":
                     {"quest_thy_name": "Galahad",
                      "subquest": {
                          "quest_thy_quest": "To seek the Grail",
                          "quest_thy_favorite_color":
-                             "#0000FF"}})
+                             "#0000FF"}}}})
              })
         proposal_id = response.data['id']
         proposal = Proposal.objects.get(id=proposal_id)
@@ -923,15 +925,16 @@ class ProposalTests(APITestCase):
         response = self.client.patch('/api/v1/proposals/%s/partial/' % proposal_id,
             {
              'data': json.dumps(
-                    {
-                     "subquest": {
-                         "quest_thy_favorite_color": "green", }})
+                    {"holy_grail_workflow" :
+                    {"get_on_with_it":
+                     {"subquest": {
+                         "quest_thy_favorite_color": "green", }}}})
              })
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         response = self.client.get('/api/v1/proposals/%s/' % proposal_id)
         new_proposal = Proposal.objects.get(id=proposal_id)
-        self.assertEqual(response.data['data']['subquest']
+        self.assertEqual(response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']
                          ['quest_thy_favorite_color'], 'green')
 
         self.assertNotEqual(None, proposal.verified_at)
@@ -943,7 +946,7 @@ class ProposalTests(APITestCase):
         user = _fixture_user(self)
 
         response = self.client.get('/api/v1/proposals/2/')
-        response.data['data']['subquest']['quest_thy_favorite_color'] = 'blue'
+        response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']['quest_thy_favorite_color'] = 'blue'
         response.data['data'] = json.dumps(response.data['data'])
         response = self.client.put('/api/v1/proposals/2/', response.data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
@@ -957,10 +960,12 @@ class ProposalTests(APITestCase):
             {'workflow': 1,
              'title': 'Title!', 'topic': 1, 'data': json.dumps(
                     {
+                     "holy_grail_workflow": {
+                     "get_on_with_it": {
                      "subquest": {
                          "quest_thy_quest": "To seek the Grail",
                          "quest_thy_favorite_color":
-                             "#0000FF"}})
+                             "#0000FF"}}}})
              })
         self.assertIn('Required field quest_thy_name not found',
                       response.data['non_field_errors'])
@@ -972,8 +977,10 @@ class ProposalTests(APITestCase):
         response = self.client.post('/api/v1/proposals/',
             {'workflow': 1,
              'title': 'Title', 'topic': 1, 'data': json.dumps(
+                    {'holy_grail_workflow':
+                    {'get_on_with_it':
                     {"subquest":
-                     {"quest_thy_quest": "To seek the Grail", }})
+                     {"quest_thy_quest": "To seek the Grail", }}}})
             })
         self.assertIn('Required field quest_thy_name not found',
                       response.data['non_field_errors'])
@@ -987,9 +994,11 @@ class ProposalTests(APITestCase):
         response = self.client.post('/api/v1/proposals/',
             {'workflow': 1,
              'title': 'Title', 'topic': 1, 'data': json.dumps(
+                    {'holy_grail_workflow':
+                    {"get_on_with_it":
                     {"subquest": {
                      "quest_thy_quest": "To seek the Grail",
-                     "quest_thy_favorite_color": "blue"}})
+                     "quest_thy_favorite_color": "blue"}}}})
             })
         self.assertIn('Required field quest_thy_name not found',
                       response.data['non_field_errors'])
@@ -1002,11 +1011,13 @@ class ProposalTests(APITestCase):
         response = self.client.post('/api/v1/proposals/partial/',
             {'workflow': 1,
              'title': 'Title!', 'topic': 1, 'data': json.dumps(
+                    {'holy_grail_workflow':
+                    {"get_on_with_it":
                     {
                      "subquest": {
                          "quest_thy_quest": "To seek the Grail",
                          "quest_thy_favorite_color":
-                             "#0000FF"}})
+                             "#0000FF"}}}})
              })
         proposal = Proposal.objects.get(id=response.data['id'])
 
@@ -1020,11 +1031,13 @@ class ProposalTests(APITestCase):
         response = self.client.post('/api/v1/proposals/partial/',
             {'workflow': 1,
              'title': 'Title!', 'topic': 1, 'data': json.dumps(
+                    {'holy_grail_workflow':
+                    {"get_on_with_it":
                     {
                      "subquest": {
                          "quest_thy_quest": "To seek the Grail",
                          "quest_thy_favorite_color":
-                             "#0000FF"}})
+                             "#0000FF"}}}})
              })
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         proposal = Proposal.objects.get(id=response.data['id'])
@@ -1033,15 +1046,17 @@ class ProposalTests(APITestCase):
                                      response.data['id'],
             {
              'data': json.dumps(
+                    {'holy_grail_workflow':
+                    {"get_on_with_it":
                     {
                      "subquest": {
-                         "quest_thy_quest": "Grail-thingie.  Get.", }})
+                         "quest_thy_quest": "Grail-thingie.  Get.", }}}})
              })
         new_proposal = Proposal.objects.get(id=response.data['id'])
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data['data']['subquest']['quest_thy_quest'],
+        self.assertEqual(response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']['quest_thy_quest'],
                          'Grail-thingie.  Get.')
-        self.assertEqual(response.data['data']['subquest']
+        self.assertEqual(response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']
                          ['quest_thy_favorite_color'], "#0000FF")
         self.assertEqual(response.data['title'], 'Title!')
         self.assertEqual(None, proposal.verified_at)

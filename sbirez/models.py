@@ -338,7 +338,7 @@ class Element(models.Model):
     # function
     _calc_pattern = re.compile(r"\S\s+[+-/*]\s+\S")
 
-    def validation_errors2(self, data, accept_partial):
+    def validation_errors(self, data, accept_partial):
         """
         Assemble a list of all errors found when this workflow's
         validation is applied to ``data`` from proposal.
@@ -414,88 +414,6 @@ class Element(models.Model):
 
         return errors
 
-    def validation_errors(self, top_level, data, accept_partial):
-        """
-        Assemble a list of all errors found when this element's validation is
-        applied to `top_level` data.
-
-        Args:
-            top_level: The proposal's entire data submission
-            data: The segment of proposal data corresponding to this element and
-                  its descendants
-            accept_partial: If ``True``, then missing elements won't trigger errors
-                            even when ``.required == True``
-        Returns:
-            List of strings describing errors
-        """
-
-        errors = []
-
-        if hasattr(data, 'keys'): # then it's a dict
-            data = [data, ]
-
-        for datum in data:
-
-            required = self.data_required(accept_partial, datum)
-
-            if required == 'required':
-                if self.name not in datum:
-                    errors.append('Required field %s not found' % self.name)
-                    continue
-                elif datum[self.name] is None:
-                    errors.append('%s is blank' % self.name)
-                    continue
-
-            if self.name not in datum:
-                continue
-            found = datum[self.name]
-
-            if required == 'forbidden':
-                if found is not None:
-                    errors.append('%s should not be filled' % self.name)
-                    continue
-
-            type_validator = self.type_validators.get(self.element_type)
-            if type_validator:
-                if callable(type_validator):
-                    try:
-                        valid = type_validator(datum[self.name])
-                    except Exception as e:
-                        valid = False
-                else:
-                    valid = type_validator.search(datum[self.name])
-                if not valid:
-                    errors.append('Not a valid %s' % self.element_type)
-                    continue
-
-            if self.validation:
-                for validation in self.validation.split(';'):
-                    if self._calc_pattern.search(validation):
-                        # This "validation" is actually a calculation
-                        continue
-                    args = shlex.split(validation)
-                    function_name = args.pop(0)
-                    try:
-                        func = getattr(validation_helpers, function_name)
-                        if not func(top_level, found, *args):
-                            errors.append(
-                                '%s: %s' % (self.name, self.validation_msg or
-                                                       "failed %s" % function_name))
-                    except AttributeError:
-                        # validation refers to a function not found in helper library
-                        errors.append(
-                            '%s: validation function %s absent from validation_helpers.py' %
-                            (self.name, function_name))
-
-            if self.multiplicity:
-                # then the keys are not relevant, and we just want to validate values
-                found = list(found.values())
-
-            for child_element in self.children.all():
-                errors.extend(child_element.validation_errors(top_level, found, accept_partial))
-
-        return errors
-
     def bound_children(self, data, path):
         for child in self.children.all():
             if child.name in data:
@@ -507,7 +425,7 @@ class Element(models.Model):
     _comma_and_space = re.compile(r',\s+')
 
     def bound(self, data, path=None):
-        """ Yields (element, datum) tuples
+        """ Yields (element, datum, path) tuples
         for the entire workflow from this point
         downward, pairing each workflow element
         with corresponding data from a proposal.

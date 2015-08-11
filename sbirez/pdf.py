@@ -57,7 +57,7 @@ def render_workflow(proposal, story, style):
     # For the moment, tolerate data whether or not
     # it is nested under the name of the workflow
     data = proposal.data.get(proposal.workflow.name) or proposal.data
-    for (el, data) in proposal.workflow.bound(data):
+    for (el, data, path) in proposal.workflow.bound(data, []):
         story.append(Paragraph(el.human_plain, style))
         if (not isinstance(data, list) and not isinstance(data, dict)):
             story.append(Paragraph(str(data), style))
