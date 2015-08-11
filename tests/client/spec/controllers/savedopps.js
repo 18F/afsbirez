@@ -36,7 +36,8 @@ describe('Controller: SavedOppsCtrl', function () {
         'pre_release_date':'',
         'proposals_begin_date':'',
         'proposals_end_date':''
-      }]
+      }],
+    'count': 2
   };
 
   propData = {
@@ -73,6 +74,7 @@ describe('Controller: SavedOppsCtrl', function () {
     AuthenticationService.setAuthenticated(true);
     expect(scope.data).toEqual({});
     $httpBackend.expectGET('api/v1/topics/?closed=true&saved=true').respond(data);
+    $httpBackend.expectGET('api/v1/proposals/').respond(data);
     $httpBackend.flush();
     expect(scope.data.results[0].proposal).toBe(2);
   });
@@ -83,13 +85,4 @@ describe('Controller: SavedOppsCtrl', function () {
     $httpBackend.flush();
   });
 
-  xit('clicking the remove button should remove a topic if logged in', function () {
-    AuthenticationService.setAuthenticated(true);
-    expect(scope.data).toEqual({});
-    $httpBackend.expectGET('api/v1/topics/?closed=true&saved=true').respond(data);
-    $httpBackend.expectGET('api/v1/proposals/').respond({});
-    $httpBackend.flush();
-    scope.removeOpportunity(1);
-    $httpBackend.expectDELETE('api/v1/topics/1/saved').respond(200);
-  });
 });

@@ -69,7 +69,7 @@ angular.module('sbirezApp', [
         }
       })
       .state('app', {
-        url: '/app',
+        url: '/~',
         abstract: true,
         access: {requiredAuthentication: true},
         views: {
@@ -181,30 +181,20 @@ angular.module('sbirezApp', [
         },
         access: { requiredAuthentication: true }
       })
-      .state('app.account', {
-        url: '/account',
-        abstract: 'true',
-        views: {
-          'tabContent': {
-            templateUrl: 'static/views/partials/account.html',
-          }
-        },
-        access: { requiredAuthentication: true }
-      })
-      .state('app.account.user', {
+      .state('app.user', {
         url: '',
         views: {
-          'accountContent': {
+          'tabContent': {
             templateUrl: 'static/views/partials/accountUser.html',
             controller: 'AccountUserCtrl'
           }
         },
         access: { requiredAuthentication: true }
       })
-      .state('app.account.organization', {
-        url: '/organization',
+      .state('app.organization', {
+        url: '/company',
         views: {
-          'accountContent': {
+          'tabContent': {
             templateUrl: 'static/views/partials/accountOrganization.html',
             controller: 'AccountOrganizationCtrl'
           }
@@ -246,7 +236,7 @@ angular.module('sbirezApp', [
   })
 
 .run(function($rootScope, $location, $state, $window, AuthenticationService) {
-  $rootScope.preproduction = false;
+  $rootScope.preproduction = true;
   $rootScope.$on('$stateChangeError',function(event, toState, toParams, fromState, fromParams){
     //console.log('$stateChangeError - fired when an error occurs during transition.');
     //console.log(arguments);

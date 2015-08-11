@@ -153,6 +153,7 @@
           human: If yes, please provide the information below
           element_type: line_item
           ask_if: firm_affiliated
+          required: True
           children:
           -
             name: firm_affiliated_name

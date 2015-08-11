@@ -1,10 +1,10 @@
 # all applications use these settings and services
 memory: 512M
 instances: 1
-buildpack: https://github.com/cloudfoundry/buildpack-python.git
+buildpack: https://github.com/cloudfoundry/buildpack-python.git#v1.3.5
 applications:
 - name: sbirez
   timeout: 180
   #command: waitress-serve --port=$VCAP_APP_PORT afsbirez.wsgi:application 
-  command: python manage.py migrate --noinput && waitress-serve --port=$VCAP_APP_PORT afsbirez.wsgi:application 
-  #command: python manage.py migrate && python manage.py readworkflow data/dod_workflow.yaml && python manage.py loaddata sbirez/fixtures/alldata.json && python manage.py indextopics && waitress-serve --port=$VCAP_APP_PORT afsbirez.wsgi:application 
+  #command: python manage.py migrate --noinput && waitress-serve --port=$VCAP_APP_PORT afsbirez.wsgi:application 
+  command: python manage.py migrate && python manage.py readworkflow data/dod_workflow.yaml && python manage.py loaddata sbirez/fixtures/alldata.json && python manage.py getnaics && python manage.py indextopics && waitress-serve --port=$VCAP_APP_PORT afsbirez.wsgi:application 

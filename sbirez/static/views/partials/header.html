@@ -1,11 +1,11 @@
 <header id="header" role="banner" class="header banner">
   <div class="wrap">
-    <h1><span class="icon-logo"></span>SBIR-EZ</h1>
+    <h1><a href="/"><span class="icon-logo"></span>SBIR-EZ</a></h1>
     <form ng-submit="search()">
       <div class="field">
         <label for="header-query">
           <span class="label-text">Query</span>
-          <input type="search" id="header-query" name="query" ng-model="query" value="" />
+          <input type="text" id="header-query" name="query" ng-model="query" value="" />
         </label>
       </div>
       <footer>
@@ -13,7 +13,7 @@
       </footer>
     </form>
     <nav class="primary">
-      <a class="{{item.title}}" ng-repeat="item in menu" ng-click="item.click()" href="{{item.link}}">{{item.title}}</a>
+      <a class="{{::item.class}}" ng-repeat="item in menu" ng-click="item.click()" href="{{::item.link}}">{{::item.title}}</a>
     </nav>
   </div>
 </header>
