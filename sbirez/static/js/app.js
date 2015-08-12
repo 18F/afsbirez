@@ -24,7 +24,7 @@ angular.module('sbirezApp', [
         }
       })
       .state('search', {
-        url: '/search/',
+        url: '/search',
         views: {
           '': {
             templateUrl: 'static/views/partials/search.html',
@@ -236,7 +236,7 @@ angular.module('sbirezApp', [
   })
 
 .run(function($rootScope, $location, $state, $window, AuthenticationService) {
-  $rootScope.preproduction = true;
+  $rootScope.preproduction = false;
   $rootScope.$on('$stateChangeError',function(event, toState, toParams, fromState, fromParams){
     //console.log('$stateChangeError - fired when an error occurs during transition.');
     //console.log(arguments);
