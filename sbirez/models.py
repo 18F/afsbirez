@@ -262,12 +262,36 @@ class Element(models.Model):
 
     _tag_pattern= re.compile(r'<.*?>', re.DOTALL)
     @property
-    def human_plain(self):
+    def human_plain(self)   :
         "A plain human-friendly name, scrubbed of tags"
         if self.human:
             return self._tag_pattern.sub('', self.human)
         else:
             return self.name.replace('_', ' ')
+
+    @property
+    def reportable_question(self):
+        """Human-readable text for a read-only report"""
+        # TODO: make jargon links in questions?
+        if self.human and self.human.startswith('%'):
+            return ''
+        return self.human_plain
+
+    def reportable_answer(self, datum):
+        """Human-readable version of answer for a read-only report"""
+        result = datum
+        if self.element_type == 'bool':
+            if datum:
+                if hasattr(datum, 'lower'):
+                    datum = (datum.lower() != 'false')
+            result = 'Yes' if datum else 'No'
+        else:
+            if isinstance(datum, list) or isinstance(datum, dict):
+                result = ''
+        if result:
+            return ': %s' % str(result)
+        else:
+            return ''
 
     def parentage(self):
         """
@@ -414,8 +438,6 @@ class Element(models.Model):
 
             if not datum:  # or children with data, hmm TODO
                 if required == 'required':
-                    if (None in path[:-1]):
-                        import ipdb; ipdb.set_trace()
                     # None in path ---> a parent missing from data
                     errors.append('Required field %s not found' % el.name)
                 continue

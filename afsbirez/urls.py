@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 
 from rest_framework import routers
 from rest_framework_proxy.views import ProxyView
-from sbirez import api, models
+from sbirez import api, models, views
 
 router = routers.DefaultRouter()
 router.register(r'users', api.UserViewSet)
@@ -70,4 +70,9 @@ urlpatterns = patterns('',
         ProxyView.as_view(source='registrations?qterms=%(searchterms)s&api_key='
                           + settings.REST_PROXY['API_KEY']),
         name='firm-search'),
+
+    # view submission report
+    url(r'^submission/(?P<pk>[0-9]+)/$',
+        views.submission_report),
+
 )

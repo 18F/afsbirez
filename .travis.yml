@@ -20,6 +20,7 @@ before_script:
   - psql -c 'create database afsbirez owner=afsbirez;' -U postgres
   - 'python manage.py migrate'
 install:
+  - apt-get install -y wkhtmltopdf
   - "pip install -r requirements.txt"
 script:
 - 'python manage.py test'

@@ -26,13 +26,13 @@ def myLaterPages(canvas, doc):
     canvas.restoreState()
 
 def render_proposal_header(proposal, story, style):
-    p = Paragraph('Proposal Number: %s' % proposal.proposal_number,
+    p = Paragraph('<para fontSize="24px">Proposal Number: %s</para>' % proposal.proposal_number,
                   style)
     story.append(p)
-    p = Paragraph('Date Submitted: %s' % proposal.date_submitted,
+    p = Paragraph('<para alignment="TA_RIGHT">Date Submitted: %s</para>' % proposal.date_submitted,
                   style)
     story.append(p)
-    p = Paragraph(str(proposal.topic.solicitation),
+    p = Paragraph('<para alignment="TA_RIGHT">%s</para>' % proposal.topic.solicitation,
                   style)
     story.append(p)
 
