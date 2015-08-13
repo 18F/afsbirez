@@ -1,10 +1,13 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('SearchCtrl', function ($scope, $rootScope, SearchService) {
+  .controller('SearchCtrl', function ($scope, $rootScope, $location, SearchService) {
 
     $rootScope.bodyClass = 'topics';
  
+    var SOLICITATIONS_PER_PAGE = 10;
+    $scope.itemsPerPage = SOLICITATIONS_PER_PAGE;
+
     var loadState = function() {
       var state = SearchService.loadState();
       $scope.searchTerm = state.searchTerm; 
@@ -19,16 +22,6 @@ angular.module('sbirezApp')
       }
     };
 
-    loadState();
-
-    var SOLICITATIONS_PER_PAGE = 10;
-    $scope.itemsPerPage = SOLICITATIONS_PER_PAGE;
-
-    $scope.simpleMode = ($scope.searchTerm === '');
-    $scope.simpleModeIcebox = true;
-
-    SearchService.registerObserverCallback(loadState);
-
     $scope.search = function(page) {
       SearchService.search(page, $scope.searchTerm, $scope.itemsPerPage).then(function(data) {
         $scope.results = data;
@@ -41,7 +34,24 @@ angular.module('sbirezApp')
         console.log(error);
       });
       $scope.currentPage = SearchService.getPage();
+      $location.search({'query': $scope.searchTerm, 'page': $scope.currentPage});
     };
+
+    loadState();
+    
+    var query = $location.search();
+    if (query && query.query && ($scope.searchTerm !== query.query || $scope.numFound === 0)) {
+      $scope.searchTerm = query.query;
+      if (query.page) {
+        $scope.currentPage = query.page;
+      }
+      $scope.search($scope.currentPage);
+    }
+
+    $scope.simpleMode = ($scope.searchTerm === '');
+    $scope.simpleModeIcebox = true;
+
+    SearchService.registerObserverCallback(loadState);
 
     $scope.clear = function() {
       SearchService.clearState();

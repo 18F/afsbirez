@@ -86,7 +86,13 @@ angular.module('sbirezApp').factory('TokenInterceptor', function ($q, $window, $
       if (rejection !== null && rejection.status === 401) {
         $window.sessionStorage.token = '';
         AuthenticationService.setAuthenticated(false);
-        var path = $location.path();
+        var search = $location.search();
+        var path = '';
+        if (search.target) {
+          path = search.target;
+        } else {
+          path = $location.path();
+        }
         $location.path('/signin').search('target', path);
       }
       return $q.reject(rejection);

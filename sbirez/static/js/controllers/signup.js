@@ -33,7 +33,7 @@ angular.module('sbirezApp')
       return password.length > 7;
     };
 
-    $scope.signUp = function signUp() {
+    $scope.signUp = function() {
       $scope.errorMsg = '';
       $scope.errorName = '';
       $scope.errorEmail = '';

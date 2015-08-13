@@ -42,20 +42,25 @@ angular.module('sbirezApp').directive('header', function() {
 
         setMenu();
 
+        var setSearchTerm = function(term) {
+          $scope.query = term;
+        };
+
         AuthenticationService.registerObserverCallback(setMenu);
         SavedOpportunityService.registerCountObserverCallback(setMenu);
+        SearchService.registerSearchTermCallback(setSearchTerm);
 
         $scope.search = function() {
           if(AuthenticationService.isAuthenticated &&
              ($window.sessionStorage.token !== null && $window.sessionStorage.token !== undefined && $window.sessionStorage.token !== '')) {
             SearchService.search(1, $scope.query, 10).then(function(data) {
-              $state.go('app.search');
+              $state.go('app.search', {'query': $scope.query}, {'reload': false, 'location': true});
             }, function(error) {
               console.log(error);
             });
           } else {
             SearchService.search(1, $scope.query, 10).then(function(data) {
-              $state.go('search', {}, {'reload':true});
+              $state.go('search', {'query': $scope.query}, {'reload':true, 'location': true});
             }, function(error) {
               console.log(error);
             });

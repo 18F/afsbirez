@@ -109,11 +109,11 @@ describe('Controller: SearchCtrl', function () {
   });
 
   it('searching for a the same page and search term twice should return the cached results.', function () {
-    scope.searchTerm = 'searchTerm';
-    $httpBackend.expectGET('api/v1/topics/?closed=true&page=1&page_size=10&q=' + scope.searchTerm).respond(emptyData);
-    scope.search(1);
+    scope.searchTerm = 'software';
+    $httpBackend.expectGET('api/v1/topics/?closed=true&page=1&page_size=10&q=' + scope.searchTerm).respond(data);
     scope.search(1);
     $httpBackend.flush();
+    scope.search(1);
   });
 
   it('searching for a bogus text string should search for the first page of results', function () {

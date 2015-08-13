@@ -8,16 +8,24 @@ angular.module('sbirezApp').factory('SearchService', function($http, $q, Proposa
   var numFound = 0;
   var results = {};
   var observerCallbacks = [];
+  var searchTermCallbacks = [];
  
   return {
     registerObserverCallback : function(callback) {
       observerCallbacks.push(callback);
     },
 
+    registerSearchTermCallback : function(callback) {
+      searchTermCallbacks.push(callback);
+    },
+
     search: function(page, searchTerm, itemsPerPage) {
       var deferred = $q.defer();
       if (typeof page === 'number' && page === Math.floor(page) && page >= 0) {
         page = page;
+      }
+      else if (typeof page === 'string' && parseInt(page)) {
+        page = parseInt(page);
       }
       else if (page === 'next' && (numFound === 0 || currentPage < (numFound / itemsPerPage))) {
         page = currentPage + 1;
@@ -35,7 +43,7 @@ angular.module('sbirezApp').factory('SearchService', function($http, $q, Proposa
         page = 1;
       }
 
-      if (page === currentPage && lastSearch === searchTerm) {
+      if (page === currentPage && lastSearch === searchTerm && numFound > 0) {
         deferred.resolve(results);
         return deferred.promise;
       }
@@ -75,6 +83,12 @@ angular.module('sbirezApp').factory('SearchService', function($http, $q, Proposa
         angular.forEach(observerCallbacks, function(callback) {
           if (callback) {
             callback();
+          }
+        });
+
+        angular.forEach(searchTermCallbacks, function(callback) {
+          if (callback) {
+            callback(searchTerm);
           }
         });
       }).error(function(data) {
