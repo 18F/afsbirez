@@ -210,6 +210,7 @@ class Element(models.Model):
     """
     name = models.TextField(blank=False)
     human = models.TextField(null=True, blank=True)
+    report_text = models.TextField(null=True, blank=True)
     validation = models.TextField(null=True, blank=True)
     element_type = models.TextField(default='str')
     # workflow, group, line_item, read_only_text, or scalar type
@@ -272,15 +273,15 @@ class Element(models.Model):
     @property
     def reportable_question(self):
         """Human-readable text for a read-only report"""
-        # TODO: make jargon links in questions?
-        if self.human and self.human.startswith('%'):
-            return ''
-        return self.human_plain
+        if self.report_text is not None:
+            return self.report_text
+        else:
+            return self.human_plain
 
     def reportable_answer(self, datum):
         """Human-readable version of answer for a read-only report"""
         result = datum
-        if self.element_type == 'bool':
+        if self.element_type in ('bool', 'checkbox'):
             if datum:
                 if hasattr(datum, 'lower'):
                     datum = (datum.lower() != 'false')
@@ -480,16 +481,32 @@ class Element(models.Model):
 
         return errors
 
-    def children_with_data(self, data, path):
+    def children_with_data(self, data, path, include_empty):
         for child in self.children.all():
             if child.name in data:
-                yield from child.with_data(data[child.name], path)
+                yield from child.with_data(data[child.name], path, include_empty)
             else:
-                yield (child, None, path + [None])
+                if include_empty:
+                    yield (child, None, path + [None])
 
     _comma_and_space = re.compile(r',\s+')
+    _nonalphanum = re.compile(r'[^A-Za-z0-9]')
 
-    def with_data(self, data, path=None):
+    def _contains_data(self, data):
+        if isinstance(data, list):
+            for itm in data:
+                if self._contains_data(itm):
+                    return True
+            return False
+        elif isinstance(data, dict):
+            for key in data:
+                if self._contains_data(data[key]):
+                    return True
+            return False
+        else:
+            return True
+
+    def with_data(self, data, path=None, include_empty=True):
         """ Yields (element, datum, path) tuples
 
         Yields (element, data, path) tuples
@@ -508,6 +525,8 @@ class Element(models.Model):
         """
         if not path:
             path = []
+        if (not include_empty) and (not self._contains_data(data)):
+            return  # without yielding
         if self.multiplicity:
             any_this_level = False
             try:
@@ -515,16 +534,18 @@ class Element(models.Model):
                 keys = data.keys()
             except ValueError:
                 keys = self._comma_and_space.split(self.multiplicity)
+                keys = [self._nonalphanum.sub('_', k) for k in keys]
             for k in keys:
                 if k in data:
-                    yield (self, data[k], path + [self.name, k])
-                    any_this_level = True
-                    yield from self.children_with_data(data[k], path + [self.name, k])
+                    if include_empty or self._contains_data(data[k]):
+                        yield (self, data[k], path + [self.name, k])
+                        any_this_level = True
+                        yield from self.children_with_data(data[k], path + [self.name, k], include_empty)
             if not any_this_level:
                 yield (self, None, path + [self.name, None])
         else:  # no multiplicity
             yield (self, data, path + [self.name])
-            yield from self.children_with_data(data, path + [self.name])
+            yield from self.children_with_data(data, path + [self.name], include_empty)
 
 
 class Jargon(models.Model):
@@ -605,6 +626,24 @@ class Proposal(models.Model):
         else:
             return '(Not Submitted)'
 
+    def report(self):
+        for (el, data, path) in self.workflow.with_data(
+            self.data.get(self.workflow.name, {}), [], include_empty=False):
+            if (el.element_type == 'checkbox') and \
+                (el.parent.element_type == 'line_item'):
+                # TODO: does this really cover all cases
+                if data:
+                    # import ipdb; ipdb.set_trace()
+                    pass
+            if el.report_text == '':
+                continue
+            if el.element_type == 'checkbox' and not data:
+                continue
+            if el.human == r'%multiple%':
+                question = path[-2]
+            else:
+                question = el.reportable_question
+            yield (el, question, el.reportable_answer(data))
 
 class Document(models.Model):
     name = models.CharField(max_length=255)

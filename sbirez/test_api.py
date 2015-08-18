@@ -1165,7 +1165,9 @@ class ProposalTests(APITestCase):
         user = _fixture_user(self)
         response = _upload_death_star_plans(self)
 
-        response = self.client.get('/api/v1/proposals/2/pdf/')
+        #response = self.client.get('/api/v1/proposals/2/pdf/')
+        response = self.client.get('/submissions/2/')
+        import ipdb; ipdb.set_trace()
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertIn(b'Content-Type: application/pdf',
                       response.serialize())

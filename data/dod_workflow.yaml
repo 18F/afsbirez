@@ -77,6 +77,7 @@
         -
           name: fraud_conviction_company
           human: "If yes, provide the name of the associated company:"
+          report_text: ""
           element_type: med_str
           ask_if: fraud_conviction
           required: True
@@ -91,6 +92,7 @@
         -
           name: pi_fraud_conviction_name
           human: "If yes, please provide the individual's name (First, Middle, Last):"
+          report_text: ""
           element_type: med_str
           ask_if: pi_fraud_conviction
           required: True
@@ -301,7 +303,7 @@
         -
           name: duplication_rights_blurb
           element_type: read_only_text
-          human: For any purpose other than to evaluate the proposal, this data except
+          human: "For any purpose other than to evaluate the proposal, this data except
                  proposal cover sheets shall not be disclosed outside the Government
                  and shall not be duplicated, used or disclosed in whole or in part,
                  provided that if a contract is awarded to this proposer as a result
@@ -313,7 +315,7 @@
                  restriction does not apply to routine handling of proposals for
                  administrative purposes by Government support contractors as indicated
                  in Section 5.3 of the solicitation. The data subject to this restriction
-                 is contained on the pages of the proposal listed on the line below.
+                 is contained on the pages of the proposal listed on the line below."
         -
           name: proprietary_info_page_numbers
           element_type: integer_spans
@@ -405,6 +407,7 @@
           name: teaming_partners
           element_type: line_item
           human: Check all that apply
+          report_text: ""
           ask_if: teaming_partners_yn
           multiplicity: University, HBCU/MI, FFRDC, Nonprofit Institution,
                         Federal Laboratory, Other Federal Facility,
@@ -663,6 +666,7 @@
           name: direct_labor
           element_type: line_item
           multiplicity: 8
+          report_text: ""
           children:
           -
             name: category

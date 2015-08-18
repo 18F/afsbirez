@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from rest_framework import routers
 from rest_framework_proxy.views import ProxyView
 from sbirez import api, models, views
+from wkhtmltopdf.views import PDFTemplateView
 
 router = routers.DefaultRouter()
 router.register(r'users', api.UserViewSet)
@@ -21,6 +22,8 @@ router.register(r'documents', api.DocumentViewSet)
 router.register(r'documentversions', api.DocumentVersionViewSet)
 router.register(r'elements', api.ElementViewSet)
 router.register(r'jargons', api.JargonViewSet)
+
+from sbirez.views import ProposalPdfView
 
 urlpatterns = patterns('',
     url(r'^api/v1/topics/(?P<pk>[0-9]+)/saved/$', api.SaveTopicView.as_view()),
@@ -72,7 +75,13 @@ urlpatterns = patterns('',
         name='firm-search'),
 
     # view submission report
-    url(r'^submission/(?P<pk>[0-9]+)/$',
+    #url(r'^submissions/(?P<pk>[0-9]+)/$',
+    #    views.submission_report),
+
+    url(r'^submissions/(?P<pk>[0-9]+)/$',
+        ProposalPdfView.as_view()),
+
+    url(r'^submissions/raw/(?P<pk>[0-9]+)/$',
         views.submission_report),
 
 )

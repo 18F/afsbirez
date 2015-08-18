@@ -25,6 +25,8 @@ from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser
 from .permissions import HasObjectEditPermissions, ReadOnlyUnlessStaff
 from .utils import nested_update
 from .pdf import proposal_pdf
+from PyPDF2 import PdfFileMerger
+from django.template import Context, loader
 
 mails = template_mail.MagicMailBuilder()
 # To send new types of emails from views, simply call
@@ -172,11 +174,34 @@ class ProposalViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         return [HasObjectEditPermissions(),]
 
+    @detail_route(methods=['get,'])
+    def hardcopy(self, request, pk):
+        proposal = self.get_object()
+
+        return Response({})
+
+
     @detail_route(methods=['get',])
     def pdf(self, request, pk):
+        proposal = self.get_object()
+
+        # `merger` assembles a PDF in memory
+        merger = PdfFileMerger()
+        coverfile = open('sbirez/static/coverpage.pdf', 'rb')
+        merger.append(coverfile)
+
+        # fill buffer with wkhtmltopdf
+        response = PDFTemplateView.get(pk=pk)
+        import ipdb; ipdb.set_trace()
+        merger.append(buffer)
+
+        # Write from the PDF into a file-like response object
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = \
             'attachment; filename="somefilename.pdf"'
+        merger.write(response)
+
+        coverfile.close()
 
         proposal_pdf(proposal=self.get_object(),
                      output_file=response)
