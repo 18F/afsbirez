@@ -289,10 +289,7 @@ class Element(models.Model):
         else:
             if isinstance(datum, list) or isinstance(datum, dict):
                 result = ''
-        if result:
-            return ': %s' % str(result)
-        else:
-            return ''
+        return result 
 
     def parentage(self):
         """
@@ -629,15 +626,10 @@ class Proposal(models.Model):
     def report(self):
         for (el, data, path) in self.workflow.with_data(
             self.data.get(self.workflow.name, {}), [], include_empty=False):
-            if (el.element_type == 'checkbox') and \
-                (el.parent.element_type == 'line_item'):
-                # TODO: does this really cover all cases
-                if data:
-                    # import ipdb; ipdb.set_trace()
-                    pass
             if el.report_text == '':
                 continue
             if el.element_type == 'checkbox' and not data:
+                # TODO: Unsure this is always appropriate
                 continue
             if el.human == r'%multiple%':
                 question = path[-2]

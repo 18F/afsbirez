@@ -1,9 +1,11 @@
 import json
 import hashlib
+import os
 
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.template import Context, loader
 from django.http import HttpResponse
 from sbirez.models import Topic, Firm, Proposal, Address, Person, Naics
 from sbirez.models import Element, Document, DocumentVersion, Jargon
@@ -24,9 +26,11 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser
 from .permissions import HasObjectEditPermissions, ReadOnlyUnlessStaff
 from .utils import nested_update
-from .pdf import proposal_pdf
+
 from PyPDF2 import PdfFileMerger
-from django.template import Context, loader
+from wkhtmltopdfwrapper import WKHtmlToPdf
+
+to_pdf_generator = WKHtmlToPdf()
 
 mails = template_mail.MagicMailBuilder()
 # To send new types of emails from views, simply call
@@ -174,37 +178,45 @@ class ProposalViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         return [HasObjectEditPermissions(),]
 
-    @detail_route(methods=['get,'])
-    def hardcopy(self, request, pk):
-        proposal = self.get_object()
-
-        return Response({})
-
+    @detail_route(methods=['get',])
+    def readonly_report(self, request, pk):
+        """Web version of our PDF hardcopy report"""
+        prop = self.get_object()
+        template = loader.get_template('sbirez/submission_report.html')
+        context = Context({'data': prop.report()})
+        output = template.render(context)
+        return HttpResponse(output)
 
     @detail_route(methods=['get',])
     def pdf(self, request, pk):
-        proposal = self.get_object()
+        """
+        Generates PDF summary of a proposal.
 
-        # `merger` assembles a PDF in memory
+        Gets content from `.readonly_report`;
+        uses `PdfFileMerger` to prepend a stored cover page.
+        """
+        # A PdfFileMerger instance used to concat PDFs
         merger = PdfFileMerger()
+
         coverfile = open('sbirez/static/coverpage.pdf', 'rb')
         merger.append(coverfile)
 
-        # fill buffer with wkhtmltopdf
-        response = PDFTemplateView.get(pk=pk)
-        import ipdb; ipdb.set_trace()
-        merger.append(buffer)
+        # Use wkhtmltopdf to write /readonly_report to file on disk
+        proposal_filename = 'data/proposal_%s.pdf' % pk
+        to_pdf_generator.render(
+            'http://localhost:8000/api/v1/proposals/%s/readonly_report/?jwt=%s'
+            % (pk, request.auth), proposal_filename)
+        # TODO: less hardcoding in this url
+        # Read from the PDF just dumped, append to our PDF in progress
+        contentfile = open(proposal_filename, 'rb')
+        merger.append(contentfile)
 
-        # Write from the PDF into a file-like response object
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = \
-            'attachment; filename="somefilename.pdf"'
+            'attachment; filename="sbirez_proposal.pdf"'
         merger.write(response)
-
-        coverfile.close()
-
-        proposal_pdf(proposal=self.get_object(),
-                     output_file=response)
+        contentfile.close()
+        os.unlink(proposal_filename)
         return response
 
     @detail_route(methods=['post',])
