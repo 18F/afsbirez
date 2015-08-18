@@ -57,8 +57,17 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
 }
+REST_AUTH_SERIALIZERS = {
+    'PASSWORD_RESET_CONFIRM_SERIALIZER': 'sbirez.auth_utils.PasswordResetConfirmSerializer',
+    'PASSWORD_CHANGE_SERIALIZER': 'sbirez.auth_utils.PasswordChangeSerializer'
+}
 
+OLD_PASSWORD_FIELD_ENABLED = True
 REST_SESSION_LOGIN = False
+
+AUTH_PASSWORD_HISTORY_COUNT = 1 
+AUTH_PASSWORD_LENGTH = 8
+AUTH_PASSWORD_EXPIRATION_DAYS = 60
 
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER':'sbirez.utils.jwt_response_payload_handler',
