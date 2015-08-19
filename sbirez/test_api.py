@@ -22,26 +22,13 @@ from django.contrib.auth.models import Group
 
 factory = APIRequestFactory()
 
-
-def r2d2(self):
-    user_model = get_user_model()
-    user = user_model.objects.get(email='r2d2@naboo.gov') # r2's password = 'bleep'
-    return user
-
 def _fixture_user(self):
     """Authenticate as pre-existing user from test fixture.
 
     Returns user instance."""
-    user = r2d2(self)
+    user_model = get_user_model()
+    user = user_model.objects.get(email='r2d2@naboo.gov') # r2's password = 'bleep'
     self.client.force_authenticate(user=user)
-    return user
-
-def _explicitly_authenticated_fixture_user(self):
-    import ipdb; ipdb.set_trace()
-    response = self.client.post('/auth/',
-        {'password':'bleep', 'email':'r2d2@naboo.gov'})
-    user = r2d2(self)
-    self.assertIn('token', response.data)
     return user
 
 class UserTests(APITestCase):
