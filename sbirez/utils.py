@@ -19,7 +19,7 @@ class JSONWebTokenAuthenticationFlex(BaseJSONWebTokenAuthentication):
         auth_header_prefix = api_settings.JWT_AUTH_HEADER_PREFIX.lower()
 
         if not auth or smart_text(auth[0].lower()) != auth_header_prefix:
-            return request.QUERY_PARAMS.get('jwt')
+            return request.query_params.get('jwt')
 
         if len(auth) == 1:
             msg = _('Invalid Authorization header. No credentials provided.')
@@ -68,4 +68,3 @@ def nested_update(orig_dict, new_dict):
         else:
             orig_dict[key] = new_dict[key]
     return orig_dict
-

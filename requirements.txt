@@ -8,6 +8,7 @@ django-downloadview==1.6
 django-pgjson==0.2.3
 django-rest-auth==0.3.4
 django-rest-framework-proxy==1.4.0
+djangorestframework==3.1.1
 djangorestframework-hstore==1.2
 djangorestframework-jwt==1.4.0
 djangorestframework-recursive==0.1.0
