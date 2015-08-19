@@ -1,6 +1,7 @@
 import json
 import hashlib
 import os
+import re
 
 from django.contrib.auth.models import Group
 from django.utils import timezone
@@ -187,6 +188,17 @@ class ProposalViewSet(viewsets.ModelViewSet):
         output = template.render(context)
         return HttpResponse(output)
 
+    # For reasons I don't understand, `request.auth`
+    # is not filled out when `.pdf` is called from the
+    # test suite; instead, the jwt must be painstakingly
+    # extracted this way.
+    # Irrelevant unless test_get_pdf is re-enabled.
+    _jwt_extractor = re.compile(r"\?jwt\=(.*?)'")
+    def _jwt_from_request(self, request):
+        result = self._jwt_extractor.search(str(request._request))
+        if result:
+            return result.group(1)
+
     @detail_route(methods=['get',])
     def pdf(self, request, pk):
         """
@@ -202,10 +214,11 @@ class ProposalViewSet(viewsets.ModelViewSet):
         merger.append(coverfile)
 
         # Use wkhtmltopdf to write /readonly_report to file on disk
+        jwt = request.auth or self._jwt_from_request(request)
         proposal_filename = 'data/proposal_%s.pdf' % pk
-        to_pdf_generator.render(
-            'http://localhost:8000/api/v1/proposals/%s/readonly_report/?jwt=%s'
-            % (pk, request.auth), proposal_filename)
+        url = 'http://localhost:8000/api/v1/proposals/%s/readonly_report/?jwt=%s' \
+            % (pk, jwt)
+        to_pdf_generator.render(url, proposal_filename)
         # TODO: less hardcoding in this url
         # Read from the PDF just dumped, append to our PDF in progress
         contentfile = open(proposal_filename, 'rb')
