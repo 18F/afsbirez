@@ -216,13 +216,18 @@ class ProposalViewSet(viewsets.ModelViewSet):
         # Use wkhtmltopdf to write /readonly_report to file on disk
         jwt = request.auth or self._jwt_from_request(request)
         proposal_filename = 'data/proposal_%s.pdf' % pk
-        url = 'http://localhost:8000/api/v1/proposals/%s/readonly_report/?jwt=%s' \
-            % (pk, jwt)
+        url = request.build_absolute_uri('../readonly_report/?jwt=%s'
+            % jwt)
         to_pdf_generator.render(url, proposal_filename)
         # TODO: less hardcoding in this url
         # Read from the PDF just dumped, append to our PDF in progress
         contentfile = open(proposal_filename, 'rb')
         merger.append(contentfile)
+
+        # Add uploaded documents
+        prop = self.get_object()
+        for doc in prop.document_set.all():
+            merger.append(doc.file)
 
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = \
@@ -230,6 +235,7 @@ class ProposalViewSet(viewsets.ModelViewSet):
         merger.write(response)
         contentfile.close()
         os.unlink(proposal_filename)
+
         return response
 
     @detail_route(methods=['post',])

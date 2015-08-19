@@ -125,12 +125,6 @@ def _walk_path(dct, path):
     else:
         return dct
 
-class TreeAware(object):
-    parent = None
-
-    @classmethod
-    def make(cls, obj):
-        pass
 
 class Element(models.Model):
     """
@@ -289,18 +283,6 @@ class Element(models.Model):
         else:
             if isinstance(datum, list) or isinstance(datum, dict):
                 result = ''
-        return result 
-
-    def parentage(self):
-        """
-        Returns a list of each element in the workflow's hierarchy
-        above (and including) this one.
-        """
-        if self.parent:
-            result = self.parent.parentage()
-        else:
-            result = []
-        result.append(self)
         return result
 
     def is_trueish(self, field_name, dct):
@@ -636,6 +618,7 @@ class Proposal(models.Model):
             else:
                 question = el.reportable_question
             yield (el, question, el.reportable_answer(data))
+
 
 class Document(models.Model):
     name = models.CharField(max_length=255)
