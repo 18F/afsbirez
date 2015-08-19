@@ -30,9 +30,10 @@
           </ol>
         </nav>
         <button ng-if="showContinue" type="button" id="start" ui-sref="app.proposals.detail({id: proposalId, current: goodStartWorkflow})">{{buttonMessage}}</button>
-        <button type="button" id="validate_state" ng-click="validate()">{{verifyButton}}</button>          
+        <button type="button" id="validate_state" ng-click="validate()">{{verifyButton}}</button>
         <button ng-if="showSubmit" type="button" id="submit" ng-click="submit()">{{submitButton}}</button>
         <a ng-href="api/v1/proposal/{{proposalId}}/pdf/?jwt={{jwt}}" target="_self">Download</a>
+        <a ng-href="api/v1/proposal/{{proposalId}}/readonly_report/?jwt={{jwt}}" target="_self">Static</a>
         <div ng-if="!showContinue" class="notice">
           <p><strong>Note:</strong> You&rsquo;ll need to fill in <a ui-sref="app.organization">your company information</a> before you can submit a proposal.</p>
         </div>
@@ -53,5 +54,5 @@
       <div topic="proposal.topic"></div>
       <button class="button-remove" ng-click="delete()">Delete this proposal</button>
     </div>
-  </footer>  
+  </footer>
 </div>
