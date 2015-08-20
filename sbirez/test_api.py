@@ -40,7 +40,7 @@ class UserTests(APITestCase):
     # post user with good and complete parameter set
     def test_user_good_create(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         user = get_user_model().objects.get(email='a@b.com')
         self.assertEqual(user.email, 'a@b.com')
@@ -48,10 +48,10 @@ class UserTests(APITestCase):
     # created user can login via POST to get a JWT
     def test_user_can_login(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc','password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc','password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         response = self.client.post('/auth/',
-            {'password':'123', 'email':'a@b.com'})
+            {'password':'passWord!234', 'email':'a@b.com'})
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertIn('token', response.data)
 
@@ -69,33 +69,33 @@ class UserTests(APITestCase):
     # post user without email
     def test_user_missing_email_create(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc','password':'123', 'groups':[]})
+            {'name':'abc','password':'passWord!234', 'groups':[]})
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
     # post user with existing email
     def test_user_existing_email_create(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc','password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc','password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         response = self.client.post('/api/v1/users/',
-            {'name':'abc','password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc','password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
     # post user with bogus email
     def test_user_bad_email_create(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc','password':'123', 'email':'abdw', 'groups':[]})
+            {'name':'abc','password':'passWord!234', 'email':'abdw', 'groups':[]})
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
 
     # put user to update with good parameters and logged in
     def test_user_good_put(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         user = get_user_model().objects.get(email='a@b.com')
-        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'123'})
+        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'passWord!234'})
         self.client.credentials(HTTP_AUTHORIZATION='JWT ' + response.data['token'])
         response = self.client.put('/api/v1/users/' + str(user.id) + '/',
-            {'name':'abc', 'password':'234', 'email':'b@c.com', 'groups':[]})
+            {'name':'abc', 'password':'PassWord!567', 'email':'b@c.com', 'groups':[]})
         user_after = get_user_model().objects.get(id=user.id)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual('b@c.com', user_after.email)
@@ -103,9 +103,9 @@ class UserTests(APITestCase):
     # put user to update with no parameters
     def test_user_empty_put(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         user = get_user_model().objects.get(email='a@b.com')
-        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'123'})
+        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'passWord!234'})
         self.client.credentials(HTTP_AUTHORIZATION='JWT ' + response.data['token'])
         response = self.client.put('/api/v1/users/' + str(user.id) + '/',
             {})
@@ -114,7 +114,7 @@ class UserTests(APITestCase):
     # put user to update with no parameters
     def test_user_empty_put_unauthed(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         user = get_user_model().objects.get(email='a@b.com')
         response = self.client.put('/api/v1/users/' + str(user.id) + '/',
             {})
@@ -123,9 +123,9 @@ class UserTests(APITestCase):
     # put user with missing email
     def test_user_missing_email_put(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         user = get_user_model().objects.get(email='a@b.com')
-        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'123'})
+        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'passWord!234'})
         self.client.credentials(HTTP_AUTHORIZATION='JWT ' + response.data['token'])
         response = self.client.put('/api/v1/users/' + str(user.id) + '/',
             {'name':'abc','password':'234', 'groups':[]})
@@ -135,22 +135,22 @@ class UserTests(APITestCase):
     # put user with missing email
     def test_user_missing_email_put_unauthed(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         user = get_user_model().objects.get(email='a@b.com')
         response = self.client.put('/api/v1/users/' + str(user.id) + '/',
-            {'name':'abc','password':'234', 'groups':[]})
+            {'name':'abc','password':'PassWord!567', 'groups':[]})
         user_after = get_user_model().objects.get(id=user.id)
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
     # put user with missing groups
     def test_user_missing_groups_put(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         user = get_user_model().objects.get(email='a@b.com')
-        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'123'})
+        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'passWord!234'})
         self.client.credentials(HTTP_AUTHORIZATION='JWT ' + response.data['token'])
         response = self.client.put('/api/v1/users/' + str(user.id) + '/',
-            {'name':'abc', 'password':'234', 'email':'b@c.com'})
+            {'name':'abc', 'password':'PassWord!567', 'email':'b@c.com'})
         user_after = get_user_model().objects.get(id=user.id)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual('b@c.com', user_after.email)
@@ -158,10 +158,10 @@ class UserTests(APITestCase):
     # put user with missing groups
     def test_user_missing_groups_put_unauthed(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         user = get_user_model().objects.get(email='a@b.com')
         response = self.client.put('/api/v1/users/' + str(user.id) + '/',
-            {'name':'abc', 'password':'234', 'email':'b@c.com'})
+            {'name':'abc', 'password':'PassWord!567', 'email':'b@c.com'})
         user_after = get_user_model().objects.get(id=user.id)
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
         self.assertEqual('a@b.com', user_after.email)
@@ -169,9 +169,9 @@ class UserTests(APITestCase):
     # put user with missing password
     def test_user_missing_password_put(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         user = get_user_model().objects.get(email='a@b.com')
-        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'123'})
+        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'passWord!234'})
         self.client.credentials(HTTP_AUTHORIZATION='JWT ' + response.data['token'])
         response = self.client.put('/api/v1/users/' + str(user.id) + '/',
             {'name':'abc', 'email':'b@c.com', 'groups':[]})
@@ -182,7 +182,7 @@ class UserTests(APITestCase):
     # put user with missing password
     def test_user_missing_password_put_unauthed(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         user = get_user_model().objects.get(email='a@b.com')
         response = self.client.put('/api/v1/users/' + str(user.id) + '/',
             {'name':'abc', 'email':'b@c.com', 'groups':[]})
@@ -193,21 +193,21 @@ class UserTests(APITestCase):
     # put user that does not exist
     def test_user_bad_user_put(self):
         response = self.client.put('/api/v1/users/12312321/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
     # put user that does not exist
     def test_user_bad_user_alpha_put(self):
         response = self.client.put('/api/v1/users/abcdef/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
     # patch user to change email
     def test_user_good_patch_email(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         user = get_user_model().objects.get(email='a@b.com')
-        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'123'})
+        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'passWord!234'})
         self.client.credentials(HTTP_AUTHORIZATION='JWT ' + response.data['token'])
         response = self.client.patch('/api/v1/users/' + str(user.id) + '/',
             {'email':'b@b.com'})
@@ -219,7 +219,7 @@ class UserTests(APITestCase):
     # patch user to change email
     def test_user_good_patch_email_unauthed(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         user = get_user_model().objects.get(email='a@b.com')
         response = self.client.patch('/api/v1/users/' + str(user.id) + '/',
             {'email':'b@b.com'})
@@ -228,9 +228,9 @@ class UserTests(APITestCase):
 
     def test_user_empty_patch(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         user = get_user_model().objects.get(email='a@b.com')
-        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'123'})
+        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'passWord!234'})
         self.client.credentials(HTTP_AUTHORIZATION='JWT ' + response.data['token'])
         response = self.client.patch('/api/v1/users/' + str(user.id) + '/',
             {})
@@ -241,7 +241,7 @@ class UserTests(APITestCase):
 
     def test_user_empty_patch_unauthed(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         user = get_user_model().objects.get(email='a@b.com')
         response = self.client.patch('/api/v1/users/' + str(user.id) + '/',
             {})
@@ -249,16 +249,16 @@ class UserTests(APITestCase):
 
     def test_user_get_unauthed(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         user = get_user_model().objects.get(email='a@b.com')
         response = self.client.get('/api/v1/users/' + str(user.id) + '/');
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
     def test_user_get(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         user = get_user_model().objects.get(email='a@b.com')
-        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'123'})
+        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'passWord!234'})
         self.client.credentials(HTTP_AUTHORIZATION='JWT ' + response.data['token'])
         response = self.client.get('/api/v1/users/' + str(user.id) + '/');
         self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -267,8 +267,8 @@ class UserTests(APITestCase):
 
     def test_user_list(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
-        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'123'})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
+        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'passWord!234'})
         self.client.credentials(HTTP_AUTHORIZATION='JWT ' + response.data['token'])
         response = self.client.get('/api/v1/users/');
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
@@ -285,9 +285,9 @@ class UserTests(APITestCase):
     # post two users with same name / avoid default firm creation error
     def test_two_users_same_name(self):
         self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a+1@b.com', 'groups':[]})
+            {'name':'abc', 'password':'passWord!234', 'email':'a+1@b.com', 'groups':[]})
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         user = get_user_model().objects.get(email='a+1@b.com')
         self.assertEqual(user.email, 'a+1@b.com')
@@ -363,8 +363,8 @@ class FirmTests(APITestCase):
 
     def create_user_and_auth(self):
         response = self.client.post('/api/v1/users/',
-            {'name':'abc', 'password':'123', 'email':'a@b.com', 'groups':[]})
-        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'123'})
+            {'name':'abc', 'password':'passWord!234', 'email':'a@b.com', 'groups':[]})
+        response = self.client.post('/auth/', {'email':'a@b.com', 'password':'passWord!234'})
         self.client.credentials(HTTP_AUTHORIZATION='JWT ' + response.data['token'])
 
     # get firm without being authed
