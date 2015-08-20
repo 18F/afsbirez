@@ -110,37 +110,37 @@ def does_not_equal(all_fields, data, target, unit=None):
     comparitor = lambda d, t: d != t
     return _compare(data, target, comparitor, unit)
 
-def one_of(all_fields, data, target):
+def one_of(all_fields, data, *targets):
     """
     >>> one_of({}, 'ms.',  'Mr. Mrs. Ms. Miss')
     True
     >>> one_of({}, 'Supreme Overlord',  'Mr. Mrs. Ms. Miss')
     False
     """
-    targets = target.lower().split()
+    targets = [t.lower() for t in targets]
     return data.lower().strip() in targets
 
-def required_unless(all_fields, data, target):
+def required_unless(all_fields, data, *targets):
     """
     Something in here should be true-ish - either `data` or one of the
     fields named in `target`
-    >>> required_unless({'x': True, 'y': False}, 'True', 'x')
+    >>> required_unless({'x': True, 'y': False}, 'True', ['x'])
     True
-    >>> required_unless({'x': False, 'y': False}, 'True', 'x')
+    >>> required_unless({'x': False, 'y': False}, 'True', ['x'])
     True
-    >>> required_unless({'x': True, 'y': False}, '', 'x')
+    >>> required_unless({'x': True, 'y': False}, '', ['x'])
     True
-    >>> required_unless({'x': False, 'y': False}, '', 'x')
+    >>> required_unless({'x': False, 'y': False}, '', ['x'])
     False
-    >>> required_unless({'x': False, 'y': False, 'z': True}, '', 'x y')
+    >>> required_unless({'x': False, 'y': False, 'z': True}, '', ['x', 'y'])
     False
-    >>> required_unless({'x': False, 'y': True, 'z': True}, '', 'x y')
+    >>> required_unless({'x': False, 'y': True, 'z': True}, '', ['x', 'y'])
     True
     """
     if to_bool(data):
         return True
-    for field_name in target.split():
-        if to_bool(all_fields.get(target)):
+    for field_name in targets:
+        if to_bool(all_fields.get(field_name)):
             return True
     else:
         return False
