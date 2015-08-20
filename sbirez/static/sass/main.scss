@@ -329,7 +329,7 @@ fieldset.fieldset-contact-information,
 fieldset.fieldset-checkbox,
 fieldset.labor-related-cost,
 fieldset.direct-material-cost,
-fieldset.dynamic-item{
+fieldset.fieldset-dynamic-item{
   border: 1px solid #cfcfcf;
   padding: 20px 16px 16px;
   position: relative;
@@ -352,7 +352,7 @@ fieldset.fieldset-contact-information > legend,
 fieldset.fieldset-checkbox > legend,
 fieldset.labor-related-cost > legend,
 fieldset.direct-material-cost > legend,
-fieldset.dynamic-item > legend{
+fieldset.fieldset-dynamic-item > legend{
   position: absolute;
   background: white;
   margin: 0 0 -3px;
@@ -383,6 +383,7 @@ section.fieldset div.field:last-of-type+section.fieldset{
 .fieldset-discretionary-technical-assistance > legend,
 .fieldset.fieldset-equivalent-work-detail > h1,
 .fieldset.fieldset-phase-2 > h1{ display: none; }
+
 
 .fieldset-radio > legend,
 section.fieldset.fieldset-radio > h1,
@@ -476,6 +477,81 @@ section.fieldset.fieldset-radio.is-error span.error-message{
   font-style: italic; 
 }
 
+.fieldset-dynamic > header{
+  margin-bottom: 24px;
+}
+
+.fieldset-dynamic > header a{
+  background: none;
+  border: 1px solid;
+  color: #a50;
+  font: inherit;
+  padding: 6px 8px;
+  font-size: 14px;
+  margin: 4px 0 0 0.4em;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  border-radius: 3px;
+}
+
+div.fieldset-dynamic > header h1 {
+    display: inline-block;
+    vertical-align: middle;
+    font: inherit;
+    color: #555;
+    font-size: 21px;
+    line-height: 16px;
+    margin: 0;
+    position: static;
+}
+
+.fieldset-dynamic .fieldset-dynamic-item a.remove{
+  position: absolute;
+  right: 16px;
+  font-size: 14px;
+  color: #e51600;
+  border-radius: 3px;
+  padding: 4px 6px;
+}
+
+.fieldset-dynamic .fieldset-dynamic-item a.remove:hover{
+  background: #cc1602; 
+  color: white;
+  text-decoration: none;
+}
+
+.fieldset-principal-investigator .fieldset:last-of-type,
+.fieldset-dynamic-item.field:last-of-type,
+.fieldset-dynamic .fieldset-dynamic-item:last-of-type{
+  margin-bottom: 2px;
+}
+
+
+/* @group reference */
+
+.citation-a{
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  text-decoration: none;
+  border-bottom: 1px solid #ccc;
+}
+.citation{
+  font-size: 14px;
+  padding: 0.5em;
+  margin: 1em 0;
+  border: 1px solid #ccc;
+  background: #f3f3f3;
+  color: #333;
+  border-radius: 2px;
+  overflow: auto;
+  max-height: 10em;
+}
+
+/* @end */
 
 fieldset.fieldset-mailing-address div.field{
   padding-bottom: 1.4em;
@@ -571,7 +647,6 @@ span.naics-description {
 .field-contract-number input,
 .field-short_str input,
 .field-naics input,
-.field-zip input,
 .field-phone input,
 .field-fax input,
 .field-rate input,
@@ -1833,12 +1908,19 @@ body .bigfoot-footnote__button:focus{
     color: #5e2900;
 }
 
+body .bigfoot-footnote__button:focus{
+  border-color: #1188ff;
+  box-shadow: 0 0 0 1px rgba(17,136,255,0.15);
+}
+
 body .bigfoot-footnote__button:active,
 body .bigfoot-footnote__button.is-active {
   background: #5e2900;
     border: 1px solid #5e2900;
   color: #fff;
 }
+
+
 body .bigfoot-footnote__button svg{
   display: none;
 }
