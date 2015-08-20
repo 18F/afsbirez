@@ -1,4 +1,4 @@
-/* @override http://127.0.0.1:4000/stylesheets/styles.css */
+/* @override http://localhost:4001/stylesheets/styles.css */
 
 /* @override http://127.0.0.1:4000/stylesheets/styles.css */
 
@@ -307,113 +307,16 @@ body.sign-up-post main h1,
 form > h1:first-of-type{
   margin-top: 0;
   padding-top: 24px;
+  
 }
 
 form a.a-return + h1{
   margin-top: 1em !important; 
 }
 
-div.fieldset{
-  border: 1px solid #cfcfcf;
-  padding: 20px 16px 16px;
-  position: relative;
-  margin-bottom: 20px;
-  border-radius: 4px;
-}
-
-div.fieldset > h1,
-div.fieldset > header > h1{
-  position: absolute;
-  background: white;
-  margin: 0 0 -3px;
-  bottom: 100%;
-  left: 8px;
-  padding: 0 1px;
-  font-size: 14px;
-  line-height: 16px;
-  font-weight: 600;
-  color: #777;
-}
-
 div.field,
 section.fieldset,
-section.fieldset.fieldset-radio,
 .fieldset-radio{ margin-bottom: 24px; }
-
-section.fieldset{
-  border: 1px solid #cfcfcf;
-  padding: 20px 16px 16px;
-  position: relative;
-  margin-bottom: 20px;
-  border-radius: 4px;
-}
-
-.fieldset+.fieldset:not(.fieldset-radio){ margin-top: 32px; }
-
-.fieldset-dynamic section.fieldset-dynamic-item a.remove{
-  position: absolute;
-  right: 16px;
-  font-size: 14px;
-  color: #e51600;
-  border-radius: 3px;
-  padding: 4px 6px;
-}
-
-.fieldset-dynamic section.fieldset-dynamic-item a.remove:hover{
-  background: #cc1602; 
-  color: white;
-  text-decoration: none;
-}
-
-.fieldset-principal-investigator .fieldset:last-of-type,
-.fieldset-dynamic-item.field:last-of-type{
-  margin-bottom: 2px;
-}
-
-section.fieldset > h1,
-section.fieldset > header > h1{
-  position: absolute;
-  background: white;
-  margin: 0 0 -3px;
-  bottom: 100%;
-  left: 8px;
-  padding: 0 1px;
-  font-size: 14px;
-  line-height: 16px;
-  font-weight: 600;
-  color: #777;
-}
-
-.fieldset-dynamic > header{
-  margin-bottom: 24px;
-}
-
-.fieldset-dynamic > header a{
-  background: none;
-  border: 1px solid;
-  color: #a50;
-  font: inherit;
-  padding: 6px 8px;
-  font-size: 14px;
-  margin: 4px 0 0 0.4em;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  vertical-align: middle;
-  position: relative;
-  border-radius: 3px;
-}
-
-div.fieldset-dynamic > header h1 {
-    display: inline-block;
-    vertical-align: middle;
-    font: inherit;
-    color: #555;
-    font-size: 21px;
-    line-height: 16px;
-    margin: 0;
-    position: static;
-}
 
 div.field+section.fieldset,
 div.field+fieldset,
@@ -425,7 +328,8 @@ fieldset.fieldset-point-of-contact,
 fieldset.fieldset-contact-information,
 fieldset.fieldset-checkbox,
 fieldset.labor-related-cost,
-fieldset.direct-material-cost{
+fieldset.direct-material-cost,
+fieldset.dynamic-item{
   border: 1px solid #cfcfcf;
   padding: 20px 16px 16px;
   position: relative;
@@ -447,7 +351,8 @@ fieldset.fieldset-point-of-contact > legend,
 fieldset.fieldset-contact-information > legend,
 fieldset.fieldset-checkbox > legend,
 fieldset.labor-related-cost > legend,
-fieldset.direct-material-cost > legend{
+fieldset.direct-material-cost > legend,
+fieldset.dynamic-item > legend{
   position: absolute;
   background: white;
   margin: 0 0 -3px;
@@ -625,6 +530,8 @@ fieldset.fieldset-mailing-address div.field.field-zip input{
   width: 75%; 
 }
 
+.field-email input,
+.field-med_str input,
 .field-name input,
 .field-title input,
 .field-category input,
@@ -635,13 +542,25 @@ fieldset.fieldset-mailing-address div.field.field-zip input{
   min-width: 10em;
 }
 
-.field-phone input,
-.field-fax input,
-.field-rate input,
-.field-estimated-hours input,
+
+.field-naics input {
+    margin-bottom: 8px;
+}
+.field-naics input:last-child{ margin-bottom: 0;}
+
+span.naics-description {
+    margin-left: 8px;
+    font-size: 14px;
+  width: 33%;
+}
+
+
 .field-overhead input,
 .field-year input,
 .field-number input,
+.field-int input,
+.field-integer input,
+.field-float input,
 .field-fringe-benefits input,
 .field-dollars input,
 .field-calculated input,
@@ -650,6 +569,14 @@ fieldset.fieldset-mailing-address div.field.field-zip input{
 .field-proposed-cost input,
 .field-proposed-dta-amount input,
 .field-contract-number input,
+.field-short_str input,
+.field-naics input,
+.field-zip input,
+.field-phone input,
+.field-fax input,
+.field-rate input,
+.field-estimated-hours input,
+.field-overhead input,
 .field-num-phase-2-awards input{
   width: 33%;
 }
@@ -657,17 +584,6 @@ fieldset.fieldset-mailing-address div.field.field-zip input{
 .field-phone-number input,
 .field-fax-number input{
   width: 10em;
-}
-
-.field-naics input {
-  margin-bottom: 8px;
-}
-.field-naics input:last-child{ margin-bottom: 0;}
-
-span.naics-description {
-  margin-left: 8px;
-  font-size: 14px;
-  width: 33%;
 }
 
 .field-number-short input{ width: 2em; }
@@ -830,12 +746,10 @@ header.banner nav a:hover{
   color: #a3d3ff; 
 }
 
-body.proposals header.banner nav a.proposals,
+body.proposals header.banner nav a.my-proposals,
 body.notifications header.banner nav a.notifications,
-body.company header.banner nav a.company {
-    color: #fefefe;
-    background: #002152;
-    text-decoration: none;
+body.my-company header.banner nav a.my-company {
+  text-decoration: none;
 }
 header.banner form span.label-text,
 header.banner form button{ position: absolute; left: -9999em; }
@@ -897,7 +811,7 @@ header.banner form div.field input {
     margin-top: 4px;
   }
 
-  header.banner nav a{  padding: 0 8px; }
+  header.banner nav a{  padding: 0 10px; }
   header.banner h1{
     width: 112px;
     margin: 0;
@@ -963,7 +877,11 @@ header.banner form div.field input {
   text-decoration: underline;
 }
 
-.topic h1{
+.topic h1,
+.sign-in .sign-in-header h1,
+.sign-up .sign-up-header h1,
+.sign-in .sign-in-header a,
+.sign-up .sign-up-header a{
   font-family: georgia;
   font-size: 20px;
   line-height: 24px;
@@ -1015,11 +933,14 @@ header.banner form div.field input {
   box-shadow: none;
 }
 
-/* @group is-favorite */
-
-article.topic.is-favorite h1{
-    color: #b03a00;
+.topic .topic-nav a:hover,
+.topic .topic-nav button:hover{ 
+  color: #032353; 
+  border-color: inherit;
+  text-decoration: none;
 }
+
+.topic.is-favorite h1{ color: #b03a00; }
 
 @media screen and (min-width: 711.11px) {
   article.topic{
@@ -1037,8 +958,7 @@ article.topic.is-favorite h1{
   .topic .topic-nav form{ display: block; }
 
   .topic .topic-nav a,
-  .topic .topic-nav button, 
-  .topic .topc-nav span.stats {
+  .topic .topic-nav button{
     display: block;
     width: 100%;
     padding: 0.4em 0;
@@ -1281,13 +1201,15 @@ body.home main form{ border: none; }
 /* @group body.proposal-cost-volume */
 
 .labor-related-costs,
-.direct-material-costs{ 
+.direct-material-costs,
+.dynamic-items{ 
   margin-bottom: 24px; 
   position: relative;
 }
 
 .labor-related-costs h1,
-.direct-material-costs h1{
+.direct-material-costs h1,
+.dynamic-items h1{
   display: inline-block;
   vertical-align: middle;
   font: inherit;
@@ -1298,13 +1220,16 @@ body.home main form{ border: none; }
 }
 
 .labor-related-costs .labor-related-cost:first-of-type,
-.direct-material-costs .direct-material-cost:first-of-type{
+.direct-material-costs .direct-material-cost:first-of-type,
+.dynamic-items .dynamic-item:first-of-type{
   margin-top: 2em;
 }
 
 .labor-related-cost+.labor-related-cost,
-.direct-material-cost+.direct-material-cost{ margin-top: 36px; }
+.direct-material-cost+.direct-material-cost,
+.dynamic-item+.dynamic-item{ margin-top: 36px; }
 
+.dynamic-items  .dynamic-items-add,
 .labor-related-costs  .labor-related-costs-add,
 .direct-material-costs .direct-material-costs-add{
   background: none;
@@ -1320,6 +1245,7 @@ body.home main form{ border: none; }
   border-radius: 3px;
 }
 
+.dynamic-items  .dynamic-items-add:hover,
 .labor-related-costs  .labor-related-costs-add:hover,
 .direct-material-costs .direct-material-costs-add:hover {
   background: #cb4d00;
@@ -1327,6 +1253,7 @@ body.home main form{ border: none; }
   color: white;
 }
 
+.dynamic-items  .dynamic-items-add:active,
 .labor-related-costs  .labor-related-costs-add:active,
 .direct-material-costs .direct-material-costs-add:active {
   color: #c6bb96;
@@ -1334,6 +1261,7 @@ body.home main form{ border: none; }
   border-color: #7e2000;
 }
 
+.dynamic-item a.dynamic-item-remove,
 .direct-material-cost a.direct-material-cost-remove{
   position: absolute;
   right: 16px;
@@ -1344,6 +1272,7 @@ body.home main form{ border: none; }
   
 }
 
+.dynamic-item a.dynamic-item-remove:hover,
 .direct-material-cost a.direct-material-cost-remove:hover{
   background: #cc1602; 
   color: white;
@@ -1504,34 +1433,6 @@ body.proposals-no-results main div.wrap {
 body.proposals-no-results main div.wrap h1,
 body.topics-no-results main div.wrap h1{ margin-top: 0; }
 
-body.proposals-no-results main form {
-  position: relative;
-  padding-right: 96px;
-}
-
-body.proposals-no-results main form footer {
-  padding: 0;
-  margin: 0;
-  position: static;
-}
-
-body.proposals-no-results main p {
-  max-width: 50em; 
-}
-
-body.proposals-no-results main form div.field span.label-text {
-  position: absolute;
-  left: -9999em;
-}
-
-body.proposals-no-results main form .button {
-  width: 84px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  margin: 0;
-}
-
 /* @end */
 
 /* @group body.topics, body.proposals */
@@ -1559,13 +1460,57 @@ body.sign-up-post main div.wrap {
   background: white;
 }
 
-body.sign-in main h1,
-body.sign-up main h1,
-body.sign-up-post main h1{
-  margin-top: 0;
-  padding-top: 0;
-  margin-bottom: 24px;
+.sign-in .sign-in-header,
+.sign-up .sign-up-header {
+  background: #eceff2;
+  margin: -16px -16px 16px;
+}
+
+.sign-in .sign-in-header::after,
+.sign-up .sign-up-header::after{
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.sign-in .sign-in-header .or,
+.sign-up .sign-up-header .or{
+  position: absolute;
+  left: -9999em;
+}
+
+.sign-in .sign-in-header h1,
+.sign-up .sign-up-header h1,
+.sign-in .sign-in-header a,
+.sign-up .sign-up-header a{
   color: #b03a00;
+  font-size: 24px;
+  float: left;
+  width: 50%;
+  padding: 20px 16px 20px;
+  margin: 0;
+  margin-right: -0.02em;
+  text-align: center;
+}
+
+.sign-up .sign-up-header h1,
+.sign-up .sign-up-header a{
+  float: right; 
+}
+
+.sign-in .sign-in-header h1,
+.sign-up .sign-up-header h1{
+  background: white;
+}
+
+.sign-in .sign-in-header a,
+.sign-up .sign-up-header a{
+  color: #0064be;
+}
+
+.sign-in .sign-in-header a:hover,
+.sign-up .sign-up-header a:hover{
+  color: #003c72;
 }
 
 body.sign-in footer,
@@ -1607,6 +1552,11 @@ body.sign-up p#password-instructions{
     padding: 24px;
     max-width: 384px;
     margin: 48px auto;
+  }
+  
+  .sign-in .sign-in-header,
+  .sign-up .sign-up-header {
+    margin: -24px -24px 24px;
   }
   
   body.sign-up-post main div.wrap{ max-width: 512px; }
@@ -1900,10 +1850,6 @@ body .bigfoot-footnote__button:after {
   content: '';
   display: table;
   clear: both;
-}
-
-.bigfoot-footnote__wrapper {
-  width: 50em;
 }
 
 @media screen { 
