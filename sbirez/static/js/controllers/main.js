@@ -19,13 +19,9 @@ angular.module('sbirezApp')
       DialogService.openIntroMessage();
     }
 
-    $scope.logIn = function() {
-      console.log('here');
-    };
-
     $scope.search = function() {
       SearchService.search(1, $scope.query, 10).then(function(data) {
-        $state.go('search', {}, {'reload':true});
+        $state.go('search', {'query':$scope.query}, {'reload':true});
       }, function(error) {
         console.log(error);
       });
