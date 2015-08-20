@@ -30,6 +30,9 @@ angular.module('sbirezApp')
         },function(status) {
           if (status && status.data && status.data.non_field_errors) {
             $scope.errorMsg = status.data.non_field_errors[0];
+            if ($scope.errorMsg === 'Password has expired.') {
+              $scope.errorMsg = 'Your password has expired. Please reset your password via the \'Forgot your password?\' link to continue.'
+            }
           } else {
             if (status.data.email) {
               $scope.errorEmail = status.data.email[0];

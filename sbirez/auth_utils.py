@@ -7,13 +7,14 @@ except:
     # make compatible with django 1.5
     from django.utils.http import base36_to_int as uid_decoder
 from django.contrib.auth.tokens import default_token_generator
-
+from django.contrib.auth.hashers import identify_hasher
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 import rest_auth.serializers
 from datetime import timedelta
 from django.utils import timezone
 from sbirez.models import PasswordHistory, SbirezUser
+from Levenshtein import distance
 
 def password_check(value, user):
     """
@@ -43,19 +44,22 @@ def password_check(value, user):
         raise serializers.ValidationError('Password must contain at least 1 special character.')
 
     # new users won't have a password history at this point
-    try:
+    if user is not None:
         prior_passwords = PasswordHistory.objects.filter(user_id=user.id).order_by('created_at').reverse()[:settings.AUTH_PASSWORD_HISTORY_COUNT]
 
         for p in prior_passwords:
-            if user.password == p.password:
+            hasher = identify_hasher(p.password)
+            print(value, p.password)
+            if hasher.verify(value, p.password):
                 raise serializers.ValidationError('Password can not have been one of the last %d passwords' % settings.AUTH_PASSWORD_HISTORY_COUNT)
-    finally:
-        return value
+
+    return value
 
 class ExpiringSetPasswordForm(SetPasswordForm):
     def save(self, commit=True):
         self.user.set_password(self.cleaned_data['new_password1'])
         self.user.password_expires = timezone.now() + timedelta(days = settings.AUTH_PASSWORD_EXPIRATION_DAYS)
+        PasswordHistory.objects.create(password=self.user.password, user=self.user)
         if commit:
             self.user.save()
         return self.user
@@ -74,4 +78,28 @@ class PasswordChangeSerializer(rest_auth.serializers.PasswordChangeSerializer):
     set_password_form_class = ExpiringSetPasswordForm
 
     def validate_new_password1(self, value):
+        if distance(value, self.initial_data['old_password']) < settings.AUTH_PASSWORD_DIFFERENCE:
+            raise serializers.ValidationError('Password must differ from the prior password by at least %d characters' % settings.AUTH_PASSWORD_DIFFERENCE)
         return password_check(value, self.user)
+
+
+class ExpiringModelBackend(object):
+    """
+    Authenticates against settings.AUTH_USER_MODEL.
+    """
+
+    def authenticate(self, username=None, password=None, **kwargs):
+        UserModel = get_user_model()
+        if username is None:
+            username = kwargs.get(UserModel.USERNAME_FIELD)
+        try:
+            user = UserModel._default_manager.get_by_natural_key(username)
+            if user.password_expires > timezone.now() and user.check_password(password):
+                return user
+            elif user.password_expires <= timezone.now() and user.check_password(password):
+                raise serializers.ValidationError('Password has expired.')
+
+        except UserModel.DoesNotExist:
+            # Run the default password hasher once to reduce the timing
+            # difference between an existing and a non-existing user (#20760).
+            UserModel().set_password(password)

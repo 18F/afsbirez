@@ -1,14 +1,29 @@
-<div>
-  <form ng-submit="save()">
-    <input type="text"
-           ng-model="user.name"
-           class="form-control"
-           placeholder="Name"></input>
-    <input type="text"
-           ng-model="user.email"
-           class="form-control"
-           placeholder="Contact Email"></input>
-    <br/>
-    <button type="submit" class="btn btn-primary">Update</button>
-  </form>
-</div>
+<main role="main">
+  <div class="wrap">
+    <form ng-submit="save()">
+      <h1>Change Password</h1>
+      <div class="field field-name" ng-class="{'is-error': validationData.old_password}">
+        <label for="oldpassword"><span class="label-text">Old Password</span>
+          <input type="password" id="oldpassword" ng-model="input.oldpassword">
+        </label>
+        <span class="error-message" ng-if="validationData.old_password">{{validationData.old_password[0]}}</span>
+      </div>
+      <div class="field field-name" ng-class="{'is-error': validationData.new_password1}">
+        <label for="newpassword1"><span class="label-text">New Password</span>
+          <input type="password" id="newpassword1" ng-model="input.newpassword1">
+        </label>
+        <span class="error-message" ng-if="validationData.new_password1">{{validationData.new_password1[0]}}</span>
+      </div>
+      <div class="field field-name" ng-class="{'is-error': validationData.new_password2}">
+        <label for="newpassword2"><span class="label-text">Repeat New Password</span>
+          <input type="password" id="newpassword2" ng-model="input.newpassword2">
+        </label>
+        <span class="error-message" ng-if="validationData.new_password2">{{validationData.new_password2[0]}}</span>
+      </div>
+      <div ng-show="errorMsg" class="field is-error">
+        <span class="error-message">{{errorMsg}}</span>
+      </div>
+      <button type="submit" class="btn btn-primary" ng-click="savePassword()">Update Password</button>
+    </form>
+  </div>
+</main>

@@ -9,6 +9,12 @@ from rest_framework_jwt import utils
 from rest_framework_jwt.settings import api_settings
 from rest_framework_jwt.authentication import BaseJSONWebTokenAuthentication
 
+from django.utils import timezone
+
+from django.conf import settings
+
+jwt_get_user_id_from_payload = api_settings.JWT_PAYLOAD_GET_USER_ID_HANDLER
+
 # Utility methods for the sbirez application
 class JSONWebTokenAuthenticationFlex(BaseJSONWebTokenAuthentication):
 
@@ -39,6 +45,27 @@ class JSONWebTokenAuthenticationFlex(BaseJSONWebTokenAuthentication):
         """
         return 'JWT realm="{0}"'.format(self.www_authenticate_realm)
 
+    def authenticate_credentials(self, payload):
+        """
+        Returns an active user that matches the payload's user id and email.
+        """
+        User = utils.get_user_model()
+
+        user_id = jwt_get_user_id_from_payload(payload)
+        if user_id is not None:
+            try:
+                user = User.objects.get(pk=user_id, is_active=True)
+                if user.password_expires < timezone.now():
+                    msg = _('Password expired.')
+                    raise exceptions.AuthenticationFailed(msg)
+            except User.DoesNotExist:
+                msg = _('Invalid signature.')
+                raise exceptions.AuthenticationFailed(msg)
+        else:
+            msg = _('Invalid payload.')
+            raise exceptions.AuthenticationFailed(msg)
+
+        return user
 
 
 # custom payload handler to add the user name and id to the jwt token.

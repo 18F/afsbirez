@@ -25,6 +25,15 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
       return $http.post('rest-auth/password/reset/', {'email': email});
     },
 
+    changePassword: function(old_password, new_password1, new_password2) {
+      return $http.post('rest-auth/password/change/', 
+        {
+          'old_password': old_password,
+          'new_password1': new_password1,
+          'new_password2': new_password2
+        });
+    },
+
     createUser: function(name, username, password) {
       return $http.post('api/v1/users/', 
         {
