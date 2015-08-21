@@ -307,7 +307,6 @@ body.sign-up-post main h1,
 form > h1:first-of-type{
   margin-top: 0;
   padding-top: 24px;
-  
 }
 
 form a.a-return + h1{
@@ -317,6 +316,90 @@ form a.a-return + h1{
 div.field,
 section.fieldset,
 .fieldset-radio{ margin-bottom: 24px; }
+
+.fieldset-dynamic > header{
+  margin-bottom: 24px;
+}
+
+.fieldset-dynamic > header a{
+  background: none;
+  border: 1px solid;
+  color: #a50;
+  font: inherit;
+  padding: 6px 8px;
+  font-size: 14px;
+  margin: 4px 0 0 0.4em;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  border-radius: 3px;
+}
+
+
+.fieldset-dynamic .fieldset-dynamic-item a.fieldset-dynamic-item-remove{
+  position: absolute;
+  right: 16px;
+  font-size: 14px;
+  color: #e51600;
+  border-radius: 3px;
+  padding: 4px 6px;
+}
+
+.fieldset-dynamic .fieldset-dynamic-item a.fieldset-dynamic-item-remove:hover{
+  background: #cc1602; 
+  color: white;
+  text-decoration: none;
+}
+
+.fieldset-principal-investigator .fieldset:last-of-type,
+.fieldset-dynamic-item.field:last-of-type,
+.fieldset-dynamic .fieldset-dynamic-item:last-of-type{
+  margin-bottom: 2px;
+}
+
+div.fieldset-dynamic > header h1 {
+    display: inline-block;
+    vertical-align: middle;
+    font: inherit;
+    color: #555;
+    font-size: 21px;
+    line-height: 16px;
+    margin: 0;
+    position: static;
+}
+
+.fieldset-dynamic > header{
+  margin-bottom: 24px;
+}
+
+.fieldset-dynamic > header a{
+  background: none;
+  border: 1px solid;
+  color: #a50;
+  font: inherit;
+  padding: 6px 8px;
+  font-size: 14px;
+  margin: 4px 0 0 0.4em;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  border-radius: 3px;
+}
+
+div.fieldset-dynamic > header h1 {
+    display: inline-block;
+    vertical-align: middle;
+    font: inherit;
+    color: #555;
+    font-size: 21px;
+    line-height: 16px;
+    margin: 0;
+    position: static;
+}
 
 div.field+section.fieldset,
 div.field+fieldset,
@@ -477,59 +560,6 @@ section.fieldset.fieldset-radio.is-error span.error-message{
   font-style: italic; 
 }
 
-.fieldset-dynamic > header{
-  margin-bottom: 24px;
-}
-
-.fieldset-dynamic > header a{
-  background: none;
-  border: 1px solid;
-  color: #a50;
-  font: inherit;
-  padding: 6px 8px;
-  font-size: 14px;
-  margin: 4px 0 0 0.4em;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  vertical-align: middle;
-  position: relative;
-  border-radius: 3px;
-}
-
-div.fieldset-dynamic > header h1 {
-    display: inline-block;
-    vertical-align: middle;
-    font: inherit;
-    color: #555;
-    font-size: 21px;
-    line-height: 16px;
-    margin: 0;
-    position: static;
-}
-
-.fieldset-dynamic .fieldset-dynamic-item a.remove{
-  position: absolute;
-  right: 16px;
-  font-size: 14px;
-  color: #e51600;
-  border-radius: 3px;
-  padding: 4px 6px;
-}
-
-.fieldset-dynamic .fieldset-dynamic-item a.remove:hover{
-  background: #cc1602; 
-  color: white;
-  text-decoration: none;
-}
-
-.fieldset-principal-investigator .fieldset:last-of-type,
-.fieldset-dynamic-item.field:last-of-type,
-.fieldset-dynamic .fieldset-dynamic-item:last-of-type{
-  margin-bottom: 2px;
-}
-
-
 /* @group reference */
 
 .citation-a{
@@ -618,19 +648,10 @@ fieldset.fieldset-mailing-address div.field.field-zip input{
   min-width: 10em;
 }
 
-
-.field-naics input {
-    margin-bottom: 8px;
-}
-.field-naics input:last-child{ margin-bottom: 0;}
-
-span.naics-description {
-    margin-left: 8px;
-    font-size: 14px;
-  width: 33%;
-}
-
-
+.field-phone input,
+.field-fax input,
+.field-rate input,
+.field-estimated-hours input,
 .field-overhead input,
 .field-year input,
 .field-number input,
@@ -647,10 +668,6 @@ span.naics-description {
 .field-contract-number input,
 .field-short_str input,
 .field-naics input,
-.field-phone input,
-.field-fax input,
-.field-rate input,
-.field-estimated-hours input,
 .field-overhead input,
 .field-num-phase-2-awards input{
   width: 33%;
@@ -659,6 +676,17 @@ span.naics-description {
 .field-phone-number input,
 .field-fax-number input{
   width: 10em;
+}
+
+.field-naics input {
+  margin-bottom: 8px;
+}
+.field-naics input:last-child{ margin-bottom: 0;}
+
+span.naics-description {
+  margin-left: 8px;
+  font-size: 14px;
+  width: 33%;
 }
 
 .field-number-short input{ width: 2em; }
@@ -821,9 +849,11 @@ header.banner nav a:hover{
   color: #a3d3ff; 
 }
 
-body.proposals header.banner nav a.my-proposals,
+body.proposals header.banner nav a.proposals,
 body.notifications header.banner nav a.notifications,
-body.my-company header.banner nav a.my-company {
+body.company header.banner nav a.company {
+  color: #fefefe;
+  background: #002152;
   text-decoration: none;
 }
 header.banner form span.label-text,
@@ -886,7 +916,7 @@ header.banner form div.field input {
     margin-top: 4px;
   }
 
-  header.banner nav a{  padding: 0 10px; }
+  header.banner nav a{  padding: 0 8px; }
   header.banner h1{
     width: 112px;
     margin: 0;
@@ -1033,13 +1063,16 @@ header.banner form div.field input {
   .topic .topic-nav form{ display: block; }
 
   .topic .topic-nav a,
-  .topic .topic-nav button{
+  .topic .topic-nav button, 
+  .topic .topic-nav span.stats {
     display: block;
     width: 100%;
     padding: 0.4em 0;
     margin: 0;
     border-bottom: 1px solid #eee !important;
   }
+  
+  .topic .topic-nav .stats{font-size:14px}
   
   .topic .topic-nav a:hover,
   .topic .topic-nav button:hover{
@@ -1508,6 +1541,34 @@ body.proposals-no-results main div.wrap {
 body.proposals-no-results main div.wrap h1,
 body.topics-no-results main div.wrap h1{ margin-top: 0; }
 
+body.proposals-no-results main form {
+  position: relative;
+  padding-right: 96px;
+}
+
+body.proposals-no-results main form footer {
+  padding: 0;
+  margin: 0;
+  position: static;
+}
+
+body.proposals-no-results main p {
+  max-width: 50em; 
+}
+
+body.proposals-no-results main form div.field span.label-text {
+  position: absolute;
+  left: -9999em;
+}
+
+body.proposals-no-results main form .button {
+  width: 84px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 0;
+}
+
 /* @end */
 
 /* @group body.topics, body.proposals */
@@ -1932,6 +1993,10 @@ body .bigfoot-footnote__button:after {
   content: '';
   display: table;
   clear: both;
+}
+
+.bigfoot-footnote__wrapper {
+  width: 50em;
 }
 
 @media screen { 
