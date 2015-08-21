@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="wrap">
+  <ul>
+    {% for q in data %}
+      {% if q.0.element_type == 'workflow' %}
+        <hr />
+      {% endif %}
+      <li><span class="question {{ q.0.element_type}}">
+          {{ q.1 }}
+          </span>
+          <span class="response {{ q.0.element_type}}">
+          {{ q.2 }}
+          </span>
+      </li>
+    {% endfor %}
+  </li>
+</div>
+{% endblock %}
