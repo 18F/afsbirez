@@ -23,6 +23,9 @@
       <div ng-show="errorMsg" class="field is-error">
         <span class="error-message">{{errorMsg}}</span>
       </div>
+      <div ng-show="successMsg" class="field">
+        <span>{{successMsg}}</span>
+      </div>
       <button type="submit" class="btn btn-primary" ng-click="savePassword()">Update Password</button>
     </form>
   </div>

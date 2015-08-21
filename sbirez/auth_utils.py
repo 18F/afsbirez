@@ -49,7 +49,6 @@ def password_check(value, user):
 
         for p in prior_passwords:
             hasher = identify_hasher(p.password)
-            print(value, p.password)
             if hasher.verify(value, p.password):
                 raise serializers.ValidationError('Password can not have been one of the last %d passwords' % settings.AUTH_PASSWORD_HISTORY_COUNT)
 

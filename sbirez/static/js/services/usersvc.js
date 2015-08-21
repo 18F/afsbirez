@@ -12,9 +12,10 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
         $window.sessionStorage.username = null;
         $window.sessionStorage.userid = null;
         $window.sessionStorage.firmid = null;
+        $window.sessionStorage.expiration = null;
         user = {};
         AuthenticationService.setAuthenticated(false);
-        $location.path('/');      
+        $location.path('/');
     },
 
     refreshToken: function() {
@@ -26,6 +27,7 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
     },
 
     changePassword: function(old_password, new_password1, new_password2) {
+      user.name = null;
       return $http.post('rest-auth/password/change/', 
         {
           'old_password': old_password,
@@ -53,6 +55,7 @@ angular.module('sbirezApp').factory('UserService', function($http, $window, $roo
         }
         $http.get('api/v1/users/' + id + '/').success(function(data) {
           user = data;
+          $window.sessionStorage.expiration = data.password_expires;
           $rootScope.$broadcast('userUpdated', user);
           deferred.resolve(data);
         }).error(function(data) {

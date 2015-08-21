@@ -13,6 +13,9 @@ angular.module('sbirezApp')
         if ($scope.input.newpassword1 === $scope.input.newpassword2) {
           UserService.changePassword($scope.input.oldpassword, $scope.input.newpassword1, $scope.input.newpassword2).then(function(data) {
             $scope.validationData = {};
+            $scope.errorMsg = '';
+            $scope.successMsg = 'Password changed successfully.';
+            UserService.getUserDetails();
             console.log('password changed');
           }, function(status) {
             console.log('password changed', status);

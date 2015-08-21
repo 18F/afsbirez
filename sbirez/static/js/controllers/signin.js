@@ -18,9 +18,10 @@ angular.module('sbirezApp')
           $window.sessionStorage.token = data.data.token;
           $window.sessionStorage.username = data.data.username;
           $window.sessionStorage.userid = data.data.id;
-          AuthenticationService.setAuthenticated(true);
           UserService.getUserDetails(data.data.id).then(function(data) {
             $window.sessionStorage.firmid = data.firm;
+            $window.sessionStorage.expiration = data.password_expires;
+            AuthenticationService.setAuthenticated(true);
           });
           if ($scope.intention) {
             $location.path($scope.intention.target.replace(/%2F/g, '/')).search('target', null);

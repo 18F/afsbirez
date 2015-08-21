@@ -772,7 +772,7 @@ header.banner{
   color: #fff;
   line-height: 32px;
   overflow: hidden;
-  padding: 4px 0;
+  padding: 4px 0 0 0;
 }
 
 header.banner a{ color: white; }
@@ -830,6 +830,12 @@ header.banner nav a{
 }
 header.banner nav a:hover{
   color: #a3d3ff; 
+}
+
+header.banner div.notification {
+  background: #002152;
+  color: #fff;
+  line-height: 32px;
 }
 
 body.proposals header.banner nav a.proposals,
@@ -939,6 +945,10 @@ header.banner form div.field input {
     top: 6px;
     width: auto;
   } 
+
+  header.banner div.notification div.wrap{ 
+    padding: 8px 156px 8px 156px;
+  }
 }
 
 
