@@ -112,9 +112,9 @@ def does_not_equal(all_fields, data, target, unit=None):
 
 def one_of(all_fields, data, *targets):
     """
-    >>> one_of({}, 'ms.',  'Mr. Mrs. Ms. Miss')
+    >>> one_of({}, 'ms.',  'Mr.', 'Mrs.', 'Ms.', 'Miss')
     True
-    >>> one_of({}, 'Supreme Overlord',  'Mr. Mrs. Ms. Miss')
+    >>> one_of({}, 'Supreme Overlord',  'Mr.', 'Mrs.', 'Ms.', 'Miss')
     False
     """
     targets = [t.lower() for t in targets]
@@ -124,17 +124,17 @@ def required_unless(all_fields, data, *targets):
     """
     Something in here should be true-ish - either `data` or one of the
     fields named in `target`
-    >>> required_unless({'x': True, 'y': False}, 'True', ['x'])
+    >>> required_unless({'x': True, 'y': False}, 'True', 'x')
     True
-    >>> required_unless({'x': False, 'y': False}, 'True', ['x'])
+    >>> required_unless({'x': False, 'y': False}, 'True', 'x')
     True
-    >>> required_unless({'x': True, 'y': False}, '', ['x'])
+    >>> required_unless({'x': True, 'y': False}, '', 'x')
     True
-    >>> required_unless({'x': False, 'y': False}, '', ['x'])
+    >>> required_unless({'x': False, 'y': False}, '', 'x')
     False
-    >>> required_unless({'x': False, 'y': False, 'z': True}, '', ['x', 'y'])
+    >>> required_unless({'x': False, 'y': False, 'z': True}, '', 'x', 'y')
     False
-    >>> required_unless({'x': False, 'y': True, 'z': True}, '', ['x', 'y'])
+    >>> required_unless({'x': False, 'y': True, 'z': True}, '', 'x', 'y')
     True
     """
     if to_bool(data):
@@ -144,6 +144,3 @@ def required_unless(all_fields, data, *targets):
             return True
     else:
         return False
-
-if __name__ == '__main__':
-    testmod(optionflags=NORMALIZE_WHITESPACE)
