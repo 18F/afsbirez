@@ -340,33 +340,51 @@ angular.module('sbirezApp').factory('ValidationService', function() {
 
   return {
     validate: function(workflow, data, validationResults) {
+      // looping over each workflow element - in the tree
       var length = workflow.children.length;
       var response;
       for (var i = 0; i < length; i++) {
-        var requiredSet = false;
+        // error detected - we only look for errors on an element while
+        //  we don't have any errors on it. Order of processing is:
+        //   Type-based validation
+        //   Required validation
+        //   Validation-Defined validation
+        var errorDetected = false;
+        // get the current element
         var element = workflow.children[i];
+        // check to see if the element's type has any implicit validation
         response = processTypeValidation(element, data);
+        // if it does, apply it
         if (typeof response === 'string') {
           validationResults[element.name] = response;
-          requiredSet = true;
+          errorDetected = true;
         }
-        if (element.required !== 'False' && !requiredSet) {
+        // check to see if the element is required, or has requirement logic
+        if (element.required !== 'False' && !errorDetected) {
           if (!processRequired(element, data)) {
             validationResults[element.name] = requirementFailureMessage(element);
-            requiredSet = true;
+            errorDetected = true;
           } else {
             validationResults[element.name] = {};
           }
         }
-        if (element.validation !== null && data && data[element.name] && !requiredSet) {
+        // check to see if any validation logic is defined
+        if (element.validation !== null && data && data[element.name] && !errorDetected) {
           if (!processValidation(element.validation, data[element.name])) {
             validationResults[element.name] = element.validation_msg;
           } else {
             validationResults[element.name] = {};
           }
         }
-        if (element.element_type === 'line_item' && element.multiplicity && element.multiplicity.length > 0 && element.multiplicityCount !== 1 &&
+        // if it is a standard or dynamic line item, then we will need to
+        //  validate child elements
+        if (element.element_type === 'line_item' &&
+            element.multiplicity &&
+            element.multiplicity.length > 0 &&
+            element.multiplicityCount !== 1 &&
             (!element.ask_if || element.ask_if && isSet(data, element.ask_if) && data[element.ask_if] === 'true')) {
+          // line items are represented differently from workflows, and so we 
+          //  must build out the data and validation placeholders.
           for (var j = 0; j < element.multiplicity.length; j++) {
             if (data[element.name] === undefined) {
               data[element.name] = {};
@@ -383,14 +401,23 @@ angular.module('sbirezApp').factory('ValidationService', function() {
             this.validate(element, data[element.name][element.multiplicity[j].token], validationResults[element.name][element.multiplicity[j].token]);
           }
         }
-        if (element.children.length > 0 && element.element_type === 'workflow' ||  (element.element_type === 'line_item' && element.multiplicityCount === 1 && (!element.ask_if || element.ask_if && isSet(data, element.ask_if) && data[element.ask_if] === 'true'))) {
-          //console.log('validate precall', element.name);
-          if (validationResults[element.name] === undefined) {
+        // we must validate the child elements for workflows and single line items
+        if (element.children.length > 0 &&
+            element.element_type === 'workflow' ||
+            (element.element_type === 'line_item' &&
+             element.multiplicityCount === 1 &&
+             (!element.ask_if || element.ask_if && isSet(data, element.ask_if) && data[element.ask_if] === 'true'))) {
+          // need to check for undefined or string here. The string check
+          //  is for elements that failed validation, but have child elements
+          //  that need to be checked. Failing to have this check will result
+          //  in cryptic 'unable to write to read only property' errors.
+          if (validationResults[element.name] === undefined || typeof validationResults[element.name] === 'string') {
             validationResults[element.name] = {};
           }
           if (data[element.name] === undefined) {
             data[element.name] = {};
           }
+
           this.validate(element, data[element.name], validationResults[element.name], true);
         }
       }
