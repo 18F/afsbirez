@@ -39,8 +39,7 @@ def password_check(value, user):
     if not any(char.isupper() for char in value):
         raise serializers.ValidationError('Password must contain at least 1 uppercase letter.')
     # check for symbol
-    predef = set('!@#$%&*()')
-    if not any(char in predef for char in value):
+    if not any(not char.isalnum() for char in value):
         raise serializers.ValidationError('Password must contain at least 1 special character.')
 
     # new users won't have a password history at this point
