@@ -1,9 +1,11 @@
 import json
 import re
 import shlex
+import datetime
+from datetime import timedelta
 from django.contrib.auth.models import User, Group
 from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person
-from sbirez.models import Address, Proposal, Address, Naics
+from sbirez.models import Address, Proposal, Address, Naics, PasswordHistory
 from sbirez.models import Element, Document, DocumentVersion, Solicitation, Jargon
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
@@ -11,6 +13,8 @@ from rest_framework_recursive.fields import RecursiveField
 from .utils import nested_update
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
+from sbirez.auth_utils import password_check
+from django.conf import settings
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -20,12 +24,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('name', 'password', 'url', 'email', 'groups', 'saved_topics', 'firm')
+        fields = ('name', 'password', 'url', 'email', 'groups', 'saved_topics', 'firm', 'password_expires')
         write_only_fields = ('password',)
 
     def create(self, validated_data):
         user = super(UserSerializer, self).create(validated_data)
         user.set_password(validated_data.get('password'))
+        user.password_expires = timezone.now() + timedelta(days = settings.AUTH_PASSWORD_EXPIRATION_DAYS)
+        PasswordHistory.objects.create(password=user.password, user=user)
         # create an initial firm with a unique name
         firm_name = user.name
         disambiguator = 1
@@ -43,10 +49,15 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+    def validate_password(self, value):
+        return password_check(value, None)
+
+
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ('street', 'street2', 'city', 'state', 'zip')
+
 
 class PersonSerializer(serializers.ModelSerializer):
     class Meta:

@@ -62,6 +62,12 @@ class Naics(models.Model):
 class SbirezUser(AbstractEmailUser):
     name = models.TextField()
     firm = models.ForeignKey(Firm, null=True, blank=True)
+    password_expires = models.DateTimeField(null=True)
+
+class PasswordHistory(models.Model):
+    user = models.ForeignKey(SbirezUser, related_name='prior_passwords')
+    password = models.CharField(max_length=128)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class Area(models.Model):
     area = models.TextField(unique=True)

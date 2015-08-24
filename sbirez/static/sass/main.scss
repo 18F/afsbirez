@@ -544,6 +544,7 @@ div.field.field-checkbox+div.field.field-checkbox{ margin-top: 4px; }
 
 
 div.field.is-error input,
+div.field.is-error password,
 div.field.is-error textarea{
   background: #fff7f4;
   background: repeating-linear-gradient(
@@ -713,6 +714,7 @@ main div.wrap > form { max-width: 576px; }
 
 @media screen and (min-width: 640px) {
    body.company main div.wrap > form,
+   body.user main div.wrap > form,
    body.proposal main div.wrap > form,
    .proposal-details main div.wrap > form {
     padding-right: 16px;
@@ -770,7 +772,7 @@ header.banner{
   color: #fff;
   line-height: 32px;
   overflow: hidden;
-  padding: 4px 0;
+  padding: 4px 0 0 0;
 }
 
 header.banner a{ color: white; }
@@ -828,6 +830,12 @@ header.banner nav a{
 }
 header.banner nav a:hover{
   color: #a3d3ff; 
+}
+
+header.banner div.notification {
+  background: #002152;
+  color: #fff;
+  line-height: 32px;
 }
 
 body.proposals header.banner nav a.proposals,
@@ -937,6 +945,10 @@ header.banner form div.field input {
     top: 6px;
     width: auto;
   } 
+
+  header.banner div.notification div.wrap{ 
+    padding: 8px 156px 8px 156px;
+  }
 }
 
 
@@ -1038,7 +1050,7 @@ article.topic.is-favorite h1{
 
   .topic .topic-nav a,
   .topic .topic-nav button, 
-  .topic .topc-nav span.stats {
+  .topic .topic-nav .stats {
     display: block;
     width: 100%;
     padding: 0.4em 0;
@@ -1046,6 +1058,10 @@ article.topic.is-favorite h1{
     border-bottom: 1px solid #eee !important;
   }
   
+  .topic .topic-nav .stats{
+    font-size: 14px;
+  }
+
   .topic .topic-nav a:hover,
   .topic .topic-nav button:hover{
     background: #f8f8f8;
@@ -1207,7 +1223,8 @@ nav.toc ol li span.toc-error-count{
 
 /* @group body.company */
 
-body.company h1.primary-header{
+body.company h1.primary-header,
+body.user h1.primary-header{
   margin-bottom: 24px;
   padding-top: 24px;
   margin-top: 0;  
@@ -1359,6 +1376,7 @@ body.home main form{ border: none; }
 
 
 header.proposal-header,
+header.user-header,
 header.company-header{
   background: #eee;
   line-height: 24px;
