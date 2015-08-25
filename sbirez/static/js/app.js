@@ -182,7 +182,7 @@ angular.module('sbirezApp', [
         access: { requiredAuthentication: true }
       })
       .state('app.user', {
-        url: '',
+        url: '/user',
         views: {
           'tabContent': {
             templateUrl: 'static/views/partials/accountUser.html',

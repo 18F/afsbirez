@@ -5,16 +5,25 @@ angular.module('sbirezApp').directive('header', function() {
     restrict: 'A',
     replace: true,
     templateUrl: 'static/views/partials/header.html',
-    controller: ['$scope', '$window', '$location', '$state', 'AuthenticationService', 'UserService', 'SearchService', 'SavedOpportunityService',
-      function ($scope, $window, $location, $state, AuthenticationService, UserService, SearchService, SavedOpportunityService) {
+    controller: ['$scope', '$rootScope', '$window', '$location', '$state', 'AuthenticationService', 'UserService', 'SearchService', 'SavedOpportunityService',
+      function ($scope, $rootScope, $window, $location, $state, AuthenticationService, UserService, SearchService, SavedOpportunityService) {
         $scope.menu = [];
         $scope.query = '';
+        $scope.warning = false;
 
         $scope.openLogout = function() {
           UserService.logOut();
         };
 
+        var getDays = function(expiration) {
+          var now = Date.now();
+          var dayInMS = 60 * 60 * 24 * 1000;
+          var expirationDate = new Date(expiration);
+          return (expirationDate - now) / dayInMS; 
+        };
+
         var setMenu = function() {
+          $scope.warning = false;
           if ($window.sessionStorage.token !== undefined && $window.sessionStorage.token !== null && $window.sessionStorage.token !== '' &&
               AuthenticationService.isAuthenticated) {
             SavedOpportunityService.count().then(function(data) {
@@ -35,6 +44,16 @@ angular.module('sbirezApp').directive('header', function() {
                 $scope.menu[0].title = 'My Proposals (' + data + ')';
               }
             });
+            if ($window.sessionStorage.expiration !== null) {
+              var days = parseInt(getDays($window.sessionStorage.expiration));
+              if (days < 11) {
+                $scope.warning = true;
+                $scope.expiration_days = '' + days;
+                $scope.expiration_days +=  days > 1 ? ' days' : 'day';
+              } else {
+                $scope.warning = false;
+              }
+            }
           } else {
             $scope.menu = [
               {
@@ -47,6 +66,7 @@ angular.module('sbirezApp').directive('header', function() {
                 'class': 'sign-up'
               }
             ];
+            $scope.warning = false;
           }
         };
 
@@ -59,6 +79,10 @@ angular.module('sbirezApp').directive('header', function() {
         AuthenticationService.registerObserverCallback(setMenu);
         SavedOpportunityService.registerCountObserverCallback(setMenu);
         SearchService.registerSearchTermCallback(setSearchTerm);
+
+        $rootScope.$on('userUpdated', function() {
+          setMenu();
+        });
 
         $scope.search = function() {
           if(AuthenticationService.isAuthenticated &&

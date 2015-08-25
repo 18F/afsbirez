@@ -72,4 +72,17 @@ describe('Service: UserService', function () {
        'is_staff': false }).respond(200);
     $httpBackend.flush();
   });
+
+// changePassword
+  it ('should post to the change password endpoint with correct parameters', function() {
+    AuthenticationService.setAuthenticated(true);
+    UserService.changePassword('oldpass', 'newpass', 'newpass');
+    $httpBackend.expect('POST', 'rest-auth/password/change/',
+      {
+        'old_password': 'oldpass',
+        'new_password1': 'newpass',
+        'new_password2': 'newpass'
+      }).respond(200);
+    $httpBackend.flush();
+  })
 });
