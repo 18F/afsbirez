@@ -1613,11 +1613,43 @@ class ProposalValidationTests(APITestCase):
         response = self.client.post('/api/v1/proposals/', data)
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
+    def test_element_type_integer_as_string_validation_pass(self):
+        user = _fixture_user(self)
+        data = deepcopy(minstrel_data)
+        data["data"] = json.loads(data["data"])
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["teeth"] = "17"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
     def test_element_type_integer_validation_fail(self):
         user = _fixture_user(self)
         data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
         data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["teeth"] = "Maybe"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid integer']})
+
+    def test_element_type_float_validation_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(minstrel_data)
+        data["data"] = json.loads(data["data"])
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["teeth"] = 12.8
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid integer']})
+
+    def test_element_type_float_as_string_validation_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(minstrel_data)
+        data["data"] = json.loads(data["data"])
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["teeth"] = "12.8"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1634,11 +1666,32 @@ class ProposalValidationTests(APITestCase):
         response = self.client.post('/api/v1/proposals/', data)
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
+    def test_element_type_percent_as_string_validation_pass(self):
+        user = _fixture_user(self)
+        data = deepcopy(minstrel_data)
+        data["data"] = json.loads(data["data"])
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["skill"] = "22"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
     def test_element_type_percent_validation_fail(self):
         user = _fixture_user(self)
         data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
         data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["skill"] = -22
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid percent']})
+
+    def test_element_type_percent_as_string_validation_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(minstrel_data)
+        data["data"] = json.loads(data["data"])
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["skill"] = "-22"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
