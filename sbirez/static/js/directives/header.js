@@ -55,8 +55,18 @@ angular.module('sbirezApp').directive('header', function() {
               }
             }
           } else {
+            $scope.menu = [
+              {
+                'title': 'Sign in',
+                'link': '/signin',
+                'class': 'sign-in'
+              }, {
+                'title': 'Sign up',
+                'link': '/signup',
+                'class': 'sign-up'
+              }
+            ];
             $scope.warning = false;
-            $scope.menu = [{'title': 'Sign in', 'link':'/signin', 'class':'sign-in'}];
           }
         };
 
