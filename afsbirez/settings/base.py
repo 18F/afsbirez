@@ -29,7 +29,6 @@ INSTALLED_APPS = [
     'sbirez',
     'django_assets',
     'rest_framework',
-    'rest_framework.authtoken',
     'rest_auth',
     'djmail',
 ]
@@ -40,9 +39,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'sbirez.auth_utils.ExpiringModelBackend',
 )
 
 REST_FRAMEWORK = {
@@ -52,11 +53,21 @@ REST_FRAMEWORK = {
     'MAX_PAGINATE_BY': 200,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'sbirez.utils.JSONWebTokenAuthenticationFlex',
-        'rest_framework.authentication.TokenAuthentication',
     ),
 }
 
+REST_AUTH_SERIALIZERS = {
+    'PASSWORD_RESET_CONFIRM_SERIALIZER': 'sbirez.auth_utils.PasswordResetConfirmSerializer',
+    'PASSWORD_CHANGE_SERIALIZER': 'sbirez.auth_utils.PasswordChangeSerializer'
+}
+
+OLD_PASSWORD_FIELD_ENABLED = True
 REST_SESSION_LOGIN = False
+
+AUTH_PASSWORD_HISTORY_COUNT = 2 
+AUTH_PASSWORD_LENGTH = 8
+AUTH_PASSWORD_EXPIRATION_DAYS = 60
+AUTH_PASSWORD_DIFFERENCE = 4
 
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER':'sbirez.utils.jwt_response_payload_handler',

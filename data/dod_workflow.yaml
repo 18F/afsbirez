@@ -705,7 +705,7 @@
           element_type: calculated
           required: False
           validation: "subtotal_direct_labor * fringe_benefit_percentage * .01"
-          human: "Fringe Benefits (rate x DL)"
+          human: "Fringe Benefits (rate &times; DL)"
         -
           name: labor_overhead_percentage
           element_type: percentage
@@ -714,7 +714,7 @@
         -
           name: labor_overhead
           element_type: calculated
-          human: "Labor Overhead (rate * (DL + Fringe))"
+          human: "Labor Overhead (rate &times; (DL + Fringe))"
           validation: "(subtotal_direct_labor + fringe_benefit) * labor_overhead_percentage * .01"
           required: True
         -
