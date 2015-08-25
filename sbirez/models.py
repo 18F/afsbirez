@@ -126,6 +126,33 @@ def _walk_path(dct, path):
         return dct
 
 
+def _to_number(val):
+    """
+    Convert to a numeric data type, but only if
+    possible (do not throw error)
+
+    >>> _to_number('5.4')
+    5.4
+    >>> _to_number(5.4)
+    5.4
+    >>> _to_number('-6')
+    -6
+    >>> _to_number('R2D2')
+    'R2D2'
+    """
+    try:
+        if val.is_integer():  # passed as int in float form
+            return int(val)
+    except AttributeError:
+        try:
+            return int(val)
+        except ValueError:
+            try:
+                return float(val)
+            except ValueError:
+                return val
+
+
 class Element(models.Model):
     """
     Individual questions for a form, or nestable containers to hold
@@ -430,6 +457,7 @@ class Element(models.Model):
             if type_validator:
                 if callable(type_validator):
                     try:
+                        datum = _to_number(datum)
                         valid = type_validator(datum)
                     except Exception as e:
                         valid = False
