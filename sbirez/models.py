@@ -418,12 +418,6 @@ class Element(models.Model):
         raise NotImplementedError('could not interpret %s for %s' %
                                   (self.required, self.name))
 
-    # recognize "validations" that are actually calculations
-    # every calculation should include an operator (+-*/) surrounded by
-    # whitespace, or the validator will mistake it for a call to a validation
-    # function
-    _calc_pattern = re.compile(r"\S\s+[+-/*]\s+\S")
-
     def validation_errors(self, data, accept_partial):
         """List of validation errors from applying to ``data``
 
@@ -475,7 +469,7 @@ class Element(models.Model):
 
             if el.validation:
                 for validation in el.validation.split(';'):
-                    if el._calc_pattern.search(validation):
+                    if el.element_type == 'calculated':
                         # This "validation" is actually a calculation
                         continue
                     args = shlex.split(validation)
