@@ -184,7 +184,8 @@ class ProposalViewSet(viewsets.ModelViewSet):
         """Web version of our PDF hardcopy report"""
         prop = self.get_object()
         template = loader.get_template('sbirez/submission_report.html')
-        context = Context({'data': prop.report()})
+        context = Context({'prop': prop,
+                           'data': prop.report()})
         output = template.render(context)
         return HttpResponse(output)
 

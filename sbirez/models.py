@@ -288,6 +288,10 @@ class Element(models.Model):
         else:
             return self.name
 
+    @property
+    def hyphenated_name(self):
+        return self.name.replace('_', '-')
+        
     _tag_pattern= re.compile(r'<.*?>', re.DOTALL)
     @property
     def human_plain(self)   :
