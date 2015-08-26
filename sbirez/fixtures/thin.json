@@ -553,7 +553,7 @@
         "fields": {
             "ask_if": null,
             "default": null,
-            "element_type": "float",
+            "element_type": "calculated",
             "help": null,
             "human": "weight in lb",
             "multiplicity": null,
