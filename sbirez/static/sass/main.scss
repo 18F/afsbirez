@@ -265,14 +265,16 @@ button,
   vertical-align: middle;
 }
 
-button:hover {
+button:hover,
+.button:hover {
   background: #00834d;
   border-color: #00834d;
   color: white;
   box-shadow: 0 1px 0 #f3f3f3;
 }
 
-button:active {
+button:active,
+.button:active {
   color: #7aa79d;
   background: #006e52;
   border-color: #006e52;
