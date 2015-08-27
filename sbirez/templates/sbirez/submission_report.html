@@ -1,6 +1,7 @@
-{% extends "base.html" %}
-
-{% block content %}
+<html>
+  <head>
+  </head>
+  <body>
 
     <main class="cover-sheet">
       <div class="wrapper">
@@ -51,6 +52,35 @@
             <dt class="sba-sbc">SBA SBC</dt>
             <dd class="sba-sbc">SBC-000000000</dd> <!-- TODO -->
           </dl>
+          {% for itm in report %}
+            {% if itm.semantic|first == 'h' %}
+              <hr />
+              <{{ itm.semantic }}>{{ itm.question }}</{{ itm.semantic }}>
+            {% elif itm.semantic == 'dl-start' %}
+              <dl>
+            {% elif itm.semantic == 'dl' %}
+                <dt>{{ itm.question }}</dt>
+                <dd>{{ itm.answer }}</dd>
+            {% elif itm.semantic == 'dl-end' %}
+              </dl>
+            {% elif itm.semantic == 'table-start' %}
+              <table>
+            {% elif itm.semantic == 'table' %}
+              <tr><td class="question">{{ itm.question }}</td>
+                  <td class="answer">{{ itm.answer }}</td>
+              </tr>
+            {% elif itm.semantic == 'table-end' %}
+              </table>
+            {% elif itm.semantic == 'p' %}
+              <p>{{ itm.question }}</p>
+            {% else %}
+              <div>
+                <span class="question">{{ itm.question }}</span>
+                <span class="answer">{{ itm.answer }}</span>
+              </div>
+            {% endif %}
+          {% endfor %}
+          <!--
           <article class="question question-1">
             <span class="question--number">1</span>
             <span class="question--text">Does your firm allow for the release of its contact information to Economic Development Organizations?</span>
@@ -94,7 +124,6 @@
             <span class="question--text">Has your firm&rsquo;s Principal Investigator (PI) or Corporate Official (CO) listed below, or owner been convicted of a fraud-related crime involving SBIR and/or STTR funds or found civilly liable for a fraud-related violation involving Federal funds?</span>
             <span class="question--answer">{{ prop.data.dod_workflow.dod_coversheet.eligibility.pi_fraud_conviction|yesno }}</span>
           </article>
-          <!-- TODO - no details when answer is yes -->
           <article class="question question-9">
             <span class="question--number">9</span>
             <span class="question--text">Has your firm met the performance benchmarks in section 3.1 of the solicitation and listed by the SBA on their website as eligible to participate?</span>
@@ -332,7 +361,6 @@
             <div class="date">Date</div>
           </article>
         </section>
+      -->
       </div>
     </main>
-
-{% endblock %}

@@ -242,6 +242,7 @@ class Element(models.Model):
     element_type = models.TextField(default='str')
     # workflow, group, line_item, read_only_text, or scalar type
     order = models.IntegerField(blank=False)
+    report_question_number = models.TextField(null=True, blank=True)
     parent = models.ForeignKey('Element', related_name='children', null=True, blank=True)
     multiplicity = models.TextField(null=True, blank=True)
     # comma-separated list of names: collect one group for each name
@@ -291,7 +292,7 @@ class Element(models.Model):
     @property
     def hyphenated_name(self):
         return self.name.replace('_', '-')
-        
+
     _tag_pattern= re.compile(r'<.*?>', re.DOTALL)
     @property
     def human_plain(self)   :
@@ -477,6 +478,7 @@ class Element(models.Model):
                         # This "validation" is actually a calculation
                         continue
                     args = shlex.split(validation)
+                    args = [a.strip(',') for a in args]
                     function_name = args.pop(0)
                     try:
                         func = getattr(validation_helpers, function_name)
@@ -558,6 +560,11 @@ class Element(models.Model):
             yield (self, data, path + [self.name])
             yield from self.children_with_data(data, path + [self.name], include_empty)
 
+    def ancestry(self):
+        if self.parent:
+            yield self.parent
+            yield from self.parent.ancestry()
+
 
 class Jargon(models.Model):
     name = models.TextField(unique=True)
@@ -638,18 +645,45 @@ class Proposal(models.Model):
             return '(Not Submitted)'
 
     def report(self):
+        enclosing_semantic = None
         for (el, data, path) in self.workflow.with_data(
             self.data.get(self.workflow.name, {}), [], include_empty=False):
+            if el.element_type == 'line_item':
+                if not enclosing_semantic:
+                    yield {'semantic': 'dl-start'}
+                enclosing_semantic == 'dl'
+            else:
+                if enclosing_semantic:
+                    yield {'semantic': '%s-end' % enclosing_semantic }
+                    enclosing_semantic = None
             if el.report_text == '':
                 continue
             if el.element_type == 'checkbox' and not data:
                 # TODO: Unsure this is always appropriate
-                continue
+                # continue
+                pass
             if el.human == r'%multiple%':
                 question = path[-2]
             else:
                 question = el.reportable_question
-            yield (el, question, el.reportable_answer(data))
+            if enclosing_semantic:
+                semantic = enclosing_semantic
+            elif el.element_type == 'read_only_text':
+                semantic = 'p'
+            elif el.element_type == 'workflow':
+                parent_workflows = len([e for e in
+                                        el.ancestry()
+                                        if e.element_type == 'workflow'])
+                semantic = 'h%d' % (1 + parent_workflows)
+            else:
+                semantic = 'div'
+            yield {'element': el,
+                   'semantic': semantic,
+                   'question': question,
+                   'answer': el.reportable_answer(data)}
+
+        if enclosing_semantic:
+            yield {'semantic': '%s-end' % enclosing_semantic }
 
 
 class Document(models.Model):
