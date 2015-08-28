@@ -35,9 +35,10 @@ angular.module('sbirezApp').directive('calculated', function() {
                                  validationCallback,
                                  $scope.element.ask_if !== null ? askIfCallback : null,
                                  $scope.multipletoken);
-        //console.log('$storage', $scope.storage, $scope.element.name, $scope.storage.length);
         if ($scope.storage.length === undefined && typeof $scope.storage === 'object') {
           $scope.storage = '';
+        } else {
+          $scope.storage = Math.round(($scope.storage + 0.00001) * 100) / 100;
         }
 
         $scope.fieldName = $scope.element.human;

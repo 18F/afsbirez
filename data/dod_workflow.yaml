@@ -276,8 +276,8 @@
         children:
         -
           name: proposed_cost
-          element_type: dollars
-          validation: not_more_than 150000
+          element_type: calculated 
+          validation: estimated_total_cost 
           validation_msg: Must not exceed $150,000
           required: True
         -
@@ -372,14 +372,6 @@
             name: section313
             html: "<p>Any recipient performing research involving recombinant DNA molecules and/or organisms and viruses containing recombinant DNA molecules shall comply with the National Institutes of Health Guidelines for Research Involving Recombinant DNA Molecules, dated January 2011, as amended. The guidelines can be found at: <a href=\"http://oba.od.nih.gov/rdna/nih_guidelines_oba.html\">guidlines</a>. Recombinant DNA is defined as (i) molecules that are constructed outside living cells by joining natural or synthetic DNA segments to DNA molecules that can replicate in living cells or (ii) molecules that result from the replication of those described in (i) above. A listing of the cited regulations is available at: <a href=\"http://www.acq.osd.mil/osbp/sbir/sb/resources/deskreference/quickref/researchrecombinantdna.shtml\">reference</a>."
         -
-          name: technical_abstract
-          element_type: text
-          human: Technical Abstract (Limit your abstract to 200 words
-                 with no classified or proprietary information)
-          validation: no_more_than 200 words
-          validation_msg: Limit your abstract to 200 words
-          required: True
-        -
           name: anticipated_benefits
           element_type: text
           human: Anticipated Benefits/Potential Commercial Applications
@@ -447,18 +439,8 @@
           element_type: percentage
           required: True
         -
-          name: pi_is_woman
-          human: Is the principal investigator (identified below) a woman?
-          element_type: bool
-          required: True
-        -
-          name: pi_is_disadvantaged
-          human: Is the principal investigator (identified below) socially/economically disadvantaged?
-          element_type: bool
-          required: True
-        -
           name: pi_is_university
-          human: Is your firm's PI,CO, or owner, a faculty member or student
+          human: Is your firm's principal investigator, corporate official, or owner a faculty member or student
                  of an institution of higher education?
           element_type: bool
           required: True
@@ -495,6 +477,16 @@
             name: pi_email
             human: Email
             element_type: email
+            required: True
+          -
+            name: pi_is_woman
+            human: Is this person a woman?
+            element_type: bool
+            required: True
+          -
+            name: pi_is_disadvantaged
+            human: Is this person socially/economically disadvantaged?
+            element_type: bool
             required: True
         -
           name: co_contact_info
@@ -537,34 +529,34 @@
       children:
         -
           name: reviewed_requirement
-          element_type: bool
+          element_type: checkbox
           human: Have you reviewed all the requirements in the Air Force and
                  DoD Solicitation instructions?
           required: True
         -
           name: is_pdf
-          element_type: bool
+          element_type: checkbox 
           human: Is the Technical Volume a single Portable Document Format
                  (PDF) file, including graphics?
           required: True
         -
           name: was_virus_scanned
-          element_type: bool
+          element_type: checkbox
           human: Did you virus scan the document?
           required: True
         -
           name: is_20_pages
-          element_type: bool
+          element_type: checkbox
           human: Is the document less than or equal to twenty pages in length?
           required: True
         -
           name: is_font_and_paper_correct
-          element_type: bool
+          element_type: checkbox
           human: Is the font 10 pt. or larger on 8-1/2" x 11" paper with one-inch margins?
           required: True
         -
           name: contains_header
-          element_type: bool
+          element_type: checkbox
           human: Does it contain a header with the company name, topic number, and
                  proposal number? This header can exist in the margin.
           required: True
@@ -572,6 +564,14 @@
           name: tech_volume_upload
           element_type: file_upload
           human: Upload Technical Volume
+          required: True
+        -
+          name: technical_abstract
+          element_type: text
+          human: Technical Abstract (Limit your abstract to 200 words
+                 with no classified or proprietary information)
+          validation: no_more_than 200 words
+          validation_msg: Limit your abstract to 200 words
           required: True
     -
       name: dod_cost_volume
@@ -645,8 +645,8 @@
           human: Specify the type of payment desired
           element_type: big_str
           required: True
-          validation: one_of "partial payments (monthly) as work progresses (recommended)",
-                      "progress payments"
+          validation: one_of "Partial payments (monthly) as work progresses (recommended)",
+                      "Progress payments"
         -
           name: false_statements
           human: Knowingly and willfully making any false, ficticious, or fraudulent
@@ -753,7 +753,7 @@
         -
           name: material_overhead
           element_type: calculated
-          human: "Material Overhead (rate * DM)"
+          human: "Material Overhead (rate &times; DM)"
           validation: "subtotal_direct_material * material_overhead_percentage * .01"
           required: False
         -
@@ -796,7 +796,7 @@
         -
           name: other_overhead
           element_type: calculated
-          human: "Direct Cost Overhead (rate * ODC)"
+          human: "Direct Cost Overhead (rate &times; ODC)"
           validation: "subtotal_other * other_overhead_percentage * .01"
           required: False
         -
@@ -862,7 +862,7 @@
         -
           name: discretionary_technical_assistance
           element_type: dollars
-          required: True
+          required: False 
     -
       name: dod_company_commercialization_report
       element_type: workflow
