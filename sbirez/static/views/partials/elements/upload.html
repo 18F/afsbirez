@@ -1,5 +1,5 @@
-<section class="fieldset fieldset-standalone">
-  <h1 class="label-text">{{element.human}}</h1>
+<fieldset class="fieldset fieldset-singlelineitem">
+  <legend class="label-text">{{element.human}}</legend>
   <div class="field field-upload" ng-class="{'is-error': validationstorage}">
     <label>
       <input id="{{fieldToken}}" name="{{fieldToken}}" type="file" accept="application/pdf" ng-file-select="onFileSelect($files)" size="40">
@@ -15,4 +15,4 @@
     </label>
     <span ng-show="validationstorage" class="error-message">{{validationstorage}}</span>
   </div>
-</section>
+</fieldset>
