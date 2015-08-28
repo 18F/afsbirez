@@ -52,9 +52,12 @@
             <dt class="sba-sbc">SBA SBC</dt>
             <dd class="sba-sbc">SBC-000000000</dd> <!-- TODO -->
           </dl>
+        </section>
           {% for itm in report %}
             {% if itm.semantic|first == 'h' %}
+              </section>
               <hr />
+              <section>
               <{{ itm.semantic }}>{{ itm.question }}</{{ itm.semantic }}>
             {% elif itm.semantic == 'dl-start' %}
               <dl>
@@ -75,11 +78,15 @@
               <p>{{ itm.question }}</p>
             {% else %}
               <div>
+                <span class="question_number">
+                  {{ itm.element.report_question_number|default_if_none:"" }}
+                </span>
                 <span class="question">{{ itm.question }}</span>
                 <span class="answer">{{ itm.answer }}</span>
               </div>
             {% endif %}
           {% endfor %}
+        </section>
           <!--
           <article class="question question-1">
             <span class="question--number">1</span>

@@ -185,7 +185,7 @@ class ProposalViewSet(viewsets.ModelViewSet):
         prop = self.get_object()
         template = loader.get_template('sbirez/submission_report.html')
         context = Context({'prop': prop,
-                           'report': prop.report()})
+                           'report': prop.report('dod_workflow.dod_coversheet')})
         output = template.render(context)
         return HttpResponse(output)
 
