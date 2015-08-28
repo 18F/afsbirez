@@ -207,7 +207,9 @@ angular.module('sbirezApp').factory('ValidationService', function() {
   };
 
   var meetsRequirement = function(data, element) {
-    if ((element.required === 'True') || (element.required === true)) {
+    if (((element.required === 'True') || (element.required === true)) && element.element_type === 'checkbox') {
+      return isTrueIsh(data, element.name);
+    } else if ((element.required === 'True') || (element.required === true)) {
       return isSet(data, element.name);
     } else if ((element.required === 'False') || (element.required === false)) {
       return true;
@@ -293,6 +295,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
       if (element.element_type === 'percentage') {
         response = 'Invalid percentage';
         value = data[element.name];
+        value = value.replace('%','');
         if (isFinite(value)) {
           value = parseFloat(value);
           if (value >= 0 && value <= 1000) {

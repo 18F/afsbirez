@@ -40,7 +40,6 @@ angular.module('sbirezApp').directive('checkbox', function() {
                                  $scope.multipletoken);
 
         $scope.apply = function() {
-          console.log('bool apply', $scope.element.id, $scope.storage);
           ProposalService.apply($scope.element, $scope.storage, $scope.multipletoken);
         };
       }
