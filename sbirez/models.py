@@ -561,8 +561,8 @@ class Element(models.Model):
             yield from self.children_with_data(data, path + [self.name], include_empty)
 
     def ancestry(self):
+        yield self
         if self.parent:
-            yield self.parent
             yield from self.parent.ancestry()
 
 
@@ -644,18 +644,28 @@ class Proposal(models.Model):
         else:
             return '(Not Submitted)'
 
-    def report(self):
+    def report(self, path_filter):
         enclosing_semantic = None
+        path_filter = path_filter.split('.')
         for (el, data, path) in self.workflow.with_data(
             self.data.get(self.workflow.name, {}), [], include_empty=False):
+            # This seems like an ugly way to restrict the
+            # results to `path`, but matching proposal Data
+            # to workflows is tricky.
+            if enclosing_semantic == 'dl' and 'line_item' not in (
+                e.element_type for e in el.ancestry()):
+                # dl section is over
+                yield {'semantic': '%s-end' % enclosing_semantic, 'element': el}
+                enclosing_semantic = None
+            if path[:len(path_filter)] != path_filter:
+                # This seems like an ugly way to restrict the
+                # results to `path_filter`, but matching proposal Data
+                # to workflows is tricky.
+                continue
             if el.element_type == 'line_item':
                 if not enclosing_semantic:
-                    yield {'semantic': 'dl-start'}
-                enclosing_semantic == 'dl'
-            else:
-                if enclosing_semantic:
-                    yield {'semantic': '%s-end' % enclosing_semantic }
-                    enclosing_semantic = None
+                    yield {'semantic': 'dl-start', 'element': el}
+                enclosing_semantic = 'dl'
             if el.report_text == '':
                 continue
             if el.element_type == 'checkbox' and not data:
@@ -668,15 +678,15 @@ class Proposal(models.Model):
                 question = el.reportable_question
             if enclosing_semantic:
                 semantic = enclosing_semantic
-            elif el.element_type == 'read_only_text':
-                semantic = 'p'
-            elif el.element_type == 'workflow':
+            else:
+                semantic = 'div'  # but this may be overwritten
+            if el.element_type == 'workflow':
                 parent_workflows = len([e for e in
                                         el.ancestry()
                                         if e.element_type == 'workflow'])
-                semantic = 'h%d' % (1 + parent_workflows)
-            else:
-                semantic = 'div'
+                semantic = 'h%d' % parent_workflows
+            elif el.element_type == 'read_only_text':
+                semantic = 'p'  # this overrides earlier
             yield {'element': el,
                    'semantic': semantic,
                    'question': question,

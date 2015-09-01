@@ -33,7 +33,8 @@
         <button type="button" id="validate_state" ng-click="validate()">{{verifyButton}}</button>
         <button ng-if="showSubmit" type="button" id="submit" ng-click="submit()">{{submitButton}}</button>
         <a ng-href="api/v1/proposal/{{proposalId}}/pdf/?jwt={{jwt}}" target="_self">Download</a>
-        <a ng-href="api/v1/proposal/{{proposalId}}/readonly_report/?jwt={{jwt}}" target="_self">Static</a>
+        <a ng-href="api/v1/proposal/{{proposalId}}/coversheet/?jwt={{jwt}}" target="_self">Cover sheet</a>
+        <a ng-href="api/v1/proposal/{{proposalId}}/cost_volume/?jwt={{jwt}}" target="_self">Cost volume</a>
         <div ng-if="!showContinue" class="notice">
           <p><strong>Note:</strong> You&rsquo;ll need to fill in <a ui-sref="app.organization">your company information</a> before you can submit a proposal.</p>
         </div>

@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <!--link rel="stylesheet" href="https://abs.twimg.com/a/1440461805/css/t1/twitter_core.bundle.css"-->
+    <link rel="stylesheet" href="/static/css/pdf.css" />
+  </head>
+  <body>
+
+    <main class="cover-sheet">
+      <div class="wrapper">
+        <header class="cover-sheet--header">
+          <h1>
+            Small Business Innovation Research (SBIR) Program
+            <span class="cover-sheet">Proposal Cover Sheet</span>
+          </h1>
+          <p>Knowingly and willfully making any false, fictitious, or fraudulent statements or representations may be a felony under the Federal Criminal False Statement Act (18 USC Sec 1001), punishable by a fine of up to $10,000, up to five years in prison, or both.</p>
+          <dl>
+            <dt class="date-submitted">Date submitted</dt>
+            <dd class="date-submitted">{{ prop.date_submitted }}</dd>
+            <dt class="proposal-number">Proposal number</dt>
+            <dd class="proposal-number">{{ prop.proposal_number }}</dd>
+          </dl>
+          <div class="due-date">{{ prop.topic.solicitation.name }} due
+            {{ prop.topic.solicitation.proposals_end_date|date:"d F Y" }}</div>
+        </header>
+        <section class="cover-sheet--agency-information">
+          <h1>Agency information</h1>
+          <dl>
+            <dt class="name">Name</dt>
+            <dd class="name">{{ prop.topic.agency }}</dd>
+            <dt class="command">Command</dt>
+            <dd class="command">RI</dd><!-- TODO: -->
+            <dt class="topic-number">Topic number</dt>
+            <dd class="topic-number">{{ prop.topic.topic_number }}</dd>
+            <dt class="proposal-title">Proposal Title</dt>
+            <dd class="proposal-title">{{ prop.topic.title }}</dd>
+          </dl>
+        </section>
+        <section class="cover-sheet--firm-information">
+          <h1>Firm information</h1>
+          <dl>
+            <dt class="name">Firm name</dt>
+            <dd class="name">{{ prop.firm.name }}</dd>
+            <dt class="mailing-address">Mailing address</dt>
+            <dd class="mailing-address">
+              {{ prop.firm.address|linebreaks }}
+            </dd>
+            <dt class="website-address">Website address</dt>
+            <dd class="website-address">{{ prop.firm.website }}</dd>
+            <dt class="duns">DUNS</dt>
+            <dd class="duns">{{ prop.firm.duns_id }}</dd>
+            <dt class="cage">CAGE</dt>
+            <dd class="cage">{{ prop.firm.cage_code }}</dd>
+            <dt class="sba-sbc">SBA SBC</dt>
+            <dd class="sba-sbc">{{ prop.firm_sbc_id }}</dd>
+          </dl>
+        </section>
+          {% for itm in report %}
+            {% if itm.semantic|first == 'h' %}
+              </section>
+              <hr />
+              <section class="{{ itm.element.element_type }}">
+              <{{ itm.semantic }} class="{{ itm.element.element_type }}">
+                {{ itm.question }}
+              </{{ itm.semantic }}>
+            {% elif itm.semantic == 'dl-start' %}
+              <dl class="{{ itm.element.element_type }}">
+            {% elif itm.semantic == 'dl' %}
+                <dt class="{{ itm.element.element_type }}">{{ itm.question }}</dt>
+                <dd class="{{ itm.element.element_type }}">{{ itm.answer }}</dd>
+            {% elif itm.semantic == 'dl-end' %}
+              </dl>
+            {% elif itm.semantic == 'table-start' %}
+              <table class="{{ itm.element.element_type }}">
+            {% elif itm.semantic == 'table' %}
+              <tr><td class="question {{ itm.element.element_type }}">{{ itm.question }}</td>
+                  <td class="answer {{ itm.element.element_type }}">{{ itm.answer }}</td>
+              </tr>
+            {% elif itm.semantic == 'table-end' %}
+              </table>
+            {% elif itm.semantic == 'p' %}
+              <p class="{{ itm.element.element_type }}">{{ itm.question }}</p>
+            {% else %}
+              <div class="numbered-question {{ itm.element.element_type }}">
+                <div class="question-number {{ itm.element.element_type }}">
+                  {{ itm.element.report_question_number|default_if_none:"" }}
+                </div>
+                <div class="question {{ itm.element.element_type }}">{{ itm.question }}</div>
+                <div class="answer {{ itm.element.element_type }}">{{ itm.answer }}</div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </section>
+      </div>
+    </main>
