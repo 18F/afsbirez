@@ -1,5 +1,7 @@
 *.min.css
 *.min.js
+*.min.*.js
+*.min.*.css
 .webassets-cache/
 .DS_Store
 *.pyc

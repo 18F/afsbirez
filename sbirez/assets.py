@@ -16,7 +16,7 @@ bower_js = Bundle(
     "lib/base64/base64.min.js",
     "lib/bigfoot/dist/bigfoot.min.js",
     filters="jsmin",
-    output="js/bower.min.js"
+    output="js/bower.min.%(version)s.js"
 )
 
 angular_js = Bundle(
@@ -69,7 +69,7 @@ angular_js = Bundle(
     "js/services/documentsvc.js",
     "js/services/validationsvc.js",
     filters="jsmin",
-    output="js/angular.min.js"
+    output="js/angular.min.%(version)s.js"
 )
 
 combined_sass = Bundle(
@@ -88,7 +88,7 @@ combined_css = Bundle(
     "lib/bigfoot/dist/bigfoot-default.css",
     combined_sass,
     filters="cssmin",
-    output="css/sbirez.min.css"
+    output="css/sbirez.min.%(version)s.css"
 )
 
 register("bower_js", bower_js)
