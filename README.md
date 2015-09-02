@@ -67,13 +67,6 @@ $ npm install npm -g
 $ npm install
 ```
 
-* Install Sass and Compass gems
-
-```
-$ gem install sass
-$ gem install compass
-```
-
 * install client side dependencies via bower
 ```
 $ bower install
