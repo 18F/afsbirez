@@ -3,11 +3,10 @@
     <h1>{{::element.human}}</h1>
     <a href="#" ng-click="addAnother()">Add another</a>
   </header>
-  <section class="fieldset fieldset-dynamic-item" ng-if="element.multiplicity" ng-repeat="multiple in element.multiplicity| limitTo:visibleCount">
-    <header>
-      <h1>{{::element.human}} {{multiple.value + 1}}</h1>
-      <a href="#" ng-if="visibleCount > 1" ng-click="remove(multiple.value)" class="remove">Remove</a>
-    </header>
+  <fieldset class="fieldset fieldset-dynamic-item" ng-if="element.multiplicity" ng-repeat="multiple in element.multiplicity| limitTo:visibleCount">
+    <legend>{{::element.human}} {{multiple.value + 1}}</legend>
+    <a href="#" ng-if="visibleCount > 1" ng-click="remove(multiple.value)" class="fieldset-dynamic-item-remove">Remove</a>
+
     <div ng-repeat="subelement in element.children">
       <div class="workflow-element" ng-class="{'element-aside':subelement.ask_if}" ng-if="subelement.element_type === 'str' || subelement.element_type === 'long_str' || subelement.element_type === 'med_str' || subelement.element_type === 'short_str' || subelement.element_type === 'phone' || subelement.element_type === 'email' || subelement.element_type === 'int' || subelement.element_type === 'dollars' || subelement.element_type === 'float' || subelement.element_type === 'percentage' || subelement.element_type === 'big_str'">
         <div str="subelement" multiplename="multiple.value" multipletoken="multiple.token"></div>
@@ -32,5 +31,5 @@
         <div upload="subelement" proposalId="{{::proposalId}}" multiplename="multiple.value" multipletoken="multiple.token"></div>
       </div>
     </div>
-  </section>
+  </fieldset>
 </div>

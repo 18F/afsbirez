@@ -44,12 +44,19 @@
         else if ($('input[name=new_password1]').val() === '' || $('input[name=new_password2]').val() === '') {
           $('.api-response').html('Must provide both password fields.');
         }
+        else if (data && data.responseJSON && data.responseJSON.new_password1) {
+          $('.api-response').html(data.responseJSON.new_password1[0]);
+        }
+        else if (data && data.responseJSON && data.responseJSON.non_field_errors) {
+          $('.api-response').html(data.responseJSON.non_field_errors[0]);
+        }
         else {
           $('.api-response').html('Error: Invalid Token');
         }
       }
-      var susccess_response = function(data){
+      var success_response = function(data){
         $('.api-response').html(data.success + ' Go back to the <a href="/">application</a> to log in.');
+        $('form.ajax-post button[type=submit]').hide();
       }
 
       $().ready(function(){
@@ -57,7 +64,7 @@
           var form = $('form.ajax-post');
           $.post(form.attr('action'), form.serialize())
           .fail(function(data){error_response(data);})
-          .done(function(data){susccess_response(data);});
+          .done(function(data){success_response(data);});
           return false;
         });
       });

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sbirezApp').factory('SavedOpportunityService', function($http, $q) {
+angular.module('sbirezApp').factory('SavedOpportunityService', function($http, $q, AuthenticationService) {
 
   var SAVEDTOPIC_URI = 'api/v1/topics/';
   var PROPOSALS_URI = 'api/v1/proposals/';
@@ -15,6 +15,13 @@ angular.module('sbirezApp').factory('SavedOpportunityService', function($http, $
       }
     });
   };
+
+  var clearResults = function() {
+    opportunities = {};
+    opportunities.results = [];
+  };
+
+  AuthenticationService.registerObserverCallback(clearResults);
 
   var getOpportunities = function() {
     var deferred = $q.defer();

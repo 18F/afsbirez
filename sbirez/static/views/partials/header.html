@@ -16,4 +16,7 @@
       <a class="{{::item.class}}" ng-repeat="item in menu" ng-click="item.click()" href="{{::item.link}}">{{::item.title}}</a>
     </nav>
   </div>
+  <div class="notification" ng-show="warning">
+    <div class="wrap">Your password will expire in {{expiration_days}}. <a ui-sref="app.user">Click here</a> to change it.</div>
+  </div>
 </header>
