@@ -1,28 +1,31 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('AccountUserCtrl', function ($scope, $rootScope, $http, $routeParams, $window, UserService) {
-    $scope.userId = $window.sessionStorage.userid;
-    $scope.user = {};
-    $scope.user.name = '';
+  .controller('AccountUserCtrl', function ($scope, $rootScope, UserService) {
+    $scope.input = {};
+    $scope.input.oldpassword = '';
+    $scope.input.newpassword1 = '';
+    $scope.input.newpassword2 = '';
+    $rootScope.bodyClass = 'user';
 
-    if ($scope.user.name === '') {
-      UserService.getUserDetails($scope.userId).then(function(data) {
-        $scope.user = data;
-      }, function(error) {
-        console.log(error);
-      });
-    }
-
-    $rootScope.$on('userUpdated', function() {
-      UserService.getUserDetails($scope.userId).then(function(data) {
-        $scope.user = data;
-      }, function(error) {
-        console.log(error);
-      });
-    });
-
-    $scope.save = function() {
-      UserService.updateUserDetails($scope.user);
+    $scope.savePassword = function() {
+      if ($scope.input.oldpassword !== '' && $scope.input.newpassword1 !== '' && $scope.input.newpassword2 !== '') {
+        if ($scope.input.newpassword1 === $scope.input.newpassword2) {
+          UserService.changePassword($scope.input.oldpassword, $scope.input.newpassword1, $scope.input.newpassword2).then(function(data) {
+            $scope.validationData = {};
+            $scope.errorMsg = '';
+            $scope.successMsg = 'Password changed successfully.';
+            UserService.getUserDetails();
+            console.log('password changed');
+          }, function(status) {
+            console.log('password changed', status);
+            $scope.validationData = status.data;
+          });
+        } else {
+          $scope.errorMsg = 'New passwords must match.';
+        }
+      } else {
+        $scope.errorMsg = 'All fields are required.'; 
+      }
     };
   });

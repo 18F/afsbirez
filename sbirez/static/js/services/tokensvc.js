@@ -46,7 +46,7 @@ angular.module('sbirezApp').factory('TokenInterceptor', function ($q, $window, $
     request: function (config) {
       config.headers = config.headers || {};
       // only need the auth header if we are talking to our api
-      if ($window.sessionStorage.token && config.url.indexOf('api/') >= 0) {
+      if ($window.sessionStorage.token && (config.url.indexOf('api/') >= 0 || config.url.indexOf('change/') >= 0)) {
         config.headers.Authorization = 'JWT ' + $window.sessionStorage.token;
         if (expiration === null) {
           expiration = getTokenExpirationDate($window.sessionStorage.token);
