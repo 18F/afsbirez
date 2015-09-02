@@ -8,8 +8,8 @@ angular.module('sbirezApp').directive('workflow', function() {
       proposalId: '@'
     },
     templateUrl: 'static/views/partials/workflow.html',
-    controller: ['$scope', '$stateParams', '$state', '$location', 'ProposalService', '$timeout', 
-      function ($scope, $stateParams, $state, $location, ProposalService, $timeout) {
+    controller: ['$scope', '$stateParams', '$state', '$location', 'ProposalService', '$timeout', '$anchorScroll',
+      function ($scope, $stateParams, $state, $location, ProposalService, $timeout, $anchorScroll) {
 
         $scope.currentWorkflow = {};
         $scope.startingWorkflow = null;
@@ -101,6 +101,7 @@ angular.module('sbirezApp').directive('workflow', function() {
                 $scope.validationList = [];
                 buildErrorList($scope.validationData);
                 ProposalService.getOverview(false).then(function(data) {
+                  $anchorScroll();
                   $scope.overview = data;
                   $timeout($.bigfoot, 100);
                 });
