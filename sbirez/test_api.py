@@ -1400,17 +1400,18 @@ class StaticReportTests(APITestCase):
     def test_static_report(self):
         user = _fixture_user(self)
         proposal = Proposal.objects.get(id=2)
-        self.assertTrue(list(proposal.report())[0][1] ==
+        self.assertEqual(proposal.report('holy_grail_workflow').__next__()['question'],
             'Holy Grail Workflow')
 
     def test_integer_multiplicity(self):
         user = _fixture_user(self)
         response = self.client.post('/api/v1/proposals/', minstrel_data)
         proposal = Proposal.objects.get(id=response.data['id'])
-        qs_and_answers = [(e[1], e[2]) for e in proposal.report()]
+        qs_and_answers = [(e.get('question'), e.get('answer'))
+                          for e in proposal.report('holy_grail_workflow')]
         self.assertIn(('Name', 'Sasha'), qs_and_answers)
         self.assertIn(('Instrument', 'sackbut'), qs_and_answers)
-        self.assertTrue(list(proposal.report())[0][1] ==
+        self.assertEqual(proposal.report('holy_grail_workflow').__next__()['question'],
             'Holy Grail Workflow')
 
 
