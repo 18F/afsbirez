@@ -53,7 +53,7 @@ class Firm(models.Model):
 class Naics(models.Model):
     code = models.TextField(primary_key=True)
     description = models.TextField(null=False)
-    firms = models.ManyToManyField('Firm', blank=True, null=True,
+    firms = models.ManyToManyField('Firm', blank=True, 
                                    related_name='naics')
 
     def __str__(self):
@@ -71,13 +71,13 @@ class PasswordHistory(models.Model):
 
 class Area(models.Model):
     area = models.TextField(unique=True)
-    topics = models.ManyToManyField('Topic', blank=True, null=True, related_name='areas')
+    topics = models.ManyToManyField('Topic', blank=True, related_name='areas')
 
 class Keyword(models.Model):
     keyword = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    topics = models.ManyToManyField('Topic', blank=True, null=True, related_name='keywords')
+    topics = models.ManyToManyField('Topic', blank=True, related_name='keywords')
 
 class Phase(models.Model):
     phase = models.TextField()
@@ -365,7 +365,7 @@ class Element(models.Model):
 class Jargon(models.Model):
     name = models.TextField(unique=True)
     html = models.TextField()
-    elements = models.ManyToManyField('Element', blank=True, null=True,
+    elements = models.ManyToManyField('Element', blank=True,
                                       related_name='jargons')
 
 
@@ -407,7 +407,7 @@ class Topic(models.Model):
     objective = models.TextField()
     fts = VectorField()
     saved_by = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                      blank=True, null=True,
+                                      blank=True,
                                       related_name='saved_topics')
 
     objects = SearchManager(fields=None, search_field='fts',
@@ -432,7 +432,7 @@ class Document(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     firm = models.ForeignKey('Firm')
-    proposals = models.ManyToManyField('Proposal', blank=True, null=True,)
+    proposals = models.ManyToManyField('Proposal', blank=True)
 
     @property
     def file(self):
