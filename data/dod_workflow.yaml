@@ -50,23 +50,27 @@
         -
           name: two_thirds_work_requirement
           human: At a minimum, will two-thirds of the research and/or analytical work in
-                 Phase I be carried out by your small business as described in section 4.2 <jargon section42>
+                 Phase I be carried out by your small business as described in section 4.2 <jargon section42_twothirds>
                  of the solicitation?
           element_type: bool
           required: True
           jargons:
           -
-            name: section42
-            html: "<p>Offeror Eligibility and Performance Requirements</p><p>Each proposer must qualify as a small business concern as defined by 13 C.F.R §§ 701-705 at time of award and certify to this in the Cover Sheet section of the proposal. The eligibility requirements for the SBIR/STTR programs are unique and do not correspond to those of other small business programs (see Section 3.15 of this solicitation). Proposers must meet eligibility requirements for Small Business Ownership and Control (see 13 CFR § 121.702 and Section 4.4 of this solicitation).</p><p>In addition, a minimum of two-thirds of the research and/or analytical work in Phase I must be carried out by the proposing firm. For Phase II, a minimum of one-half (50%) of the research and/or analytical work must be performed by the proposing firm. The percentage of work is usually measured by both direct and indirect costs.</p><p>For both Phase I and II, the primary employment of the principal investigator must be with the small business firm at the time of the award and during the conduct of the proposed effort. Primary employment means that more than one-half of the principal investigator&rsquo;s time is spent with the small business. Primary employment with a small business concern precludes full-time employment at another organization.</p><p>For both Phase I and Phase II, all research or research and development work must be performed by the small business concern and its subcontractors in the United States.</p><p>Proposers with prior SBIR/STTR awards must meet the benchmark requirements for Progress Towards Commercialization (see Section 3.1)</p>"
+            name: section42_twothirds
+            html: "<p>A minimum of two-thirds of the research and/or analytical work in Phase I must be carried out by the proposing firm. The percentage of work is usually measured by both direct and indirect costs.</p>"
         -
           name: pi_primary_employment
-          human: Is primary employment of the principal investigator with your firm (identified
-                 below) as described in section 4.2 <jargon section42> of the solicitation?
+          human: Is primary employment of the principal investigator <jargon pi> with your firm 
+                 as described in section 4.2 <jargon section42_primaryemployment> of the solicitation?
           element_type: bool
           required: True
           jargons:
           -
-            name: section42
+            name: section42_primaryemployment
+            html: "<p>For both Phase I and II, the primary employment of the principal investigator must be with the small business firm at the time of the award and during the conduct of the proposed effort. Primary employment means that more than one-half of the principal investigator&rsquo;s time is spent with the small business. Primary employment with a small business concern precludes full-time employment at another organization.</p>"
+          -
+            name: pi
+            html: "<p>The principal investigator/project manager is the one individual designated by the applicant to provide the scientific and technical direction to a project supported by the funding agreement.</p><p>For both Phase I and Phase II, the primary employment of the principal investigator must be with the SBC at the time of award and during the conduct of the proposed project. Primary employment means that more than one-half of the principal investigator's time is spent in the employ of the SBC. This precludes full-time employment with another organization. Occasionally, deviations from this requirement may occur, and must be approved in writing by the contracting officer after consultation with the agency SBIR Program Manager/Coordinator. Further, an SBC may replace the principal investigator on an SBIR Phase I or Phase II award, subject to approval in writing by the contracting officer.</p>"
         -
           name: fraud_conviction
           human: Has your firm been convicted of a fraud related crime involving SBIR and/or
@@ -107,9 +111,13 @@
         -
           name: registered_venture_capital
           human: Is your firm registered in the SBA's venture capital database as majority-owned
-                 by venture capital operating companies, hedge funds, or private equity firms?
+                 by venture capital operating companies, hedge funds, or private equity firms <jargon section44>?
           element_type: bool
           required: True
+          jargons:
+          -
+            name: section44
+            html: "<p>Small businesses that are owned in majority part by multiple venture capital operating companies (VCOCs), hedge funds, or private equity funds are ineligible to submit applications or receive awards for opportunities in this solicitation.</p>"
         -
           name: single_venture_capital_owned
           human: Is your firm more than 50% owned by a single Venture Capital Owned Company (VCOC),
@@ -187,26 +195,42 @@
           required: True
         -
           name: women_owned_small_business
-          human: As defined by the SBA, are you a Woman-Owned small business (WOSB)?
+          human: As defined by the SBA, are you a Woman-Owned small business <jargon wosb> (WOSB)?
           element_type: bool
           required: True
+          jargons:
+          -
+            name: wosb
+            html: "<p>An SBC that is at least 51% owned by one or more women, or in the case of any publicly owned business, at least 51% of the stock is owned by women, and women control the management and daily business operations.</p>"
         -
           name: hubzone_small_business
-          human: As defined by the SBA, are you a certified HUBZone small business concern?
+          human: As defined by the SBA, are you a certified HUBZone <jargon section33> small business concern?
           element_type: bool
           required: True
+          jargons:
+          -
+            name: section33
+            html: "<p>An SBC that has been certified by SBA under the Historically Underutilized Business Zones (HUBZone) Program (13 C.F.R. § 126) as a HUBZone firm listed in the <a href=\"http://dsbs.sba.gov/dsbs/search/dsp_dsbs.cfm\">Dynamic Small Business Search</a> (DSBS).</p>"
         -
           name: service_disabled_vet_small_business
-          human: As defined by the SBA, are you a Service-Disabled Veteran-Owned small business (SDVOSB)?
+          human: As defined by the SBA, are you a Service-Disabled Veteran-Owned small business <jargon sdvosb> (SDVOSB)?
           element_type: bool
           required: True
+          jargons:
+          -
+            name: sdvosb
+            html: "<p>The Service-Disabled Veteran must have a service-connected disability that has been determined by the Department of Veterans Affairs or Department of Defense, and the SBC must meet the eligibility and business control requirements set forth in 13 C.F.R. § 125.8-125.10. </p>"
         -
           name: dcaa_review
-          human: Has the Defense Contracting Audit Agency (DCAA) or other agreed upon agency,
+          human: Has the Defense Contract Audit Agency <jargon dcaa> (DCAA) or other agreed upon agency,
                  performed a review of your accounts or records in connection with government
                  contracts or subcontracts within the past 12 months?
           element_type: bool
           required: True
+          jargons:
+          -
+            name: dcaa
+            html: "<p>DCAA's requirements and standards are available at <a href=\"http://www.dcaa.mil\">http://www.dcaa.mil</a> and click on \"Guidance\" and then click on \"Audit Process Overview – Information for Contractors,\" and also under \"Checklists and Tools\" and then click on \"Pre-award Accounting System Adequacy Checklist\".</p>"
         -
           name: dcaa_review_info
           human: If yes, please provide the following information
@@ -290,8 +314,12 @@
         -
           name: cost_includes_dta_yn
           element_type: bool
-          human: Does the proposed cost include Discretionary Technical Assistance (DTA)?
+          human: Does the proposed cost include Discretionary Technical Assistance <jargon dta> (DTA)?
           required: True
+          jargons:
+          -
+            name: dta
+            html: "<p>Components may have agreements with vendors to provide technical assistance to SBIR or STTR awardees to assist in:<ul><li>Making better technical decisions on SBIR/STTR projects</li><li>Solving technical problems that arise during SBIR/STTR projects;</li><li>Minimizing technical risks associated with SBIR/STTR projects; and</li><li>Commercializing the SBIR/STTR product or process.</li></ul> Each agency may provide up to $5,000 of SBIR or STTR funds for the technical assistance described above per year for each Phase I award and each Phase II award to these vendors for direct support to SBIR and STTR awardees.</p><p>Alternatively, an SBIR or STTR firm may directly acquire the technical assistance services described above and not through the vendor selected by the Components. Firms must request this authority from the agency and clearly identify the need for assistance (purpose and objective of required assistance), provide details on the provider of the assistance (name and point of contact for performer) and why the proposed DTA provider is uniquely skilled to conduct the work (specific experience in providing the assistance proposed), and the cost of the required assistance (costs and hours proposed or other details on arrangement). This information must be included in the Explanatory Material section of the firm’s cost proposal specifically identified as \"Discretionary Technical Assistance.\"</p><p>If the awardee demonstrates this requirement sufficiently, the agency shall permit the awardee to acquire such technical assistance itself, in an amount up to $5,000 per year for each Phase I award and each Phase II award, as an allowable cost of the SBIR or STTR award. The per year amount will be in addition to the award and is not subject to any profit or fee by the requesting (SBIR/STTR) firm and is inclusive of all indirect rates.</p><p>The DTA provider may not be the requesting firm, an affiliate of the requesting firm, an investor of the requesting firm, or a subcontractor or consultant of the requesting firm otherwise required as part of the paid portion of the research effort (e.g. research partner or research institution).</p><p>Failure to include the required information in the Phase I and/or Phase II proposal will result in the request for discretionary technical assistance being disapproved. Requests for DTA funding outside of the Phase I or Phase II proposal submission will not be considered. If the firm is approved for DTA from a source other than that provided by the agency, the firm may not be eligible for the technical assistance services normally provided by those organizations.</p>"
         -
           name: dta_amount
           element_type: dollars
@@ -321,9 +349,13 @@
         -
           name: essentially_equivalent_work_yn
           element_type: bool
-          human: Has a proposal for essentially equivalent work been submitted
+          human: Has a proposal for essentially equivalent <jargon section33> work been submitted
                  to other US government agencies or DoD components?
           required: True
+          jargons:
+          -
+            name: section33
+            html: "<p>Work that is substantially the same research, which is proposed for funding in more than one contract proposal or grant application submitted to the same Federal agency or submitted to two or more different Federal agencies for review and funding consideration; or work where a specific research objective and the research design for accomplishing the objective are the same or closely related to another proposal or award, regardless of the funding source.</p>"
         -
           name: essentially_equivalent_work_info
           element_type: med_str
@@ -391,14 +423,19 @@
         -
           name: teaming_partners_yn
           element_type: bool
-          human: Are teaming partners or subcontractors proposed?
+          human: Are teaming partners or subcontractors <jargon subcontractor> proposed?
           required: True
+          jargons:
+          -
+            name: subcontractor
+            html: "<p>A subcontract is any agreement, other than one involving an employer-employee relationship, entered into by an awardee of a funding agreement calling for supplies or services for the performance of the original funding agreement. This includes consultants.</p>"
         -
           name: teaming_partners
           element_type: line_item
           human: Check all that apply
           ask_if: teaming_partners_yn
-          multiplicity: University, HBCU/MI, FFRDC, Nonprofit Institution,
+          multiplicity: University, Historically Black Colleges and Universities and Minority Institutions,
+                        Federally Funded Research and Development Center, Nonprofit Institution,
                         Federal Laboratory, Other Federal Facility,
                         Small Business, Large Business, Other
           children:
@@ -434,16 +471,12 @@
         human: Principal Investigator/Corporate Official Information
         children:
         -
-          name: pi_time_percentage
-          human: What percentage of the principal investigator's total time will be on the project?
-          element_type: percentage
-          required: True
-        -
-          name: pi_is_university
-          human: Is your firm's principal investigator, corporate official, or owner a faculty member or student
-                 of an institution of higher education?
-          element_type: bool
-          required: True
+          name: what_is_pi
+          element_type: read_only_text
+          human: Tell us about your Principal Investigator <jargon pi> and Corporate Official.
+          jargons:
+          -
+            name: pi
         -
           name: pi_contact_info
           element_type: line_item
@@ -477,6 +510,11 @@
             name: pi_email
             human: Email
             element_type: email
+            required: True
+          -
+            name: pi_time_percentage
+            human: What percentage of the principal investigator's total time will be on the project?
+            element_type: percentage
             required: True
           -
             name: pi_is_woman
@@ -522,6 +560,12 @@
             human: Email
             element_type: email
             required: True
+        -
+          name: pi_is_university
+          human: Is your firm's principal investigator, corporate official, or owner a faculty member or student
+                 of an institution of higher education?
+          element_type: bool
+          required: True
     -
       name: dod_technicalvolume
       human: Technical Volume
@@ -560,6 +604,16 @@
           human: Does it contain a header with the company name, topic number, and
                  proposal number? This header can exist in the margin.
           required: True
+        -
+          name: marked_proprietary
+          element_type: checkbox
+          human: As per section 5.3 <jargon section53> of the DoD solicitation, have
+                 you correctly marked proprietary information in the proposal?
+          required: True
+          jargons:
+          -
+            name: section53
+            html: "<p>Offerors that include in their proposals data that they do not want disclosed to the public for any purpose, or used by the Government except for evaluation purposes, shall:</p><blockquote>(1) Mark the first page of each Volume of the proposal submission with the following legend:<p>\"This proposal includes data that shall not be disclosed outside the Government and shall not be duplicated, used, or disclosed-in whole or in part-for any purpose other than to evaluate this proposal. If, however, a contract is awarded to this offeror as a result of-or in connection with-the submission of this data, the Government shall have the right to duplicate, use, or disclose the data to the extent provided in the resulting contract. This restriction does not limit the Government's right to use information contained in this data if it is obtained from another source without restriction. The data subject to this restriction are contained in pages [insert numbers or other identification of sheets]\"; and</p><p>(2) Mark each sheet of data it wishes to restrict with the following legend:</p><p>\"Use or disclosure of data contained on this page is subject to the restriction on the first page of this volume.\"</p></blockquote><p>The DoD assumes no liability for disclosure or use of unmarked data and may use or disclose such data for any purpose.</p><p>Restrictive notices notwithstanding, proposals and final reports submitted through the DoD Submission Web site may be handled, for administrative purposes only, by support contractors. All support contractors are bound by appropriate non-disclosure agreements.</p>"
         -
           name: tech_volume_upload
           element_type: file_upload
@@ -609,7 +663,7 @@
             required: True
         -
           name: dcaa_review
-          human: If the Defense Contracting Audit Agency (DCAA) has performed a review
+          human: If the Defense Contract Audit Agency (DCAA) has performed a review
                  of your projects within the past 12 months, please provide the following
           element_type: line_item
           children:
@@ -659,6 +713,10 @@
         element_type: workflow
         human: Direct Labor
         children:
+        -
+          name: what_is_direct_labor
+          human: "<p>What is direct labor?<ul><li>Materials</li><li>Stuff you buy</li></p>"
+          element_type: read_only_text
         -
           name: direct_labor
           element_type: line_item
@@ -725,9 +783,19 @@
         human: Direct Materials
         children:
         -
+          name: what_are_direct_costs
+          human: "<p>What are direct costs?<ul><li>Materials</li><li>Stuff you buy</li></p>"
+          element_type: read_only_text
+        -
+          name: any_direct_costs
+          element_type: bool
+          required: True
+          human: Do you have any direct costs?
+        -
           name: direct_material_costs
           element_type: line_item
           multiplicity: 4
+          ask_if: any_direct_costs
           children:
           -
             name: name
@@ -744,23 +812,27 @@
           element_type: calculated
           required: False
           validation: "sum(material_cost)"
+          ask_if: any_direct_costs
           human: "Subtotal Direct Material Costs (DM)"
         -
           name: material_overhead_percentage
           element_type: percentage
           human: "Material Overhead Rate (%)"
+          ask_if: any_direct_costs
           required: True
         -
           name: material_overhead
           element_type: calculated
           human: "Material Overhead (rate &times; DM)"
           validation: "subtotal_direct_material * material_overhead_percentage * .01"
+          ask_if: any_direct_costs
           required: False
         -
           name: total_direct_material
           element_type: calculated
           human: "Total Direct Material (TDM)"
           validation: "subtotal_direct_material + material_overhead"
+          ask_if: any_direct_costs
           required: False
       -
         name: cv_other_direct
@@ -768,9 +840,19 @@
         human: Other Direct Costs
         children:
         -
+          name: what_are_other_direct_costs
+          human: "<p>What are other direct costs?<ul><li>Travel</li><li>Consultants</li></p>"
+          element_type: read_only_text
+        -
+          name: any_other_direct_costs
+          element_type: bool
+          required: True
+          human: Do you have any other direct costs?
+        -
           name: other_direct_costs
           element_type: line_item
           multiplicity: 4
+          ask_if: any_other_direct_costs
           children:
           -
             name: name
@@ -787,23 +869,27 @@
           element_type: calculated
           required: False
           validation: "sum(other_cost)"
+          ask_if: any_other_direct_costs
           human: "Subtotal Other Direct Costs (ODC)"
         -
           name: other_overhead_percentage
           element_type: percentage
           human: "Direct Cost Overhead Rate (%)"
+          ask_if: any_other_direct_costs
           required: True
         -
           name: other_overhead
           element_type: calculated
           human: "Direct Cost Overhead (rate &times; ODC)"
           validation: "subtotal_other * other_overhead_percentage * .01"
+          ask_if: any_other_direct_costs
           required: False
         -
           name: total_other_direct
           element_type: calculated
           human: "Total Other Direct Costs (TODC)"
           validation: "subtotal_other + other_overhead"
+          ask_if: any_other_direct_costs
           required: False
       -
         name: cv_totals
@@ -862,7 +948,11 @@
         -
           name: discretionary_technical_assistance
           element_type: dollars
+          human: Discretionary Technical Assistance <jargon dta> (DTA)
           required: False 
+          jargons:
+          -
+            name: dta
     -
       name: dod_company_commercialization_report
       element_type: workflow
