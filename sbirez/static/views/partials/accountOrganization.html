@@ -202,25 +202,31 @@
         </label>
         <span class="error-message" ng-if="validationData.current_employees">{{validationData.current_employees[0]}}</span>
       </div>
-      <div class="field field-radio" ng-class="{'is-error': validationData.ipo_completed}">
-        <p for="firmipo"><span class="label-text">Has your firm successfully completed an Initial Public Offering ("IPO") of stock since receiving its first Phase 2 award that was the result, in part, of technology your firm developed under the Federal SBIR and/or STTR programs?</span></p>
-        <label>
-          <input type="radio" ng-model="firm.ipo_completed" id="firmipoyes" value="true"><span class="label-text">Yes</span>
-        </label>
-        <label>
-          <input type="radio" ng-model="firm.ipo_completed" id="firmipono" value="false" checked="checked"><span class="label-text">No</span>
-        </label>
+      <fieldset class="fieldset fieldset-radio" ng-class="{'is-error': validationData.ipo_completed}">
+        <legend>Has your firm successfully completed an Initial Public Offering (&ldquo;IPO&rdquo;) of stock since receiving its first Phase 2 award that was the result, in part, of technology your firm developed under the Federal SBIR and/or STTR programs?</legend>
+        <div class="field field-radio">        
+          <label for="firmipoyes">
+            <input type="radio" ng-model="firm.ipo_completed" name="firmipo" id="firmipoyes" value="true"><span class="label-text">Yes</span>
+          </label>
+        </div>
+        <div class="field field-radio">
+          <label for="firmipono">
+            <input type="radio" ng-model="firm.ipo_completed" name="firmipo" id="firmipono" value="false" checked="checked"><span class="label-text">No</span>
+          </label>          
+        </div>
         <span class="error-message" ng-if="validationData.ipo_completed">{{validationData.ipo_completed[0]}}</span>
-      </div>
+      </fieldset>
       <div class="field field-number field-number-short" ng-class="{'is-error': validationData.patent_count}">
-        <label for="firmpatents"><span class="label-text">How many patents have resulted, at least in part, from your firm's SBIR andd/or STTR awards?</span>
+        <label for="firmpatents"><span class="label-text">How many patents have resulted, at least in part, from your firm&rsquo;s SBIR andd/or STTR awards?</span>
           <input type="number" id="firmpatents" ng-model="firm.patent_count">
         </label>
         <span class="error-message" ng-if="validationData.patent_count">{{validationData.patent_count[0]}}</span>
       </div>
       <div class="field field-select field-total-revenue" ng-class="{'is-error': validationData.total_revenue_range}">
-        <label for="firmtotalrevenue"><span class="label-text">Your firm's total revenue for the last fiscal year:</span>
-          <select id="firmtotalrevenue" ng-model="firm.total_revenue_range">
+        <label for="firmtotalrevenue">
+          <span class="label-text">Your firm&rsquo;s total revenue for the last fiscal year:</span>
+          <span class="label-select">
+            <select id="firmtotalrevenue" ng-model="firm.total_revenue_range">
             <option value="">Please select a value</option>
             <option value="<$100,000">&lt;$100,000</option>
             <option value="$100,000-$499,999">$100,000-$499,999</option>
@@ -230,6 +236,7 @@
             <option value="$20,000,000-$99,999,999">$20,000,000-$99,999,999</option>
             <option value="$100,000,000+">$100,000,000+</option>
           </select>
+          </span>
         </label>
         <span class="error-message" ng-if="validationData.total_revenue_range">{{validationData.total_revenue_range[0]}}</span>
       </div>
