@@ -88,7 +88,7 @@ class Firm(models.Model):
 class Naics(models.Model):
     code = models.TextField(primary_key=True)
     description = models.TextField(null=False)
-    firms = models.ManyToManyField('Firm', blank=True, 
+    firms = models.ManyToManyField('Firm', blank=True,
                                    related_name='naics')
 
     def __str__(self):
@@ -645,33 +645,47 @@ class Proposal(models.Model):
             return '(Not Submitted)'
 
     def report(self, path_filter):
+        """Yield data for a read-only report on this proposal
+
+        Walks the workflow and the corresponding items in proposal data.
+
+        Args:
+            path_filter: dot-delimited string of element names representing
+               the path to the portion of the data to report on.  Used to
+               make a report on a subset of the proposal's total data.
+        Return:
+            generator of dictionaries with
+                {'element': Element instance
+                 'semantic': HTML element appropriate to this item
+                 'question': Question text
+                 'answer': Proposal's response}
+        """
         enclosing_semantic = None
+        enclose_children_of = None
         path_filter = path_filter.split('.')
         for (el, data, path) in self.workflow.with_data(
             self.data.get(self.workflow.name, {}), [], include_empty=False):
-            # This seems like an ugly way to restrict the
-            # results to `path`, but matching proposal Data
-            # to workflows is tricky.
-            if enclosing_semantic == 'dl' and 'line_item' not in (
-                e.element_type for e in el.ancestry()):
-                # dl section is over
-                yield {'semantic': '%s-end' % enclosing_semantic, 'element': el}
-                enclosing_semantic = None
+            # Return
             if path[:len(path_filter)] != path_filter:
                 # This seems like an ugly way to restrict the
                 # results to `path_filter`, but matching proposal Data
                 # to workflows is tricky.
                 continue
-            if el.element_type == 'line_item':
-                if not enclosing_semantic:
-                    yield {'semantic': 'dl-start', 'element': el}
+            # Check whether a dl list has just ended.
+            if enclosing_semantic == 'dl' and enclose_children_of not in el.ancestry():
+                yield {'semantic': '%s-end' % enclosing_semantic}
+                enclosing_semantic = None
+                enclose_children_of = None
+            if (el.element_type == 'line_item') and (not enclosing_semantic):
+                yield {'semantic': 'dl-start', 'element': el}
                 enclosing_semantic = 'dl'
+                enclose_children_of = el
             if el.report_text == '':
                 continue
-            if el.element_type == 'checkbox' and not data:
-                # TODO: Unsure this is always appropriate
-                # continue
-                pass
+            # "%multiple%" is a flag to indicate that the key of the data's
+            # enclosing parent should be used.  It's appropriate for a child
+            # of an item with a non-integer `multiplicity`; otherwise that
+            # key word never appears in the report
             if el.human == r'%multiple%':
                 question = path[-2]
             else:
@@ -679,19 +693,24 @@ class Proposal(models.Model):
             if enclosing_semantic:
                 semantic = enclosing_semantic
             else:
-                semantic = 'div'  # but this may be overwritten
-            if el.element_type == 'workflow':
+                semantic = 'div'
+            # The semantic determined thus far could be overruled by
+            # the following
+            if el.element_type == 'read_only_text':
+                semantic = 'p'
+            # Workflow elements are considered headers; header level depends on
+            # how deeply it's nested under other workflow elements
+            elif el.element_type == 'workflow':
                 parent_workflows = len([e for e in
                                         el.ancestry()
                                         if e.element_type == 'workflow'])
                 semantic = 'h%d' % parent_workflows
-            elif el.element_type == 'read_only_text':
-                semantic = 'p'  # this overrides earlier
             yield {'element': el,
                    'semantic': semantic,
                    'question': question,
                    'answer': el.reportable_answer(data)}
 
+        # Close any unclosed dl
         if enclosing_semantic:
             yield {'semantic': '%s-end' % enclosing_semantic }
 

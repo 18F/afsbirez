@@ -186,7 +186,6 @@ class ProposalViewSet(viewsets.ModelViewSet):
         template = loader.get_template(template_name)
         context = Context({'prop': prop,
                            'report': prop.report(report_filter)})
-        rpt = list(prop.report(report_filter))
         output = template.render(context)
         return HttpResponse(output)
 
