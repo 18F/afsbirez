@@ -8,6 +8,13 @@ body{
   font-family: Arial, helvetica neue, helvetica, sans-serif;
   font-size: 16px;
   color: #333;
+  background-color: white;
+}
+
+body.topics, body.company, body.user, body.sign-up-post,
+body.proposals, body.topic-show,
+body.proposal, body.search-results, body.topic {
+    background-color: white;
 }
 
 a{ color: #0064be; }
