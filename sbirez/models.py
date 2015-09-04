@@ -13,6 +13,7 @@ from django_pgjson.fields import JsonField
 
 from sbirez import validation_helpers
 
+
 class Address(models.Model):
     street = models.TextField()
     street2 = models.TextField(null=True, blank=True)
@@ -24,8 +25,7 @@ class Address(models.Model):
         street = self.street
         if self.street2:
             street = '%s\n%s' % self.street2
-        return '%s\n%s, %s %s' % (
-            street, self.city, self.state, self.zip)
+        return '%s\n%s, %s %s' % (street, self.city, self.state, self.zip)
 
 
 class Person(models.Model):
@@ -34,6 +34,7 @@ class Person(models.Model):
     email = models.TextField(null=True, blank=True)
     phone = models.TextField(null=True, blank=True)
     fax = models.TextField(null=True, blank=True)
+
 
 class Firm(models.Model):
     name = models.TextField(unique=True)
@@ -58,69 +59,67 @@ class Firm(models.Model):
     @property
     def complete(self):
         return bool(
-            self.name and
-            self.sbc_id and
-            self.duns_id and
-            self.cage_code and
-            self.website and
-            self.address and
-            self.point_of_contact and
+            self.name and self.sbc_id and self.duns_id and self.cage_code and
+            self.website and self.address and self.point_of_contact and
             self.founding_year and
-            (self.phase1_count is not None) and
-            self.phase1_year  and
-            (self.phase2_count is not None) and
-            self.phase2_year and
-            (self.phase2_employees is not None) and
-            (self.current_employees is not None) and
-            (self.patent_count is not None) and
-            self.total_revenue_range and
-            (self.revenue_percent is not None) and
-            self.point_of_contact and
-            self.point_of_contact.name and
-            self.point_of_contact.title and
-            self.point_of_contact.email and
-            self.point_of_contact.phone and
-            self.point_of_contact.name )
+            (self.phase1_count is not None) and self.phase1_year and
+            (self.phase2_count is not None) and self.phase2_year and
+            (self.phase2_employees is not None) and (
+                self.current_employees is not None) and (
+                    self.patent_count is not None) and self.total_revenue_range
+            and (self.revenue_percent is not None
+                 ) and self.point_of_contact and self.point_of_contact.name and
+            self.point_of_contact.title and self.point_of_contact.email and
+            self.point_of_contact.phone and self.point_of_contact.name)
 
     def __str__(self):
         return self.name
 
+
 class Naics(models.Model):
     code = models.TextField(primary_key=True)
     description = models.TextField(null=False)
-    firms = models.ManyToManyField('Firm', blank=True,
-                                   related_name='naics')
+    firms = models.ManyToManyField('Firm', blank=True, related_name='naics')
 
     def __str__(self):
         return "%s (%s)" % (self.code, self.description)
+
 
 class SbirezUser(AbstractEmailUser):
     name = models.TextField()
     firm = models.ForeignKey(Firm, null=True, blank=True)
     password_expires = models.DateTimeField(null=True)
 
+
 class PasswordHistory(models.Model):
     user = models.ForeignKey(SbirezUser, related_name='prior_passwords')
     password = models.CharField(max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)
 
+
 class Area(models.Model):
     area = models.TextField(unique=True)
     topics = models.ManyToManyField('Topic', blank=True, related_name='areas')
+
 
 class Keyword(models.Model):
     keyword = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    topics = models.ManyToManyField('Topic', blank=True, related_name='keywords')
+    topics = models.ManyToManyField('Topic',
+                                    blank=True,
+                                    related_name='keywords')
+
 
 class Phase(models.Model):
     phase = models.TextField()
     topic = models.ForeignKey('Topic', related_name='phases')
 
+
 class Reference(models.Model):
     reference = models.TextField()
     topic = models.ForeignKey('Topic', related_name='references')
+
 
 def _walk_path(dct, path):
     if path:
@@ -134,8 +133,7 @@ def _walk_path(dct, path):
 
 def _to_number(val):
     """
-    Convert to a numeric data type, but only if
-    possible (do not throw error)
+    Convert to a numeric data type, but only if possible (do not throw error).
 
     >>> _to_number('5.4')
     5.4
@@ -243,7 +241,10 @@ class Element(models.Model):
     # workflow, group, line_item, read_only_text, or scalar type
     order = models.IntegerField(blank=False)
     report_question_number = models.TextField(null=True, blank=True)
-    parent = models.ForeignKey('Element', related_name='children', null=True, blank=True)
+    parent = models.ForeignKey('Element',
+                               related_name='children',
+                               null=True,
+                               blank=True)
     multiplicity = models.TextField(null=True, blank=True)
     # comma-separated list of names: collect one group for each name
     # integer: collect up to N unnamed groups
@@ -258,20 +259,19 @@ class Element(models.Model):
 
     type_validators = {
         'phone': re.compile(
-            '''^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$'''
-            , re.IGNORECASE),
+            '''^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$''',
+            re.IGNORECASE),
         'email': re.compile(
-            '''^[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$'''
-            , re.IGNORECASE),
+            '''^[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$''',
+            re.IGNORECASE),
         'zip': re.compile(
-            '''^\d{5}(-\d{4})?$'''
-            , re.IGNORECASE),
+            '''^\d{5}(-\d{4})?$''', re.IGNORECASE),
         'percent': lambda x: 0 <= x <= 1000,
         'integer': lambda x: isinstance(x, int),
     }
 
     class Meta:
-        ordering = ['order',]
+        ordering = ['order', ]
 
     def __str__(self):
         return self.name
@@ -293,9 +293,10 @@ class Element(models.Model):
     def hyphenated_name(self):
         return self.name.replace('_', '-')
 
-    _tag_pattern= re.compile(r'<.*?>', re.DOTALL)
+    _tag_pattern = re.compile(r'<.*?>', re.DOTALL)
+
     @property
-    def human_plain(self)   :
+    def human_plain(self):
         "A plain human-friendly name, scrubbed of tags"
         if self.human:
             return self._tag_pattern.sub('', self.human)
@@ -346,7 +347,7 @@ class Element(models.Model):
             datum = datum.strip().lower()
             if datum == 'false':
                 return False
-        except AttributeError: # was not a string
+        except AttributeError:  # was not a string
             pass
         return bool(datum)
 
@@ -399,9 +400,8 @@ class Element(models.Model):
             'optional', 'required', or 'forbidden'
         """
 
-        if (accept_partial
-            or (not self.should_ask(data, path))
-            or (self.required.lower() == 'false')):
+        if (accept_partial or (not self.should_ask(data, path)) or
+            (self.required.lower() == 'false')):
             return 'optional'
         if self.required.lower() == 'true':
             return 'required'
@@ -420,8 +420,8 @@ class Element(models.Model):
                 return 'required'
             else:
                 return 'forbidden'
-        raise NotImplementedError('could not interpret %s for %s' %
-                                  (self.required, self.name))
+        raise NotImplementedError(
+            'could not interpret %s for %s' % (self.required, self.name))
 
     def validation_errors(self, data, accept_partial):
         """List of validation errors from applying to ``data``
@@ -485,19 +485,21 @@ class Element(models.Model):
                         if not func(data, datum, *args):
                             errors.append(
                                 '%s: %s' % (el.name, el.validation_msg or
-                                                       "failed %s" % function_name))
+                                            "failed %s" % function_name))
                     except AttributeError:
-                        # validation refers to a function not found in helper library
+                        # validation refers to a function
+                        # not found in helper library
                         errors.append(
-                            '%s: validation function %s absent from validation_helpers.py' %
-                            (el.name, function_name))
+                            '%s: validation function %s absent from validation_helpers.py'
+                            % (el.name, function_name))
 
         return errors
 
     def children_with_data(self, data, path, include_empty):
         for child in self.children.all():
             if child.name in data:
-                yield from child.with_data(data[child.name], path, include_empty)
+                yield from child.with_data(data[child.name], path,
+                                           include_empty)
             else:
                 if include_empty:
                     yield (child, None, path + [None])
@@ -553,14 +555,17 @@ class Element(models.Model):
                     if include_empty or self._contains_data(data[k]):
                         yield (self, data[k], path + [self.name, k])
                         any_this_level = True
-                        yield from self.children_with_data(data[k], path + [self.name, k], include_empty)
+                        yield from self.children_with_data(
+                            data[k], path + [self.name, k], include_empty)
             if not any_this_level:
                 yield (self, None, path + [self.name, None])
         else:  # no multiplicity
             yield (self, data, path + [self.name])
-            yield from self.children_with_data(data, path + [self.name], include_empty)
+            yield from self.children_with_data(data, path + [self.name],
+                                               include_empty)
 
     def ancestry(self):
+        "Generator of all elements above and including this in the workflow."
         yield self
         if self.parent:
             yield from self.parent.ancestry()
@@ -569,7 +574,8 @@ class Element(models.Model):
 class Jargon(models.Model):
     name = models.TextField(unique=True)
     html = models.TextField()
-    elements = models.ManyToManyField('Element', blank=True,
+    elements = models.ManyToManyField('Element',
+                                      blank=True,
                                       related_name='jargons')
 
 
@@ -587,7 +593,7 @@ class Solicitation(models.Model):
     def __str__(self):
         return '%s due %s' % (self.name or '',
                               self.proposals_end_date.strftime(
-                              '%d %B %Y'))
+                                  '%d %B %Y'))
 
     @property
     def status(self):
@@ -599,11 +605,9 @@ class Solicitation(models.Model):
         else:
             return 'Future'
 
+
 class Topic(models.Model):
-    PROGRAM_CHOICES = (
-        ("SBIR", "SBIR"),
-        ("STTR", "STTR"),
-        )
+    PROGRAM_CHOICES = (("SBIR", "SBIR"), ("STTR", "STTR"), )
 
     topic_number = models.TextField(unique=True)
     solicitation = models.ForeignKey(Solicitation, related_name='solicitation')
@@ -618,8 +622,9 @@ class Topic(models.Model):
                                       blank=True,
                                       related_name='saved_topics')
 
-    objects = SearchManager(fields=None, search_field='fts',
-                           auto_update_search_field=False)
+    objects = SearchManager(fields=None,
+                            search_field='fts',
+                            auto_update_search_field=False)
 
 
 class Proposal(models.Model):
@@ -635,17 +640,19 @@ class Proposal(models.Model):
 
     @property
     def proposal_number(self):
+        """Topic number plus locally generated unique proposal ID."""
         return '%s-%04d' % (self.topic.topic_number, self.id)
 
     @property
     def date_submitted(self):
+        """Readable form of submitted_at."""
         if self.submitted_at:
             return self.submitted_at.strftime('%m-%d-%Y')
         else:
             return '(Not Submitted)'
 
     def report(self, path_filter):
-        """Yield data for a read-only report on this proposal
+        """Yield data for a read-only report on this proposal.
 
         Walks the workflow and the corresponding items in proposal data.
 
@@ -664,7 +671,8 @@ class Proposal(models.Model):
         enclose_children_of = None
         path_filter = path_filter.split('.')
         for (el, data, path) in self.workflow.with_data(
-            self.data.get(self.workflow.name, {}), [], include_empty=False):
+            self.data.get(self.workflow.name, {}), [],
+            include_empty=False):
             # Return
             if path[:len(path_filter)] != path_filter:
                 # This seems like an ugly way to restrict the
@@ -672,7 +680,8 @@ class Proposal(models.Model):
                 # to workflows is tricky.
                 continue
             # Check whether a dl list has just ended.
-            if enclosing_semantic == 'dl' and enclose_children_of not in el.ancestry():
+            if enclosing_semantic == 'dl' and enclose_children_of not in el.ancestry(
+            ):
                 yield {'semantic': '%s-end' % enclosing_semantic}
                 enclosing_semantic = None
                 enclose_children_of = None
@@ -701,18 +710,19 @@ class Proposal(models.Model):
             # Workflow elements are considered headers; header level depends on
             # how deeply it's nested under other workflow elements
             elif el.element_type == 'workflow':
-                parent_workflows = len([e for e in
-                                        el.ancestry()
+                parent_workflows = len([e for e in el.ancestry()
                                         if e.element_type == 'workflow'])
                 semantic = 'h%d' % parent_workflows
-            yield {'element': el,
-                   'semantic': semantic,
-                   'question': question,
-                   'answer': el.reportable_answer(data)}
+            yield {
+                'element': el,
+                'semantic': semantic,
+                'question': question,
+                'answer': el.reportable_answer(data)
+            }
 
         # Close any unclosed dl
         if enclosing_semantic:
-            yield {'semantic': '%s-end' % enclosing_semantic }
+            yield {'semantic': '%s-end' % enclosing_semantic}
 
 
 class Document(models.Model):
@@ -729,7 +739,8 @@ class Document(models.Model):
 
 
 class DocumentVersion(models.Model):
-    document = models.ForeignKey(Document, related_name='versions')  # order by created_at
+    document = models.ForeignKey(Document,
+                                 related_name='versions')  # order by created_at
     note = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -740,7 +751,7 @@ class DocumentVersion(models.Model):
         return hashlib.md5(self.file.read()).hexdigest()
 
     class Meta:
-        ordering = ['updated_at',]
+        ordering = ['updated_at', ]
 
 
 class RawAgency(models.Model):
