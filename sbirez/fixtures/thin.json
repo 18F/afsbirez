@@ -430,6 +430,7 @@
             "element_type": "line_item",
             "help": null,
             "human": "Knights",
+            "report_text": "",
             "multiplicity": "Lancelot, Galahad, Robin",
             "name": "knights",
             "order": 3,
@@ -447,10 +448,28 @@
             "default": null,
             "element_type": "bool",
             "help": null,
+            "human": "%multiple%",
+            "multiplicity": null,
+            "name": "is_questing",
+            "order": 1,
+            "parent": 7,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 88
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "bool",
+            "help": null,
             "human": "Is Courageous",
             "multiplicity": null,
             "name": "is_courageous",
-            "order": 1,
+            "order": 2,
             "parent": 7,
             "required": "False",
             "validation": null,
@@ -468,7 +487,7 @@
             "human": "On a scale of 1 to 10, how <span class=\"jargon\" jargon=\"courage\">courageous</span>?",
             "multiplicity": null,
             "name": "how_courageous_exactly",
-            "order": 2,
+            "order": 3,
             "parent": 7,
             "required": "True",
             "validation": null,
@@ -540,7 +559,7 @@
             "human": "weight in kg",
             "multiplicity": null,
             "name": "kg",
-            "order": 3,
+            "order": 4,
             "parent": 10,
             "required": "True",
             "validation": "not_less_than 0",
@@ -558,7 +577,7 @@
             "human": "weight in lb",
             "multiplicity": null,
             "name": "lb",
-            "order": 4,
+            "order": 5,
             "parent": 10,
             "required": "True",
             "validation": "kg / 2.20462",
@@ -576,7 +595,7 @@
             "human": "Sings?",
             "multiplicity": null,
             "name": "sings",
-            "order": 5,
+            "order": 6,
             "parent": 10,
             "required": "False",
             "validation": null,
@@ -624,8 +643,6 @@
         "model": "sbirez.element",
         "pk": 17
     },
-
-
     {
         "fields": {
             "ask_if": null,

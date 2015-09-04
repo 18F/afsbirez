@@ -1365,10 +1365,12 @@ minstrel_data = {
                  {"quest_thy_name": "Galahad",
                   "knights": {
                       "Galahad": {
+                          "is_questing": True,
                           "is_courageous": True,
                           "how_courageous_exactly": 9,
                           },
                       "Robin": {
+                          "is_questing": True,
                           "is_courageous": False,
                           },
                       },
@@ -1400,18 +1402,43 @@ class StaticReportTests(APITestCase):
     def test_static_report(self):
         user = _fixture_user(self)
         proposal = Proposal.objects.get(id=2)
-        self.assertTrue(list(proposal.report())[0][1] ==
+        self.assertEqual(proposal.report('holy_grail_workflow').__next__()['question'],
             'Holy Grail Workflow')
 
     def test_integer_multiplicity(self):
         user = _fixture_user(self)
         response = self.client.post('/api/v1/proposals/', minstrel_data)
         proposal = Proposal.objects.get(id=response.data['id'])
-        qs_and_answers = [(e[1], e[2]) for e in proposal.report()]
+        qs_and_answers = [(e.get('question'), e.get('answer'))
+                          for e in proposal.report('holy_grail_workflow')]
         self.assertIn(('Name', 'Sasha'), qs_and_answers)
         self.assertIn(('Instrument', 'sackbut'), qs_and_answers)
-        self.assertTrue(list(proposal.report())[0][1] ==
+        self.assertEqual(proposal.report('holy_grail_workflow').__next__()['question'],
             'Holy Grail Workflow')
+
+    def test_report_semantics(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/', minstrel_data)
+        proposal = Proposal.objects.get(id=response.data['id'])
+
+        from pprint import pprint
+        rpt = list(proposal.report('holy_grail_workflow'))
+        self.assertEqual(rpt[0]['question'], 'Holy Grail Workflow')
+        self.assertEqual(rpt[0]['semantic'], 'h1')
+        self.assertEqual(rpt[3]['element'].name, 'knights')
+        # verify that back-to-back multiplicity lists are
+        # semantically handled as dl lists
+        # Knights section
+        self.assertEqual(rpt[3]['semantic'], 'dl-start')
+        self.assertEqual(rpt[3]['element'].name, 'knights')
+        # import ipdb; ipdb.set_trace()
+        self.assertEqual([r['semantic'] for r in rpt[4:9]], ['dl',] * 5)
+        self.assertEqual(rpt[9]['semantic'], 'dl-end')
+        # Minstrels section
+        self.assertEqual(rpt[10]['semantic'], 'dl-start')
+        self.assertEqual(rpt[10]['element'].name, 'minstrels')
+        self.assertEqual([r['semantic'] for r in rpt[11:23]], ['dl',] * 12)
+        self.assertEqual(rpt[23]['semantic'], 'dl-end')
 
 
 class ProposalValidationTests(APITestCase):
