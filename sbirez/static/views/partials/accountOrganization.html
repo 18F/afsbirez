@@ -204,14 +204,14 @@
       </div>
       <fieldset class="fieldset fieldset-radio" ng-class="{'is-error': validationData.ipo_completed}">
         <legend>Has your firm successfully completed an Initial Public Offering (&ldquo;IPO&rdquo;) of stock since receiving its first Phase 2 award that was the result, in part, of technology your firm developed under the Federal SBIR and/or STTR programs?</legend>
-        <div class="field field-radio">        
+        <div class="field field-radio" ng-class="{'is-focused': highlight_ipo_yes===true}">
           <label for="firmipoyes">
-            <input type="radio" ng-model="firm.ipo_completed" name="firmipo" id="firmipoyes" value="true"><span class="label-text">Yes</span>
+            <input type="radio" ng-model="firm.ipo_completed" name="firmipo" id="firmipoyes" value="true" ng-focus="highlight_ipo_yes=true" ng-blur="highlight_ipo_yes=false"><span class="label-text">Yes</span>
           </label>
         </div>
-        <div class="field field-radio">
+        <div class="field field-radio" ng-class="{'is-focused': highlight_ipo_no===true}">
           <label for="firmipono">
-            <input type="radio" ng-model="firm.ipo_completed" name="firmipo" id="firmipono" value="false" checked="checked"><span class="label-text">No</span>
+            <input type="radio" ng-model="firm.ipo_completed" name="firmipo" id="firmipono" value="false" checked="checked" ng-focus="highlight_ipo_no=true" ng-blur="highlight_ipo_no=false"><span class="label-text">No</span>
           </label>          
         </div>
         <span class="error-message" ng-if="validationData.ipo_completed">{{validationData.ipo_completed[0]}}</span>
