@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sbirezApp')
-  .controller('SearchCtrl', function ($scope, $rootScope, $location, SearchService) {
+  .controller('SearchCtrl', function ($scope, $rootScope, $location, $anchorScroll, SearchService) {
 
     $rootScope.bodyClass = 'topics';
  
@@ -35,6 +35,7 @@ angular.module('sbirezApp')
       });
       $scope.currentPage = SearchService.getPage();
       $location.search({'query': $scope.searchTerm, 'page': $scope.currentPage});
+      $anchorScroll();
     };
 
     loadState();
