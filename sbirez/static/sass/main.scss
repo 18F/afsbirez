@@ -1986,6 +1986,20 @@ body .bigfoot-footnote__content ul{
   color: #333;
 }
 
+body .bigfoot-footnote__content ul{
+  list-style-type: circle;
+  padding-left: 20px;
+  padding-bottom: 20px;
+}
+
+body .bigfoot-footnote__content blockquote{
+  font-size: 14px;  
+  line-height: 1.33;
+  color: #333;
+  padding-left: 20px;
+  padding-bottom: 20px;
+}
+
 body .bigfoot-footnote__button {
   padding: 0;
   border-radius: 99em;
