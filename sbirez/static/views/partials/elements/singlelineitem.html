@@ -1,5 +1,5 @@
-<div ng-show="visible" class="fieldset">
-  <h1>{{::element.human}}</h1>
+<fieldset ng-show="visible" class="fieldset-singlelineitem">
+  <legend>{{::element.human}}</legend>
   <div ng-repeat="subelement in element.children">
     <div class="workflow-element" ng-class="{'element-aside':subelement.ask_if}" ng-if="subelement.element_type === 'str' || subelement.element_type === 'long_str' || subelement.element_type === 'med_str' || subelement.element_type === 'short_str' || subelement.element_type === 'phone' || subelement.element_type === 'email' || subelement.element_type === 'int' || subelement.element_type === 'dollars' || subelement.element_type === 'float' || subelement.element_type === 'percentage' || subelement.element_type === 'big_str' || subelement.element_type === 'integer' || subelement.element_type === 'integer_spans' || subelement.element_type === 'zip'">
       <div str="subelement" multiplename="multiple.value" multipletoken="multiple.token"></div>
@@ -24,4 +24,4 @@
       <div upload="subelement" proposalId="{{::proposalId}}" multiplename="multiple.value" multipletoken="multiple.token"></div>
     </div>
   </div>
-</div>
+</fieldset>

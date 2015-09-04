@@ -13,6 +13,7 @@ angular.module('sbirezApp').directive('jargon', function(){
         }
 
         function set(val) {
+          var found = false;
           var startIndex, endIndex;
           startIndex = val.indexOf('<jargon');
           while (startIndex !== -1) {
@@ -20,6 +21,7 @@ angular.module('sbirezApp').directive('jargon', function(){
             var id = val.substr(startIndex + 8, endIndex - startIndex - 8);
             for (var i = 0; i < scope.jargon.jargons.length; i++) {
               if (scope.jargon.jargons[i].name === id) {
+                found = true;
                 val = spliceSlice(val, startIndex, endIndex - startIndex + 1, 
                   '<a id="fn-' + i + '-a" href="#fn-' + i + '" class="footnote-button" rel="footnote">' + i + '</a>' + 
                   '<section class="footnotes"><ol><li class="footnote" id="fn-' + i + '">' + 
@@ -27,6 +29,12 @@ angular.module('sbirezApp').directive('jargon', function(){
                   '<a href="#fn-' + i + '-a" class="reversefootnote">R</a></li></ol></section>');
                 break;
               }
+            }
+            if (!found) {
+              console.log('ERROR: jargon not found', id);
+              val = spliceSlice(val, startIndex, endIndex - startIndex + 1, '');
+            } else {
+              found = false;
             }
             startIndex = val.indexOf('<jargon');
           }

@@ -1,14 +1,14 @@
 <fieldset ng-show="visible" ng-class="{'is-branch': element.ask_if}" class="fieldset fieldset-radio field">
   <legend jargon="element"></legend>
-  <div class="field field-radio">
+  <div class="field field-radio" ng-class="{'is-focused': highlightyes === true}">
     <label>
-      <input type="radio" ng-model="storage" name="{{::fieldToken}}" id="{{::fieldToken}}-yes" ng-click="apply()" value="true"> 
+      <input type="radio" ng-model="storage" name="{{::fieldToken}}" id="{{::fieldToken}}-yes" ng-focus="highlightyes=true" ng-blur="highlightyes=false" ng-click="apply()" value="true"> 
       <span class="label-text">Yes</span>
     </label>
   </div>
-  <div class="field field-radio">
+  <div class="field field-radio" ng-class="{'is-focused': highlightno === true}">
     <label>
-      <input type="radio" ng-model="storage" name="{{::fieldToken}}" id="{{::fieldToken}}-no" ng-click="apply()" value="false"> 
+      <input type="radio" ng-model="storage" name="{{::fieldToken}}" id="{{::fieldToken}}-no" ng-focus="highlightno=true" ng-blur="highlightno=false" ng-click="apply()" value="false"> 
       <span class="label-text">No</span>
     </label>
   </div>

@@ -8,13 +8,9 @@
     <span ng-if="viewDetails">
       <a ui-sref="topic({id:topic.id})">View details</a>
     </span>
-    <span ng-if="createOption && topic.saved">
+    <span ng-if="createOption">
       <a href="#" ng-hide="topic.proposal" ng-click="createProposal()" title="Start Proposal for {{::topic.topic_number}}">Start a proposal</a>
       <a href="#" ng-show="topic.proposal" ui-sref="app.proposals.report({id: topic.proposal})" title="Goto Proposal for {{::topic.topic_number}}">View proposal</a>
-    </span>
-    <span ng-if="saveOption">
-      <a href="#" ng-hide="topic.saved" ng-click="saveOpportunity()" title="Save {{::topic.topic_number}} for later">Add to my topics</a>
-      <a href="#" ng-show="topic.saved" ng-click="removeOpportunity()" title="Remove {{::topic.topic_number}}">Remove from my topics</a>
     </span>
     <span ng-if="topic.proposal_created">
       <span class="stats">Created: {{::topic.proposal_created | date}}</span>

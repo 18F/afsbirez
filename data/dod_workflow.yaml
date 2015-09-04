@@ -15,36 +15,86 @@
         -
           name: release_to_edc
           human: Does your firm allow for the release of its contact information
-                 to Economic Development Organizations<jargon economic_development_organizations>?
+                 to Economic Development Organizations
+                 <jargon economic_development_organizations>?
           report_question_number: 1
           element_type: bool
           required: True
           jargons:
           -
             name: economic_development_organizations
-            html: "An economic development organization is an organization dedicated to the economic development of a region, be it a subnational area such as a town, city, county, province, or state; a whole nation; or transnational regions unified through economic integration. EDOs are typically government agencies, public-private partnerships, or non-governmental organizations working together with other actors to improve the regional economy they focus on."
+            html: "An economic development organization is an organization 
+                  dedicated to the economic development of a region, be it a
+                  subnational area such as a town, city, county, province, or
+                  state; a whole nation; or transnational regions unified
+                  through economic integration. EDOs are typically government
+                  agencies, public-private partnerships, or non-governmental
+                  organizations working together with other actors to improve
+                  the regional economy they focus on."
         -
           name: small_business
-          human: Are you a small business as described in section 3.15<jargon section315> of the solicitation
-                 with no more than 500 employees including affiliates?
+          human: Are you a small business as described in section 3.15
+                 <jargon section315> of the solicitation with no more than 500
+                 employees including affiliates?
           report_question_number: 2
           element_type: bool
           required: True
           jargons:
           -
             name: section315
-            html: "An SBC must satisfy the following conditions on the date of award:<ul><li>a. Is organized for profit, with a place of business located in the United States, which operates primarily within the United States or which makes a significant contribution to the United States economy through payment of taxes or use of American products, materials or labor;</li><li>b. Is in the legal form of an individual proprietorship, partnership, limited liability company, corporation, joint venture, association, trust or cooperative, except that if the concern is a joint venture, each entity to the venture must meet the requirements set forth in paragraph (c) below;</li><li>c. Is more than 50% directly owned and controlled by one or more individuals (who are citizens or permanent resident aliens of the United States), other small business concerns (each of which is more than 50% directly owned and controlled by individuals who are citizens or permanent resident aliens of the United States), or any combination of these; and</li><li>d. Has, including its affiliates, not more than 500 employees. (For explanation of affiliate, see <a href=\"http://www.sba.gov/size\">www.sba.gov/size</a>.)</li></ol>"
+            html: "An SBC must satisfy the following conditions on the date of
+                  award:<ul><li>a. Is organized for profit, with a place of
+                  business located in the United States, which operates
+                  primarily within the United States or which makes a
+                  significant contribution to the United States economy through
+                  payment of taxes or use of American products, materials or
+                  labor;</li><li>b. Is in the legal form of an individual
+                  proprietorship, partnership, limited liability company,
+                  corporation, joint venture, association, trust or cooperative,
+                  except that if the concern is a joint venture, each entity to
+                  the venture must meet the requirements set forth in paragraph
+                  (c) below;</li><li>c. Is more than 50% directly owned and
+                  controlled by one or more individuals (who are citizens or
+                  permanent resident aliens of the United States), other small
+                  business concerns (each of which is more than 50% directly
+                  owned and controlled by individuals who are citizens or
+                  permanent resident aliens of the United States), or any
+                  combination of these; and</li><li>d. Has, including its
+                  affiliates, not more than 500 employees. (For explanation of
+                  affiliate, see 
+                  <a href=\"http://www.sba.gov/size\">www.sba.gov/size</a>.)</li></ol>"
         -
           name: ownership_control_requirements
-          human: Does your business concern meet the ownership and control requirements in
-                 13 CFR 121.702<jargon cfr121702>?
+          human: Does your business concern meet the ownership and control 
+                 requirements in 13 CFR 121.702<jargon cfr121702>?
           report_question_number: 3
           element_type: bool
           required: True
           jargons:
           -
             name: cfr121702
-            html: "<p>§ 121.702 What size standards are applicable to the SBIR program?</p>To be eligible for award of funding agreements in the SBA&rsquo;s Small Business Innovation Research (SBIR) program, a business concern must meet the requirements of paragraphs (a) and (b) below:<ol><li>(a) Ownership and control. (1) An SBIR awardee must (i) be a concern which is at least 51% owned and controlled by one or more individuals who are citizens of the United States, or permanent resident aliens in the United States; or</li><li>(ii) Be a concern which is at least 51% owned and controlled by another business concern that is itself at least 51% owned and controlled by individuals who are citizens of, or permanent resident aliens in the United States; or </li><li>(iii) Be a joint venture in which each entity to the venture must meet the requirements set forth in either paragraphs (a)(1)(i) or (a)(1)(ii) of this section.</li><li>(2) If an Employee Stock Ownership Plan owns all or part of the concern, SBA considers each stock trustee and plan member to be an owner.</li><li>(3) If a trust owns all or part of the concern, SBA considers each trustee and trust beneficiary to be an owner.</li><li>(b) Size. An SBIR awardee, together with its affiliates, not have more than 500 employees.</li></ol>"
+            html: "<p>§ 121.702 What size standards are applicable to the SBIR
+                  program?</p><p>To be eligible for award of funding agreements
+                  in the SBA&rsquo;s Small Business Innovation Research (SBIR)
+                  program, a business concern must meet the requirements of
+                  paragraphs (a) and (b) below:</p><ol><li>(a) Ownership and
+                  control. (1) An SBIR awardee must (i) be a concern which is at
+                  least 51% owned and controlled by one or more individuals who
+                  are citizens of the United States, or permanent resident
+                  aliens in the United States; or</li><li>(ii) Be a concern
+                  which is at least 51% owned and controlled by another business
+                  concern that is itself at least 51% owned and controlled by
+                  individuals who are citizens of, or permanent resident aliens
+                  in the United States; or </li><li>(iii) Be a joint venture in
+                  which each entity to the venture must meet the requirements
+                  set forth in either paragraphs (a)(1)(i) or (a)(1)(ii) of this
+                  section.</li><li>(2) If an Employee Stock Ownership Plan owns
+                  all or part of the concern, SBA considers each stock trustee
+                  and plan member to be an owner.</li><li>(3) If a trust owns
+                  all or part of the concern, SBA considers each trustee and
+                  trust beneficiary to be an owner.</li><li>(b) Size. An SBIR
+                  awardee, together with its affiliates, not have more than 500
+                  employees.</li></ol>"
         -
           name: majority_owned_by_corp
           human: Is 50% or more of your firm owned or managed by a corporate entity?
@@ -53,31 +103,62 @@
           required: True
         -
           name: two_thirds_work_requirement
-          human: At a minimum, will two-thirds of the research and/or analytical work in
-                 Phase I be carried out by your small business as described in section 4.2 <jargon section42>
-                 of the solicitation?
+          human: At a minimum, will two-thirds of the research and/or analytical
+                 work in Phase I be carried out by your small business as
+                 described in section 4.2 <jargon section42_twothirds> of the
+                 solicitation?
           report_question_number: 5
           element_type: bool
           required: True
           jargons:
           -
-            name: section42
-            html: "<p>Offeror Eligibility and Performance Requirements</p><p>Each proposer must qualify as a small business concern as defined by 13 C.F.R §§ 701-705 at time of award and certify to this in the Cover Sheet section of the proposal. The eligibility requirements for the SBIR/STTR programs are unique and do not correspond to those of other small business programs (see Section 3.15 of this solicitation). Proposers must meet eligibility requirements for Small Business Ownership and Control (see 13 CFR § 121.702 and Section 4.4 of this solicitation).</p><p>In addition, a minimum of two-thirds of the research and/or analytical work in Phase I must be carried out by the proposing firm. For Phase II, a minimum of one-half (50%) of the research and/or analytical work must be performed by the proposing firm. The percentage of work is usually measured by both direct and indirect costs.</p><p>For both Phase I and II, the primary employment of the principal investigator must be with the small business firm at the time of the award and during the conduct of the proposed effort. Primary employment means that more than one-half of the principal investigator&rsquo;s time is spent with the small business. Primary employment with a small business concern precludes full-time employment at another organization.</p><p>For both Phase I and Phase II, all research or research and development work must be performed by the small business concern and its subcontractors in the United States.</p><p>Proposers with prior SBIR/STTR awards must meet the benchmark requirements for Progress Towards Commercialization (see Section 3.1)</p>"
+            name: section42_twothirds
+            html: "<p>A minimum of two-thirds of the research and/or analytical
+                  work in Phase I must be carried out by the proposing firm. The
+                  percentage of work is usually measured by both direct and
+                  indirect costs.</p>"
         -
           name: pi_primary_employment
-          human: Is primary employment of the principal investigator with your firm (identified
-                 below) as described in section 4.2 <jargon section42> of the solicitation?
+          human: Is primary employment of the principal investigator <jargon pi>
+                 with your firm as described in section 4.2
+                 <jargon section42_primaryemployment> of the solicitation?
           report_question_number: 6
           element_type: bool
           required: True
           jargons:
           -
-            name: section42
+            name: section42_primaryemployment
+            html: "<p>For both Phase I and II, the primary employment of the
+                  principal investigator must be with the small business firm at
+                  the time of the award and during the conduct of the proposed
+                  effort. Primary employment means that more than one-half of
+                  the principal investigator&rsquo;s time is spent with the
+                  small business. Primary employment with a small business
+                  concern precludes full-time employment at another 
+                  organization.</p>"
+          -
+            name: pi
+            html: "<p>The principal investigator/project manager is the one
+                  individual designated by the applicant to provide the
+                  scientific and technical direction to a project supported by
+                  the funding agreement.</p><p>For both Phase I and Phase II,
+                  the primary employment of the principal investigator must be
+                  with the SBC at the time of award and during the conduct of
+                  the proposed project. Primary employment means that more than
+                  one-half of the principal investigator&rsquo;s time is spent
+                  in the employ of the SBC. This precludes full-time employment
+                  with another organization. Occasionally, deviations from this
+                  requirement may occur, and must be approved in writing by the
+                  contracting officer after consultation with the agency SBIR
+                  Program Manager/Coordinator. Further, an SBC may replace the
+                  principal investigator on an SBIR Phase I or Phase II award,
+                  subject to approval in writing by the contracting
+                  officer.</p>"
         -
           name: fraud_conviction
-          human: Has your firm been convicted of a fraud related crime involving SBIR and/or
-                 STTR funds or found civilly liable for a fraud related violation involving
-                 Federal funds?
+          human: Has your firm been convicted of a fraud related crime involving
+                 SBIR and/or STTR funds or found civilly liable for a fraud
+                 related violation involving Federal funds?
           report_question_number: 7
           element_type: bool
           required: True
@@ -90,10 +171,10 @@
           required: True
         -
           name: pi_fraud_conviction
-          human: Has your firm's Principal Investigator (PI) or Corporate Official (CO)
-                 or owner been convicted of a fraud-related crime involving SBIR and/or
-                 STTR funds or found civilly liable for a fraud-related violation involving
-                 Federal funds?
+          human: Has your firm's Principal Investigator (PI) or Corporate
+                 Official (CO) or owner been convicted of a fraud-related crime
+                 involving SBIR and/or STTR funds or found civilly liable for a
+                 fraud-related violation involving Federal funds?
           report_question_number: 8
           element_type: bool
           required: True
@@ -106,43 +187,64 @@
           required: True
         -
           name: performance_benchmarks
-          human: Has your firm met the performance benchmarks in section 3.1 <jargon section31> of the solicitation
-                 and listed by the SBA on their website as eligible to participate?
+          human: Has your firm met the performance benchmarks in section 3.1
+                 <jargon section31> of the solicitation and listed by the SBA on
+                 their website as eligible to participate?
           report_question_number: 9
           element_type: bool
           required: True
           jargons:
           -
             name: section31
-            html: "In accordance with the SBA Policy Directive Sec 4.(a)(3), DoD established a threshold for the application of benchmark where it is applied only to Phase I applicants that have received more than twenty (20) awards over the prior five (5) fiscal years as determined by the Small Business Administration, the ratio of Phase II awards received to Phase I awards received during this period must be at least 0.25. Additional information on performance benchmarking for Phase I applicants can be found on <a href=\"http://www.sbir.gov\">www.sbir.gov</a>."
+            html: "In accordance with the SBA Policy Directive Sec 4.(a)(3), DoD
+                  established a threshold for the application of benchmark where
+                  it is applied only to Phase I applicants that have received
+                  more than twenty (20) awards over the prior five (5) fiscal
+                  years as determined by the Small Business Administration, the
+                  ratio of Phase II awards received to Phase I awards received
+                  during this period must be at least 0.25. Additional
+                  information on performance benchmarking for Phase I applicants
+                  can be found on
+                  <a href=\"http://www.sbir.gov\">www.sbir.gov</a>."
         -
           name: registered_venture_capital
-          human: Is your firm registered in the SBA's venture capital database as majority-owned
-                 by venture capital operating companies, hedge funds, or private equity firms?
+          human: Is your firm registered in the SBA's venture capital database
+                 as majority-owned by venture capital operating companies, hedge
+                 funds, or private equity firms<jargon section44>?
           report_question_number: 10
           element_type: bool
           required: True
+          jargons:
+          -
+            name: section44
+            html: "<p>Small businesses that are owned in majority part by
+                  multiple venture capital operating companies (VCOCs), hedge
+                  funds, or private equity funds are ineligible to submit
+                  applications or receive awards for opportunities in this
+                  solicitation.</p>"
         -
           name: single_venture_capital_owned
-          human: Is your firm more than 50% owned by a single Venture Capital Owned Company (VCOC),
-                 hedge fund, or private equity firm?
+          human: Is your firm more than 50% owned by a single Venture Capital
+                 Owned Company (VCOC), hedge fund, or private equity firm?
           report_question_number: 11
           element_type: bool
           required: True
         -
           name: multiple_venture_capital_owned
-          human: Is your firm more than 50% owned by multiple business concerns that are VCOCs,
-                 hedge funds, or private equity firms?
+          human: Is your firm more than 50% owned by multiple business concerns
+                 that are VCOCs, hedge funds, or private equity firms?
           report_question_number: 12
           element_type: bool
           required: True
         -
           name: eligibility_note
-          human: "Note: IAW Section 4.2 of the solicitation, firms that do not meet all eligibility
-                 requirements will not receive award. IAW Section 4.4 of the solicitation, small
-                 businesses that are owned in majority part by multiple VCOCs, hedge funds, or
-                 private equity funds are ineligible to submit proposals for opportunities in
-                 this solicitation."
+          human: "Note: In accordance with Section 4.2 of the solicitation,
+                 firms that do not meet all eligibility requirements will not
+                 receive award. In accordance with Section 4.4 of the
+                 solicitation, small businesses that are owned in majority part
+                 by multiple VCOCs, hedge funds, or private equity funds are
+                 ineligible to submit proposals for opportunities in this
+                 solicitation."
           element_type: read_only_text
       -
         name: business_information
@@ -150,20 +252,268 @@
         children:
         -
           name: employee_count
-          human: Number of employees including all affiliates (average for preceding 12 months)
+          human: Number of employees including all affiliates (average for 
+                 preceding 12 months)
           report_question_number: 13
           element_type: integer
           required: True
         -
           name: firm_affiliated
-          human: Is your firm affiliated as set forth in 13 CFR 121.103<jargon cfr121103>?
+          human: Is your firm affiliated as set forth in 13 CFR
+                 121.103<jargon cfr121103>?
           report_question_number: 14
           element_type: bool
           required: True
           jargons:
           -
             name: cfr121103
-            html: <p>§ 121.103 How does SBA determine affiliation?</p><ol><li>(a)<em>General Principles of Affiliation.</em> (1) Concerns and entities are affiliates of each other when one controls or has the power to control the other, or a third party or parties controls or has the power to control both. It does not matter whether control is exercised, so long as the power to control exists.</li><li>(2) SBA considers factors such as ownership, management, previous relationships with or ties to another concern, and contractual relationships, in determining whether affiliation exists.</li><li>(3) Control may be affirmative or negative. Negative control includes, but is not limited to, instances where a minority shareholder has the ability, under the concern&rsquo;s charter, by-laws, or shareholder&rsquo;s agreement, to prevent a quorum or otherwise block action by the board of directors or shareholders.</li><li>(4) Affiliation may be found where an individual, concern, or entity exercises control indirectly through a third party.</li><li>(5) In determining whether affiliation exists, SBA will consider the totality of the circumstances, and may find affiliation even though no single factor is sufficient to constitute affiliation.</li><li>(6) In determining the concern&rsquo;s size, SBA counts the receipts, employees, or other measure of size of the concern whose size is at issue and all of its domestic and foreign affiliates, regardless of whether the affiliates are organized for profit.</li><li>(b) <em>Exceptions to affiliation coverage.</em>(1) Business concerns owned in whole or substantial part by investment companies licensed, or development companies qualifying, under the Small Business Investment Act of 1958, as amended, are not considered affiliates of such investment companies or development companies.</li><li>(2)(i) Business concerns owned and controlled by Indian Tribes, Alaska Native Corporations (ANCs) organized pursuant to the Alaska Native Claims Settlement Act (43 U.S.C. 1601 et seq.), Native Hawaiian Organizations (NHOs), Community Development Corporations (CDCs) authorized by 42 U.S.C. 9805, or wholly-owned entities of Indian Tribes, ANCs, NHOs, or CDCs are not considered affiliates of such entities.</li><li>(ii) Business concerns owned and controlled by Indian Tribes, ANCs, NHOs, CDCs, or wholly-owned entities of Indian Tribes, ANCs, NHOs, or CDCs are not considered to be affiliated with other concerns owned by these entities because of their common ownership or common management. In addition, affiliation will not be found based upon the performance of common administrative services, such as bookkeeping and payroll, so long as adequate payment is provided for those services. Affiliation may be found for other reasons.</li><li>(3) Business concerns which are part of an SBA approved pool of concerns for a joint program of research and development as authorized by the Small Business Act are not affiliates of one another because of the pool.</li><li>(4) Business concerns which lease employees from concerns primarily engaged in leasing employees to other businesses or which enter into a co-employer arrangement with a Professional Employer Organization (PEO) are not affiliated with the leasing company or PEO solely on the basis of a leasing agreement.</li><li>(5) For financial, management or technical assistance under the Small Business Investment Act of 1958, as amended, (an applicant is not affiliated with the investors listed in paragraphs</li><li>(b)(5) (i) through (vi) of this section.</li><li>(i) Venture capital operating companies, as defined in the U.S. Department of Labor regulations found at 29 CFR 2510.3–101(d);</li><li>(ii) Employee benefit or pension plans established and maintained by the Federal government or any state, or their political subdivisions, or any agency or instrumentality thereof, for the benefit of employees;</li><li>(iii) Employee benefit or pension plans within the meaning of the Employee Retirement Income Security Act of 1974, as amended (29 U.S.C. 1001, et seq.);</li><li>(iv) Charitable trusts, foundations, endowments, or similar organizations exempt from Federal income taxation under section 501(c) of the Internal Revenue Code of 1986, as amended (26 U.S.C. 501(c));</li><li>(v) Investment companies registered under the Investment Company Act of 1940, as amended (1940 Act) (15 U.S.C. 80a-1, et seq.); and</li><li>(vi) Investment companies, as defined under the 1940 Act, which are not registered under the 1940 Act because they are beneficially owned by less than 100 persons, if the company&rsquo;s sales literature or organizational documents indicate that its principal purpose is investment in securities rather than the operation of commercial enterprises.</li><li>(6) A protege firm is not an affiliate of a mentor firm solely because the protege firm receives assistance from the mentor firm under Federal MentorProtege programs. Affiliation may be found for other reasons.</li><li>(7) The member shareholders of a small agricultural cooperative, as defined in the Agricultural Marketing Act (12 U.S.C. 1141j), are not considered affiliated with the cooperative by virtue of their membership in the cooperative.</li><li>(c) Affiliation based on stock ownership.</li><li>(1) A person (including any individual, concern or other entity) that owns, or has the power to control, 50 percent or more of a concern&rsquo;s voting stock, or a block of voting stock which is large compared to other outstanding blocks of voting stock, controls or has the power to control the concern.</li><li>(2) If two or more persons (including any individual, concern or other entity) each owns, controls, or has the power to control less than 50 percent of a concern&rsquo;s voting stock, and such minority holdings are equal or approximately equal in size, and the aggregate of these minority holdings is large as compared with any other stock holding, SBA presumes that each such person controls or has the power to control the concern whose size is at issue. This presumption may be rebutted by a showing that such control or power to control does not in fact exist.</li><li>(3) If a concern&rsquo;s voting stock is widely held and no single block of stock is large as compared with all other stock holdings, the concern&rsquo;s Board of Directors and CEO or President will be deemed to have the power to control the concern in the absence of evidence to the contrary.</li><li>(d) Affiliation arising under stock options, convertible securities, and agreements to merge. (1) In determining size, SBA considers stock options, convertible securities, and agreements to merge (including agreements in principle) to have a present effect on the power to control a concern. SBA treats such options, convertible securities, and agreements as though the rights granted have been exercised.</li><li>(2) Agreements to open or continue negotiations towards the possibility of a merger or a sale of stock at some later date are not considered "agreements in principle" and are thus not given present effect.</li><li>(3) Options, convertible securities, and agreements that are subject to conditions precedent which are incapable of fulfillment, speculative, conjectural, or unenforceable under state or Federal law, or where the probability of the transaction (or exercise of the rights) occurring is shown to be extremely remote, are not given present effect.</li><li>(4) An individual, concern or other entity that controls one or more other concerns cannot use options, convertible securities, or agreements to appear to terminate such control before actually doing so. SBA will not give present effect to individuals&rsquo;, concerns&rsquo; or other entities&rsquo; ability to divest all or part of their ownership interest in order to avoid a finding of affiliation.</li><li>(e) Affiliation based on common management. Affiliation arises where one or more officers, directors, managing members, or partners who control the board of directors and/or management of one concern also control the board of directors or management of one or more other concerns.</li><li>(f) Affiliation based on identity of interest. Affiliation may arise among two or more persons with an identity of interest. Individuals or firms that have identical or substantially identical business or economic interests (such as family members, individuals or firms with common investments, or firms that are economically dependent through contractual or other relationships) may be treated as one party with such interests aggregated. Where SBA determines that such interests should be aggregated, an individual or firm may rebut that determination with evidence showing that the interests deemed to be one are in fact separate.</li><li>(g) Affiliation based on the newly organized concern rule. Affiliation may arise where former officers, directors, principal stockholders, managing members, or key employees of one concern organize a new concern in the same or related industry or field of operation, and serve as the new concern&rsquo;s officers, directors, principal stockholders, managing members, or key employees, and the one concern is furnishing or will furnish the new concern with contracts, financial or technical assistance, indemnification on bid or performance bonds, and/or other facilities, whether for a fee or otherwise. A concern may rebut such an affiliation determination by demonstrating a clear line of fracture between the two concerns. A "key employee" is an employee who, because of his/her position in the concern, has a critical influence in or substantive control over the operations or management of the concern.</li><li>(h) Affiliation based on joint ventures. A joint venture is an association of individuals and/or concerns with interests in any degree or proportion by way of contract, express or implied, consorting to engage in and carry out no more than three specific or limited purpose business ventures for joint profit over a two year period, for which purpose they combine their efforts, property, money, skill, or knowledge, but not on a continuing or permanent basis for conducting business generally. This means that the joint venture entity cannot submit more than three offers over a two year period, starting from the date of the submission of the first offer. A joint venture may or may not be in the form of a separate legal entity. The joint venture is viewed as a business entity in determining power to control its management. SBA may also determine that the relationship between a prime contractor and its subcontractor is a joint venture, and that affiliation between the two exists, pursuant to paragraph (h)(4) of this section.</li><li>(1) Parties to a joint venture are affiliates if any one of them seeks SBA financial assistance for use in connection with the joint venture.</li><li>(2) Except as provided in paragraph (h)(3) of this section, concerns submitting offers on a particular procurement or property sale as joint venturers are affiliated with each other with regard to the performance of that contract.</li><li>(3) Exception to affiliation for certain joint ventures. (i) A joint venture of two or more business concerns may submit an offer as a small business for a Federal procurement without regard to affiliation under paragraph (h) of this section so long as each concern is small under the size standard corresponding to the NAICS code assigned to the contract, provided:</li><li>(A) The procurement qualifies as a "bundled" requirement, at any dollar value, within the meaning of §125.2(d)(1)(i) of this chapter; or</li><li>(B) The procurement is other than a "bundled" requirement within the meaning of §125.2(d)(1)(i) of this chapter, and:</li><li>(1) For a procurement having a receipts based size standard, the dollar value of the procurement, including options, exceeds half the size standard corresponding to the NAICS code assigned to the contract; or</li><li>(2) For a procurement having an employee-based size standard, the dollar value of the procurement, including options, exceeds $10 million.</li><li>(ii) A joint venture of at least one 8(a) Participant and one or more other business concerns may submit an offer for a competitive 8(a) procurement without regard to affiliation under paragraph (h) of this section so long as the requirements of §124.513(b)(1) of this chapter are met.</li><li>(iii) Two firms approved by SBA to be a mentor and prote´ge´ under 13 CFR 124.520 may joint venture as a small business for any Federal Government procurement, provided the prote´ge qualifies as small for the size standard corresponding to the NAICS code assigned to the procurement and, for purposes of 8(a) sole source requirements, has not reached the dollar limit set forth in 13 CFR 124.519.</li><li>(4) A contractor and its ostensible subcontractor are treated as joint venturers, and therefore affiliates, for size determination purposes. An ostensible subcontractor is a subcontractor that performs primary and vital requirements of a contract, or of an order under a multiple award schedule contract, or a subcontractor upon which the prime contractor is unusually reliant. All aspects of the relationship between the prime and subcontractor are considered, including, but not limited to, the terms of the proposal (such as contract management, technical responsibilities, and the percentage of subcontracted work), agreements between the prime and subcontractor (such as bonding assistance or the teaming agreement), and whether the subcontractor is the incumbent contractor and is ineligible to submit a proposal because it exceeds the applicable size standard for that solicitation.</li><li>(5) For size purposes, a concern must include in its receipts its proportionate share of joint venture receipts, and in its total number of employees its proportionate share of joint venture employees.</li><li>(i) Affiliation based on franchise and license agreements. The restraints imposed on a franchisee or licensee by its franchise or license agreement relating to standardized quality, advertising, accounting format and other similar provisions, generally will not be considered in determining whether the franchisor or licensor is affiliated with the franchisee or licensee provided the franchisee or licensee has the right to profit from its efforts and bears the risk of loss commensurate with ownership. Affiliation may arise, however, through other means, such as common ownership, common management or excessive restrictions upon the sale of the franchise interest.</li></ol>
+            html: <p>§ 121.103 How does SBA determine affiliation?</p><ol><li>(a)
+                  <em>General Principles of Affiliation.</em> (1) Concerns and
+                  entities are affiliates of each other when one controls or has
+                  the power to control the other, or a third party or parties
+                  controls or has the power to control both. It does not matter
+                  whether control is exercised, so long as the power to control
+                  exists.</li><li>(2) SBA considers factors such as ownership,
+                  management, previous relationships with or ties to another
+                  concern, and contractual relationships, in determining whether
+                  affiliation exists.</li><li>(3) Control may be affirmative or
+                  negative. Negative control includes, but is not limited to,
+                  instances where a minority shareholder has the ability, under
+                  the concern&rsquo;s charter, by-laws, or shareholder&rsquo;s
+                  agreement, to prevent a quorum or otherwise block action by
+                  the board of directors or shareholders.</li><li>(4)
+                  Affiliation may be found where an individual, concern, or
+                  entity exercises control indirectly through a third party.
+                  </li><li>(5) In determining whether affiliation exists, SBA
+                  will consider the totality of the circumstances, and may find
+                  affiliation even though no single factor is sufficient to
+                  constitute affiliation.</li><li>(6) In determining the
+                  concern&rsquo;s size, SBA counts the receipts, employees, or
+                  other measure of size of the concern whose size is at issue
+                  and all of its domestic and foreign affiliates, regardless of
+                  whether the affiliates are organized for profit.</li><li>(b)
+                  <em>Exceptions to affiliation coverage.</em>(1) Business
+                  concerns owned in whole or substantial part by investment
+                  companies licensed, or development companies qualifying, under
+                  the Small Business Investment Act of 1958, as amended, are not
+                  considered affiliates of such investment companies or
+                  development companies.</li><li>(2)(i) Business concerns owned
+                  and controlled by Indian Tribes, Alaska Native Corporations
+                  (ANCs) organized pursuant to the Alaska Native Claims
+                  Settlement Act (43 U.S.C. 1601 et seq.), Native Hawaiian
+                  Organizations (NHOs), Community Development Corporations
+                  (CDCs) authorized by 42 U.S.C. 9805, or wholly-owned entities
+                  of Indian Tribes, ANCs, NHOs, or CDCs are not considered
+                  affiliates of such entities.</li><li>(ii) Business concerns
+                  owned and controlled by Indian Tribes, ANCs, NHOs, CDCs, or
+                  wholly-owned entities of Indian Tribes, ANCs, NHOs, or CDCs
+                  are not considered to be affiliated with other concerns owned
+                  by these entities because of their common ownership or common
+                  management. In addition, affiliation will not be found based
+                  upon the performance of common administrative services, such
+                  as bookkeeping and payroll, so long as adequate payment is
+                  provided for those services. Affiliation may be found for
+                  other reasons.</li><li>(3) Business concerns which are part of
+                  an SBA approved pool of concerns for a joint program of
+                  research and development as authorized by the Small Business
+                  Act are not affiliates of one another because of the pool.
+                  </li><li>(4) Business concerns which lease employees from
+                  concerns primarily engaged in leasing employees to other
+                  businesses or which enter into a co-employer arrangement with
+                  a Professional Employer Organization (PEO) are not affiliated
+                  with the leasing company or PEO solely on the basis of a
+                  leasing agreement.</li><li>(5) For financial, management or
+                  technical assistance under the Small Business Investment Act
+                  of 1958, as amended, (an applicant is not affiliated with the
+                  investors listed in paragraphs</li><li>(b)(5) (i) through (vi)
+                  of this section.</li><li>(i) Venture capital operating
+                  companies, as defined in the U.S. Department of Labor
+                  regulations found at 29 CFR 2510.3–101(d);</li><li>(ii)
+                  Employee benefit or pension plans established and maintained
+                  by the Federal government or any state, or their political
+                  subdivisions, or any agency or instrumentality thereof, for
+                  the benefit of employees;</li><li>(iii) Employee benefit or
+                  pension plans within the meaning of the Employee Retirement
+                  Income Security Act of 1974, as amended (29 U.S.C. 1001, et
+                  seq.);</li><li>(iv) Charitable trusts, foundations,
+                  endowments, or similar organizations exempt from Federal
+                  income taxation under section 501(c) of the Internal Revenue
+                  Code of 1986, as amended (26 U.S.C. 501(c));</li><li>(v)
+                  Investment companies registered under the Investment Company
+                  Act of 1940, as amended (1940 Act) (15 U.S.C. 80a-1, et seq.);
+                  and</li><li>(vi) Investment companies, as defined under the
+                  1940 Act, which are not registered under the 1940 Act because
+                  they are beneficially owned by less than 100 persons, if the
+                  company&rsquo;s sales literature or organizational documents
+                  indicate that its principal purpose is investment in
+                  securities rather than the operation of commercial 
+                  enterprises.</li><li>(6) A protege firm is not an affiliate of
+                  a mentor firm solely because the protege firm receives
+                  assistance from the mentor firm under Federal MentorProtege
+                  programs. Affiliation may be found for other reasons.</li><li>
+                  (7) The member shareholders of a small agricultural
+                  cooperative, as defined in the Agricultural Marketing Act
+                  (12 U.S.C. 1141j), are not considered affiliated with the
+                  cooperative by virtue of their membership in the cooperative.
+                  </li><li>(c) Affiliation based on stock ownership.</li><li>(1)
+                  A person (including any individual, concern or other entity)
+                  that owns, or has the power to control, 50 percent or more of
+                  a concern&rsquo;s voting stock, or a block of voting stock
+                  which is large compared to other outstanding blocks of voting
+                  stock, controls or has the power to control the concern.</li>
+                  <li>(2) If two or more persons (including any individual,
+                  concern or other entity) each owns, controls, or has the power
+                  to control less than 50 percent of a concern&rsquo;s voting
+                  stock, and such minority holdings are equal or approximately
+                  equal in size, and the aggregate of these minority holdings is
+                  large as compared with any other stock holding, SBA presumes
+                  that each such person controls or has the power to control the
+                  concern whose size is at issue. This presumption may be
+                  rebutted by a showing that such control or power to control
+                  does not in fact exist.</li><li>(3) If a concern&rsquo;s
+                  voting stock is widely held and no single block of stock is
+                  large as compared with all other stock holdings, the
+                  concern&rsquo;s Board of Directors and CEO or President will
+                  be deemed to have the power to control the concern in the
+                  absence of evidence to the contrary.</li><li>(d) Affiliation
+                  arising under stock options, convertible securities, and
+                  agreements to merge. (1) In determining size, SBA considers
+                  stock options, convertible securities, and agreements to merge
+                  (including agreements in principle) to have a present effect
+                  on the power to control a concern. SBA treats such options,
+                  convertible securities, and agreements as though the rights
+                  granted have been exercised.</li><li>(2) Agreements to open or
+                  continue negotiations towards the possibility of a merger or a
+                  sale of stock at some later date are not considered 
+                  "agreements in principle" and are thus not given present
+                  effect.</li><li>(3) Options, convertible securities, and
+                  agreements that are subject to conditions precedent which are
+                  incapable of fulfillment, speculative, conjectural, or
+                  unenforceable under state or Federal law, or where the
+                  probability of the transaction (or exercise of the rights)
+                  occurring is shown to be extremely remote, are not given
+                  present effect.</li><li>(4) An individual, concern or other
+                  entity that controls one or more other concerns cannot use
+                  options, convertible securities, or agreements to appear to
+                  terminate such control before actually doing so. SBA will not
+                  give present effect to individuals&rsquo;, concerns&rsquo; or
+                  other entities&rsquo; ability to divest all or part of their
+                  ownership interest in order to avoid a finding of affiliation.
+                  </li><li>(e) Affiliation based on common management.
+                  Affiliation arises where one or more officers, directors,
+                  managing members, or partners who control the board of
+                  directors and/or management of one concern also control the
+                  board of directors or management of one or more other 
+                  concerns.</li><li>(f) Affiliation based on identity of
+                  interest. Affiliation may arise among two or more persons
+                  with an identity of interest. Individuals or firms that have
+                  identical or substantially identical business or economic
+                  interests (such as family members, individuals or firms with
+                  common investments, or firms that are economically dependent
+                  through contractual or other relationships) may be treated as
+                  one party with such interests aggregated. Where SBA determines
+                  that such interests should be aggregated, an individual or
+                  firm may rebut that determination with evidence showing that
+                  the interests deemed to be one are in fact separate.</li><li>
+                  (g) Affiliation based on the newly organized concern rule.
+                  Affiliation may arise where former officers, directors,
+                  principal stockholders, managing members, or key employees of
+                  one concern organize a new concern in the same or related
+                  industry or field of operation, and serve as the new
+                  concern&rsquo;s officers, directors, principal stockholders,
+                  managing members, or key employees, and the one concern is
+                  furnishing or will furnish the new concern with contracts,
+                  financial or technical assistance, indemnification on bid or
+                  performance bonds, and/or other facilities, whether for a fee
+                  or otherwise. A concern may rebut such an affiliation
+                  determination by demonstrating a clear line of fracture
+                  between the two concerns. A "key employee" is an employee who,
+                  because of his/her position in the concern, has a critical
+                  influence in or substantive control over the operations or
+                  management of the concern.</li><li>(h) Affiliation based on
+                  joint ventures. A joint venture is an association of
+                  individuals and/or concerns with interests in any degree or
+                  proportion by way of contract, express or implied, consorting
+                  to engage in and carry out no more than three specific or
+                  limited purpose business ventures for joint profit over a two
+                  year period, for which purpose they combine their efforts,
+                  property, money, skill, or knowledge, but not on a continuing
+                  or permanent basis for conducting business generally. This
+                  means that the joint venture entity cannot submit more than
+                  three offers over a two year period, starting from the date of
+                  the submission of the first offer. A joint venture may or may
+                  not be in the form of a separate legal entity. The joint
+                  venture is viewed as a business entity in determining power to
+                  control its management. SBA may also determine that the
+                  relationship between a prime contractor and its subcontractor
+                  is a joint venture, and that affiliation between the two
+                  exists, pursuant to paragraph (h)(4) of this section.</li><li>
+                  (1) Parties to a joint venture are affiliates if any one of
+                  them seeks SBA financial assistance for use in connection with
+                  the joint venture.</li><li>(2) Except as provided in paragraph
+                  (h)(3) of this section, concerns submitting offers on a
+                  particular procurement or property sale as joint venturers are
+                  affiliated with each other with regard to the performance of
+                  that contract.</li><li>(3) Exception to affiliation for
+                  certain joint ventures. (i) A joint venture of two or more
+                  business concerns may submit an offer as a small business for
+                  a Federal procurement without regard to affiliation under
+                  paragraph (h) of this section so long as each concern is small
+                  under the size standard corresponding to the NAICS code
+                  assigned to the contract, provided:</li><li>(A) The
+                  procurement qualifies as a "bundled" requirement, at any
+                  dollar value, within the meaning of §125.2(d)(1)(i) of this
+                  chapter; or</li><li>(B) The procurement is other than a
+                  "bundled" requirement within the meaning of §125.2(d)(1)(i) of
+                  this chapter, and:</li><li>(1) For a procurement having a
+                  receipts based size standard, the dollar value of the
+                  procurement, including options, exceeds half the size standard
+                  corresponding to the NAICS code assigned to the contract; or
+                  </li><li>(2) For a procurement having an employee-based size
+                  standard, the dollar value of the procurement, including
+                  options, exceeds $10 million.</li><li>(ii) A joint venture of
+                  at least one 8(a) Participant and one or more other business
+                  concerns may submit an offer for a competitive 8(a)
+                  procurement without regard to affiliation under paragraph (h)
+                  of this section so long as the requirements of §124.513(b)(1)
+                  of this chapter are met.</li><li>(iii) Two firms approved by
+                  SBA to be a mentor and prote´ge´ under 13 CFR 124.520 may
+                  joint venture as a small business for any Federal Government
+                  procurement, provided the prote´ge qualifies as small for the
+                  size standard corresponding to the NAICS code assigned to the
+                  procurement and, for purposes of 8(a) sole source
+                  requirements, has not reached the dollar limit set forth in 13
+                  CFR 124.519.</li><li>(4) A contractor and its ostensible
+                  subcontractor are treated as joint venturers, and therefore
+                  affiliates, for size determination purposes. An ostensible
+                  subcontractor is a subcontractor that performs primary and
+                  vital requirements of a contract, or of an order under a
+                  multiple award schedule contract, or a subcontractor upon
+                  which the prime contractor is unusually reliant. All aspects
+                  of the relationship between the prime and subcontractor are
+                  considered, including, but not limited to, the terms of the
+                  proposal (such as contract management, technical
+                  responsibilities, and the percentage of subcontracted work),
+                  agreements between the prime and subcontractor (such as
+                  bonding assistance or the teaming agreement), and whether the
+                  subcontractor is the incumbent contractor and is ineligible to
+                  submit a proposal because it exceeds the applicable size
+                  standard for that solicitation.</li><li>(5) For size purposes,
+                  a concern must include in its receipts its proportionate share
+                  of joint venture receipts, and in its total number of
+                  employees its proportionate share of joint venture employees.
+                  </li><li>(i) Affiliation based on franchise and license
+                  agreements. The restraints imposed on a franchisee or licensee
+                  by its franchise or license agreement relating to standardized
+                  quality, advertising, accounting format and other similar
+                  provisions, generally will not be considered in determining
+                  whether the franchisor or licensor is affiliated with the
+                  franchisee or licensee provided the franchisee or licensee has
+                  the right to profit from its efforts and bears the risk of
+                  loss commensurate with ownership. Affiliation may arise,
+                  however, through other means, such as common ownership, common
+                  management or excessive restrictions upon the sale of the
+                  franchise interest.</li></ol>
         -
           name: firm_affiliated_info
           human: If yes, please provide the information below
@@ -198,36 +548,73 @@
             required: True
         -
           name: disadvantaged_small_business
-          human: As defined by the SBA, are you a socially or economically disadvantaged small business?
+          human: As defined by the SBA, are you a socially or economically
+                 disadvantaged small business?
           report_question_number: 15A
           element_type: bool
           required: True
         -
           name: women_owned_small_business
-          human: As defined by the SBA, are you a Woman-Owned small business (WOSB)?
+          human: As defined by the SBA, are you a Woman-Owned small
+                 business<jargon wosb> (WOSB)?
           report_question_number: 15B
           element_type: bool
           required: True
+          jargons:
+          -
+            name: wosb
+            html: "<p>An SBC that is at least 51% owned by one or more women, or
+                  in the case of any publicly owned business, at least 51% of
+                  the stock is owned by women, and women control the management
+                  and daily business operations.</p>"
         -
           name: hubzone_small_business
-          human: As defined by the SBA, are you a certified HUBZone small business concern?
+          human: As defined by the SBA, are you a certified HUBZone
+                 <jargon hubzone> small business concern?
           report_question_number: 15C
           element_type: bool
           required: True
+          jargons:
+          -
+            name: hubzone 
+            html: "<p>An SBC that has been certified by SBA under the
+                  Historically Underutilized Business Zones (HUBZone) Program
+                  (13 C.F.R. § 126) as a HUBZone firm listed in the
+                  <a href=\"http://dsbs.sba.gov/dsbs/search/dsp_dsbs.cfm\">
+                  Dynamic Small Business Search</a> (DSBS).</p>"
         -
           name: service_disabled_vet_small_business
-          human: As defined by the SBA, are you a Service-Disabled Veteran-Owned small business (SDVOSB)?
+          human: As defined by the SBA, are you a Service-Disabled Veteran-Owned
+                 small business <jargon sdvosb> (SDVOSB)?
           report_question_number: 15D
           element_type: bool
           required: True
+          jargons:
+          -
+            name: sdvosb
+            html: "<p>The Service-Disabled Veteran must have a service-connected
+                  disability that has been determined by the Department of
+                  Veterans Affairs or Department of Defense, and the SBC must
+                  meet the eligibility and business control requirements set
+                  forth in 13 C.F.R. § 125.8-125.10. </p>"
         -
           name: dcaa_review
-          human: Has the Defense Contracting Audit Agency (DCAA) or other agreed upon agency,
-                 performed a review of your accounts or records in connection with government
-                 contracts or subcontracts within the past 12 months?
+          human: Has the Defense Contract Audit Agency <jargon dcaa> (DCAA) or
+                 other agreed upon agency, performed a review of your accounts
+                 or records in connection with government contracts or
+                 subcontracts within the past 12 months?
           report_question_number: 16
           element_type: bool
           required: True
+          jargons:
+          -
+            name: dcaa
+            html: <p>DCAA&rsquo;s requirements and standards are available at
+                  <a href="http://www.dcaa.mil">http://www.dcaa.mil</a>.
+                  Navigate there, click on "Guidance" and then click on "Audit
+                  Process Overview – Information for Contractors." More
+                  information is available under "Checklists and Tools" and then
+                  click on "Pre-award Accounting System Adequacy Checklist."</p>
         -
           name: dcaa_review_info
           human: If yes, please provide the following information
@@ -297,8 +684,8 @@
         children:
         -
           name: proposed_cost
-          element_type: dollars
-          validation: not_more_than 150000
+          element_type: calculated 
+          validation: estimated_total_cost 
           validation_msg: Must not exceed $150,000
           required: True
         -
@@ -311,9 +698,58 @@
         -
           name: cost_includes_dta_yn
           element_type: bool
-          human: Does the proposed cost include Discretionary Technical Assistance (DTA)?
+          human: Does the proposed cost include Discretionary Technical
+                 Assistance <jargon dta> (DTA)?
           report_question_number: 17
           required: True
+          jargons:
+          -
+            name: dta
+            html: "<p>Components may have agreements with vendors to provide
+                  technical assistance to SBIR or STTR awardees to assist in:
+                  </p><ul><li>Making better technical decisions on SBIR/STTR
+                  projects</li><li>Solving technical problems that arise during
+                  SBIR/STTR projects;</li><li>Minimizing technical risks
+                  associated with SBIR/STTR projects; and</li><li>
+                  Commercializing the SBIR/STTR product or process.</li></ul>
+                  <p>Each agency may provide up to $5,000 of SBIR or STTR funds
+                  for the technical assistance described above per year for each
+                  Phase I award and each Phase II award to these vendors for
+                  direct support to SBIR and STTR awardees.</p><p>Alternatively,
+                  an SBIR or STTR firm may directly acquire the technical
+                  assistance services described above and not through the vendor
+                  selected by the Components. Firms must request this authority
+                  from the agency and clearly identify the need for assistance
+                  (purpose and objective of required assistance), provide
+                  details on the provider of the assistance (name and point of
+                  contact for performer) and why the proposed DTA provider is
+                  uniquely skilled to conduct the work (specific experience in
+                  providing the assistance proposed), and the cost of the
+                  required assistance (costs and hours proposed or other details
+                  on arrangement). This information must be included in the
+                  Explanatory Material section of the firm&rsquo;s cost proposal
+                  specifically identified as \"Discretionary Technical
+                  Assistance.\"</p><p>If the awardee demonstrates this
+                  requirement sufficiently, the agency shall permit the awardee
+                  to acquire such technical assistance itself, in an amount up
+                  to $5,000 per year for each Phase I award and each Phase II
+                  award, as an allowable cost of the SBIR or STTR award. The per
+                  year amount will be in addition to the award and is not
+                  subject to any profit or fee by the requesting (SBIR/STTR)
+                  firm and is inclusive of all indirect rates.</p><p>The DTA
+                  provider may not be the requesting firm, an affiliate of the
+                  requesting firm, an investor of the requesting firm, or a
+                  subcontractor or consultant of the requesting firm otherwise
+                  required as part of the paid portion of the research effort
+                  (e.g. research partner or research institution).</p><p>Failure
+                  to include the required information in the Phase I and/or
+                  Phase II proposal will result in the request for discretionary
+                  technical assistance being disapproved. Requests for DTA
+                  funding outside of the Phase I or Phase II proposal submission
+                  will not be considered. If the firm is approved for DTA from a
+                  source other than that provided by the agency, the firm may
+                  not be eligible for the technical assistance services normally
+                  provided by those organizations.</p>"
         -
           name: dta_amount
           element_type: dollars
@@ -323,19 +759,21 @@
         -
           name: duplication_rights_blurb
           element_type: read_only_text
-          human: "For any purpose other than to evaluate the proposal, this data except
-                 proposal cover sheets shall not be disclosed outside the Government
-                 and shall not be duplicated, used or disclosed in whole or in part,
-                 provided that if a contract is awarded to this proposer as a result
-                 of or in connection with the submission of this data, the Government
-                 shall have the right to duplicate, use or disclose the data to the
-                 extent provided in the funding agreement. This restriction does not
-                 limit the Government's right to use information contained in the data
-                 if it is obtained from another source without restriction. This
+          human: For any purpose other than to evaluate the proposal, this data
+                 except proposal cover sheets shall not be disclosed outside the
+                 Government and shall not be duplicated, used or disclosed in
+                 whole or in part, provided that if a contract is awarded to
+                 this proposer as a result of or in connection with the
+                 submission of this data, the Government shall have the right to
+                 duplicate, use or disclose the data to the extent provided in
+                 the funding agreement. This restriction does not limit the
+                 Government's right to use information contained in the data if
+                 it is obtained from another source without restriction. This
                  restriction does not apply to routine handling of proposals for
-                 administrative purposes by Government support contractors as indicated
-                 in Section 5.3 of the solicitation. The data subject to this restriction
-                 is contained on the pages of the proposal listed on the line below."
+                 administrative purposes by Government support contractors as
+                 indicated in Section 5.3 of the solicitation. The data subject
+                 to this restriction is contained on the pages of the proposal
+                 listed on the line below.
         -
           name: proprietary_info_page_numbers
           element_type: integer_spans
@@ -343,16 +781,28 @@
         -
           name: essentially_equivalent_work_yn
           element_type: bool
-          human: Has a proposal for essentially equivalent work been submitted
-                 to other US government agencies or DoD components?
+          human: Has a proposal for essentially equivalent <jargon section33>
+                 work been submitted to other US government agencies or DoD
+                 components?
           report_question_number: 18
           required: True
+          jargons:
+          -
+            name: section33
+            html: "<p>Work that is substantially the same research, which is
+                  proposed for funding in more than one contract proposal or
+                  grant application submitted to the same Federal agency or
+                  submitted to two or more different Federal agencies for review
+                  and funding consideration; or work where a specific research
+                  objective and the research design for accomplishing the
+                  objective are the same or closely related to another proposal
+                  or award, regardless of the funding source.</p>"
         -
           name: essentially_equivalent_work_info
           element_type: med_str
           ask_if: essentially_equivalent_work_yn
-          human:  If yes, list the name(s) of the agency or DoD component and if SBIR or STTR,
-                  list Topic Number in the space below.
+          human:  If yes, list the name(s) of the agency or DoD component and if
+                  SBIR or STTR, list Topic Number in the space below.
           required: True
         -
           name: essentially_equivalent_contract_awarded_yn
@@ -370,46 +820,131 @@
         -
           name: dfars252
           element_type: bool
-          human: Are you submitting assertions in accordance with DFARS 252.227-7017
-                 "Identification and assertions use, release, or disclosure restriction"?
-                 See Section 11.5 <jargon section115> of the solicitation.
+          human: Are you submitting assertions in accordance with DFARS
+                 252.227-7017 "Identification and assertions use, release, or
+                 disclosure restriction"? See Section 11.5 <jargon section115>
+                 of the solicitation.
           report_question_number: 20
           required: True
           jargons:
           -
             name: section115
-            html: "<p>Rights in technical data, including software, developed under the terms of any contract resulting from proposals submitted in response to this solicitation generally remain with the contractor, except that the Government obtains a royalty-free license to use such technical data only for Government purposes during the period commencing with contract award and ending five years after completion of the project under which the data were generated. This data should be marked with the restrictive legend specified in DFARS 252.227-7018. Upon expiration of the five-year restrictive license, the Government has unlimited rights in the SBIR data. During the license period, the Government may not release or disclose SBIR data to any person other than its support services contractors except: (1) For evaluation purposes; (2) As expressly permitted by the contractor; or (3) A use, release, or disclosure that is necessary for emergency repair or overhaul of items operated by the Government. See DFARS clause 252.227-7018, \"Rights in Noncommercial Technical Data and Computer Software – Small Business Innovation Research (SBIR) Program\".</p><p>If a proposer plans to submit assertions in accordance with DFARS 252.227-7017, those assertions must be identified and assertion of use, release, or disclosure restriction MUST be included with your proposal submission. The contract cannot be awarded until assertions have been approved.</p>"
+            html: "<p>Rights in technical data, including software, developed
+                  under the terms of any contract resulting from proposals
+                  submitted in response to this solicitation generally remain
+                  with the contractor, except that the Government obtains a
+                  royalty-free license to use such technical data only for
+                  Government purposes during the period commencing with
+                  contract award and ending five years after completion of the
+                  project under which the data were generated. This data should
+                  be marked with the restrictive legend specified in DFARS
+                  252.227-7018. Upon expiration of the five-year restrictive
+                  license, the Government has unlimited rights in the SBIR data.
+                  During the license period, the Government may not release or
+                  disclose SBIR data to any person other than its support
+                  services contractors except: (1) For evaluation purposes; (2)
+                  As expressly permitted by the contractor; or (3) A use,
+                  release, or disclosure that is necessary for emergency repair
+                  or overhaul of items operated by the Government. See DFARS
+                  clause 252.227-7018, \"Rights in Noncommercial Technical Data
+                  and Computer Software – Small Business Innovation Research
+                  (SBIR) Program\".</p><p>If a proposer plans to submit
+                  assertions in accordance with DFARS 252.227-7017, those
+                  assertions must be identified and assertion of use, release,
+                  or disclosure restriction MUST be included with your proposal
+                  submission. The contract cannot be awarded until assertions
+                  have been approved.</p>"
         -
           name: special_research_subjects
           element_type: bool
           human:  Are you proposing research that utilizes human/animal subjects
-                  or recombinant DNA as described in section 3.11<jargon section311>, 3.12<jargon section312>, and 3.13<jargon section313>
-                  of the solicitation?
+                  or recombinant DNA as described in section 3.11
+                  <jargon section311>, 3.12<jargon section312>, and 3.13
+                  <jargon section313> of the solicitation?
           report_question_number: 21
           required: True
           jargons:
           -
             name: section311
-            html: "<p>All activities involving animal subjects shall be conducted in accordance with DoDI 3216.01 \"Use of Animals in DoD Programs,\" 9 C.F.R. parts 1-4 \"Animal Welfare Regulations,\" National Academy of Sciences Publication \"Guide for the Care & Use of Laboratory Animals,\" as amended, and the Department of Agriculture rules implementing the Animal Welfare Act (7 U.S.C. §§ 2131-2159), as well as other applicable federal and state law and regulation and DoD instructions. A listing of the cited regulations is available at:<a href=\"http://www.acq.osd.mil/osbp/sbir/sb/resources/deskreference/quickref/researchanimalsubject.shtml\">reference</a>.</p><p>\"Animal use\" protocols apply to all activities that meet any of the following criteria:</p><p>a. Any research, development, test, evaluation or training, (including experimentation) involving an animal or animals.</p><p>b. An animal is defined as any living or dead, vertebrate organism (non-human) that is being used or is intended for use in research, development, test, evaluation or training.</p><p>c. A vertebrate is a member of the subphylum Vertebrata (within the phylum Chordata), including birds and cold-blooded animals.</p><p>See DoDI 3216.01 for definitions of these terms and more information about the applicability of DoDI 3216.01 to work involving animals.</p>"
+            html: "<p>All activities involving animal subjects shall be
+                  conducted in accordance with DoDI 3216.01 \"Use of Animals in
+                  DoD Programs,\" 9 C.F.R. parts 1-4 \"Animal Welfare
+                  Regulations,\" National Academy of Sciences Publication
+                  \"Guide for the Care & Use of Laboratory Animals,\" as
+                  amended, and the Department of Agriculture rules implementing
+                  the Animal Welfare Act (7 U.S.C. §§ 2131-2159), as well as
+                  other applicable federal and state law and regulation and DoD
+                  instructions. A listing of the cited regulations is available
+                  at:<a href=\"http://www.acq.osd.mil/osbp/sbir/sb/resources/deskreference/quickref/researchanimalsubject.shtml\">
+                  reference</a>.</p><p>\"Animal use\" protocols apply to all
+                  activities that meet any of the following criteria:</p><p>a.
+                  Any research, development, test, evaluation or training,
+                  (including experimentation) involving an animal or animals.
+                  </p><p>b. An animal is defined as any living or dead,
+                  vertebrate organism (non-human) that is being used or is
+                  intended for use in research, development, test, evaluation or
+                  training.</p><p>c. A vertebrate is a member of the subphylum
+                  Vertebrata (within the phylum Chordata), including birds and
+                  cold-blooded animals.</p><p>See DoDI 3216.01 for definitions
+                  of these terms and more information about the applicability of
+                  DoDI 3216.01 to work involving animals.</p>"
           -
             name: section312
-            html: "<p>All research involving human subjects shall be conducted in accordance with 32 C.F.R. § 219 \"The Common Rule,\" 10 U.S.C. § 980 \"Limitation on Use of Humans as Experimental Subjects,\" and DoDD 3216.02 \"Protection of Human Subjects and Adherence to Ethical Standards in DoD-Supported Research,\" as well as other applicable federal and state law and regulations, and DoD component guidance. Offerors must be cognizant of and abide by the additional restrictions and limitations imposed on the DoD regarding research involving human subjects, specifically as they regard vulnerable populations (DoDD 3216.02), recruitment of military research subjects (DoDD 3216.02), and informed consent and surrogate consent (10 U.S.C. § 980) and chemical and biological agent research (DoDD 3216.02). Food and Drug Administration regulation and policies may also apply. A listing of the cited regulations is available at:<a href=\"http://www.acq.osd.mil/osbp/sbir/sb/resources/deskreference/quickref/researchhumansubject.shtml\">reference</a>.</p><p>\"Human use\" protocols apply to all research that meets any of the following criteria:</p><p>a. Any research involving an intervention or an interaction with a living person that would not be occurring or would be occurring in some other fashion but for this research.</p><p>b. Any research involving identifiable private information. This may include data/information/specimens collected originally from living individuals (broadcast video, web-use logs, tissue, blood, medical or personnel records, health data repositories, etc.) in which the identity of the subject is known, or the identity may be readily ascertained by the investigator or associated with the data/information/specimens.</p><p>See DoDD 3216.02 for definitions of these terms and more information about the applicability of DoDI 3216.02 to research involving human subjects.</p>"
+            html: "<p>All research involving human subjects shall be conducted
+                  in accordance with 32 C.F.R. § 219 \"The Common Rule,\" 10
+                  U.S.C. § 980 \"Limitation on Use of Humans as Experimental
+                  Subjects,\" and DoDD 3216.02 \"Protection of Human Subjects
+                  and Adherence to Ethical Standards in DoD-Supported
+                  Research,\" as well as other applicable federal and state law
+                  and regulations, and DoD component guidance. Offerors must be
+                  cognizant of and abide by the additional restrictions and
+                  limitations imposed on the DoD regarding research involving
+                  human subjects, specifically as they regard vulnerable
+                  populations (DoDD 3216.02), recruitment of military research
+                  subjects (DoDD 3216.02), and informed consent and surrogate
+                  consent (10 U.S.C. § 980) and chemical and biological agent
+                  research (DoDD 3216.02). Food and Drug Administration
+                  regulation and policies may also apply. A listing of the cited
+                  regulations is available at:
+                  <a href=\"http://www.acq.osd.mil/osbp/sbir/sb/resources/deskreference/quickref/researchhumansubject.shtml\">
+                  reference</a>.</p><p>\"Human use\" protocols apply to all
+                  research that meets any of the following criteria:</p><p>a.
+                  Any research involving an intervention or an interaction with
+                  a living person that would not be occurring or would be
+                  occurring in some other fashion but for this research.</p><p>
+                  b. Any research involving identifiable private information.
+                  This may include data/information/specimens collected
+                  originally from living individuals (broadcast video, web-use
+                  logs, tissue, blood, medical or personnel records, health data
+                  repositories, etc.) in which the identity of the subject is
+                  known, or the identity may be readily ascertained by the
+                  investigator or associated with the data/information/specimens
+                  .</p><p>See DoDD 3216.02 for definitions of these terms and
+                  more information about the applicability of DoDI 3216.02 to
+                  research involving human subjects.</p>"
           -
             name: section313
-            html: "<p>Any recipient performing research involving recombinant DNA molecules and/or organisms and viruses containing recombinant DNA molecules shall comply with the National Institutes of Health Guidelines for Research Involving Recombinant DNA Molecules, dated January 2011, as amended. The guidelines can be found at: <a href=\"http://oba.od.nih.gov/rdna/nih_guidelines_oba.html\">guidlines</a>. Recombinant DNA is defined as (i) molecules that are constructed outside living cells by joining natural or synthetic DNA segments to DNA molecules that can replicate in living cells or (ii) molecules that result from the replication of those described in (i) above. A listing of the cited regulations is available at: <a href=\"http://www.acq.osd.mil/osbp/sbir/sb/resources/deskreference/quickref/researchrecombinantdna.shtml\">reference</a>."
-        -
-          name: technical_abstract
-          element_type: text
-          human: Technical Abstract (Limit your abstract to 200 words
-                 with no classified or proprietary information)
-          validation: no_more_than 200 words
-          validation_msg: Limit your abstract to 200 words
-          required: True
+            html: "<p>Any recipient performing research involving recombinant
+                  DNA molecules and/or organisms and viruses containing
+                  recombinant DNA molecules shall comply with the National
+                  Institutes of Health Guidelines for Research Involving
+                  Recombinant DNA Molecules, dated January 2011, as amended. The
+                  guidelines can be found at:
+                  <a href=\"http://oba.od.nih.gov/rdna/nih_guidelines_oba.html\">guidlines</a>.
+                  Recombinant DNA is defined as (i) molecules that are
+                  constructed outside living cells by joining natural or
+                  synthetic DNA segments to DNA molecules that can replicate in
+                  living cells or (ii) molecules that result from the
+                  replication of those described in (i) above. A listing of the
+                  cited regulations is available at: 
+                  <a href=\"http://www.acq.osd.mil/osbp/sbir/sb/resources/deskreference/quickref/researchrecombinantdna.shtml\">
+                  reference</a>."
         -
           name: anticipated_benefits
           element_type: text
           human: Anticipated Benefits/Potential Commercial Applications
-                 of the Research or Development. (No classified or proprietary information)
+                 of the Research or Development. (No classified or proprietary
+                 information)
           required: True
         -
           name: keywords
@@ -425,18 +960,29 @@
         -
           name: teaming_partners_yn
           element_type: bool
-          human: Are teaming partners or subcontractors proposed?
+          human: Are teaming partners or subcontractors
+                 <jargon subcontractor> proposed?
           report_question_number: 22
           required: True
+          jargons:
+          -
+            name: subcontractor
+            html: "<p>A subcontract is any agreement, other than one involving
+                  an employer-employee relationship, entered into by an awardee
+                  of a funding agreement calling for supplies or services for
+                  the performance of the original funding agreement. This
+                  includes consultants.</p>"
         -
           name: teaming_partners
           element_type: line_item
           human: Check all that apply
           report_text: ""
           ask_if: teaming_partners_yn
-          multiplicity: University, HBCU/MI, FFRDC, Nonprofit Institution,
-                        Federal Laboratory, Other Federal Facility,
-                        Small Business, Large Business, Other
+          multiplicity: University, 
+                        Historically Black Colleges and Universities and Minority Institutions,
+                        Federally Funded Research and Development Center, 
+                        Nonprofit Institution, Federal Laboratory, Other Federal
+                        Facility, Small Business, Large Business, Other
           children:
           -
             name: is_teaming_with
@@ -464,37 +1010,43 @@
           jargons:
           -
             name: section35
-            html: "<p>Foreign Nationals (also known as Foreign Persons) as defined by 22 CFR 120.16 means any natural person who is not a lawful permanent resident as defined by 8 U.S.C. § 1101(a)(20) or who is not a protected individual as defined by 8 U.S.C. § 1324b(a)(3). It also means any foreign corporation, business association, partnership, trust, society or any other entity or group that is not incorporated or organized to do business in the United States, as well as international organizations, foreign governments and any agency or subdivision of foreign governments (e.g., diplomatic missions).</p><p>\"Lawfully admitted for permanent residence\" means the status of having been lawfully accorded the privilege of residing permanently in the United States as an immigrant in accordance with the immigration laws, such status not having changed.</p><p>\"Protected individual\" means an individual who (A) is a citizen or national of the United States, or (B) is an alien who is lawfully admitted for permanent residence, is granted the status of an alien lawfully admitted for temporary residence under 8 U.S.C. § 1160(a) or 8 U.S.C. § 1255a(a)(1), is admitted as a refugee under 8 U.S.C. § 1157, or is granted asylum under Section 8 U.S.C. § 1158; but does not include (i) an alien who fails to apply for naturalization within six months of the date the alien first becomes eligible (by virtue of period of lawful permanent residence) to apply for naturalization or, if later, within six months after November 6, 1986, and (ii) an alien who has applied on a timely basis, but has not been naturalized as a citizen within 2 years after the date of the application, unless the alien can establish that the alien is actively pursuing naturalization, except that time consumed in the Service&rsquo;s processing the application shall not be counted toward the 2-year period.</p>"
+            html: "<p>Foreign Nationals (also known as Foreign Persons) as
+                  defined by 22 CFR 120.16 means any natural person who is not a
+                  lawful permanent resident as defined by 8 U.S.C. § 1101(a)(20)
+                  or who is not a protected individual as defined by 8 U.S.C. §
+                  1324b(a)(3). It also means any foreign corporation, business
+                  association, partnership, trust, society or any other entity
+                  or group that is not incorporated or organized to do business
+                  in the United States, as well as international organizations,
+                  foreign governments and any agency or subdivision of foreign
+                  governments (e.g., diplomatic missions).</p><p>\"Lawfully
+                  admitted for permanent residence\" means the status of having
+                  been lawfully accorded the privilege of residing permanently
+                  in the United States as an immigrant in accordance with the
+                  immigration laws, such status not having changed.</p><p>
+                  \"Protected individual\" means an individual who (A) is a
+                  citizen or national of the United States, or (B) is an alien
+                  who is lawfully admitted for permanent residence, is granted
+                  the status of an alien lawfully admitted for temporary
+                  residence under 8 U.S.C. § 1160(a) or 8 U.S.C. § 1255a(a)(1),
+                  is admitted as a refugee under 8 U.S.C. § 1157, or is granted
+                  asylum under Section 8 U.S.C. § 1158; but does not include (i)
+                  an alien who fails to apply for naturalization within six
+                  months of the date the alien first becomes eligible (by virtue
+                  of period of lawful permanent residence) to apply for
+                  naturalization or, if later, within six months after November 6, 1986, and (ii) an alien who has applied on a timely basis, but has not been naturalized as a citizen within 2 years after the date of the application, unless the alien can establish that the alien is actively pursuing naturalization, except that time consumed in the Service&rsquo;s processing the application shall not be counted toward the 2-year period.</p>"
       -
         name: pi_info
         element_type: workflow
         human: Principal Investigator/Corporate Official Information
         children:
         -
-          name: pi_time_percentage
-          human: What percentage of the principal investigator's total time will be on the project?
-          report_question_number: 24
-          element_type: percentage
-          required: True
-        -
-          name: pi_is_woman
-          human: Is the principal investigator (identified below) a woman?
-          report_question_number: 25
-          element_type: bool
-          required: True
-        -
-          name: pi_is_disadvantaged
-          human: Is the principal investigator (identified below) socially/economically disadvantaged?
-          report_question_number: 26
-          element_type: bool
-          required: True
-        -
-          name: pi_is_university
-          human: Is your firm's PI,CO, or owner, a faculty member or student
-                 of an institution of higher education?
-          report_question_number: 27
-          element_type: bool
-          required: True
+          name: what_is_pi
+          element_type: read_only_text
+          human: Tell us about your Principal Investigator <jargon pi> and Corporate Official.
+          jargons:
+          -
+            name: pi
         -
           name: pi_contact_info
           element_type: line_item
@@ -528,6 +1080,25 @@
             name: pi_email
             human: Email
             element_type: email
+            required: True
+          -
+            name: pi_time_percentage
+            human: What percentage of the principal investigator's total time
+                   will be on the project?
+            report_question_number: 24
+            element_type: percentage
+            required: True
+          -
+            name: pi_is_woman
+            human: Is this person a woman?
+            report_question_number: 25
+            element_type: bool
+            required: True
+          -
+            name: pi_is_disadvantaged
+            human: Is this person socially/economically disadvantaged?
+            report_question_number: 26
+            element_type: bool
             required: True
         -
           name: co_contact_info
@@ -563,6 +1134,14 @@
             human: Email
             element_type: email
             required: True
+        -
+          name: pi_is_university
+          human: Is your firm's principal investigator, corporate official, or
+                 owner a faculty member or student of an institution of higher
+                 education?
+          report_question_number: 27
+          element_type: bool
+          required: True
     -
       name: dod_technicalvolume
       human: Technical Volume
@@ -570,41 +1149,88 @@
       children:
         -
           name: reviewed_requirement
-          element_type: bool
+          element_type: checkbox
           human: Have you reviewed all the requirements in the Air Force and
                  DoD Solicitation instructions?
           required: True
         -
           name: is_pdf
-          element_type: bool
+          element_type: checkbox 
           human: Is the Technical Volume a single Portable Document Format
                  (PDF) file, including graphics?
           required: True
         -
           name: was_virus_scanned
-          element_type: bool
+          element_type: checkbox
           human: Did you virus scan the document?
           required: True
         -
           name: is_20_pages
-          element_type: bool
+          element_type: checkbox
           human: Is the document less than or equal to twenty pages in length?
           required: True
         -
           name: is_font_and_paper_correct
-          element_type: bool
-          human: Is the font 10 pt. or larger on 8-1/2" x 11" paper with one-inch margins?
+          element_type: checkbox
+          human: Is the font 10 pt. or larger on 8-1/2" x 11" paper with 
+                 one-inch margins?
           required: True
         -
           name: contains_header
-          element_type: bool
-          human: Does it contain a header with the company name, topic number, and
-                 proposal number? This header can exist in the margin.
+          element_type: checkbox
+          human: Does it contain a header with the company name, topic number,
+                 and proposal number? This header can exist in the margin.
           required: True
+        -
+          name: marked_proprietary
+          element_type: checkbox
+          human: As per section 5.3 <jargon section53> of the DoD solicitation,
+                 have you correctly marked proprietary information in the
+                 proposal?
+          required: True
+          jargons:
+          -
+            name: section53
+            html: "<p>Offerors that include in their proposals data that they do
+                  not want disclosed to the public for any purpose, or used by
+                  the Government except for evaluation purposes, shall:</p>
+                  <blockquote>(1) Mark the first page of each Volume of the
+                  proposal submission with the following legend:<p>\"This
+                  proposal includes data that shall not be disclosed outside the
+                  Government and shall not be duplicated, used, or disclosed-in
+                  whole or in part-for any purpose other than to evaluate this
+                  proposal. If, however, a contract is awarded to this offeror
+                  as a result of-or in connection with-the submission of this
+                  data, the Government shall have the right to duplicate, use,
+                  or disclose the data to the extent provided in the resulting
+                  contract. This restriction does not limit the
+                  Government&rsquo;s right to use information contained in this
+                  data if it is obtained from another source without
+                  restriction. The data subject to this restriction are
+                  contained in pages [insert numbers or other identification of
+                  sheets]\"; and</p><p>(2) Mark each sheet of data it wishes to
+                  restrict with the following legend:</p><p>\"Use or disclosure
+                  of data contained on this page is subject to the restriction
+                  on the first page of this volume.\"</p></blockquote><p>The DoD
+                  assumes no liability for disclosure or use of unmarked data
+                  and may use or disclose such data for any purpose.</p><p>
+                  Restrictive notices notwithstanding, proposals and final
+                  reports submitted through the DoD Submission Web site may be
+                  handled, for administrative purposes only, by support
+                  contractors. All support contractors are bound by appropriate
+                  non-disclosure agreements.</p>"
         -
           name: tech_volume_upload
           element_type: file_upload
           human: Upload Technical Volume
+          required: True
+        -
+          name: technical_abstract
+          element_type: text
+          human: Technical Abstract (Limit your abstract to 200 words
+                 with no classified or proprietary information)
+          validation: no_more_than 200 words
+          validation_msg: Limit your abstract to 200 words
           required: True
     -
       name: dod_cost_volume
@@ -642,8 +1268,9 @@
             required: True
         -
           name: dcaa_review
-          human: If the Defense Contracting Audit Agency (DCAA) has performed a review
-                 of your projects within the past 12 months, please provide the following
+          human: If the Defense Contract Audit Agency (DCAA) has performed a
+                 review of your projects within the past 12 months, please
+                 provide the following
           element_type: line_item
           children:
           -
@@ -678,20 +1305,28 @@
           human: Specify the type of payment desired
           element_type: big_str
           required: True
-          validation: one_of "partial payments (monthly) as work progresses (recommended)",
-                      "progress payments"
+          validation: one_of "Partial payments (monthly) as work progresses (recommended)",
+                      "Progress payments"
         -
           name: false_statements
-          human: Knowingly and willfully making any false, ficticious, or fraudulent
-                 statements or representations may be a felony under the Federal Criminal
-                 False Statement Act (18 USC Sec 1001), punishable by a fine of up to
-                 $10,000, up to five years in prison, or both.
+          human: Knowingly and willfully making any false, ficticious, or
+                 fraudulent statements or representations may be a felony under
+                 the Federal Criminal False Statement Act (18 USC Sec 1001),
+                 punishable by a fine of up to $10,000, up to five years in
+                 prison, or both.
           element_type: read_only_text
       -
         name: cv_direct_labor
         element_type: workflow
         human: Direct Labor
         children:
+        -
+          name: what_is_direct_labor
+          human: You should identify key personnel by name if possible or by
+                 labor category if specific names are not available. The number
+                 of hours, labor overhead and/or fringe benefits and actual
+                 hourly rates for each individual are also necessary.
+          element_type: read_only_text
         -
           name: direct_labor
           element_type: line_item
@@ -759,9 +1394,21 @@
         human: Direct Materials
         children:
         -
+          name: what_are_direct_costs
+          human: You should justify costs for materials, parts, and supplies
+                 with an itemized list containing types, quantities, and price
+                 and where appropriate, purposes.
+          element_type: read_only_text
+        -
+          name: any_direct_costs
+          element_type: bool
+          required: True
+          human: Do you have any direct costs?
+        -
           name: direct_material_costs
           element_type: line_item
           multiplicity: 4
+          ask_if: any_direct_costs
           children:
           -
             name: name
@@ -778,23 +1425,27 @@
           element_type: calculated
           required: False
           validation: "sum(material_cost)"
+          ask_if: any_direct_costs
           human: "Subtotal Direct Material Costs (DM)"
         -
           name: material_overhead_percentage
           element_type: percentage
           human: "Material Overhead Rate (%)"
+          ask_if: any_direct_costs
           required: True
         -
           name: material_overhead
           element_type: calculated
-          human: "Material Overhead (rate * DM)"
+          human: "Material Overhead (rate &times; DM)"
           validation: "subtotal_direct_material * material_overhead_percentage * .01"
+          ask_if: any_direct_costs
           required: False
         -
           name: total_direct_material
           element_type: calculated
           human: "Total Direct Material (TDM)"
           validation: "subtotal_direct_material + material_overhead"
+          ask_if: any_direct_costs
           required: False
       -
         name: cv_other_direct
@@ -802,9 +1453,47 @@
         human: Other Direct Costs
         children:
         -
+          name: what_are_other_direct_costs
+          human: "<p>This category of costs includes specialized services such
+                 as machining or milling, special testing or analysis, costs
+                 incurred in obtaining temporary use of specialized equipment.
+                 Proposals, which include leased hardware, must provide an
+                 adequate lease vs. purchase justification or rational.</p><ul>
+                 <li>Travel: Travel costs must relate to the needs of the
+                 project. Break out travel cost by trip, with the number of
+                 travelers, airfare, per diem, lodging, etc. The number of trips
+                 required, as well as the destination and purpose of each trip
+                 should be reflected. Recommend budgeting at least one (1) trip
+                 to the Air Force location managing the contract.</li>
+                 <li>Subcontracts: Involvement of university or other
+                 consultants in the planning and/or research stages of the
+                 project may be appropriate. If the offeror intends such
+                 involvement, describe in detail and include information in the
+                 Cost Volume. The proposed total of all consultant fees,
+                 facility leases or usage fees, and other subcontract or
+                 purchase agreements may not exceed one-third of the total
+                 contract price or cost, unless otherwise approved in writing by
+                 the Contracting Officer. Support subcontract costs with copies
+                 of the subcontract agreements. The supporting agreement
+                 documents must adequately describe the work to be performed
+                 (i.e., Cost Volume). At a minimum, an offeror must include a
+                 Statement of Work (SOW) with a corresponding detailed Cost
+                 Volume for each planned subcontract.</li><li>Consultants:
+                 Provide a separate agreement letter for each consultant. The
+                 letter should briefly state what service or assistance will be
+                 provided, the number of hours required and hourly rate.</li>
+                 </ul>"
+          element_type: read_only_text
+        -
+          name: any_other_direct_costs
+          element_type: bool
+          required: True
+          human: Do you have any other direct costs?
+        -
           name: other_direct_costs
           element_type: line_item
           multiplicity: 4
+          ask_if: any_other_direct_costs
           children:
           -
             name: name
@@ -821,23 +1510,27 @@
           element_type: calculated
           required: False
           validation: "sum(other_cost)"
+          ask_if: any_other_direct_costs
           human: "Subtotal Other Direct Costs (ODC)"
         -
           name: other_overhead_percentage
           element_type: percentage
           human: "Direct Cost Overhead Rate (%)"
+          ask_if: any_other_direct_costs
           required: True
         -
           name: other_overhead
           element_type: calculated
-          human: "Direct Cost Overhead (rate * ODC)"
+          human: "Direct Cost Overhead (rate &times; ODC)"
           validation: "subtotal_other * other_overhead_percentage * .01"
+          ask_if: any_other_direct_costs
           required: False
         -
           name: total_other_direct
           element_type: calculated
           human: "Total Other Direct Costs (TODC)"
           validation: "subtotal_other + other_overhead"
+          ask_if: any_other_direct_costs
           required: False
       -
         name: cv_totals
@@ -896,7 +1589,11 @@
         -
           name: discretionary_technical_assistance
           element_type: dollars
-          required: True
+          human: Discretionary Technical Assistance <jargon dta> (DTA)
+          required: False 
+          jargons:
+          -
+            name: dta
     -
       name: dod_company_commercialization_report
       element_type: workflow
