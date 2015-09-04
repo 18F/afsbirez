@@ -6,25 +6,15 @@ angular.module('sbirezApp')
     $rootScope.bodyClass = 'topic-show';
     $scope.data = {};
 
-    $scope.saveOpportunity = function() {
-      SavedOpportunityService.save($scope.topicId).then(function() {
-        $scope.data.saved = true;
-      }, function(error) {
-        console.log(error);
-      });
-    };
-
-    $scope.removeOpportunity = function() {
-      SavedOpportunityService.remove($scope.topicId).then(function() {
-        $scope.data.saved = false;
-      });
-    };
-
     $scope.createProposal = function() {
       var title = 'Proposal for ' + $scope.data.title;
       var workflow = $scope.data.solicitation.element;
-      ProposalService.create($scope.data.id, title, workflow).then(function(data) {
-        $scope.data.proposal = data.id;
+      SavedOpportunityService.save($scope.topicId).then(function() {
+        $scope.data.saved = true;
+        ProposalService.create($scope.data.id, title, workflow).then(function(data) {
+          $scope.data.proposal = data.id;
+          $state.go('app.proposals.report', {id: $scope.data.proposal});
+        });
       });
     };
 

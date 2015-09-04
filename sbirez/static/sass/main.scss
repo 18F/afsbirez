@@ -8,6 +8,13 @@ body{
   font-family: Arial, helvetica neue, helvetica, sans-serif;
   font-size: 16px;
   color: #333;
+  background-color: white;
+}
+
+body.topics, body.company, body.user, body.sign-up-post,
+body.proposals, body.topic-show,
+body.proposal, body.search-results, body.topic {
+    background-color: white;
 }
 
 a{ color: #0064be; }
@@ -219,6 +226,12 @@ textarea{
   display: block;
 }
 
+.field-big_str.field-select span.label-select{ 
+  position: relative; 
+  width: 100%;
+  display: block;
+}
+
 .field-select{ position: relative; }
 
 .field-select span.label-select::after{
@@ -317,6 +330,9 @@ div.field,
 section.fieldset,
 .fieldset-radio{ margin-bottom: 24px; }
 
+fieldset.fieldset-radio > div.field.is-error,
+fieldset.fieldset-singlelineitem > div.field.is-error { margin-bottom:0; }
+
 .fieldset-dynamic > header{
   margin-bottom: 24px;
 }
@@ -356,7 +372,7 @@ section.fieldset,
 .fieldset-principal-investigator .fieldset:last-of-type,
 .fieldset-dynamic-item.field:last-of-type,
 .fieldset-dynamic .fieldset-dynamic-item:last-of-type{
-  margin-bottom: 2px;
+  margin-bottom: 20px;
 }
 
 div.fieldset-dynamic > header h1 {
@@ -412,12 +428,14 @@ fieldset.fieldset-contact-information,
 fieldset.fieldset-checkbox,
 fieldset.labor-related-cost,
 fieldset.direct-material-cost,
+fieldset.fieldset-singlelineitem,
 fieldset.fieldset-dynamic-item{
   border: 1px solid #cfcfcf;
   padding: 20px 16px 16px;
   position: relative;
   margin-bottom: 24px;
   border-radius: 4px;
+  margin-top: 20px;
 }
 
 fieldset.fieldset-corporate-official{ margin-bottom: 24px; }
@@ -435,6 +453,7 @@ fieldset.fieldset-contact-information > legend,
 fieldset.fieldset-checkbox > legend,
 fieldset.labor-related-cost > legend,
 fieldset.direct-material-cost > legend,
+fieldset.fieldset-singlelineitem > legend,
 fieldset.fieldset-dynamic-item > legend{
   position: absolute;
   background: white;
@@ -677,6 +696,11 @@ fieldset.fieldset-mailing-address div.field.field-zip input{
 .field-phone-number input,
 .field-fax-number input{
   width: 10em;
+}
+
+.field-big_str input,
+.field-big_str select{
+  width: 100%;
 }
 
 .field-naics input {
@@ -1960,6 +1984,20 @@ body .bigfoot-footnote__content ul{
   font-size: 14px;
   line-height: 1.33;
   color: #333;
+}
+
+body .bigfoot-footnote__content ul{
+  list-style-type: circle;
+  padding-left: 20px;
+  padding-bottom: 20px;
+}
+
+body .bigfoot-footnote__content blockquote{
+  font-size: 14px;  
+  line-height: 1.33;
+  color: #333;
+  padding-left: 20px;
+  padding-bottom: 20px;
 }
 
 body .bigfoot-footnote__button {

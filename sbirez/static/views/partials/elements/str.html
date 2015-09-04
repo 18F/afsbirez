@@ -3,8 +3,10 @@
   <div ng-show="options.length === 0">
     <input id="{{::fieldToken}}" class="form-control" ng-change="apply()" ng-model="storage" type="text"></input>
   </div>
-  <div ng-show="options.length > 0">
-    <select id="{{::fieldToken}}" class="form-control" ng-change="apply()" ng-options="opt as opt for opt in options" ng-model="storage"></select>
-  </div>
-  <span ng-show="validationstorage" class="error-message">{{validationstorage}}</span>
+  <span ng-show="options.length > 0" class="label-select">
+    <select id="{{::fieldToken}}" class="form-control" ng-change="apply()" ng-options="opt as opt for opt in options track by opt" ng-model="storage">
+      <option value="">Please select one</option>
+    </select>
+  </span>
+  <span class="error-message">{{validationstorage}}</span>
 </div>

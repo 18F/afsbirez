@@ -8,12 +8,11 @@ angular.module('sbirezApp').directive('topic', function() {
       topic: '=',
       viewDetails: '@',
       removeOption: '@',
-      saveOption: '@',
       createOption: '@'
     },
     templateUrl: 'static/views/partials/topic.html',
-    controller: ['$scope', '$http', '$q', '$stateParams', '$location', 'SavedOpportunityService', 'ProposalService',
-      function ($scope, $http, $q, $stateParams, $location, SavedOpportunityService, ProposalService) {
+    controller: ['$scope', '$state', 'SavedOpportunityService', 'ProposalService',
+      function ($scope, $state, SavedOpportunityService, ProposalService) {
 
         $scope.saveOpportunity = function() {
           SavedOpportunityService.save($scope.topic.id).then(function() {
@@ -32,8 +31,11 @@ angular.module('sbirezApp').directive('topic', function() {
         $scope.createProposal = function() {
           var title = 'Proposal for ' + $scope.topic.title;
           var workflow = $scope.topic.solicitation.element;
-          ProposalService.create($scope.topic.id, title, workflow).then(function(data) {
-            $scope.topic.proposal = data.id;
+          SavedOpportunityService.save($scope.topic.id).then(function() {
+            ProposalService.create($scope.topic.id, title, workflow).then(function(data) {
+              $scope.topic.proposal = data.id;
+              $state.go('app.proposals.report', {id: $scope.topic.proposal});
+            });
           });
         }; 
 

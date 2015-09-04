@@ -343,6 +343,83 @@ describe('Service: ValidationService', function () {
     expect(validationData.dollar_field1).toEqual('Must not exceed 100');
   });
 
+  // required checkbox
+  var checkboxElements = {
+    'id': 1,
+    'name': 'nestedworkflow',
+    'order': 1,
+    'element_type': 'workflow',
+    'required': false,
+    'default': null,
+    'human': 'Nested Workflow',
+    'help': null,
+    'validation': null,
+    'validation_msg': null,
+    'ask_if': null,
+    'multiplicity': null,
+    'children': [
+      {
+        'id': 3,
+        'name': 'checkbox_field1',
+        'order': 1,
+        'element_type': 'checkbox',
+        'required': true,
+        'default': null,
+        'human': 'Field',
+        'help': null,
+        'validation': null,
+        'validation_msg': null,
+        'ask_if': null,
+        'multiplicity': null,
+        'children': []
+      }]
+  }
+
+  it('should honor basic required flag functionality for the checkbox', function() {
+    var elemData = {
+      'checkbox_field1': true
+    };
+    var validationData = {};
+    ValidationService.validate(checkboxElements, elemData, validationData);
+    expect(validationData.checkbox_field1).toEqual({});
+  });
+
+  it('should honor basic required flag functionality for the checkbox with string truth', function() {
+    var elemData = {
+      'checkbox_field1': 'true'
+    };
+    var validationData = {};
+    ValidationService.validate(checkboxElements, elemData, validationData);
+    expect(validationData.checkbox_field1).toEqual({});
+  });
+
+  it('should honor basic required flag functionality for the checkbox with empty string', function() {
+    var elemData = {
+      'checkbox_field1': ''
+    };
+    var validationData = {};
+    ValidationService.validate(checkboxElements, elemData, validationData);
+    expect(validationData.checkbox_field1).toEqual('This field is required');
+  });
+
+  it('should honor basic required flag functionality for the checkbox with false string', function() {
+    var elemData = {
+      'checkbox_field1': 'false'
+    };
+    var validationData = {};
+    ValidationService.validate(checkboxElements, elemData, validationData);
+    expect(validationData.checkbox_field1).toEqual('This field is required');
+  });
+
+  it('should honor basic required flag functionality for the checkbox with false', function() {
+    var elemData = {
+      'checkbox_field1': false
+    };
+    var validationData = {};
+    ValidationService.validate(checkboxElements, elemData, validationData);
+    expect(validationData.checkbox_field1).toEqual('This field is required');
+  });
+
   var percentageElements = {
     'id': 1,
     'name': 'nestedworkflow',

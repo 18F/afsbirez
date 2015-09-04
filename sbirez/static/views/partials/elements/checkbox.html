@@ -1,6 +1,6 @@
 <div class="field-checkbox field" ng-show="visible" ng-class="{'is-branch': element.ask_if, 'is-error': validationstorage, 'is-focused':highlight===true}">
   <label for="{{::fieldToken}}">
-    <input type="checkbox" ng-model="storage" ng-change="apply()" name="{{::fieldToken}}" id="{{::fieldToken}}" ng-focus="highlightno=true" ng-blur="highlightno=false"><span class="label-text">{{::fieldName}}</span> 
+    <input type="checkbox" ng-model="storage" ng-change="apply()" name="{{::fieldToken}}" id="{{::fieldToken}}" ng-focus="highlight=true" ng-blur="highlight=false"><span class="label-text" jargon="element"></span> 
   </label>
   <span ng-show="validationstorage" class="error-message">{{validationstorage}}</span>
 </div>
