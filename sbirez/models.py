@@ -351,6 +351,20 @@ class Element(models.Model):
             pass
         return bool(datum)
 
+    def _should_ask_this_level(self, data, path):
+        if not self.ask_if:
+            return True
+        reverse = False
+        ask_if = self.ask_if
+        if ask_if.split()[0] == 'not':
+            reverse = True
+            ask_if = ask_if.split()[1]
+        parent = _walk_path(data, path[:-1])
+        result = self.is_trueish(ask_if, parent)
+        if reverse:
+            result = not result
+        return result
+
     def should_ask(self, data, path):
         """Applies ``self.ask_if`` to ``data``
 
@@ -370,18 +384,15 @@ class Element(models.Model):
             question in this context (and thus,
             whether ``required`` fields should
             actually be required, etc.) """
-        if not self.ask_if:
-            return True
-        reverse = False
-        ask_if = self.ask_if
-        if ask_if.split()[0] == 'not':
-            reverse = True
-            ask_if = ask_if.split()[1]
-        parent = _walk_path(data, path[:-1])
-        result = self.is_trueish(ask_if, parent)
-        if reverse:
-            result = not result
-        return result
+
+        # Any ancestors that don't need to be asked imply that
+        # this element doesn't need to be asked, either
+        path_ = path[:]
+        for el in self.ancestry():
+            if not el._should_ask_this_level(data, path_):
+                return False
+            path_.pop(-1)
+        return True
 
     def data_required(self, accept_partial, data, path):
         """Applies ``self.required`` to ``data``.
@@ -400,8 +411,9 @@ class Element(models.Model):
             'optional', 'required', or 'forbidden'
         """
 
-        if (accept_partial or (not self.should_ask(data, path)) or
-            (self.required.lower() == 'false')):
+        if accept_partial or (not self.should_ask(data, path)):
+            return 'optional' # and so are its descendants
+        if self.required.lower() == 'false':
             return 'optional'
         if self.required.lower() == 'true':
             return 'required'
@@ -444,6 +456,7 @@ class Element(models.Model):
 
         # Designed to be called for a full workflow only
         assert self.element_type == 'workflow'
+
 
         for (el, datum, path) in self.with_data(data.get(self.name, {}), []):
             required = el.data_required(accept_partial, data, path)

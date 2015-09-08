@@ -373,6 +373,62 @@
         "fields": {
             "ask_if": null,
             "default": null,
+            "element_type": "med_str",
+            "help": null,
+            "human": "Thy mighty steed's name",
+            "multiplicity": null,
+            "name": "horsie_name",
+            "order": 6,
+            "parent": 2,
+            "required": "False",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 104
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "group",
+            "help": null,
+            "human": null,
+            "multiplicity": null,
+            "name": "horsie_info",
+            "order": 7,
+            "parent": 2,
+            "required": "False",
+            "ask_if": "horsie_name",
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 105
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
+            "element_type": "integer",
+            "help": null,
+            "human": "Number of hoofs",
+            "multiplicity": null,
+            "name": "hoofs",
+            "order": 1,
+            "parent": 105,
+            "required": "True",
+            "ask_if": null,
+            "validation": null,
+            "validation_msg": null
+        },
+        "model": "sbirez.element",
+        "pk": 106
+    },
+    {
+        "fields": {
+            "ask_if": null,
+            "default": null,
             "element_type": "group",
             "help": null,
             "human": "Subquest",

@@ -1363,6 +1363,10 @@ minstrel_data = {
          {"holy_grail_workflow":
              {"get_on_with_it":
                  {"quest_thy_name": "Galahad",
+                  "horsie_name": "Patches",
+                  "horsie_info": {
+                    "hoofs": 4,
+                  },
                   "knights": {
                       "Galahad": {
                           "is_questing": True,
@@ -1431,7 +1435,6 @@ class StaticReportTests(APITestCase):
         # Knights section
         self.assertEqual(rpt[3]['semantic'], 'dl-start')
         self.assertEqual(rpt[3]['element'].name, 'knights')
-        # import ipdb; ipdb.set_trace()
         self.assertEqual([r['semantic'] for r in rpt[4:9]], ['dl',] * 5)
         self.assertEqual(rpt[9]['semantic'], 'dl-end')
         # Minstrels section
@@ -1745,6 +1748,41 @@ class ProposalValidationTests(APITestCase):
         response = self.client.post('/api/v1/proposals/', data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(response.data, {'non_field_errors': ['Not a valid percent']})
+
+    def required_enforced_when_parent_ask_if_true(self):
+        user = _fixture_user(self)
+        data = deepcopy(minstrel_data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["holy_grail_workflow"]["get_on_with_it"]["horsie_info"].pop("hoofs")
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Required field hoofs not found']})
+
+    def required_not_enforced_when_parent_ask_if_false(self):
+        user = _fixture_user(self)
+        data = deepcopy(minstrel_data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["holy_grail_workflow"]["get_on_with_it"]["horsie_name"] = None
+        data["data"]["holy_grail_workflow"]["get_on_with_it"]["horsie_info"].pop("hoofs")
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def required_respects_parents_ask_if(self):
+
+        user = _fixture_user(self)
+        data = deepcopy(minstrel_data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["holy_grail_workflow"]["get_on_with_it"]["minstrels"]["0"]["skill"] = 1001
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid percent']})
+
 
 def _upload_death_star_plans(test_instance, login=True):
     if login:
