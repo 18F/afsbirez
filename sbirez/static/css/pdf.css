@@ -14,6 +14,15 @@ div.wrapper {
     # clear: both;
 }
 
+
+h1, h2
+{
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 auto 1em;
+    text-align: center;
+}
+
 h1 {
   margin-bottom: 1em;
   margin-top: 1em;
@@ -27,6 +36,14 @@ h2 {
 h3, h4, h5 {
   margin-bottom: 0.5em;
   margin-top: 0.5em;
+}
+
+.cover-sheet dt::after,
+.cost-volume dt::after
+{ content: ":"; }
+
+.cost-table {
+  margin:2em 0;
 }
 
 dl {
@@ -58,11 +75,12 @@ div.numbered-question {
 }
 div.numbered-question div.question-number {
   clear: left;
-  width: 6%;
   margin-right: 2%;
   float: left;
   min-height: 1px;
+  font-weight: bold;
 }
+
 div.numbered-question div.question {
   width: 80%;
   margin-right: 2%;
@@ -81,11 +99,11 @@ div.numbered-question div.question.text,div.question.long_str {
 div.numbered-question div.answer.text,div.answer.long_str {
   clear: both;
   float: none !important;
-  width: 100% !important;
+  width: 80% !important;
   font-weight: normal !important;
   text-transform: none !important;
   margin-left: 6em !important;
-  margin-right: 2em !important;
+  margin-right: 4em !important;
 }
 
 div.question div.answer {
@@ -106,9 +124,10 @@ div.line_item div.question,div.answer {
 
 table {
   margin: 4em;
+  width: 90%;
 }
 
-tr.total, tr.major-cost {
+tr.total, .major-cost, dt.total, tr.category {
   margin-top: 1em;
   font-weight: bold;
   text-transform: uppercase;
@@ -118,19 +137,33 @@ tr.subtotal {
   font-weight: bold;
 }
 
+table .category {
+  margin-top: 2em;
+}
+
 th {
   text-align: left;
 }
 
 td, th {
-  padding-left: 1em;
-  padding-right: 1em;
-  padding-top: 0.3em;
-  padding-bottom: 0.3em;
+  padding: 0.3em 0;
 }
 
+.lastcolumn {
+  text-align:right;
+  font-weight: normal;
+  text-transform:none;
+}
 
-.proposal-number {
+.finalcost {
+  font-weight: bold;
+}
+
+.explanatory h2 {
+  text-align: left;
+}
+
+.cover-sheet .cover-sheet--header .proposal-number {
   font-weight: bold;
   font-size: 140%;
   margin-top: 0.5em;
@@ -146,7 +179,18 @@ dl dd.date-submitted {
   width: 20%;
 }
 
-div.due-date {
+dl dt.total {
+  width: 50%;
+  margin-bottom: 1em;
+}
+
+dl dd.total {
+  width: 40%;
+  margin-top: 1em;
+  font-weight: bold;
+}
+
+div.due-date, div.date-submitted {
   font-weight: bold;
   width: 90%;
   text-align: right;

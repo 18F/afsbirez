@@ -1,15 +1,18 @@
-<html>
+<!doctype html>
+<html lang="en">
   <head>
     <!--link rel="stylesheet" href="https://abs.twimg.com/a/1440461805/css/t1/twitter_core.bundle.css"-->
-    <link rel="stylesheet" href="/static/css/pdf.css" />
+    <link rel="stylesheet" href="/static/css/reset.css" /> 
+    <link rel="stylesheet" href="/static/css/pdf.css" /> 
   </head>
   <body>
 
     <main class="static-report cost-volume">
       <div class="wrapper">
-        <header id="cost-volume--header">
-          <h1>Small Business Innovation Research (SBIR) Program</h1>
-          <h2>Cost Proposal</h2>
+        <header class="cost-volume--header">
+          <h1>Small Business Innovation Research (SBIR) Program
+            <span class="cost-volume">Cost Proposal</span>
+          </h1>
 
           <dl id="proposal-info">
             <dt class="date-submitted">Date submitted</dt>
@@ -33,16 +36,12 @@
             <dd class="duns">{{ prop.firm.duns_id }}</dd>
             <dt class="topic-number">Topic number</dt>
             <dd class="topic-number">{{ prop.topic.topic_number }}</dd>
+            <dt class="total">Total dollar amount for this proposal</dt>
+            <dd class="total money">{{ data.cv_totals.estimated_total_cost|default_if_none:"" }}</dd>
           </dl>
       </header>
 
-      <table id="cost-table">
-
-        <tr class="total grand-total section">
-          <td colspan="3">
-            Total dollar amount for this proposal:</td>
-          <td class="money">{{ data.cv_totals.total_cost|default_if_none:"" }}</td>
-        </tr>
+      <table id="cost-table" class="cost-table">
 
         <tr class="category">
           <td colspan="4" >
@@ -52,167 +51,189 @@
         <tr>
           <th>Category and/or Individual:</th>
           <th>Rate/Hour:</th>
-          <th>Est. Hours:</th>
-          <th>Phase I:</th>
+          <th class="lastcolumn">Est. Hours:</th>
+          <th class="lastcolumn">Phase I:</th>
         </tr>
 
         {% for laborer in data.cv_direct_labor.direct_labor.values %}
         <tr>
           <td>{{ laborer.category }}</td>
-          <td>{{ laborer.estimated_hours }}</td>
           <td class="money">{{ laborer.hourly_rate }}</td>
-          <td class="money">{{ laborer.labor_cost }}</td>
+          <td class="lastcolumn">{{ laborer.estimated_hours }}</td>
+          <td class="money lastcolumn">{{ laborer.labor_cost }}</td>
         </tr>
         {% endfor %}
 
         <tr class="subtotal">
           <td colspan="3">
             Subtotal Direct Labor:</td>
-          <td class="money">{{ data.cv_direct_labor.subtotal_direct_labor }}</td>
+          <td class="money lastcolumn">{{ data.cv_direct_labor.subtotal_direct_labor }}</td>
         </tr>
 
         <tr class="calculated">
           <td colspan="3">
             Fringe Benefits, if not included in Overhead, (rate {{ data.cv_direct_labor.fringe_benefit_percentage|default_if_none:"" }} %) x DL =</td>
-          <td class="money">{{ data.cv_direct_labor.fringe_benefit|default_if_none:"" }}</td>
+          <td class="money lastcolumn">{{ data.cv_direct_labor.fringe_benefit|default_if_none:"" }}</td>
         </tr>
 
         <tr class="calculated">
           <td colspan="3">
-            Labor Overhead (rate {{ data.cv_direct_labor.labor_overhead_percentage|default_if_none:"" }}%) x (DL + Fringe) =</td>
-          <td class="money">{{ data.cv_direct_labor.labor_overhead|default_if_none:"" }}</td>
+            Labor Overhead (rate {{ data.cv_direct_labor.labor_overhead_percentage|default_if_none:"" }}%) x (DL + Fringe) =
+          </td>
+          <td class="money lastcolumn">{{ data.cv_direct_labor.labor_overhead|default_if_none:"" }}</td>
         </tr>
 
         <tr class="subtotal">
           <td colspan="3">
             Total Direct Labor (TDL):</td>
-          <td class="money">{{ data.cv_direct_labor.total_direct_labor|default_if_none:"" }}</td>
+          <td class="money lastcolumn">{{ data.cv_direct_labor.total_direct_labor|default_if_none:"" }}</td>
         </tr>
+      </table>
 
+      <table class="cost-table">
         <tr class="category">
           <td colspan="3" >
             Direct Material Costs:</td>
-          <td>Phase I:</td>
+          <td class="lastcolumn">Phase I:</td>
         </tr>
+        {% for material in data.cv_direct_material.direct_material_costs.values %}
+        <tr>
+          <td colspan="3">{{ material.name}}</td>
+          <td class="money lastcolumn">{{ material.material_cost }}</td>
+        </tr>
+        {% endfor %}
 
         <tr class="subtotal">
           <td colspan="3">
             Subtotal Direct Material Costs (DM):</td>
-          <td class="money">{{ data.cv_direct_material.subtotal_direct_material|default_if_none:"" }}</td>
+          <td class="money lastcolumn">{{ data.cv_direct_material.subtotal_direct_material|default_if_none:"" }}</td>
         </tr>
 
         <tr class="calculated">
           <td colspan="3">
             Material Overhead (rate {{ data.cv_direct_material.material_overhead_percentage|default_if_none:"" }}%) x DM:</td>
-          <td class="money">{{ data.cv_direct_material.material_overhead|default_if_none:"" }}</td>
+          <td class="money lastcolumn">{{ data.cv_direct_material.material_overhead|default_if_none:"" }}</td>
         </tr>
 
         <tr class="subtotal">
           <td colspan="3">
             Total Direct Material Costs (TDM):</td>
-          <td class="money">{{ data.cv_direct_material.total_direct_material|default_if_none:"" }}</td>
+          <td class="money lastcolumn">{{ data.cv_direct_material.total_direct_material|default_if_none:"" }}</td>
         </tr>
+      </table>
+
+      <table class="cost-table">
 
         <tr class="category">
           <td colspan="3" >
             Other Direct Costs:</td>
-          <td>Phase I:</td>
+          <td class="lastcolumn">Phase I:</td>
         </tr>
 
-        {% for cost in data.cv_other_direct.other_direct_costs %}
+        {% for cost in data.cv_other_direct.other_direct_costs.values %}
         <tr>
           <td colspan="3" >
             {{ cost.name }}</td>
-          <td class="money">{{ cost.other_cost|default_if_none:"" }}</td>
+          <td class="money lastcolumn">{{ cost.other_cost|default_if_none:"" }}</td>
         </tr>
         {% endfor %}
 
         <tr class="subtotal">
           <td colspan="3">
             Subtotal Other Direct Costs (ODC): </td>
-          <td class="money">{{ data.cv_other_direct.subtotal_other }}</td>
+          <td class="money lastcolumn">{{ data.cv_other_direct.subtotal_other }}</td>
         </tr>
 
         <tr class="calculated">
           <td colspan="3">
             Direct Cost Overhead (rate {{ data.cv_other_direct.other_overhead_percentage|default_if_none:"" }} %) x ODC</td>
-          <td class="money">{{ data.cv_other_direct.other_overhead|default_if_none:"" }}</td>
+          <td class="money lastcolumn">{{ data.cv_other_direct.other_overhead|default_if_none:"" }}</td>
         </tr>
 
         <tr class="subtotal">
           <td colspan="3">
             Total Other Direct Costs (TODC): </td>
-          <td class="money">{{ data.cv_other_direct.total_other_direct|default_if_none:"" }}</td>
+          <td class="money lastcolumn">{{ data.cv_other_direct.total_other_direct|default_if_none:"" }}</td>
         </tr>
 
+      </table>
+
+      <table class="cost-table">
         <tr class="calculated">
           <td colspan="3">
             G&amp;A (rate {{ data.cv_totals.general_admin_rate|default_if_none:"" }} %) x
             (base: {{ ga_basis }})</td>
-          <td class="money">{{ data.cv_totals.general_admin|default_if_none:"" }}</td>
+          <td class="money lastcolumn">{{ data.cv_totals.general_admin|default_if_none:"" }}</td>
         </tr>
 
         <tr class="subtotal">
           <td colspan="3">
             Total Cost:</td>
-          <td class="money">{{ data.cv_totals.total_cost|default_if_none:"" }}</td>
+          <td class="money lastcolumn">{{ data.cv_totals.total_cost|default_if_none:"" }}</td>
         </tr>
 
         <tr class="calculated">
           <td colspan="3">
             Fee or Profit (rate {{ data.cv_totals.fee_or_profit_rate|default_if_none:"" }} %)</td>
-          <td class="money">{{ data.cv_totals.fee_or_profit|default_if_none:"" }}</td>
+          <td class="money lastcolumn">{{ data.cv_totals.fee_or_profit|default_if_none:"" }}</td>
         </tr>
 
         <tr class="total grand-total section">
           <td colspan="3">
             Total Estimated Cost:</td>
-          <td class="money">{{ data.cv_totals.estimated_total_cost|default_if_none:"" }}</td>
+          <td class="money lastcolumn finalcost">{{ data.cv_totals.estimated_total_cost|default_if_none:"" }}</td>
         </tr>
+      </table>
 
+      <table class="cost-table">
         <tr class="major-cost">
           <td colspan="3">
             Discretionary Technical Assistance:</td>
-          <td class="money">{{ data.cv_totals.discretionary_technical_assistance|default_if_none:"" }}</td>
+          <td class="money lastcolumn finalcost">{{ data.cv_totals.discretionary_technical_assistance|default_if_none:"" }}</td>
         </tr>
-
       </table>
 
-      <section id="explanatory">
+      <section class="explanatory">
         <h2>Explanatory material relating to the cost proposal:</h2>
         <p>{{ data.cv_general.cost_volume_explanatory|default_if_none:"" }}</p>
+      </section>
 
-        <section id="dcaa-review">
-          <h3>DCAA Review</h3>
-          <div>If the Defense Contracting Audit Agency (DCAA) has performed a review of your projects within the past 12 months,
-please provide the following:</div>
-          <dl id="dcaa-review-office">
-            <dt>Reviewing Office</dt>
-            <dd>{{ data.cv_general.dcaa_review.reviewing_office|default_if_none:"" }}</dd>
-            <dt>Individual</dt>
-            <dd>{{ data.cv_general.dcaa_review.individual|default_if_none:"" }}</dd>
-            <dd></dd>
-            <dt>Address</dt>
-            <dd>{{ data.cv_general.dcaa_review.address|linebreaks|default_if_none:"" }}</dd>
-            <dt>Phone</dt>
-            <dd>{{ data.cv_general.dcaa_review.phone|default_if_none:"" }}</dd>
-          </dl>
-        </section>
+      <br />
+      <section class="dcaa-review">
+        <div>&gt;&gt;If the Defense Contracting Audit Agency (DCAA) has performed a review of your projects within the past 12 months, please provide the following:</div>
+        <dl id="dcaa-review-office">
+          <dt>Reviewing Office</dt>
+          <dd>{{ data.cv_general.dcaa_review.reviewing_office|default_if_none:"" }}</dd>
+          <dt>Individual</dt>
+          <dd>{{ data.cv_general.dcaa_review.individual|default_if_none:"" }}</dd>
+          <dt>Address</dt>
+          <dd>{{ data.cv_general.dcaa_review.address|linebreaks|default_if_none:"" }}</dd>
+          <dt>Phone</dt>
+          <dd>{{ data.cv_general.dcaa_review.phone|default_if_none:"" }}</dd>
+        </dl>
 
-        <div class="question">
-          <div class="question">Will you require the use of any government property in the performance of this proposal?</div>
-          <div class="answer">{{ data.cv_general.use_government_property_yn|yesno }}</div>
-        </div>
-        <div class="question">
-          <div class="question">If Yes, identify</div>
-          <div class="answer">{{ data.cv_general.government_property_to_use|default_if_none:"" }}</div>
-        </div>
-        <div class="question">
-          <div class="question">Specify the type of payment desired:</div>
-          <div class="answer">{{ data.cv_general.payment_desired|default_if_none:"" }}</div>
-        </div>
-
+      </section>
+      <br />
+      <br />
+      <div class="question gov-property">
+        <div class="question">&gt;&gt;Will you require the use of any government property in the performance of this proposal?</div>
+        {% if data.cv_general.use_government_property_yn == "false" %}
+            <div class="answer">{{ False |yesno }}</div>
+          </div>
+        {% else %}
+            <div class="answer">{{ data.cv_general.use_government_property_yn |yesno }}</div>
+          </div>
+          <div class="question">
+            <div class="question">If Yes, identify</div>
+            <div class="answer">{{ data.cv_general.government_property_to_use|default_if_none:"" }}</div>
+          </div>
+        {% endif %}
+      <br />
+      <div class="question">
+        <div class="question">&gt;&gt;Specify the type of payment desired:</div>
+        <div class="answer">{{ data.cv_general.payment_desired|default_if_none:"" }}</div>
       </div>
+
     </main>
 
   </body>

@@ -13,15 +13,12 @@
             <span class="cover-sheet">Proposal Cover Sheet</span>
           </h1>
           <p>Knowingly and willfully making any false, fictitious, or fraudulent statements or representations may be a felony under the Federal Criminal False Statement Act (18 USC Sec 1001), punishable by a fine of up to $10,000, up to five years in prison, or both.</p>
-          <dl>
-            <dt class="date-submitted">Date submitted</dt>
-            <dd class="date-submitted">{{ prop.date_submitted }}</dd>
-            <dt class="proposal-number">Proposal number</dt>
-            <dd class="proposal-number">{{ prop.proposal_number }}</dd>
-          </dl>
+            <div class="proposal-number">Proposal Number: {{ prop.proposal_number }}</div>
+          <div class="date-submitted">Date Submitted: {{ prop.date_submitted }}</div>
           <div class="due-date">{{ prop.topic.solicitation.name }} due
-            {{ prop.topic.solicitation.proposals_end_date|date:"d F Y" }}</div>
+          {{ prop.topic.solicitation.proposals_end_date|date:"d F Y" }}</div>
         </header>
+        <hr />
         <section class="cover-sheet--agency-information">
           <h1>Agency information</h1>
           <dl>
@@ -35,6 +32,7 @@
             <dd class="proposal-title">{{ prop.topic.title }}</dd>
           </dl>
         </section>
+        <hr />
         <section class="cover-sheet--firm-information">
           <h1>Firm information</h1>
           <dl>
@@ -53,11 +51,10 @@
             <dt class="sba-sbc">SBA SBC</dt>
             <dd class="sba-sbc">{{ prop.firm_sbc_id }}</dd>
           </dl>
-        </section>
+        </section><div></div>
           {% for itm in report %}
             {% if itm.semantic|first == 'h' %}
               </section>
-              <hr />
               <section class="{{ itm.element.element_type }}">
               <{{ itm.semantic }} class="{{ itm.element.element_type }}">
                 {{ itm.question }}

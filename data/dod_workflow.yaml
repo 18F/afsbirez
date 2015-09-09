@@ -687,7 +687,6 @@
           element_type: calculated 
           validation: estimated_total_cost 
           validation_msg: Must not exceed $150,000
-          required: True
         -
           name: phase_I_duration
           human: Phase I Duration (in months)

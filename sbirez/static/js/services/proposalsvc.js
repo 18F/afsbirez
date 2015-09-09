@@ -770,9 +770,9 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
         }
         // apply the calculated field expression
         if (variables[0] === 'sum') {
-          data[order[0]] = sum(params);
+          data[order[0]] = Math.round((sum(params) + 0.00001) * 100) / 100;
         } else {
-          data[order[0]] = expr.apply(null, params);
+          data[order[0]] = Math.round((expr.apply(null, params) + 0.00001) * 100) / 100;
         }
         if (isNaN(data[order[0]])) {
           data[order[0]] = {};
@@ -830,7 +830,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
               params.push(calculatedCallbacks[varName].value);
             }
           }
-          record.callbacks[index].callback(record.callbacks[index].calculation.apply(null, params));
+          record.callbacks[index].callback(Math.round((record.callbacks[index].calculation.apply(null, params) + 0.00001) * 100) / 100);
         }
       }
     }
@@ -845,7 +845,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
               params.push(calculatedCallbacks[key].value);
             }
           }
-          record.callbacks[index].callback(sum(params));
+          record.callbacks[index].callback(Math.round((sum(params) + 0.00001) * 100) / 100);
         }
       }
     }
