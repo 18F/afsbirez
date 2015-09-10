@@ -62,7 +62,7 @@ class AddressSerializer(serializers.ModelSerializer):
 class PersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
-        fields = ('name', 'title', 'email', 'phone', 'fax')
+        fields = ('name', 'title', 'email', 'phone', 'fax', 'office')
 
 
 class NaicsSerializer(serializers.ModelSerializer):

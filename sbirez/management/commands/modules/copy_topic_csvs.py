@@ -1,4 +1,6 @@
-from sbirez.models import Topic, Solicitation, Phase, Keyword, Reference, Area
+from sbirez.models import Topic, Solicitation, Phase
+from sbirez.models import Keyword, Reference, Area
+from sbirez.models import Person, PointOfContactRelationship
 from django.core.management.base import BaseCommand
 from django.core.management import call_command, CommandError
 from django.conf import settings
@@ -30,6 +32,25 @@ area_names = {
 def get_area_name(raw):
     return area_names.get(raw, raw.title())
 
+def _add_points_of_contact(raw_topic, topic):
+    tpoc_order = 1
+    while True:
+        tpoc_label = '' if tpoc_order == 1 else str(tpoc_order)
+        tpoc_name = raw_topic.get('TPoc%s' % tpoc_label, '').strip()
+        if not tpoc_name:
+            break    # no more TPOCs
+        tpoc = Person(name=tpoc_name,
+                      email=raw_topic.get('TPoc%sEmail' % tpoc_label),
+                      phone=raw_topic.get('TPoc%sPhone' % tpoc_label),
+                      fax=raw_topic.get('TPoc%sFax' % tpoc_label),
+                      office=raw_topic.get('Tpoc%sOffSym' % tpoc_label),
+                      )
+        tpoc.save()
+        relat = PointOfContactRelationship(poc=tpoc,
+            topic=topic, order=tpoc_order)
+        tpoc_order += 1
+        relat.save()
+
 def load(solicitation_name, clear=False):
     solicitation = Solicitation.objects.filter(
         name=solicitation_name).first()
@@ -37,6 +58,7 @@ def load(solicitation_name, clear=False):
     raw_commands = csv.DictReader(open('data/command.csv'))
     raw_topics = csv.DictReader(open('data/topic.csv'))
     if clear:
+        # TODO: clear out tpoc people from these topics?
         Topic.objects.filter(solicitation__name=solicitation_name).delete()
     agencies = {a['AgencyID']: a['AgencyName'] for a in raw_agencies}
     commands = {a['CommandID']: a['CommandName'] for a in raw_commands}
@@ -53,6 +75,7 @@ def load(solicitation_name, clear=False):
                       fts='',
                       )
         topic.save()
+        _add_points_of_contact(raw_topic, topic)
         phases = split_retaining_splitter(phase_splitter, matches.group('phases'))
         for phase_text in phases:
             phase = Phase(phase=phase_text, topic=topic)
