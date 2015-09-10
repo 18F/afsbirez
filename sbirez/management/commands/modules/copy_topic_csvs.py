@@ -47,7 +47,7 @@ def _add_points_of_contact(raw_topic, topic):
                       )
         tpoc.save()
         relat = PointOfContactRelationship(poc=tpoc,
-            topic=topic, order=tpoc_order)
+            topic=topic, priority=tpoc_order)
         tpoc_order += 1
         relat.save()
 

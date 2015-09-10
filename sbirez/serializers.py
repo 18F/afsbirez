@@ -220,6 +220,7 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
     references = ReferenceSerializer(many=True)
     phases = PhaseSerializer(many=True)
     keywords = KeywordSerializer(many=True)
+    tech_points_of_contact = PersonSerializer(many=True)
     areas = AreaSerializer(many=True)
     saved = serializers.SerializerMethodField()
     proposal = serializers.SerializerMethodField()
@@ -250,6 +251,7 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'topic_number', 'url', 'title', 'agency',
                     'program', 'description', 'objective',
                     'solicitation', 'references', 'phases',
+                    'tech_points_of_contact',
                     'keywords', 'areas', 'saved', 'proposal'
                     )
 

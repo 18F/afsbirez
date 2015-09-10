@@ -815,7 +815,13 @@ class TopicTests(APITestCase):
         self.assertEqual(response.data["count"], 159)
 
     def test_pocs_displayed_in_order(self):
-        pass
+        response = self.client.get('/api/v1/topics/507/')
+        self.assertEqual(response.data['tech_points_of_contact'][0]['title'],
+                         'POC 1')
+        self.assertEqual(response.data['tech_points_of_contact'][1]['title'],
+                         'POC 2')
+        self.assertEqual(response.data['tech_points_of_contact'][2]['title'],
+                         'POC 3')
 
     # Check that pagination is behaving itself
     # (this may qualify as 'testing the library instead of the code')

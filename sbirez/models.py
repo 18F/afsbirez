@@ -424,10 +424,10 @@ class Topic(models.Model):
 class PointOfContactRelationship(models.Model):
     poc = models.ForeignKey(Person)
     topic = models.ForeignKey(Topic)
-    order = models.IntegerField()
+    priority = models.IntegerField(blank=False)
 
     class Meta:
-        ordering = ['order', ]
+        ordering = ['priority', ]
 
 
 class Proposal(models.Model):
