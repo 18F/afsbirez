@@ -17,6 +17,7 @@
           human: Does your firm allow for the release of its contact information
                  to Economic Development Organizations
                  <jargon economic_development_organizations>?
+          report_question_number: 1
           element_type: bool
           required: True
           jargons:
@@ -35,6 +36,7 @@
           human: Are you a small business as described in section 3.15
                  <jargon section315> of the solicitation with no more than 500
                  employees including affiliates?
+          report_question_number: 2
           element_type: bool
           required: True
           jargons:
@@ -65,6 +67,7 @@
           name: ownership_control_requirements
           human: Does your business concern meet the ownership and control 
                  requirements in 13 CFR 121.702<jargon cfr121702>?
+          report_question_number: 3
           element_type: bool
           required: True
           jargons:
@@ -95,6 +98,7 @@
         -
           name: majority_owned_by_corp
           human: Is 50% or more of your firm owned or managed by a corporate entity?
+          report_question_number: 4
           element_type: bool
           required: True
         -
@@ -103,6 +107,7 @@
                  work in Phase I be carried out by your small business as
                  described in section 4.2 <jargon section42_twothirds> of the
                  solicitation?
+          report_question_number: 5
           element_type: bool
           required: True
           jargons:
@@ -117,6 +122,7 @@
           human: Is primary employment of the principal investigator <jargon pi>
                  with your firm as described in section 4.2
                  <jargon section42_primaryemployment> of the solicitation?
+          report_question_number: 6
           element_type: bool
           required: True
           jargons:
@@ -153,11 +159,13 @@
           human: Has your firm been convicted of a fraud related crime involving
                  SBIR and/or STTR funds or found civilly liable for a fraud
                  related violation involving Federal funds?
+          report_question_number: 7
           element_type: bool
           required: True
         -
           name: fraud_conviction_company
           human: "If yes, provide the name of the associated company:"
+          report_text: ""
           element_type: med_str
           ask_if: fraud_conviction
           required: True
@@ -167,11 +175,13 @@
                  Official (CO) or owner been convicted of a fraud-related crime
                  involving SBIR and/or STTR funds or found civilly liable for a
                  fraud-related violation involving Federal funds?
+          report_question_number: 8
           element_type: bool
           required: True
         -
           name: pi_fraud_conviction_name
           human: "If yes, please provide the individual's name (First, Middle, Last):"
+          report_text: ""
           element_type: med_str
           ask_if: pi_fraud_conviction
           required: True
@@ -180,6 +190,7 @@
           human: Has your firm met the performance benchmarks in section 3.1
                  <jargon section31> of the solicitation and listed by the SBA on
                  their website as eligible to participate?
+          report_question_number: 9
           element_type: bool
           required: True
           jargons:
@@ -200,6 +211,7 @@
           human: Is your firm registered in the SBA's venture capital database
                  as majority-owned by venture capital operating companies, hedge
                  funds, or private equity firms<jargon section44>?
+          report_question_number: 10
           element_type: bool
           required: True
           jargons:
@@ -214,12 +226,14 @@
           name: single_venture_capital_owned
           human: Is your firm more than 50% owned by a single Venture Capital
                  Owned Company (VCOC), hedge fund, or private equity firm?
+          report_question_number: 11
           element_type: bool
           required: True
         -
           name: multiple_venture_capital_owned
           human: Is your firm more than 50% owned by multiple business concerns
                  that are VCOCs, hedge funds, or private equity firms?
+          report_question_number: 12
           element_type: bool
           required: True
         -
@@ -240,12 +254,14 @@
           name: employee_count
           human: Number of employees including all affiliates (average for 
                  preceding 12 months)
+          report_question_number: 13
           element_type: integer
           required: True
         -
           name: firm_affiliated
           human: Is your firm affiliated as set forth in 13 CFR
                  121.103<jargon cfr121103>?
+          report_question_number: 14
           element_type: bool
           required: True
           jargons:
@@ -534,12 +550,14 @@
           name: disadvantaged_small_business
           human: As defined by the SBA, are you a socially or economically
                  disadvantaged small business?
+          report_question_number: 15A
           element_type: bool
           required: True
         -
           name: women_owned_small_business
           human: As defined by the SBA, are you a Woman-Owned small
                  business<jargon wosb> (WOSB)?
+          report_question_number: 15B
           element_type: bool
           required: True
           jargons:
@@ -553,6 +571,7 @@
           name: hubzone_small_business
           human: As defined by the SBA, are you a certified HUBZone
                  <jargon hubzone> small business concern?
+          report_question_number: 15C
           element_type: bool
           required: True
           jargons:
@@ -567,6 +586,7 @@
           name: service_disabled_vet_small_business
           human: As defined by the SBA, are you a Service-Disabled Veteran-Owned
                  small business <jargon sdvosb> (SDVOSB)?
+          report_question_number: 15D
           element_type: bool
           required: True
           jargons:
@@ -583,6 +603,7 @@
                  other agreed upon agency, performed a review of your accounts
                  or records in connection with government contracts or
                  subcontracts within the past 12 months?
+          report_question_number: 16
           element_type: bool
           required: True
           jargons:
@@ -666,7 +687,6 @@
           element_type: calculated 
           validation: estimated_total_cost 
           validation_msg: Must not exceed $150,000
-          required: True
         -
           name: phase_I_duration
           human: Phase I Duration (in months)
@@ -679,6 +699,7 @@
           element_type: bool
           human: Does the proposed cost include Discretionary Technical
                  Assistance <jargon dta> (DTA)?
+          report_question_number: 17
           required: True
           jargons:
           -
@@ -762,6 +783,7 @@
           human: Has a proposal for essentially equivalent <jargon section33>
                  work been submitted to other US government agencies or DoD
                  components?
+          report_question_number: 18
           required: True
           jargons:
           -
@@ -786,6 +808,7 @@
           element_type: bool
           ask_if: essentially_equivalent_work_yn
           human: Has a contract been awarded for any of the proposals listed above?
+          report_question_number: 19
           required: True
         -
           name: essentially_equivalent_contract_number
@@ -800,6 +823,7 @@
                  252.227-7017 "Identification and assertions use, release, or
                  disclosure restriction"? See Section 11.5 <jargon section115>
                  of the solicitation.
+          report_question_number: 20
           required: True
           jargons:
           -
@@ -836,6 +860,7 @@
                   or recombinant DNA as described in section 3.11
                   <jargon section311>, 3.12<jargon section312>, and 3.13
                   <jargon section313> of the solicitation?
+          report_question_number: 21
           required: True
           jargons:
           -
@@ -936,6 +961,7 @@
           element_type: bool
           human: Are teaming partners or subcontractors
                  <jargon subcontractor> proposed?
+          report_question_number: 22
           required: True
           jargons:
           -
@@ -949,6 +975,7 @@
           name: teaming_partners
           element_type: line_item
           human: Check all that apply
+          report_text: ""
           ask_if: teaming_partners_yn
           multiplicity: University, 
                         Historically Black Colleges and Universities and Minority Institutions,
@@ -977,6 +1004,7 @@
           human: Are you proposing to use foreign nationals
                  as defined in section 3.5<jargon section35> of the solicitation
                  for work under the proposed effort?
+          report_question_number: 23
           required: True
           jargons:
           -
@@ -1056,16 +1084,19 @@
             name: pi_time_percentage
             human: What percentage of the principal investigator's total time
                    will be on the project?
+            report_question_number: 24
             element_type: percentage
             required: True
           -
             name: pi_is_woman
             human: Is this person a woman?
+            report_question_number: 25
             element_type: bool
             required: True
           -
             name: pi_is_disadvantaged
             human: Is this person socially/economically disadvantaged?
+            report_question_number: 26
             element_type: bool
             required: True
         -
@@ -1107,6 +1138,7 @@
           human: Is your firm's principal investigator, corporate official, or
                  owner a faculty member or student of an institution of higher
                  education?
+          report_question_number: 27
           element_type: bool
           required: True
     -
@@ -1298,6 +1330,7 @@
           name: direct_labor
           element_type: line_item
           multiplicity: 8
+          report_text: ""
           children:
           -
             name: category

@@ -372,7 +372,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
           }
         }
         // check to see if any validation logic is defined
-        if (element.validation !== null && data && data[element.name] && !errorDetected) {
+        if (element.validation !== null && element.element_type !== 'calculated' && data && data[element.name] && !errorDetected) {
           if (!processValidation(element.validation, data[element.name])) {
             validationResults[element.name] = element.validation_msg;
           } else {
@@ -442,7 +442,7 @@ angular.module('sbirezApp').factory('ValidationService', function() {
           matchValidationResults(element, validationResults);
         }
       }
-      if (element.validation !== null && data && data[element.name] && !requiredSet) {
+      if (element.validation !== null && element.element_type !== 'calculated' && data && data[element.name] && !requiredSet) {
         if (!processValidation(element.validation, data[element.name])) {
           validationResults[element.name] = element.validation_msg;
         } else {

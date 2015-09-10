@@ -21,8 +21,8 @@ a{ color: #0064be; }
 a:hover{ color: #003c72; }
 
 a.skip-nav{ position: absolute; left: -9999em; }
-a.a-return{ 
-  color: #666; 
+a.a-return{
+  color: #666;
   font-size: 14px;
   display: block;
   padding-top: 8px;
@@ -40,7 +40,7 @@ a.a-return::before{
   line-height: 24px;
   border-radius: 100%;
   text-align: center;
-  
+
 }
 a.a-return:hover{ color: #333; }
 a.a-return:hover::before{ color: #444; background: #eee;}
@@ -59,7 +59,7 @@ p, li, dd, dt {
     -webkit-column-count: 2;
     -moz-column-count: 2;
     -column-count: 2;
-  } 
+  }
 }
 
 dt{
@@ -101,16 +101,16 @@ h1.primary-header {
   color: #333;
 }
 
-@media screen and (min-width: 711.11px) { 
-  h1.primary-header{ 
-    font-size: 40px; 
+@media screen and (min-width: 711.11px) {
+  h1.primary-header{
+    font-size: 40px;
     margin-bottom: 0.4em;
-  } 
+  }
 }
 
-main ol{ 
+main ol{
   margin-bottom: 2em;
-  padding-top: 1em; 
+  padding-top: 1em;
 }
 
 div.notice{
@@ -121,7 +121,7 @@ div.notice{
   margin: 1em 0;
   background: #fff2df;
   color: #4f0e00;
-  
+
 }
 div.notice a{
   color: #af3b00;
@@ -183,7 +183,7 @@ body:not(:-moz-handler-blocked) fieldset {
 
 fieldset > legend,
 .field span.label-text{
-  display: block; 
+  display: block;
   max-width: 40em;
   margin: 0 0 8px;
   padding: 0;
@@ -212,7 +212,7 @@ textarea{
 }
 
 .field-select select{
-  min-width: 0; 
+  min-width: 0;
   background: none;
   padding-right: 24px;
   overflow: hidden;
@@ -220,8 +220,8 @@ textarea{
   display: block;
 }
 
-.field-select span.label-select{ 
-  position: relative; 
+.field-select span.label-select{
+  position: relative;
   width: 33%;
   display: block;
 }
@@ -247,7 +247,7 @@ textarea{
 
 .field-select span.label-select::after{
   right: 12px;
-  margin-bottom: -9px;  
+  margin-bottom: -9px;
 }
 
 .field-total-revenue::after{ display: none; }
@@ -270,7 +270,7 @@ button,
   font: inherit;
   padding: 9px 12px;
   margin: 0;
-  line-height: 16px;  
+  line-height: 16px;
   cursor: pointer;
   text-decoration: none;
   border-radius: 3px;
@@ -278,14 +278,16 @@ button,
   vertical-align: middle;
 }
 
-button:hover {
+button:hover,
+.button:hover {
   background: #00834d;
   border-color: #00834d;
   color: white;
   box-shadow: 0 1px 0 #f3f3f3;
 }
 
-button:active {
+button:active,
+.button:active {
   color: #7aa79d;
   background: #006e52;
   border-color: #006e52;
@@ -293,16 +295,16 @@ button:active {
 }
 
 button.button-remove{ color: #e51600; }
-button.button-remove:hover{ 
-  background: #cc1602; 
-  border-color: #cc1602; 
+button.button-remove:hover{
+  background: #cc1602;
+  border-color: #cc1602;
   color: white;
 }
 
-button.button-remove:active{ 
-  color: #ffb302; 
+button.button-remove:active{
+  color: #ffb302;
   background: #911002;
-  border-color: #911002; 
+  border-color: #911002;
 }
 
 form > h1,
@@ -323,7 +325,7 @@ form > h1:first-of-type{
 }
 
 form a.a-return + h1{
-  margin-top: 1em !important; 
+  margin-top: 1em !important;
 }
 
 div.field,
@@ -364,7 +366,7 @@ fieldset.fieldset-singlelineitem > div.field.is-error { margin-bottom:0; }
 }
 
 .fieldset-dynamic .fieldset-dynamic-item a.fieldset-dynamic-item-remove:hover{
-  background: #cc1602; 
+  background: #cc1602;
   color: white;
   text-decoration: none;
 }
@@ -490,7 +492,7 @@ section.fieldset div.field:last-of-type+section.fieldset{
 .fieldset-radio > legend,
 section.fieldset.fieldset-radio > h1,
 div.field span.label-text{
-  display: block; 
+  display: block;
   max-width: 40em;
   margin: 0 0 10px;
   padding: 0;
@@ -500,8 +502,8 @@ div.field span.label-text{
   color: #333;
 }
 
-div.field.field-radio{ 
-  display: inline-block; 
+div.field.field-radio{
+  display: inline-block;
   vertical-align: middle;
   margin-bottom: 0;
   margin-right: 4px;
@@ -529,8 +531,8 @@ div.field.field-radio label{
 
 div.field.field-checkbox span.label-text,
 div.field.field-radio span.label-text,
-div.field.field-radio input{ 
-  display: inline; 
+div.field.field-radio input{
+  display: inline;
   vertical-align: middle;
 }
 
@@ -540,8 +542,8 @@ div.field.field-checkbox{
   margin-bottom: 8px;
 }
 
-div.field.field-checkbox input{ 
-  font-size: 1em; 
+div.field.field-checkbox input{
+  font-size: 1em;
   line-height: 1;
   position: absolute;
   left: 0;
@@ -567,17 +569,17 @@ div.field.is-error textarea{
 
 div.field.is-error span.error-message,
 section.fieldset.fieldset-radio.is-error span.error-message{
-  color: #990017; 
+  color: #990017;
   display: block;
 }
 
 div.field.is-error span.error-message,
 section.fieldset.fieldset-radio.is-error span.error-message{
-  color: #af1830; 
+  color: #af1830;
   font-size: 14px;
   padding-top: 6px;
   display: block;
-  font-style: italic; 
+  font-style: italic;
 }
 
 /* @group reference */
@@ -634,12 +636,12 @@ fieldset.fieldset-mailing-address div.field.field-state,
 fieldset.fieldset-mailing-address div.field.field-zip{
   float: left;
   width: 25%;
-  padding-right: 0.67em; 
+  padding-right: 0.67em;
   margin-bottom: 0;
 }
 
-fieldset.fieldset-mailing-address div.field.field-city{ 
-  width: 50%; 
+fieldset.fieldset-mailing-address div.field.field-city{
+  width: 50%;
 }
 
 fieldset.fieldset-mailing-address div.field.field-city input,
@@ -653,7 +655,7 @@ fieldset.fieldset-mailing-address div.field.field-zip input{
 
 .field-collaborator-name input,
 .field-collaborator-point-of-contact input{
-  width: 75%; 
+  width: 75%;
 }
 
 .field-email input,
@@ -763,18 +765,18 @@ main div.wrap > form { max-width: 576px; }
     padding-right: 16px;
     border-right: 1px solid #eee;
   }
-  
+
    body.proposal form,
    .proposal-details main div.wrap > form {
     margin-right: 224px;
    }
-  
-  
+
+
 }
 
 
-main form footer{ 
-  margin-top: 32px; 
+main form footer{
+  margin-top: 32px;
   padding-bottom: 64px;
   position: relative;
 }
@@ -842,9 +844,9 @@ header.banner h1 span.icon-logo{
 
 header.banner form,
 header.banner div.field,
-header.banner div.field label { 
+header.banner div.field label {
   display: block;
-  width: 100%; 
+  width: 100%;
 }
 
 header.banner form{
@@ -861,18 +863,18 @@ header.banner form footer{
 header.banner nav::after{
   content: "";
   display: table;
-  clear: both; 
+  clear: both;
 }
 
 header.banner nav{
   margin-top: 4px;
 }
-header.banner nav a{ 
+header.banner nav a{
   float: left;
   padding: 0 4px;
 }
 header.banner nav a:hover{
-  color: #a3d3ff; 
+  color: #a3d3ff;
 }
 
 header.banner div.notification {
@@ -891,8 +893,8 @@ body.company header.banner nav a.company {
 header.banner form span.label-text,
 header.banner form button{ position: absolute; left: -9999em; }
 
-header.banner form div.field{ 
-  position: relative; 
+header.banner form div.field{
+  position: relative;
   margin: 0;
 }
 header.banner form div.field::after{
@@ -923,8 +925,8 @@ header.banner form div.field input {
 
 
 @media screen and (min-width: 355.55px) {
-  header.banner nav{ 
-    font-size: 12px; 
+  header.banner nav{
+    font-size: 12px;
     position: absolute;
     top: 1px;
     right: 0;
@@ -936,12 +938,12 @@ header.banner form div.field input {
 
   header.banner div.wrap{ padding-left: 124px; }
 
-  header.banner form{ 
-    margin-top: 3px; 
+  header.banner form{
+    margin-top: 3px;
     margin-bottom: 0;
   }
-  
-  header.banner nav{ 
+
+  header.banner nav{
     position: static;
     font-size: 14px;
     margin-left: -10px;
@@ -962,17 +964,17 @@ header.banner form div.field input {
   header.banner{
     line-height: 32px;
   }
-  
-  header.banner div.wrap{ 
+
+  header.banner div.wrap{
     padding: 8px 288px 9px 156px;
   }
-  
+
   header.banner h1{
     width: 156px;
     margin-left: -156px;
     margin-top: 2px;
   }
-    
+
   header.banner h1 span.icon-logo{
     width: 42px;
     height: 36px;
@@ -987,9 +989,9 @@ header.banner form div.field input {
     right: -0.8em;
     top: 6px;
     width: auto;
-  } 
+  }
 
-  header.banner div.notification div.wrap{ 
+  header.banner div.notification div.wrap{
     padding: 8px 156px 8px 156px;
   }
 }
@@ -1075,8 +1077,8 @@ header.banner form div.field input {
 }
 
 .topic .topic-nav a:hover,
-.topic .topic-nav button:hover{ 
-  color: #032353; 
+.topic .topic-nav button:hover{
+  color: #032353;
   border-color: inherit;
   text-decoration: none;
 }
@@ -1088,7 +1090,7 @@ header.banner form div.field input {
     padding-right: 208px;
     position: relative;
   }
-  
+
   .topic .topic-nav{
     position: absolute;
     right: 0;
@@ -1099,7 +1101,7 @@ header.banner form div.field input {
   .topic .topic-nav form{ display: block; }
 
   .topic .topic-nav a,
-  .topic .topic-nav button, 
+  .topic .topic-nav button,
   .topic .topic-nav .stats {
     display: block;
     width: 100%;
@@ -1107,7 +1109,7 @@ header.banner form div.field input {
     margin: 0;
     border-bottom: 1px solid #eee !important;
   }
-  
+
   .topic .topic-nav .stats{
     font-size: 14px;
   }
@@ -1117,7 +1119,7 @@ header.banner form div.field input {
     background: #f8f8f8;
     cursor: pointer;
   }
-  
+
 }
 
 /* @end */
@@ -1210,7 +1212,7 @@ nav.toc ol li > span{
   padding-bottom: 0;
 }
 
-nav.toc ol li ol{ 
+nav.toc ol li ol{
   border-left: 3px solid #f3f3f3;
   padding-left: 6px;
   padding-top: 0;
@@ -1221,7 +1223,7 @@ nav.toc ol li ol{
 nav.toc ol li.is-incomplete,
 nav.toc ol li.is-complete,
 nav.toc ol li.is-error{
-  padding-left: 32px; 
+  padding-left: 32px;
   line-height: 24px;
 }
 
@@ -1234,7 +1236,7 @@ nav.toc ol li.is-error::before{
   border: 1px solid #ccc;
   position: absolute;
   left: 0;
-  top: 4px; 
+  top: 4px;
 }
 
 nav.toc ol li.is-error::after,
@@ -1277,7 +1279,7 @@ body.company h1.primary-header,
 body.user h1.primary-header{
   margin-bottom: 24px;
   padding-top: 24px;
-  margin-top: 0;  
+  margin-top: 0;
 }
 
 /* @end */
@@ -1303,14 +1305,14 @@ body.home main form{
 }
 
 body.home main form div.field input[type=text],
-body.home main form div.field input[type=search]{ 
-  border: none; 
+body.home main form div.field input[type=search]{
+  border: none;
 }
 
-body.home main form footer{ 
+body.home main form footer{
   padding: 0;
   margin: 0;
-  position: static; 
+  position: static;
 }
 body.home main form .button{
   color: white;
@@ -1333,9 +1335,9 @@ body.home main form .button:hover{
     font-size: 48px;
     margin-bottom: 0.4em;
   }
-  
-  body.home main p{ 
-    font-size: 20px; 
+
+  body.home main p{
+    font-size: 20px;
     max-width: 32em;
   }
 }
@@ -1349,8 +1351,8 @@ body.home main form{ border: none; }
 
 .labor-related-costs,
 .direct-material-costs,
-.dynamic-items{ 
-  margin-bottom: 24px; 
+.dynamic-items{
+  margin-bottom: 24px;
   position: relative;
 }
 
@@ -1416,12 +1418,12 @@ body.home main form{ border: none; }
   color: #e51600;
   border-radius: 3px;
   padding: 4px 6px;
-  
+
 }
 
 .dynamic-item a.dynamic-item-remove:hover,
 .direct-material-cost a.direct-material-cost-remove:hover{
-  background: #cc1602; 
+  background: #cc1602;
   color: white;
   text-decoration: none;
 }
@@ -1448,9 +1450,9 @@ header.company-header{
 
 header.proposal-header h1{
   overflow: hidden;
-  text-overflow: ellipsis;  
+  text-overflow: ellipsis;
 }
-header.proposal-header a{color: #555; } 
+header.proposal-header a{color: #555; }
 header.proposal-header a:hover{color: #333; }
 
 /* @end */
@@ -1471,14 +1473,14 @@ body.proposal.proposal-overview .proposal-footer .wrap > h1{
 }
 
 body.proposal.proposal-overview aside h1{
-  margin-left: -72px; 
+  margin-left: -72px;
 }
 
 
-body.proposal.proposal-overview aside{ 
+body.proposal.proposal-overview aside{
   padding-left: 72px;
   margin-top: 2em;
-  position: relative; 
+  position: relative;
 }
 
 
@@ -1499,7 +1501,7 @@ body.proposal.proposal-overview aside img+span{
 body.proposal.proposal-overview aside div.hcard{
   line-height: 1.3em;
   max-width: 10em;
-  font-size: 14px;  
+  font-size: 14px;
 }
 
 
@@ -1521,12 +1523,12 @@ footer.proposal-footer div.wrap{
 /* @end */
 
 @media screen and (min-width: 711.11px) {
-  body.proposal.proposal-overview main.proposal-content div.wrap{ 
+  body.proposal.proposal-overview main.proposal-content div.wrap{
     padding-right: 304px;
     position: relative;
   }
 
-  body.proposal.proposal-overview main.proposal-content div.wrap aside{ 
+  body.proposal.proposal-overview main.proposal-content div.wrap aside{
     position: absolute;
     right: 0;
     top: 4px;
@@ -1536,9 +1538,9 @@ footer.proposal-footer div.wrap{
   }
 
   body.proposal.proposal-overview main.proposal-content div.wrap aside h1{
-    margin-left: 0; 
+    margin-left: 0;
   }
-  
+
     body.proposal.proposal-overview main.proposal-content div.wrap aside h1 span.technical-point{
   display: block;
   white-space: nowrap;
@@ -1593,7 +1595,7 @@ body.proposals-no-results main form footer {
 }
 
 body.proposals-no-results main p {
-  max-width: 50em; 
+  max-width: 50em;
 }
 
 body.proposals-no-results main form div.field span.label-text {
@@ -1615,7 +1617,7 @@ body.proposals-no-results main form .button {
 
 body.proposals h1.primary-header,
 body.topics h1.primary-header{
-  margin-bottom: 24px; 
+  margin-bottom: 24px;
 }
 
 /* @end */
@@ -1671,7 +1673,7 @@ body.sign-up-post main div.wrap {
 
 .sign-up .sign-up-header h1,
 .sign-up .sign-up-header a{
-  float: right; 
+  float: right;
 }
 
 .sign-in .sign-in-header h1,
@@ -1691,8 +1693,8 @@ body.sign-up-post main div.wrap {
 
 body.sign-in footer,
 body.sign-up footer,
-body.sign-up-post footer { 
-  padding-bottom: 0; 
+body.sign-up-post footer {
+  padding-bottom: 0;
   margin-top: 28px;
 }
 
@@ -1709,7 +1711,7 @@ body.sign-up-post main h1{
 }
 body.sign-up-post footer a.button{ margin-top: 24px; }
 body.sign-up-post footer div { margin-top: 1em; }
-body.sign-up-post footer div p{ 
+body.sign-up-post footer div p{
   color: #555;
   font-size: 12px;
   margin-top: 4px;
@@ -1721,7 +1723,7 @@ body.sign-up p#password-instructions{
   margin-bottom: 0;
 }
 
-@media screen and (min-width: 711.11px) { 
+@media screen and (min-width: 711.11px) {
   body.sign-in main div.wrap,
   body.sign-up main div.wrap,
   body.sign-up-post main div.wrap {
@@ -1729,14 +1731,14 @@ body.sign-up p#password-instructions{
     max-width: 384px;
     margin: 48px auto;
   }
-  
+
   .sign-in .sign-in-header,
   .sign-up .sign-up-header {
     margin: -24px -24px 24px;
   }
-  
+
   body.sign-up-post main div.wrap{ max-width: 512px; }
-  
+
   body.sign-in main form footer p,
   body.sign-up main form footer p,
   body.sign-up-post main form footer p {
@@ -1795,7 +1797,7 @@ body.sign-up p#password-instructions{
     padding-right: 208px;
     position: relative;
   }
-  
+
   .topic-show .topic .topic-nav{
     position: absolute;
     right: 0;
@@ -1804,7 +1806,7 @@ body.sign-up p#password-instructions{
   }
 
   .topic .topic-nav form{ display: block; }
-  
+
 }
 
 
@@ -1823,7 +1825,7 @@ body.sign-up p#password-instructions{
     margin-top: 24px;
     border-radius: 5px;
   }
-  
+
   @media screen and (min-width: 640px) {
     aside.form-nav{
       border: none;
@@ -1835,7 +1837,7 @@ body.sign-up p#password-instructions{
     }
 
   }
-  
+
   aside.form-nav h1{
     font-size: 11px;
     text-transform: uppercase;
@@ -1845,20 +1847,20 @@ body.sign-up p#password-instructions{
     color: #333;
     margin-bottom: 20px;
   }
-  
+
   aside.form-nav nav.toc,
   aside.form-nav a{
     color: #555;
     text-decoration: none;
   }
-  
+
   aside.form-nav a:hover{ text-decoration: underline; }
-  
-  
-  aside.form-nav nav.toc ol li ol{ 
+
+
+  aside.form-nav nav.toc ol li ol{
     border-left: 2px solid #eee;
   }
-  
+
   aside.form-nav nav.toc ol li span,
   aside.form-nav nav.toc ol li{
     padding: 0;
@@ -1866,24 +1868,24 @@ body.sign-up p#password-instructions{
     border: none;
     line-height: 1.2;
   }
-  
+
   aside.form-nav span.toc-error-count{ display: none; }
-  
+
   aside.form-nav nav.toc ol li.is-incomplete,
   aside.form-nav nav.toc ol li.is-complete,
   aside.form-nav nav.toc ol li.is-error{
     padding-left: 20px;
     line-height: 16px;
-  } 
+  }
 
   aside.form-nav nav.toc ol li.is-incomplete::before,
   aside.form-nav nav.toc ol li.is-complete::before,
   aside.form-nav nav.toc ol li.is-error::before{
     width: 14px;
     height: 14px;
-    top: 1px;   
+    top: 1px;
   }
-  
+
   aside.form-nav nav.toc ol li::after{
     left: 2px;
     top: 3px;
@@ -1898,76 +1900,76 @@ body.sign-up p#password-instructions{
     width: 8px;
     height: 8px;
   }
-  
+
   aside.form-nav li.cover-sheet span{
     font-weight: 600;
     color: #606060;
   }
 
-        .proposal-cover-sheet-proposal-information aside.form-nav nav.toc 
+        .proposal-cover-sheet-proposal-information aside.form-nav nav.toc
   li.toc-proposal-cover-sheet-proposal-information a,
-      .proposal-cover-sheet-project-team-information aside.form-nav nav.toc 
+      .proposal-cover-sheet-project-team-information aside.form-nav nav.toc
   li.toc-proposal-cover-sheet-project-team-information a,
-      .proposal-cover-sheet-principal-investigator-information aside.form-nav nav.toc 
+      .proposal-cover-sheet-principal-investigator-information aside.form-nav nav.toc
   li.toc-proposal-cover-sheet-principal-investigator-information a,
-        .proposal-technical-volume aside.form-nav nav.toc 
+        .proposal-technical-volume aside.form-nav nav.toc
   li.toc-proposal-technical-volume a,
-        .proposal-cost-volume aside.form-nav nav.toc 
+        .proposal-cost-volume aside.form-nav nav.toc
   li.toc-proposal-cost-volume a,
-        .proposal-company-commercialization-report aside.form-nav nav.toc 
+        .proposal-company-commercialization-report aside.form-nav nav.toc
   li.toc-proposal-company-commercialization-report a,
   nav.toc .is-current{
     font-weight: 600;
-    text-decoration: none;  
+    text-decoration: none;
   }
-  
+
   aside.form-nav ol ol{ padding-left: 0.8em;}
-  
+
   aside.form-nav div.form-nav-prev-next{ margin-top: 2em; }
   aside.form-nav div.form-nav-prev-next::after{
     content: "";
     display: block;
     clear: both;
   }
-  
+
   aside.form-nav div.form-nav-prev-next .form-nav-prev,
   aside.form-nav div.form-nav-prev-next .form-nav-next{
-    float: left;  
+    float: left;
     border-color: #888;
     border-radius: 3px 0 0 3px;
     padding: 6px 8px;
     color: #555;
   }
-  
+
   aside.form-nav div.form-nav-prev-next .form-nav-prev:hover,
   aside.form-nav div.form-nav-prev-next .form-nav-next:hover{
     text-decoration: underline;
     background: inherit;
   }
-  
+
   aside.form-nav div.form-nav-prev-next .is-disabled{
     border-color: #ccc;
     color: #aaa;
   }
-  
+
   aside.form-nav div.form-nav-prev-next .is-disabled:hover{
     text-decoration: none;
   }
-  
+
   aside.form-nav div.form-nav-prev-next .form-nav-next{
     border-radius: 0 3px 3px 0;
     border-left: none;
   }
-  
+
   aside.form-nav div.form-nav-prev-next .form-nav-prev.is-disabled{
     border-right: none;
     cursor: default;
   }
-  
+
   aside.form-nav div.form-nav-prev-next .form-nav-prev.is-disabled+.form-nav-next{
     border-left: 1px solid #aaa;
   }
-  
+
 
 /* @end */
 
@@ -2053,10 +2055,10 @@ body .bigfoot-footnote__button:after {
   width: 50em;
 }
 
-@media screen { 
+@media screen {
   body.bigfoot section.footnotes{
     display: none;
-  } 
+  }
 }
 
 /* @end */
@@ -2065,6 +2067,302 @@ body .bigfoot-footnote__button:after {
 
 body.proposal-cover-sheet-principal-investigator-information form > h1 {
   margin-bottom: 32px;
+}
+
+/* Generated PDF styles */
+
+div.wrap,
+div.wrapper{
+	width: 90%;
+	max-width: 800px;
+	margin: 0 auto;
+	position: relative;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+div.wrap::after,
+div.wrapper::after{
+	content: "";
+	display: table;
+	clear: both;
+}
+.cover-sheet {
+  margin: 1em;
+}
+
+.cover-sheet .cover-sheet--header{ position: relative; }
+
+.cover-sheet .cover-sheet--header h1 {
+	font-weight: 600;
+	line-height: 1.2;
+	margin: 0 auto 1em;
+	text-align: center;
+}
+
+.cover-sheet .cover-sheet--header h1 span{ display: block; }
+.cover-sheet .cover-sheet--header p{
+	margin: 0 auto 3em;
+	font-size: 14px;
+	max-width: 64em;
+	text-align: center;
+}
+
+.cover-sheet .cover-sheet--header dd,
+.cover-sheet .cover-sheet--header dt{ display: block; }
+
+.cover-sheet dt::after{ content: ":"; }
+
+.cover-sheet .cover-sheet--header .proposal-number{
+  font-size: 21px;
+  font-weight: 600;
+  display: inline;
+  margin: 0;
+}
+
+.cover-sheet .cover-sheet--header .due-date,
+.cover-sheet .cover-sheet--header .date-submitted{
+	margin: 0;
+	position: absolute;
+	bottom: 4px;
+	right: 0;
+}
+
+.cover-sheet .cover-sheet--header .date-submitted{ bottom: 24px; }
+.cover-sheet .cover-sheet--header dt.date-submitted{ right: 4.9em; }
+
+.cover-sheet .cover-sheet--header .due-date{
+	text-align: right;
+	font-weight: 600;
+	display: block;
+}
+
+.cover-sheet .cover-sheet--agency-information,
+.cover-sheet .cover-sheet--firm-information,
+.cover-sheet .cover-sheet--eligibility,
+.cover-sheet .cover-sheet--business-information,
+.cover-sheet .cover-sheet--proposal-information,
+.cover-sheet .cover-sheet--project-team-information,
+.cover-sheet .cover-sheet--principal-investigator{
+  margin-top: 1.2em;
+  padding-top: 1.2em;
+  border-top: 2px solid #eee;
+}
+
+.cover-sheet .cover-sheet--agency-information > h1,
+.cover-sheet .cover-sheet--firm-information > h1,
+.cover-sheet .cover-sheet--eligibility > h1,
+.cover-sheet .cover-sheet--business-information > h1,
+.cover-sheet .cover-sheet--proposal-information > h1,
+.cover-sheet .cover-sheet--project-team-information > h1,
+.cover-sheet .cover-sheet--principal-investigator > h1{
+	font-weight: 600;
+	font-size: 18px;
+	margin-bottom: 0.6em;
+}
+
+.cover-sheet .cover-sheet--eligibility p.note,
+.cover-sheet .question-17 aside{
+	font-size: 14px;
+	line-height: 1.25em;
+	margin-left: 32px;
+	margin-bottom: 1em;
+	color: #444;
+}
+.cover-sheet .cover-sheet--agency-information dd.name,
+.cover-sheet .cover-sheet--agency-information .topic-number{ font-weight: 600; }
+
+
+.cover-sheet .question{
+  padding-top: 0.4em;
+  padding-bottom: 0.6em;
+  border-top: 1px solid #e3e3e3;
+}
+
+.cover-sheet .question.question-14 > .question--text,
+.cover-sheet .question.question-15 > .question--text{
+	margin-bottom: 0.7em;
+	display: block;
+}
+
+.cover-sheet .question.question-1,
+.cover-sheet .question.question-2,
+.cover-sheet .question.question-13,
+.cover-sheet .question.question-22,
+.cover-sheet .question.question-24 {
+	border-top: 0;
+}
+
+.cover-sheet .question .question--number,
+.cover-sheet .question .question--answer{
+	font-weight: 600;
+	color: #555;
+}
+
+.cover-sheet .question .question--number::after{
+  content: ".";
+}
+
+.cover-sheet .question .question--number,
+.cover-sheet .question .question--answer,
+.cover-sheet .question .question--text{
+  line-height: 1.4em;
+}
+
+.cover-sheet .cover-sheet--affiliated-persons > h1{ display: none; }
+
+.cover-sheet .cover-sheet--proposal-information article.technical-abstract,
+.cover-sheet .cover-sheet--proposal-information article.anticipated-benefits,
+.cover-sheet .cover-sheet--proposal-information article.key-words{
+	margin-top: 1em;
+}
+
+.cover-sheet .cover-sheet--proposal-information article.technical-abstract h1,
+.cover-sheet .cover-sheet--proposal-information article.anticipated-benefits h1,
+.cover-sheet .cover-sheet--proposal-information article.key-words h1,
+.cover-sheet .cover-sheet--affiliated-persons .person h1{
+  font-weight: 600;
+  color: #444;
+  line-height: 1.2;
+  margin-bottom: 0.4em;
+}
+
+.cover-sheet .cover-sheet--proposal-information article.technical-abstract span,
+.cover-sheet .cover-sheet--proposal-information article.anticipated-benefits span{
+	font-weight: normal;
+}
+
+.cover-sheet .cover-sheet--affiliated-persons .person{
+  margin-top: 1em;
+}
+
+@media screen and (min-width: 355.55px){
+
+	.cover-sheet .cover-sheet--affiliated-persons .person dl{
+		padding-left: 96px;
+		margin-bottom: 2em;
+	}
+	.cover-sheet .cover-sheet--affiliated-persons .person dl::after{
+	  content: "";
+	  display: table;
+	  clear: both;
+	}
+
+	.cover-sheet .cover-sheet--affiliated-persons .person dl dt,
+	.cover-sheet .cover-sheet--affiliated-persons .person dl dd{
+  		float: left;
+  		width: 100%;
+		margin: 0;
+		padding: 0;
+		padding-top: 0.4em;
+	}
+
+	.cover-sheet .cover-sheet--affiliated-persons .person dl dt{
+		clear: left;
+  		width: 96px;
+	  	margin-left: -96px;
+	}
+
+	.cover-sheet .cover-sheet--affiliated-persons .person .signature,
+	.cover-sheet .cover-sheet--affiliated-persons .person .date{
+		display: inline-block;
+		font-size: 14px;
+		padding-top: 0.6em;
+		border-top: 1px solid;
+	}
+
+	.cover-sheet .cover-sheet--affiliated-persons .person .signature{
+  		width: 70%;
+	}
+	.cover-sheet .cover-sheet--affiliated-persons .person .date{
+		width: 25%;
+	}
+}
+
+@media screen and (min-width: 568.888px){
+
+	.cover-sheet .cover-sheet--agency-information dl,
+	.cover-sheet .cover-sheet--firm-information dl,
+	.cover-sheet .question.question-14 dl,
+	.cover-sheet .question.question-16 dl{ padding-left: 160px; }
+
+	.cover-sheet .cover-sheet--agency-information dl::after,
+	.cover-sheet .cover-sheet--firm-information dl::after,
+	.cover-sheet .question.question-14 dl::after,
+	.cover-sheet .question.question-16 dl::after{
+	  content: "";
+	  display: table;
+	  clear: both;
+	}
+
+	.cover-sheet .cover-sheet--agency-information dl dt,
+	.cover-sheet .cover-sheet--agency-information dl dd,
+	.cover-sheet .cover-sheet--firm-information dl dt,
+	.cover-sheet .cover-sheet--firm-information dl dd,
+	.cover-sheet .question.question-14 dl dt,
+	.cover-sheet .question.question-14 dl dd,
+	.cover-sheet .question.question-16 dl dt,
+	.cover-sheet .question.question-16 dl dd{
+	  float: left;
+	  width: 100%;
+	  margin: 0;
+	  padding: 0;
+	  padding-top: 0.4em;
+	}
+
+	.cover-sheet .question.question-16 dl dd+dd{ padding-top: 0; }
+
+	.cover-sheet .cover-sheet--agency-information dl dt,
+	.cover-sheet .cover-sheet--firm-information dl dt,
+	.cover-sheet .question.question-14 dl dt,
+	.cover-sheet .question.question-16 dl dt{
+  		clear: left;
+  		// margin-left: -160px;
+  		width: 160px;
+	}
+
+	.cover-sheet .cover-sheet--proposal-information .proposed-cost,
+	.cover-sheet .cover-sheet--proposal-information .phase,
+	.cover-sheet .cover-sheet--proposal-information .duration{
+		float: none;
+		margin: 0;
+		display: inline-block;
+		width: 16.67%;
+		margin-right: -0.4em;
+	}
+
+  	.cover-sheet .question{
+		padding-left: 32px;
+		padding-right: 48px;
+		position: relative;
+	}
+
+	.cover-sheet .question.question-15{ padding-right: 0; }
+
+  	.cover-sheet .question .question--number,
+  	.cover-sheet .question .question--answer{
+		position: absolute;
+		top: 0.4em;
+		left: 0;
+		font-weight: normal;
+		text-align: right;
+		text-transform: uppercase;
+	}
+
+  	.cover-sheet .question .question--answer{
+		left: auto;
+		right: 0;
+		top: 0.6em;
+		font-size: 14px;
+		font-weight: 600;
+	}
+
+	.cover-sheet .cover-sheet--affiliated-persons .person{
+		float: left;
+		width: 50%;
+
+	}
+
 }
 
 

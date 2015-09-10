@@ -13,6 +13,7 @@ from django_pgjson.fields import JsonField
 
 from sbirez import validation_helpers
 
+
 class Address(models.Model):
     street = models.TextField()
     street2 = models.TextField(null=True, blank=True)
@@ -20,12 +21,20 @@ class Address(models.Model):
     state = models.TextField()
     zip = models.TextField()
 
+    def __str__(self):
+        street = self.street
+        if self.street2:
+            street = '%s\n%s' % self.street2
+        return '%s\n%s, %s %s' % (street, self.city, self.state, self.zip)
+
+
 class Person(models.Model):
     name = models.TextField()
     title = models.TextField(null=True, blank=True)
     email = models.TextField(null=True, blank=True)
     phone = models.TextField(null=True, blank=True)
     fax = models.TextField(null=True, blank=True)
+
 
 class Firm(models.Model):
     name = models.TextField(unique=True)
@@ -47,45 +56,105 @@ class Firm(models.Model):
     total_revenue_range = models.TextField(null=True, blank=True)
     revenue_percent = models.IntegerField(null=True, blank=True)
 
+    @property
+    def complete(self):
+        return bool(
+            self.name and self.sbc_id and self.duns_id and self.cage_code and
+            self.website and self.address and self.point_of_contact and
+            self.founding_year and
+            (self.phase1_count is not None) and self.phase1_year and
+            (self.phase2_count is not None) and self.phase2_year and
+            (self.phase2_employees is not None) and (
+                self.current_employees is not None) and (
+                    self.patent_count is not None) and self.total_revenue_range
+            and (self.revenue_percent is not None
+                 ) and self.point_of_contact and self.point_of_contact.name and
+            self.point_of_contact.title and self.point_of_contact.email and
+            self.point_of_contact.phone and self.point_of_contact.name)
+
     def __str__(self):
         return self.name
+
 
 class Naics(models.Model):
     code = models.TextField(primary_key=True)
     description = models.TextField(null=False)
-    firms = models.ManyToManyField('Firm', blank=True, 
-                                   related_name='naics')
+    firms = models.ManyToManyField('Firm', blank=True, related_name='naics')
 
     def __str__(self):
         return "%s (%s)" % (self.code, self.description)
+
 
 class SbirezUser(AbstractEmailUser):
     name = models.TextField()
     firm = models.ForeignKey(Firm, null=True, blank=True)
     password_expires = models.DateTimeField(null=True)
 
+
 class PasswordHistory(models.Model):
     user = models.ForeignKey(SbirezUser, related_name='prior_passwords')
     password = models.CharField(max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)
 
+
 class Area(models.Model):
     area = models.TextField(unique=True)
     topics = models.ManyToManyField('Topic', blank=True, related_name='areas')
+
 
 class Keyword(models.Model):
     keyword = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    topics = models.ManyToManyField('Topic', blank=True, related_name='keywords')
+    topics = models.ManyToManyField('Topic',
+                                    blank=True,
+                                    related_name='keywords')
+
 
 class Phase(models.Model):
     phase = models.TextField()
     topic = models.ForeignKey('Topic', related_name='phases')
 
+
 class Reference(models.Model):
     reference = models.TextField()
     topic = models.ForeignKey('Topic', related_name='references')
+
+
+def _walk_path(dct, path):
+    if path:
+        step = path.pop(0)
+        if step:
+            dct = dct[step]
+            return _walk_path(dct, path)
+    else:
+        return dct
+
+
+def _to_number(val):
+    """
+    Convert to a numeric data type, but only if possible (do not throw error).
+
+    >>> _to_number('5.4')
+    5.4
+    >>> _to_number(5.4)
+    5.4
+    >>> _to_number('-6')
+    -6
+    >>> _to_number('R2D2')
+    'R2D2'
+    """
+    try:
+        if val.is_integer():  # passed as int in float form
+            return int(val)
+    except AttributeError:
+        try:
+            return int(val)
+        except ValueError:
+            try:
+                return float(val)
+            except ValueError:
+                return val
 
 
 class Element(models.Model):
@@ -166,11 +235,16 @@ class Element(models.Model):
     """
     name = models.TextField(blank=False)
     human = models.TextField(null=True, blank=True)
+    report_text = models.TextField(null=True, blank=True)
     validation = models.TextField(null=True, blank=True)
     element_type = models.TextField(default='str')
     # workflow, group, line_item, read_only_text, or scalar type
     order = models.IntegerField(blank=False)
-    parent = models.ForeignKey('Element', related_name='children', null=True, blank=True)
+    report_question_number = models.TextField(null=True, blank=True)
+    parent = models.ForeignKey('Element',
+                               related_name='children',
+                               null=True,
+                               blank=True)
     multiplicity = models.TextField(null=True, blank=True)
     # comma-separated list of names: collect one group for each name
     # integer: collect up to N unnamed groups
@@ -185,20 +259,22 @@ class Element(models.Model):
 
     type_validators = {
         'phone': re.compile(
-            '''^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$'''
-            , re.IGNORECASE),
+            '''^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$''',
+            re.IGNORECASE),
         'email': re.compile(
-            '''^[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$'''
-            , re.IGNORECASE),
+            '''^[a-z0-9!#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$''',
+            re.IGNORECASE),
         'zip': re.compile(
-            '''^\d{5}(-\d{4})?$'''
-            , re.IGNORECASE),
+            '''^\d{5}(-\d{4})?$''', re.IGNORECASE),
         'percent': lambda x: 0 <= x <= 1000,
         'integer': lambda x: isinstance(x, int),
     }
 
     class Meta:
-        ordering = ['order',]
+        ordering = ['order', ]
+
+    def __str__(self):
+        return self.name
 
     def save(self, *args, **kwargs):
         """Human-readable should derive from ``name`` by default."""
@@ -213,19 +289,57 @@ class Element(models.Model):
         else:
             return self.name
 
-    def parentage(self):
-        """
-        Returns a list of each element in the workflow's hierarchy
-        above (and including) this one.
-        """
-        if self.parent:
-            result = self.parent.parentage()
+    @property
+    def hyphenated_name(self):
+        return self.name.replace('_', '-')
+
+    _tag_pattern = re.compile(r'<.*?>', re.DOTALL)
+
+    @property
+    def human_plain(self):
+        "A plain human-friendly name, scrubbed of tags"
+        if self.human:
+            return self._tag_pattern.sub('', self.human)
         else:
-            result = []
-        result.append(self)
+            return self.name.replace('_', ' ')
+
+    @property
+    def reportable_question(self):
+        """Human-readable text for a read-only report"""
+        if self.report_text is not None:
+            return self.report_text
+        else:
+            return self.human_plain
+
+    def reportable_answer(self, datum):
+        """Human-readable version of answer for a read-only report"""
+        result = datum
+        if self.element_type in ('bool', 'checkbox'):
+            if datum:
+                if hasattr(datum, 'lower'):
+                    datum = (datum.lower() != 'false')
+            result = 'Yes' if datum else 'No'
+        else:
+            if isinstance(datum, list) or isinstance(datum, dict):
+                result = ''
         return result
 
     def is_trueish(self, field_name, dct):
+        """``field`` name in ``dct`` and True
+
+        ``True`` if ``field_name`` in ``dct``
+        and its value is considered True
+
+        Args:
+            field_name: Name of the key
+                in question
+            dct: Dictionary that may include
+                ``field_name``
+        Return:
+            boolean - whether ``field_name`` is
+                present and with a value representing
+                True
+        """
         if field_name not in dct:
             return False
         datum = dct[field_name]
@@ -233,11 +347,11 @@ class Element(models.Model):
             datum = datum.strip().lower()
             if datum == 'false':
                 return False
-        except:
+        except AttributeError:  # was not a string
             pass
         return bool(datum)
 
-    def should_ask(self, datum):
+    def _should_ask_this_level(self, data, path):
         if not self.ask_if:
             return True
         reverse = False
@@ -245,21 +359,69 @@ class Element(models.Model):
         if ask_if.split()[0] == 'not':
             reverse = True
             ask_if = ask_if.split()[1]
-        result = self.is_trueish(ask_if, datum)
+        parent = _walk_path(data, path[:-1])
+        result = self.is_trueish(ask_if, parent)
         if reverse:
             result = not result
         return result
 
-    def data_required(self, accept_partial, datum):
-        if (accept_partial
-            or (not self.should_ask(datum))
-            or (self.required.lower() == 'false')):
+    def should_ask(self, data, path):
+        """Applies ``self.ask_if`` to ``data``
+
+        Applies logic in ``self.ask`` to
+        ``data`` from proposal, walking down
+        ``path`` to locate the dict nested at
+        this element's parent level.
+
+        Args:
+            data: Proposal's full data tree,
+                from top
+            path: Series of keys to walk down
+                data tree to this element's
+                corresponding datum
+        Return:
+            bool: Whether an element is a relevant
+            question in this context (and thus,
+            whether ``required`` fields should
+            actually be required, etc.) """
+
+        # Any ancestors that don't need to be asked imply that
+        # this element doesn't need to be asked, either
+        path_ = path[:]
+        for el in self.ancestry():
+            if not el._should_ask_this_level(data, path_):
+                return False
+            path_.pop(-1)
+        return True
+
+    def data_required(self, accept_partial, data, path):
+        """Applies ``self.required`` to ``data``.
+
+        Interprets ``self.required`` with regard to
+        ``data`` from proposal, deciding whether to
+        actually require data in this case.
+
+        Args:
+            accept_partial: Whether a partial submission
+                should be accepted
+            data: The submission's data, from the top
+            path: Series of strings to walk down nested
+               ``data`` structure to this element's level
+        Return:
+            'optional', 'required', or 'forbidden'
+        """
+
+        if accept_partial or (not self.should_ask(data, path)):
+            return 'optional' # and so are its descendants
+        if self.required.lower() == 'false':
             return 'optional'
         if self.required.lower() == 'true':
             return 'required'
         required = self.required.split()
         (operator, fields) = (required[0], required[1:])
-        field_trueness = [self.is_trueish(f, datum) for f in fields]
+        parent = _walk_path(data, path[:-1])
+        # assumes that all unless / xor are at same level in data
+        field_trueness = [self.is_trueish(f, parent) for f in fields]
         if operator == 'unless':
             if field_trueness.count(True) == 0:
                 return 'required'
@@ -270,102 +432,163 @@ class Element(models.Model):
                 return 'required'
             else:
                 return 'forbidden'
-        raise NotImplementedError('could not interpret %s for %s' %
-                                  (self.required, self.name))
+        raise NotImplementedError(
+            'could not interpret %s for %s' % (self.required, self.name))
 
-    # recognize "validations" that are actually calculations
-    # every calculation should include an operator (+-*/) surrounded by
-    # whitespace, or the validator will mistake it for a call to a validation
-    # function
-    _calc_pattern = re.compile(r"\S\s+[+-/*]\s+\S")
+    def validation_errors(self, data, accept_partial):
+        """List of validation errors from applying to ``data``
 
-    def validation_errors(self, top_level, data, accept_partial):
-        """
-        Assemble a list of all errors found when this element's validation is
-        applied to `top_level` data.
+        Return a list of all errors found when this workflow's
+        validation is applied to ``data`` from proposal.
+
+        Should only be called on top-level "workflow"
+        element.
 
         Args:
-            top_level: The proposal's entire data submission
-            data: The segment of proposal data corresponding to this element and
-                  its descendants
-            accept_partial: If ``True``, then missing elements won't trigger errors
-                            even when ``.required == True``
+            data: directory of data submitted with proposal
+            accept_partial: If ``True``, then missing elements
+                won't trigger errors even when ``.required == True``
         Returns:
             List of strings describing errors
         """
 
         errors = []
 
-        if hasattr(data, 'keys'): # then it's a dict
-            data = [data, ]
+        # Designed to be called for a full workflow only
+        assert self.element_type == 'workflow'
 
-        for datum in data:
 
-            required = self.data_required(accept_partial, datum)
+        for (el, datum, path) in self.with_data(data.get(self.name, {}), []):
+            required = el.data_required(accept_partial, data, path)
 
-            if required == 'required':
-                if self.name not in datum:
-                    errors.append('Required field %s not found' % self.name)
-                    continue
-                elif datum[self.name] is None:
-                    errors.append('%s is blank' % self.name)
-                    continue
-
-            if self.name not in datum:
+            if not datum:  # or children with data, hmm TODO
+                if required == 'required':
+                    # None in path ---> a parent missing from data
+                    errors.append('Required field %s not found' % el.name)
                 continue
-            found = datum[self.name]
 
-            if required == 'forbidden':
-                if found is not None:
-                    errors.append('%s should not be filled' % self.name)
-                    continue
+            if required == 'forbidden' and datum:
+                errors.append('%s should not be filled' % el.name)
+                continue
 
-            type_validator = self.type_validators.get(self.element_type)
+            type_validator = self.type_validators.get(el.element_type)
             if type_validator:
                 if callable(type_validator):
                     try:
-                        valid = type_validator(datum[self.name])
+                        datum = _to_number(datum)
+                        valid = type_validator(datum)
                     except Exception as e:
                         valid = False
                 else:
-                    valid = type_validator.search(datum[self.name])
+                    valid = type_validator.search(datum)
                 if not valid:
-                    errors.append('Not a valid %s' % self.element_type)
+                    errors.append('Not a valid %s' % el.element_type)
                     continue
 
-            if self.validation:
-                for validation in self.validation.split(';'):
-                    if self._calc_pattern.search(validation):
+            if el.validation:
+                for validation in el.validation.split(';'):
+                    if el.element_type == 'calculated':
                         # This "validation" is actually a calculation
                         continue
                     args = shlex.split(validation)
+                    args = [a.strip(',') for a in args]
                     function_name = args.pop(0)
                     try:
                         func = getattr(validation_helpers, function_name)
-                        if not func(top_level, found, *args):
+                        if not func(data, datum, *args):
                             errors.append(
-                                '%s: %s' % (self.name, self.validation_msg or
-                                                       "failed %s" % function_name))
+                                '%s: %s' % (el.name, el.validation_msg or
+                                            "failed %s" % function_name))
                     except AttributeError:
-                        # validation refers to a function not found in helper library
+                        # validation refers to a function
+                        # not found in helper library
                         errors.append(
-                            '%s: validation function %s absent from validation_helpers.py' %
-                            (self.name, function_name))
-
-            if self.multiplicity:
-                # then the keys are not relevant, and we just want to validate values
-                found = list(found.values())
-
-            for child_element in self.children.all():
-                errors.extend(child_element.validation_errors(top_level, found, accept_partial))
+                            '%s: validation function %s absent from validation_helpers.py'
+                            % (el.name, function_name))
 
         return errors
+
+    def children_with_data(self, data, path, include_empty):
+        for child in self.children.all():
+            if child.name in data:
+                yield from child.with_data(data[child.name], path,
+                                           include_empty)
+            else:
+                if include_empty:
+                    yield (child, None, path + [None])
+
+    _comma_and_space = re.compile(r',\s+')
+    _nonalphanum = re.compile(r'[^A-Za-z0-9]')
+
+    def _contains_data(self, data):
+        if isinstance(data, list):
+            for itm in data:
+                if self._contains_data(itm):
+                    return True
+            return False
+        elif isinstance(data, dict):
+            for key in data:
+                if self._contains_data(data[key]):
+                    return True
+            return False
+        else:
+            return True
+
+    def with_data(self, data, path=None, include_empty=True):
+        """ Yields (element, datum, path) tuples
+
+        Yields (element, data, path) tuples
+        for the entire workflow from this point
+        downward.  Each item in the tree of ``data``
+        is paired with its corresponding workflow
+        element.  When items are absent from ``data``,
+        they will still be returned, with values of
+        ``None``.
+
+        Args:
+            data: Nested dictionary of submitted proposal data,
+                from the top
+            path: Sequence of key names to navigate ``data``
+                to the point corresponding to this element
+        """
+        if not path:
+            path = []
+        if (not include_empty) and (not self._contains_data(data)):
+            return  # without yielding
+        if self.multiplicity:
+            any_this_level = False
+            try:
+                int(self.multiplicity)
+                keys = data.keys()
+            except ValueError:
+                keys = self._comma_and_space.split(self.multiplicity)
+                keys = [self._nonalphanum.sub('_', k) for k in keys]
+            for k in keys:
+                if k in data:
+                    if include_empty or self._contains_data(data[k]):
+                        yield (self, data[k], path + [self.name, k])
+                        any_this_level = True
+                        yield from self.children_with_data(
+                            data[k], path + [self.name, k], include_empty)
+            if not any_this_level:
+                yield (self, None, path + [self.name, None])
+        else:  # no multiplicity
+            yield (self, data, path + [self.name])
+            yield from self.children_with_data(data, path + [self.name],
+                                               include_empty)
+
+    def ancestry(self):
+        "Generator of all elements above and including this in the workflow."
+        yield self
+        if self.parent:
+            yield from self.parent.ancestry()
 
 
 class Jargon(models.Model):
     name = models.TextField(unique=True)
     html = models.TextField()
-    elements = models.ManyToManyField('Element', blank=True,
+    elements = models.ManyToManyField('Element',
+                                      blank=True,
                                       related_name='jargons')
 
 
@@ -380,6 +603,10 @@ class Solicitation(models.Model):
     def days_to_close(self):
         return (self.proposals_end_date - timezone.now()).days
 
+    def __str__(self):
+        return '%s due %s' % (self.name or '',
+                              self.proposals_end_date.strftime(
+                                  '%d %B %Y'))
 
     @property
     def status(self):
@@ -391,11 +618,9 @@ class Solicitation(models.Model):
         else:
             return 'Future'
 
+
 class Topic(models.Model):
-    PROGRAM_CHOICES = (
-        ("SBIR", "SBIR"),
-        ("STTR", "STTR"),
-        )
+    PROGRAM_CHOICES = (("SBIR", "SBIR"), ("STTR", "STTR"), )
 
     topic_number = models.TextField(unique=True)
     solicitation = models.ForeignKey(Solicitation, related_name='solicitation')
@@ -410,8 +635,9 @@ class Topic(models.Model):
                                       blank=True,
                                       related_name='saved_topics')
 
-    objects = SearchManager(fields=None, search_field='fts',
-                           auto_update_search_field=False)
+    objects = SearchManager(fields=None,
+                            search_field='fts',
+                            auto_update_search_field=False)
 
 
 class Proposal(models.Model):
@@ -424,6 +650,92 @@ class Proposal(models.Model):
     verified_at = models.DateTimeField(blank=True, null=True)
     title = models.TextField()
     data = JsonField(null=True, blank=True)
+
+    @property
+    def proposal_number(self):
+        """Topic number plus locally generated unique proposal ID."""
+        return '%s-%04d' % (self.topic.topic_number, self.id)
+
+    @property
+    def date_submitted(self):
+        """Readable form of submitted_at."""
+        if self.submitted_at:
+            return self.submitted_at.strftime('%m-%d-%Y')
+        else:
+            return '(Not Submitted)'
+
+    def report(self, path_filter):
+        """Yield data for a read-only report on this proposal.
+
+        Walks the workflow and the corresponding items in proposal data.
+
+        Args:
+            path_filter: dot-delimited string of element names representing
+               the path to the portion of the data to report on.  Used to
+               make a report on a subset of the proposal's total data.
+        Return:
+            generator of dictionaries with
+                {'element': Element instance
+                 'semantic': HTML element appropriate to this item
+                 'question': Question text
+                 'answer': Proposal's response}
+        """
+        enclosing_semantic = None
+        enclose_children_of = None
+        path_filter = path_filter.split('.')
+        for (el, data, path) in self.workflow.with_data(
+            self.data.get(self.workflow.name, {}), [],
+            include_empty=False):
+            # Return
+            if path[:len(path_filter)] != path_filter:
+                # This seems like an ugly way to restrict the
+                # results to `path_filter`, but matching proposal Data
+                # to workflows is tricky.
+                continue
+            # Check whether a dl list has just ended.
+            if enclosing_semantic == 'dl' and enclose_children_of not in el.ancestry(
+            ):
+                yield {'semantic': '%s-end' % enclosing_semantic}
+                enclosing_semantic = None
+                enclose_children_of = None
+            if (el.element_type == 'line_item') and (not enclosing_semantic):
+                yield {'semantic': 'dl-start', 'element': el}
+                enclosing_semantic = 'dl'
+                enclose_children_of = el
+            if el.report_text == '':
+                continue
+            # "%multiple%" is a flag to indicate that the key of the data's
+            # enclosing parent should be used.  It's appropriate for a child
+            # of an item with a non-integer `multiplicity`; otherwise that
+            # key word never appears in the report
+            if el.human == r'%multiple%':
+                question = path[-2]
+            else:
+                question = el.reportable_question
+            if enclosing_semantic:
+                semantic = enclosing_semantic
+            else:
+                semantic = 'div'
+            # The semantic determined thus far could be overruled by
+            # the following
+            if el.element_type == 'read_only_text':
+                semantic = 'p'
+            # Workflow elements are considered headers; header level depends on
+            # how deeply it's nested under other workflow elements
+            elif el.element_type == 'workflow':
+                parent_workflows = len([e for e in el.ancestry()
+                                        if e.element_type == 'workflow'])
+                semantic = 'h%d' % parent_workflows
+            yield {
+                'element': el,
+                'semantic': semantic,
+                'question': question,
+                'answer': el.reportable_answer(data)
+            }
+
+        # Close any unclosed dl
+        if enclosing_semantic:
+            yield {'semantic': '%s-end' % enclosing_semantic}
 
 
 class Document(models.Model):
@@ -440,7 +752,8 @@ class Document(models.Model):
 
 
 class DocumentVersion(models.Model):
-    document = models.ForeignKey(Document, related_name='versions')  # order by created_at
+    document = models.ForeignKey(Document,
+                                 related_name='versions')  # order by created_at
     note = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -451,7 +764,7 @@ class DocumentVersion(models.Model):
         return hashlib.md5(self.file.read()).hexdigest()
 
     class Meta:
-        ordering = ['updated_at',]
+        ordering = ['updated_at', ]
 
 
 class RawAgency(models.Model):

@@ -1,9 +1,14 @@
+import collections
 import json
 import hashlib
+import os
+import re
 
 from django.contrib.auth.models import Group
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.template import Context, loader
+from django.http import HttpResponse
 from sbirez.models import Topic, Firm, Proposal, Address, Person, Naics
 from sbirez.models import Element, Document, DocumentVersion, Jargon
 from rest_framework import viewsets, mixins, generics, status, permissions, exceptions
@@ -23,6 +28,11 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from .permissions import IsStaffOrTargetUser, IsStaffOrFirmRelatedUser
 from .permissions import HasObjectEditPermissions, ReadOnlyUnlessStaff
 from .utils import nested_update
+
+from PyPDF2 import PdfFileMerger
+from wkhtmltopdfwrapper import WKHtmlToPdf
+
+to_pdf_generator = WKHtmlToPdf()
 
 mails = template_mail.MagicMailBuilder()
 # To send new types of emails from views, simply call
@@ -170,6 +180,106 @@ class ProposalViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         return [HasObjectEditPermissions(),]
 
+    def _readonly_report(self, request, pk, template_name, report_filter):
+        """Web version of our PDF hardcopy report"""
+        prop = self.get_object()
+        template = loader.get_template(template_name)
+        context = Context({'prop': prop,
+                           'report': prop.report(report_filter)})
+        output = template.render(context)
+        return HttpResponse(output)
+
+    @detail_route(methods=['get',])
+    def coversheet(self, request, pk):
+        return self._readonly_report(request, pk,
+            'sbirez/coversheet.html', 'dod_workflow.dod_coversheet')
+
+    def _general_admin_targets(self, cost_volume_data):
+        ga_target_abbreviations = collections.OrderedDict(
+            TDL='general_admin_rate_labor',
+            TDM='general_admin_rate_materials',
+            TODC='general_admin_rate_other')
+        apply_ga_to = []
+        for (abbrev, field_name) in ga_target_abbreviations.items():
+            if cost_volume_data.get('cv_totals', {}).get(field_name):
+                apply_ga_to.append(abbrev)
+        if apply_ga_to:
+            apply_ga_to = '+'.join(apply_ga_to)
+        else:
+            apply_ga_to = '0'
+        return apply_ga_to
+
+    @detail_route(methods=['get',])
+    def cost_volume(self, request, pk):
+        prop = self.get_object()
+        template = loader.get_template('sbirez/cost_volume.html')
+        cost_volume_data = prop.data['dod_workflow'].get('dod_cost_volume', {})
+        ga_basis = self._general_admin_targets(cost_volume_data)
+        context = Context({'prop': prop,
+                           'data': cost_volume_data,
+                           'ga_basis': ga_basis})
+        output = template.render(context)
+        return HttpResponse(output)
+
+    # For reasons I don't understand, `request.auth`
+    # is not filled out when `.pdf` is called from the
+    # test suite; instead, the jwt must be painstakingly
+    # extracted this way.
+    # Irrelevant unless test_get_pdf is re-enabled.
+    _jwt_extractor = re.compile(r"\?jwt\=(.*?)'")
+    def _jwt_from_request(self, request):
+        result = self._jwt_extractor.search(str(request._request))
+        if result:
+            return result.group(1)
+
+    def _pdf_of_html_report(self, request, pk, report_name):
+        # Use wkhtmltopdf to write PDF of HTML report to file on disk
+        jwt = request.auth or self._jwt_from_request(request)
+        proposal_filename = 'data/%s_%s.pdf' % (report_name, pk)
+        url = request.build_absolute_uri('../%s/?jwt=%s'
+            % (report_name, jwt))
+        to_pdf_generator.render(url, proposal_filename)
+        # Read from the PDF just dumped
+        contentfile = open(proposal_filename, 'rb')
+        return contentfile
+
+        merger.append(contentfile)
+
+    @detail_route(methods=['get',])
+    def pdf(self, request, pk):
+        """
+        Generates PDF summary of a proposal.
+
+        Gets content from `.readonly_report`;
+        uses `PdfFileMerger` to prepend a stored cover page.
+        """
+        # A PdfFileMerger instance used to concat PDFs
+        merger = PdfFileMerger()
+
+        coverfile = open('sbirez/static/coverpage.pdf', 'rb')
+        merger.append(coverfile)
+
+        coversheet_file = self._pdf_of_html_report(request, pk, 'coversheet')
+        merger.append(coversheet_file)
+
+        # Add uploaded documents
+        prop = self.get_object()
+        for doc in prop.document_set.all():
+            merger.append(doc.file)
+
+        cost_volume_file = self._pdf_of_html_report(request, pk, 'cost_volume')
+        merger.append(cost_volume_file)
+
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = \
+            'attachment; filename="sbirez_proposal.pdf"'
+        merger.write(response)
+        for f in (coversheet_file, cost_volume_file):
+            os.unlink(f.name)
+            f.close()
+
+        return response
+
     @detail_route(methods=['post',])
     def submit(self, request, pk):
         prop = self.get_object()
@@ -182,6 +292,7 @@ class ProposalViewSet(viewsets.ModelViewSet):
             {'proposal': prop, 'data':
               json.dumps(prop.data, indent=2, sort_keys=True)
             })
+
         for doc in prop.document_set.all():
             content = doc.file.read()
             # decoding necessary due to an unfixed Django bug

@@ -1,0 +1,198 @@
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+div.wrapper {
+    font-size: 16px;
+
+    width: 90%;
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    # clear: both;
+}
+
+
+h1, h2
+{
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 auto 1em;
+    text-align: center;
+}
+
+h1 {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+h2 {
+  margin-bottom: 0.8em;
+  margin-top: 0.8em;
+}
+
+h3, h4, h5 {
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}
+
+.cover-sheet dt::after,
+.cost-volume dt::after
+{ content: ":"; }
+
+.cost-table {
+  margin:2em 0;
+}
+
+dl {
+    overflow: auto;
+    margin-top: 0.8em;
+}
+dl dt, dl dd {
+    float: left;
+}
+dl dt {
+    clear: left;
+    width: 23%;
+    margin-right: 2%;
+}
+dl dt.line_item,dt.checkbox {
+  text-decoration: underline;
+}
+dl dd {
+    width: 75%;
+    margin-left: 0;
+}
+.cost_volume dl dt {
+  font-weight: bold;
+}
+
+div.numbered-question {
+  overflow: auto;
+  margin-top: 0.15em;
+}
+div.numbered-question div.question-number {
+  clear: left;
+  margin-right: 2%;
+  float: left;
+  min-height: 1px;
+  font-weight: bold;
+}
+
+div.numbered-question div.question {
+  width: 80%;
+  margin-right: 2%;
+  float: left;
+}
+div.numbered-question div.answer {
+  width: 10%;
+  margin-left: 0;
+  float: left;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+div.numbered-question div.question.text,div.question.long_str {
+  font-weight: bold;
+}
+div.numbered-question div.answer.text,div.answer.long_str {
+  clear: both;
+  float: none !important;
+  width: 80% !important;
+  font-weight: normal !important;
+  text-transform: none !important;
+  margin-left: 6em !important;
+  margin-right: 4em !important;
+}
+
+div.question div.answer {
+  clear: both;
+  font-weight: bold;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+div.line_item {
+  margin-bottom: 0.5em;
+}
+div.line_item div.question,div.answer {
+  width: 40%;
+  font-weight: normal;
+  text-transform: none;
+}
+
+table {
+  margin: 4em;
+  width: 90%;
+}
+
+tr.total, .major-cost, dt.total, tr.category {
+  margin-top: 1em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+tr.subtotal {
+  font-weight: bold;
+}
+
+table .category {
+  margin-top: 2em;
+}
+
+th {
+  text-align: left;
+}
+
+td, th {
+  padding: 0.3em 0;
+}
+
+.lastcolumn {
+  text-align:right;
+  font-weight: normal;
+  text-transform:none;
+}
+
+.finalcost {
+  font-weight: bold;
+}
+
+.explanatory h2 {
+  text-align: left;
+}
+
+.cover-sheet .cover-sheet--header .proposal-number {
+  font-weight: bold;
+  font-size: 140%;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+dl dt.date-submitted {
+  width: 70%;
+  text-align: right;
+}
+dl dd.date-submitted {
+  text-align: right;
+  width: 20%;
+}
+
+dl dt.total {
+  width: 50%;
+  margin-bottom: 1em;
+}
+
+dl dd.total {
+  width: 40%;
+  margin-top: 1em;
+  font-weight: bold;
+}
+
+div.due-date, div.date-submitted {
+  font-weight: bold;
+  width: 90%;
+  text-align: right;
+  margin-right: 0px;
+}

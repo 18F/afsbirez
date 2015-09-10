@@ -298,9 +298,14 @@ class ProposalValidator(object):
         else:
             raise serializers.ValidationError(['no workflow supplied'])
 
+        errors.extend(workflow.validation_errors(data,
+            accept_partial=self.accept_partial))
+
+        """
         for element in workflow.children.all():
             errors.extend(element.validation_errors(data, data,
                                                     accept_partial=self.accept_partial))
+                                                    """
 
         if errors:
             proposal['verified_at'] = None

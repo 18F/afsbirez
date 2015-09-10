@@ -22,9 +22,10 @@ from django.utils import timezone
 
 factory = APIRequestFactory()
 
-
 def _fixture_user(self):
-    "Authenticate as pre-existing user from test fixture.  Returns user instance."
+    """Authenticate as pre-existing user from test fixture.
+
+    Returns user instance."""
     user_model = get_user_model()
     user = user_model.objects.get(email='r2d2@naboo.gov') # r2's password = 'bleep'
     self.client.force_authenticate(user=user)
@@ -1017,22 +1018,22 @@ class ProposalTests(APITestCase):
 
         response = self.client.get('/api/v1/proposals/2/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data["data"]["quest_thy_name"],
+        self.assertEqual(response.data["data"]['holy_grail_workflow']['get_on_with_it']["quest_thy_name"],
             'Galahad')
 
     def test_good_update_proposal(self):
         user = _fixture_user(self)
 
         response = self.client.get('/api/v1/proposals/2/')
-        self.assertEqual(response.data['data']['subquest']
+        self.assertEqual(response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']
                          ['quest_thy_favorite_color'], 'yellow')
-        response.data['data']['subquest']['quest_thy_favorite_color'] = 'green'
+        response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']['quest_thy_favorite_color'] = 'green'
         response.data['data'] = json.dumps(response.data['data'])
         response = self.client.put('/api/v1/proposals/2/', response.data)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         response = self.client.get('/api/v1/proposals/2/')
-        self.assertEqual(response.data['data']['subquest']
+        self.assertEqual(response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']
                          ['quest_thy_favorite_color'], 'green')
 
     def test_good_partial_update_proposal(self):
@@ -1041,11 +1042,13 @@ class ProposalTests(APITestCase):
         response = self.client.post('/api/v1/proposals/',
             {'owner': 2, 'firm': 1, 'workflow': 1,
              'title': 'Title!', 'topic': 1, 'data': json.dumps(
+                    {"holy_grail_workflow":
+                    {"get_on_with_it":
                     {"quest_thy_name": "Galahad",
                      "subquest": {
                          "quest_thy_quest": "To seek the Grail",
                          "quest_thy_favorite_color":
-                             "#0000FF"}})
+                             "#0000FF"}}}})
              })
         proposal_id = response.data['id']
         proposal = Proposal.objects.get(id=proposal_id)
@@ -1053,15 +1056,16 @@ class ProposalTests(APITestCase):
         response = self.client.patch('/api/v1/proposals/%s/partial/' % proposal_id,
             {
              'data': json.dumps(
-                    {
-                     "subquest": {
-                         "quest_thy_favorite_color": "green", }})
+                    {"holy_grail_workflow" :
+                    {"get_on_with_it":
+                     {"subquest": {
+                         "quest_thy_favorite_color": "green", }}}})
              })
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         response = self.client.get('/api/v1/proposals/%s/' % proposal_id)
         new_proposal = Proposal.objects.get(id=proposal_id)
-        self.assertEqual(response.data['data']['subquest']
+        self.assertEqual(response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']
                          ['quest_thy_favorite_color'], 'green')
 
         self.assertNotEqual(None, proposal.verified_at)
@@ -1073,7 +1077,7 @@ class ProposalTests(APITestCase):
         user = _fixture_user(self)
 
         response = self.client.get('/api/v1/proposals/2/')
-        response.data['data']['subquest']['quest_thy_favorite_color'] = 'blue'
+        response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']['quest_thy_favorite_color'] = 'blue'
         response.data['data'] = json.dumps(response.data['data'])
         response = self.client.put('/api/v1/proposals/2/', response.data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
@@ -1087,10 +1091,12 @@ class ProposalTests(APITestCase):
             {'workflow': 1,
              'title': 'Title!', 'topic': 1, 'data': json.dumps(
                     {
+                     "holy_grail_workflow": {
+                     "get_on_with_it": {
                      "subquest": {
                          "quest_thy_quest": "To seek the Grail",
                          "quest_thy_favorite_color":
-                             "#0000FF"}})
+                             "#0000FF"}}}})
              })
         self.assertIn('Required field quest_thy_name not found',
                       response.data['non_field_errors'])
@@ -1102,8 +1108,10 @@ class ProposalTests(APITestCase):
         response = self.client.post('/api/v1/proposals/',
             {'workflow': 1,
              'title': 'Title', 'topic': 1, 'data': json.dumps(
+                    {'holy_grail_workflow':
+                    {'get_on_with_it':
                     {"subquest":
-                     {"quest_thy_quest": "To seek the Grail", }})
+                     {"quest_thy_quest": "To seek the Grail", }}}})
             })
         self.assertIn('Required field quest_thy_name not found',
                       response.data['non_field_errors'])
@@ -1117,9 +1125,11 @@ class ProposalTests(APITestCase):
         response = self.client.post('/api/v1/proposals/',
             {'workflow': 1,
              'title': 'Title', 'topic': 1, 'data': json.dumps(
+                    {'holy_grail_workflow':
+                    {"get_on_with_it":
                     {"subquest": {
                      "quest_thy_quest": "To seek the Grail",
-                     "quest_thy_favorite_color": "blue"}})
+                     "quest_thy_favorite_color": "blue"}}}})
             })
         self.assertIn('Required field quest_thy_name not found',
                       response.data['non_field_errors'])
@@ -1132,11 +1142,13 @@ class ProposalTests(APITestCase):
         response = self.client.post('/api/v1/proposals/partial/',
             {'workflow': 1,
              'title': 'Title!', 'topic': 1, 'data': json.dumps(
+                    {'holy_grail_workflow':
+                    {"get_on_with_it":
                     {
                      "subquest": {
                          "quest_thy_quest": "To seek the Grail",
                          "quest_thy_favorite_color":
-                             "#0000FF"}})
+                             "#0000FF"}}}})
              })
         proposal = Proposal.objects.get(id=response.data['id'])
 
@@ -1150,11 +1162,13 @@ class ProposalTests(APITestCase):
         response = self.client.post('/api/v1/proposals/partial/',
             {'workflow': 1,
              'title': 'Title!', 'topic': 1, 'data': json.dumps(
+                    {'holy_grail_workflow':
+                    {"get_on_with_it":
                     {
                      "subquest": {
                          "quest_thy_quest": "To seek the Grail",
                          "quest_thy_favorite_color":
-                             "#0000FF"}})
+                             "#0000FF"}}}})
              })
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         proposal = Proposal.objects.get(id=response.data['id'])
@@ -1163,15 +1177,17 @@ class ProposalTests(APITestCase):
                                      response.data['id'],
             {
              'data': json.dumps(
+                    {'holy_grail_workflow':
+                    {"get_on_with_it":
                     {
                      "subquest": {
-                         "quest_thy_quest": "Grail-thingie.  Get.", }})
+                         "quest_thy_quest": "Grail-thingie.  Get.", }}}})
              })
         new_proposal = Proposal.objects.get(id=response.data['id'])
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data['data']['subquest']['quest_thy_quest'],
+        self.assertEqual(response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']['quest_thy_quest'],
                          'Grail-thingie.  Get.')
-        self.assertEqual(response.data['data']['subquest']
+        self.assertEqual(response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']
                          ['quest_thy_favorite_color'], "#0000FF")
         self.assertEqual(response.data['title'], 'Title!')
         self.assertEqual(None, proposal.verified_at)
@@ -1192,11 +1208,12 @@ class ProposalTests(APITestCase):
             {
              'data': json.dumps(
                     {
+                    "holy_grail_workflow": {"get_on_with_it": {
                      "subquest": {
-                         "quest_thy_quest": "Grail-thingie.  Get.", }})
+                         "quest_thy_quest": "Grail-thingie.  Get.", }}}})
              })
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data['data']['subquest']['quest_thy_quest'],
+        self.assertEqual(response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']['quest_thy_quest'],
                          'Grail-thingie.  Get.')
         self.assertEqual(response.data['title'], 'Title!')
 
@@ -1207,11 +1224,12 @@ class ProposalTests(APITestCase):
         response = self.client.post('/api/v1/proposals/',
             {'owner': 2, 'firm': 1, 'workflow': 1,
              'title': 'Title!', 'topic': 1, 'data': json.dumps(
+                    {"holy_grail_workflow": {"get_on_with_it":
                     {"quest_thy_name": "Galahad",
                      "subquest": {
                          "quest_thy_quest": "To seek the Grail",
                          "quest_thy_favorite_color":
-                             "#0000FF"}})
+                             "#0000FF"}}}})
              })
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
@@ -1220,7 +1238,7 @@ class ProposalTests(APITestCase):
         proposal = Proposal.objects.get(id=response.data['id'])
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data['data']['subquest']['quest_thy_favorite_color'],
+        self.assertEqual(response.data['data']['holy_grail_workflow']['get_on_with_it']['subquest']['quest_thy_favorite_color'],
             "#0000FF")
         self.assertNotEqual(None, proposal.verified_at)
         self.assertEqual(None, proposal.submitted_at)
@@ -1231,11 +1249,12 @@ class ProposalTests(APITestCase):
         response = self.client.post('/api/v1/proposals/',
             {'workflow': 1,
              'title': 'Title!', 'topic': 1, 'data': json.dumps(
+                    {"holy_grail_workflow": {"get_on_with_it":
                     {"quest_thy_name": "Galahad",
                      "subquest": {
                          "quest_thy_quest": "To seek the Grail",
                          "quest_thy_favorite_color":
-                             "#0000FF"}})
+                             "#0000FF"}}}})
              })
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
@@ -1272,6 +1291,25 @@ class ProposalTests(APITestCase):
         self.assertIn('Title', notification_message.body)
         self.assertEqual(None, proposal.submitted_at)
         self.assertNotEqual(None, new_proposal.submitted_at)
+
+    """
+    Cannot seem to test pdf successfully; from the
+    test api, jwt stubbornly refuses to show up in
+    the request, thus cannot be passed on
+    def test_get_pdf(self):
+        user = _fixture_user(self)
+        _upload_death_star_plans(self)
+
+        response = self.client.post('/auth/',
+            {'password':'bleep', 'email':'r2d2@naboo.gov'})
+        token = response.data['token']
+
+        response = self.client.get('/api/v1/proposals/2/pdf/?jwt=%s'
+            % token)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertIn(b'Content-Type: application/pdf',
+                      response.serialize())
+                      """
 
     # test that submitting a proposal sends an
     # email mocking the upstream submission
@@ -1319,45 +1357,100 @@ class ProposalTests(APITestCase):
         self.assertEqual(ships['Falcon'], b'Solo')
 
 
+minstrel_data = {
+     'workflow': 1,
+     'title': 'Title!', 'topic': 1, 'data': json.dumps(
+         {"holy_grail_workflow":
+             {"get_on_with_it":
+                 {"quest_thy_name": "Galahad",
+                  "horsie_name": "Patches",
+                  "horsie_info": {
+                    "hoofs": 4,
+                  },
+                  "knights": {
+                      "Galahad": {
+                          "is_questing": True,
+                          "is_courageous": True,
+                          "how_courageous_exactly": 9,
+                          },
+                      "Robin": {
+                          "is_questing": True,
+                          "is_courageous": False,
+                          },
+                      },
+                  "minstrels": {
+                      "0": {
+                          "name": "Phil",
+                          "instrument": "phlute",
+                          "kg": 77.1,
+                          "lb": 169.7,
+                          },
+                      "1": {
+                          "name": "Sasha",
+                          "instrument": "sackbut",
+                          "kg": 55,
+                          "lb": 121,
+                          "sings": "True",
+                          "singing_part": "bass",
+                          },
+                      }
+                }
+            }
+         })  # end of `data`
+     }
+
+class StaticReportTests(APITestCase):
+
+    fixtures = ['thin.json', ]
+
+    def test_static_report(self):
+        user = _fixture_user(self)
+        proposal = Proposal.objects.get(id=2)
+        self.assertEqual(proposal.report('holy_grail_workflow').__next__()['question'],
+            'Holy Grail Workflow')
+
+    def test_integer_multiplicity(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/', minstrel_data)
+        proposal = Proposal.objects.get(id=response.data['id'])
+        qs_and_answers = [(e.get('question'), e.get('answer'))
+                          for e in proposal.report('holy_grail_workflow')]
+        self.assertIn(('Name', 'Sasha'), qs_and_answers)
+        self.assertIn(('Instrument', 'sackbut'), qs_and_answers)
+        self.assertEqual(proposal.report('holy_grail_workflow').__next__()['question'],
+            'Holy Grail Workflow')
+
+    def test_report_semantics(self):
+        user = _fixture_user(self)
+        response = self.client.post('/api/v1/proposals/', minstrel_data)
+        proposal = Proposal.objects.get(id=response.data['id'])
+
+        from pprint import pprint
+        rpt = list(proposal.report('holy_grail_workflow'))
+        self.assertEqual(rpt[0]['question'], 'Holy Grail Workflow')
+        self.assertEqual(rpt[0]['semantic'], 'h1')
+        self.assertEqual(rpt[3]['element'].name, 'knights')
+        # verify that back-to-back multiplicity lists are
+        # semantically handled as dl lists
+        # Knights section
+        self.assertEqual(rpt[3]['semantic'], 'dl-start')
+        self.assertEqual(rpt[3]['element'].name, 'knights')
+        self.assertEqual([r['semantic'] for r in rpt[4:9]], ['dl',] * 5)
+        self.assertEqual(rpt[9]['semantic'], 'dl-end')
+        # Minstrels section
+        self.assertEqual(rpt[10]['semantic'], 'dl-start')
+        self.assertEqual(rpt[10]['element'].name, 'minstrels')
+        self.assertEqual([r['semantic'] for r in rpt[11:23]], ['dl',] * 12)
+        self.assertEqual(rpt[23]['semantic'], 'dl-end')
+
+
 class ProposalValidationTests(APITestCase):
 
     fixtures = ['thin.json', ]
 
-    data = {
-         'workflow': 1,
-         'title': 'Title!', 'topic': 1, 'data': json.dumps(
-             {"quest_thy_name": "Galahad",
-              "knights": {
-                  "Galahad": {
-                      "is_courageous": True,
-                      "how_courageous_exactly": 9,
-                      },
-                  "Robin": {
-                      "is_courageous": False,
-                      },
-                  },
-              "minstrels": {
-                  "0": {
-                      "name": "Phil",
-                      "instrument": "phlute",
-                      "kg": 77.1,
-                      "lb": 169.7,
-                      },
-                  "1": {
-                      "name": "Sasha",
-                      "instrument": "sackbut",
-                      "kg": 55,
-                      "lb": 121,
-                      "sings": "True",
-                      "singing_part": "bass",
-                      },
-                  }
-             })
-         }
-
     def test_correct_submission_is_valid(self):
         user = _fixture_user(self)
-        response = self.client.post('/api/v1/proposals/', self.data)
+        response = self.client.post('/api/v1/proposals/', minstrel_data)
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         proposal = Proposal.objects.get(id=response.data['id'])
         self.assertNotEqual(None, proposal.verified_at)
@@ -1365,9 +1458,9 @@ class ProposalValidationTests(APITestCase):
 
     def test_missing_required(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        del(data["data"]["minstrels"]["0"]["kg"])
+        del(data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["kg"])
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1376,9 +1469,9 @@ class ProposalValidationTests(APITestCase):
 
     def test_missing_xor_fails(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        del(data["data"]['minstrels']['1']['singing_part'])
+        del(data["data"]['holy_grail_workflow']['get_on_with_it']['minstrels']['1']['singing_part'])
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1388,9 +1481,9 @@ class ProposalValidationTests(APITestCase):
 
     def test_too_many_answers_for_xor_fails(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        data["data"]['minstrels']['1']['singing_part_unidentifiable'] = True
+        data["data"]['holy_grail_workflow']['get_on_with_it']['minstrels']['1']['singing_part_unidentifiable'] = True
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1400,9 +1493,9 @@ class ProposalValidationTests(APITestCase):
 
     def test_validation_violated(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["kg"] = -22
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["kg"] = -22
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1411,10 +1504,10 @@ class ProposalValidationTests(APITestCase):
 
     def test_two_validation_failures(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["kg"] = -22
-        del(data["data"]["knights"]["Galahad"]["how_courageous_exactly"])
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["kg"] = -22
+        del(data["data"]['holy_grail_workflow']['get_on_with_it']["knights"]["Galahad"]["how_courageous_exactly"])
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1425,7 +1518,7 @@ class ProposalValidationTests(APITestCase):
 
     def test_correct_patch_is_valid(self):
         user = _fixture_user(self)
-        response = self.client.post('/api/v1/proposals/', self.data)
+        response = self.client.post('/api/v1/proposals/', minstrel_data)
         proposal_id = response.data['id']
         proposal = Proposal.objects.get(id=proposal_id)
         patch_data = {"data": json.dumps({"minstrels": {"0": {"kg": 95}}})}
@@ -1438,10 +1531,10 @@ class ProposalValidationTests(APITestCase):
 
     def test_incorrect_patch_is_invalid(self):
         user = _fixture_user(self)
-        response = self.client.post('/api/v1/proposals/', self.data)
+        response = self.client.post('/api/v1/proposals/', minstrel_data)
         proposal_id = response.data['id']
         proposal = Proposal.objects.get(id=proposal_id)
-        patch_data = {"data": json.dumps({"minstrels": {"0": {"kg": -95}}})}
+        patch_data = {"data": json.dumps({"holy_grail_workflow":{"get_on_with_it":{"minstrels": {"1": {"kg": -95}}}}})}
         response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual({'non_field_errors': ['kg: failed not_less_than']}, response.data)
@@ -1451,7 +1544,7 @@ class ProposalValidationTests(APITestCase):
 
     def test_patch_add_complete_is_valid(self):
         user = _fixture_user(self)
-        response = self.client.post('/api/v1/proposals/', self.data)
+        response = self.client.post('/api/v1/proposals/', minstrel_data)
         proposal_id = response.data['id']
         proposal = Proposal.objects.get(id=proposal_id)
         patch_data = {"data": json.dumps({"knights": {"2": {"is_courageous": True,
@@ -1462,13 +1555,13 @@ class ProposalValidationTests(APITestCase):
         self.assertNotEqual(None, proposal.verified_at)
         self.assertNotEqual(new_proposal.verified_at, proposal.verified_at)
         self.assertNotEqual(None, new_proposal.verified_at)
-        
+
     def test_patch_add_incomplete_is_invalid(self):
         user = _fixture_user(self)
-        response = self.client.post('/api/v1/proposals/', self.data)
+        response = self.client.post('/api/v1/proposals/', minstrel_data)
         proposal_id = response.data['id']
         proposal = Proposal.objects.get(id=proposal_id)
-        patch_data = {"data": json.dumps({"knights": {"2": {"is_courageous": True}}})}
+        patch_data = {"data": json.dumps({"holy_grail_workflow": {"get_on_with_it": {"knights": {"Robin": {"is_courageous": True}}}}})}
         response = self.client.patch('/api/v1/proposals/%d/' % response.data["id"], patch_data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual({'non_field_errors': ['Required field how_courageous_exactly not found']},
@@ -1479,9 +1572,9 @@ class ProposalValidationTests(APITestCase):
 
     def test_element_type_phone_validation_pass(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["phone"] = "123-456-7890"
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["phone"] = "123-456-7890"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1489,9 +1582,9 @@ class ProposalValidationTests(APITestCase):
 
     def test_element_type_phone_validation_fail(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["phone"] = "Pennsylvania 6-5000"
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["phone"] = "Pennsylvania 6-5000"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1500,9 +1593,9 @@ class ProposalValidationTests(APITestCase):
 
     def test_element_type_email_validation_pass(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["email"] = "phil@peasantry.com"
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["email"] = "phil@peasantry.com"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1510,9 +1603,9 @@ class ProposalValidationTests(APITestCase):
 
     def test_element_type_email_validation_fail(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["email"] = "I am not literate"
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["email"] = "I am not literate"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1521,9 +1614,9 @@ class ProposalValidationTests(APITestCase):
 
     def test_element_type_zip_validation_pass(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["zip"] = "12345"
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["zip"] = "12345"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1531,9 +1624,9 @@ class ProposalValidationTests(APITestCase):
 
     def test_element_type_zip_validation_fail(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["zip"] = "12345678987654321"
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["zip"] = "12345678987654321"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1542,9 +1635,19 @@ class ProposalValidationTests(APITestCase):
 
     def test_element_type_integer_validation_pass(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["teeth"] = 17
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["teeth"] = 17
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def test_element_type_integer_as_string_validation_pass(self):
+        user = _fixture_user(self)
+        data = deepcopy(minstrel_data)
+        data["data"] = json.loads(data["data"])
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["teeth"] = "17"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1552,9 +1655,31 @@ class ProposalValidationTests(APITestCase):
 
     def test_element_type_integer_validation_fail(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["teeth"] = "Maybe"
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["teeth"] = "Maybe"
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid integer']})
+
+    def test_element_type_float_validation_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(minstrel_data)
+        data["data"] = json.loads(data["data"])
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["teeth"] = 12.8
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid integer']})
+
+    def test_element_type_float_as_string_validation_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(minstrel_data)
+        data["data"] = json.loads(data["data"])
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["teeth"] = "12.8"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1563,9 +1688,19 @@ class ProposalValidationTests(APITestCase):
 
     def test_element_type_percent_validation_pass(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["skill"] = 22
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["skill"] = 22
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def test_element_type_percent_as_string_validation_pass(self):
+        user = _fixture_user(self)
+        data = deepcopy(minstrel_data)
+        data["data"] = json.loads(data["data"])
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["skill"] = "22"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1573,9 +1708,20 @@ class ProposalValidationTests(APITestCase):
 
     def test_element_type_percent_validation_fail(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["skill"] = -22
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["skill"] = -22
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid percent']})
+
+    def test_element_type_percent_as_string_validation_fail(self):
+        user = _fixture_user(self)
+        data = deepcopy(minstrel_data)
+        data["data"] = json.loads(data["data"])
+        data["data"]['holy_grail_workflow']['get_on_with_it']["minstrels"]["0"]["skill"] = "-22"
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1584,9 +1730,9 @@ class ProposalValidationTests(APITestCase):
 
     def test_element_type_percent_validation_greater_than_100_pass(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["skill"] = 122
+        data["data"]["holy_grail_workflow"]["get_on_with_it"]["minstrels"]["0"]["skill"] = 122
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
@@ -1594,14 +1740,49 @@ class ProposalValidationTests(APITestCase):
 
     def test_element_type_percent_validation_greater_than_1000_fail(self):
         user = _fixture_user(self)
-        data = deepcopy(self.data)
+        data = deepcopy(minstrel_data)
         data["data"] = json.loads(data["data"])
-        data["data"]["minstrels"]["0"]["skill"] = 1001
+        data["data"]["holy_grail_workflow"]["get_on_with_it"]["minstrels"]["0"]["skill"] = 1001
         data["data"] = json.dumps(data["data"])
 
         response = self.client.post('/api/v1/proposals/', data)
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual(response.data, {'non_field_errors': ['Not a valid percent']})
+
+    def required_enforced_when_parent_ask_if_true(self):
+        user = _fixture_user(self)
+        data = deepcopy(minstrel_data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["holy_grail_workflow"]["get_on_with_it"]["horsie_info"].pop("hoofs")
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Required field hoofs not found']})
+
+    def required_not_enforced_when_parent_ask_if_false(self):
+        user = _fixture_user(self)
+        data = deepcopy(minstrel_data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["holy_grail_workflow"]["get_on_with_it"]["horsie_name"] = None
+        data["data"]["holy_grail_workflow"]["get_on_with_it"]["horsie_info"].pop("hoofs")
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def required_respects_parents_ask_if(self):
+
+        user = _fixture_user(self)
+        data = deepcopy(minstrel_data)
+        data["data"] = json.loads(data["data"])
+        data["data"]["holy_grail_workflow"]["get_on_with_it"]["minstrels"]["0"]["skill"] = 1001
+        data["data"] = json.dumps(data["data"])
+
+        response = self.client.post('/api/v1/proposals/', data)
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertEqual(response.data, {'non_field_errors': ['Not a valid percent']})
+
 
 def _upload_death_star_plans(test_instance, login=True):
     if login:

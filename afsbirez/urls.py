@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 
 from rest_framework import routers
 from rest_framework_proxy.views import ProxyView
-from sbirez import api, models
+from sbirez import api, models, views
 
 router = routers.DefaultRouter()
 router.register(r'users', api.UserViewSet)
@@ -15,6 +15,7 @@ router.register(r'groups', api.GroupViewSet)
 router.register(r'topics', api.TopicViewSet, 'topics')
 router.register(r'proposals/partial', api.PartialProposalViewSet)
 router.register(r'proposals', api.ProposalViewSet)
+router.register(r'proposal', api.ProposalViewSet)
 router.register(r'addresses', api.AddressViewSet)
 router.register(r'persons', api.PersonViewSet)
 router.register(r'documents', api.DocumentViewSet)

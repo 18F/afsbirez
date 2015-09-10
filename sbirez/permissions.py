@@ -44,4 +44,3 @@ class HasObjectEditPermissions(permissions.BasePermission):
         # allow logged in user to view view/edit proposals from firm
         # if a user is authed and is associated with the firm
         return request.user.is_staff or object.firm == request.user.firm
-
