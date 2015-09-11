@@ -1,38 +1,36 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <!--link rel="stylesheet" href="https://abs.twimg.com/a/1440461805/css/t1/twitter_core.bundle.css"-->
-    <link rel="stylesheet" href="/static/css/pdf.css" />
-  </head>
+  <link rel="stylesheet" href="/static/css/reset.css" /> 
+  <link rel="stylesheet" href="/static/css/pdf.css" /> 
+  {% load stringyesno %}
+  {% load money %}
   <body>
-
     <main class="cover-sheet">
       <div class="wrapper">
         <header class="cover-sheet--header">
           <h1>
-            Small Business Innovation Research (SBIR) Program
+            Small Business Innovation Research (SBIR) Program 
             <span class="cover-sheet">Proposal Cover Sheet</span>
           </h1>
           <p>Knowingly and willfully making any false, fictitious, or fraudulent statements or representations may be a felony under the Federal Criminal False Statement Act (18 USC Sec 1001), punishable by a fine of up to $10,000, up to five years in prison, or both.</p>
-            <div class="proposal-number">Proposal Number: {{ prop.proposal_number }}</div>
+          <div class="proposal-number">Proposal Number: {{ prop.proposal_number }}</div>
           <div class="date-submitted">Date Submitted: {{ prop.date_submitted }}</div>
           <div class="due-date">{{ prop.topic.solicitation.name }} due
           {{ prop.topic.solicitation.proposals_end_date|date:"d F Y" }}</div>
         </header>
-        <hr />
         <section class="cover-sheet--agency-information">
           <h1>Agency information</h1>
           <dl>
             <dt class="name">Name</dt>
-            <dd class="name">{{ prop.topic.agency }}</dd>
+            <dd class="name">Air Force</dd>
             <dt class="command">Command</dt>
-            <dd class="command">RI</dd><!-- TODO: -->
+            <dd class="command">RI</dd>
             <dt class="topic-number">Topic number</dt>
             <dd class="topic-number">{{ prop.topic.topic_number }}</dd>
             <dt class="proposal-title">Proposal Title</dt>
             <dd class="proposal-title">{{ prop.topic.title }}</dd>
           </dl>
         </section>
-        <hr />
         <section class="cover-sheet--firm-information">
           <h1>Firm information</h1>
           <dl>
@@ -51,41 +49,359 @@
             <dt class="sba-sbc">SBA SBC</dt>
             <dd class="sba-sbc">{{ prop.firm_sbc_id }}</dd>
           </dl>
-        </section><div></div>
-          {% for itm in report %}
-            {% if itm.semantic|first == 'h' %}
-              </section>
-              <section class="{{ itm.element.element_type }}">
-              <{{ itm.semantic }} class="{{ itm.element.element_type }}">
-                {{ itm.question }}
-              </{{ itm.semantic }}>
-            {% elif itm.semantic == 'dl-start' %}
-              <dl class="{{ itm.element.element_type }}">
-            {% elif itm.semantic == 'dl' %}
-                <dt class="{{ itm.element.element_type }}">{{ itm.question }}</dt>
-                <dd class="{{ itm.element.element_type }}">{{ itm.answer }}</dd>
-            {% elif itm.semantic == 'dl-end' %}
+          <article class="question question-1">
+            <span class="question--number">1</span> 
+            <span class="question--text">Does your firm allow for the release of its contact information to Economic Development Organizations?</span>
+            <span class="question--answer"> {{ data.dod_coversheet.eligibility.release_to_edc |stringyesno }}</span>
+          </article>
+        </section>
+        <section class="cover-sheet--eligibility">
+          <h1>Eligibility</h1>  
+          <article class="question question-2">
+            <span class="question--number">2</span> 
+            <span class="question--text">Are you a small business as described in section 3.15 of the solicitation, with no more than 500 employees including affiliates? </span>
+            <span class="question--answer">{{ data.dod_coversheet.eligibility.small_business |stringyesno }}</span>
+          </article>
+          <article class="question question-3">
+            <span class="question--number">3</span>
+            <span class="question--text">Does your business concern meet the ownership and control requirements in 13 CFR 121.702?</span>
+            <span class="question--answer">{{ data.dod_coversheet.eligibility.ownership_control_requirements |stringyesno }}</span>
+          </article>
+          <article class="question question-4">
+            <span class="question--number">4</span>
+            <span class="question--text">Is 50% or more of your firm owned or managed by a corporate entity?</span>
+            <span class="question--answer">{{ data.dod_coversheet.eligibility.majority_owned_by_corp |stringyesno }}</span>            
+          </article>
+          <article class="question question-5">
+            <span class="question--number">5</span>
+            <span class="question--text">At a minimum, will two-thirds of the research and/or analytical work in Phase I be carried out by your small business as described in section 4.2 of the solicitation?</span>
+            <span class="question--answer">{{ data.dod_coversheet.eligibility.two_thirds_work_requirement |stringyesno }}</span>            
+          </article>
+          <article class="question question-6">
+            <span class="question--number">6</span>
+            <span class="question--text">Is primary employment of the principal investigator with your firm (identified below) as described in section 4.2 of the solicitation?</span>
+            <span class="question--answer">{{ data.dod_coversheet.eligibility.pi_primary_employment |stringyesno }}</span>
+          </article>
+          <article class="question question-7">
+            <span class="question--number">7</span>
+            <span class="question--text">Has your firm been convicted of a fraud-related crime involving SBIR and/or STTR funds or found civilly liable for a fraud-related violation involving Federal funds?</span>
+            <span class="question--answer">{{ data.dod_coversheet.eligibility.fraud_conviction |stringyesno }}</span>
+          </article>
+          <article class="question question-8">
+            <span class="question--number">8</span>
+            <span class="question--text">Has your firm&rsquo;s Principal Investigator (PI) or Corporate Official (CO) listed below, or owner been convicted of a fraud-related crime involving SBIR and/or STTR funds or found civilly liable for a fraud-related violation involving Federal funds?</span>
+            <span class="question--answer">{{ data.dod_coversheet.eligibility.pi_fraud_conviction |stringyesno }}</span>
+          </article>
+          <article class="question question-9">
+            <span class="question--number">9</span>
+            <span class="question--text">Has your firm met the performance benchmarks in section 3.1 of the solicitation and listed by the SBA on their website as eligible to participate?</span>
+            <span class="question--answer">{{ data.dod_coversheet.eligibility.performance_benchmarks |stringyesno }}</span>
+          </article>
+          <article class="question question-10">
+            <span class="question--number">10</span>
+            <span class="question--text">Is your firm registered in the SBA's venture capital database as majority-owned by venture capital operating companies, hedge funds, or private equity firms?</span>
+            <span class="question--answer">{{ data.dod_coversheet.eligibility.registered_venture_capital |stringyesno }}</span>
+          </article>
+          <article class="question question-11">
+            <span class="question--number">11</span>
+            <span class="question--text">Is your firm more than 50% owned by a single Venture Capital Owned Company (VCOC), hedge fund, or private equity firm?</span>
+            <span class="question--answer">{{ data.dod_coversheet.eligibility.single_venture_capital_owned |stringyesno }}</span>
+          </article>
+          <article class="question question-12">
+            <span class="question--number">12</span> 
+            <span class="question--text">Is your firm more than 50% owned by multiple business concerns that are VCOCs, hedge funds, or private equity firms?</span>
+            <span class="question--answer">{{ data.dod_coversheet.eligibility.multiple_venture_capital_owned |stringyesno }}</span>
+          </article>
+          <p class="note">NOTE: IAW Section 4.2 of the solicitation, firms that do not meet all eligibility requirements will not receive award. IAW Section 4.4 of the solicitation, small businesses that are owned in majority part by multiple VCOCs, hedge funds, or private equity funds are ineligible to submit proposals for opportunities in this solicitation.</p>
+        </section>
+        <section class="cover-sheet--business-information">
+          <h1>Business information</h1>
+          <article class="question question-13">
+            <span class="question--number">13</span>
+            <span class="question--text">Number of employees including all affiliates (average for preceding 12 months):</span>
+            <span class="question--answer">{{ data.dod_coversheet.business_information.employee_count }}</span>            
+          </article>
+          <article class="question question-14">
+            <span class="question--number">14</span>
+            <span class="question--text">Is your firm affiliated as set forth in 13 CFR 121.103?</span>
+            <span class="question--answer">{{ data.dod_coversheet.business_information.firm_affiliated |stringyesno }}</span>
+            {% if data.dod_coversheet.business_information.firm_affiliated == "true" %}
+              <p>If yes, please provide information below</p>
+              <dl>
+                <dt>Name</dt>
+                <dd>{{ data.dod_coversheet.business_information.firm_affiliated_info.firm_affiliated_name }}</dd>
+                <dt>Mailing address</dt>
+                <dd>{{ data.dod_coversheet.business_information.firm_affiliated_info.firm_affiliated_address }} {{ data.dod_coversheet.business_information.firm_affiliated_info.firm_affiliated_state }} {{ data.dod_coversheet.business_information.firm_affiliated_info.firm_affiliated_zip }}</dd>
+                <dt>Number of employees</dt>
+                <dd>{{ data.dod_coversheet.business_information.firm_affiliated_info.firm_affiliated_employeecount }}</dd>
               </dl>
-            {% elif itm.semantic == 'table-start' %}
-              <table class="{{ itm.element.element_type }}">
-            {% elif itm.semantic == 'table' %}
-              <tr><td class="question {{ itm.element.element_type }}">{{ itm.question }}</td>
-                  <td class="answer {{ itm.element.element_type }}">{{ itm.answer }}</td>
-              </tr>
-            {% elif itm.semantic == 'table-end' %}
-              </table>
-            {% elif itm.semantic == 'p' %}
-              <p class="{{ itm.element.element_type }}">{{ itm.question }}</p>
-            {% else %}
-              <div class="numbered-question {{ itm.element.element_type }}">
-                <div class="question-number {{ itm.element.element_type }}">
-                  {{ itm.element.report_question_number|default_if_none:"" }}
-                </div>
-                <div class="question {{ itm.element.element_type }}">{{ itm.question }}</div>
-                <div class="answer {{ itm.element.element_type }}">{{ itm.answer }}</div>
-              </div>
             {% endif %}
-          {% endfor %}
+          </article>
+          <article class="question question-15">
+            <span class="question--number">15</span>
+            <span class="question--text">As defined by SBA&hellip;</span>
+            <article class="question">
+                <span class="question--number">A</span>
+                <span class="question--text">Are you a socially or economically disadvantaged small business?</span>
+                <span class="question--answer">{{ data.dod_coversheet.business_information.disadvantaged_small_business |stringyesno }}</span>              
+            </article>
+            <article class="question">
+              <span class="question--number">B</span>
+              <span class="question--text">Are you a Woman-Owned small business (WOSB)?</span>
+              <span class="question--answer">{{ data.dod_coversheet.business_information.women_owned_small_business |stringyesno }}</span>
+            </article>
+            <article class="question">
+              <span class="question--number">C</span>
+              <span class="question--text">Are you a certified HUBZone small business concern?</span>
+              <span class="question--answer">{{ data.dod_coversheet.business_information.hubzone_small_business |stringyesno }}</span>
+            </article>
+            <article class="question">
+              <span class="question--number">D</span>
+              <span class="question--text">Are you a Service-Disabled Veteran-Owned small business (SDVOSB)?</span>
+              <span class="question--answer">{{ data.dod_coversheet.business_information.service_disabled_vet_small_business |stringyesno }}</span>
+            </article>
+          </article>
+          <article class="question question-16">
+            <span class="question--number">16</span>
+            <span class="question--text">Has the Defense Contracting Audit Agency (DCAA) or other agreed upon agency, performed a review of your accounts or records in connection with government contracts or subcontracts within the past 12 months?</span>
+            <span class="question--answer">{{ data.dod_coversheet.business_information.dcaa_review |stringyesno }}</span>
+            {% if data.dod_coversheet.business_information.dcaa_review == 'true' %}
+              <aside>
+                <dl>
+                  <dt>Agency Name</dt>
+                  <dd>{{ data.dod_coversheet.business_information.dcaa_review_info.dcaa_review_name }}</dd>
+                  <dt>Mailing Address</dt>
+                  <dd>{{ data.dod_coversheet.business_information.dcaa_review_info.dcaa_review_address }}</dd>
+                  <dt class="empty-dt"></dt>
+                  <dd>{{ data.dod_coversheet.business_information.dcaa_review_info.dcaa_review_city }} {{ data.dod_coversheet.business_information.dcaa_review_info.dcaa_review_state }} {{ data.dod_coversheet.business_information.dcaa_review_info.dcaa_review_zipcode }}</dd>
+                  <dt>Auditor</dt>
+                  <dd>{{ data.dod_coversheet.business_information.dcaa_review_info.dcaa_review_auditor }}</dd>
+                  <dt>Phone</dt>
+                  <dd>{{ data.dod_coversheet.business_information.dcaa_review_info.dcaa_review_phone }}</dd>
+                  <dt>Email Address</dt>
+                  <dd>{{ data.dod_coversheet.business_information.dcaa_review_info.dcaa_review_email }}</dd>
+                  <dt>Agency for which the review was performed</dt>
+                  <dd>{{ data.dod_coversheet.business_information.dcaa_review_info.dcaa_review_agency_requesting_review }}</dd>
+                </dl>
+              </aside>
+            {% else %}
+              <aside>
+              <dt class="dcaa-review">If no, when was such a review was last performed</dt>
+              {% if data.dod_coversheet.business_information.dcaa_review_info_never %}
+                <dd class="dcaa-review">A review has never been performed.</dd>
+              {% elif data.dod_coversheet.business_information.dcaa_review_info_no %}
+                <dd class="dcaa-review">{{ data.dod_coversheet.business_information.dcaa_review_info_no }}</dd>
+              {% endif %}
+              </aside>
+            {% endif %}
+          </article>
+        </section>
+        <section class="cover-sheet--proposal-information">
+          <h1>Proposal information</h1>
+          <dl>
+            <dt class="proposed-cost">Proposed cost</dt>
+            <dd class="proposed-cost">${{ data.dod_cost_volume.cv_totals.estimated_total_cost | money }}</dd>
+            <dt class="phase">Phase</dt>
+            <dd class="phase">I</dd>
+            <dt class="duration breathing-room">Duration</dt>
+            <dd class="duration">{{ data.dod_coversheet.proposal_information.phase_I_duration }} Months</dd>
+          </dl>
+          <article class="question question-17">
+            <span class="question--number">17</span>
+            <span class="question--text">Does the proposed cost include Discretionary Technical Assistance (DTA)?</span>
+            <span class="question--answer">No</span>
+          </article>
+          <p class="note">For any purpose other than to evaluate the proposal, this data except proposal cover sheets shall not be disclosed outside the Government and shall not be duplicated, used or disclosed in whole or in part, provided that if a contract is awarded to this proposer as a result of or in connection with the submission of this data, the Government shall have the right to duplicate, use or disclose the data to the extent provided in the funding agreement. This restriction does not limit the Government's right to use information contained in the data if it is obtained from another source without restriction. This restriction does not apply to routine handling of proposals for administrative purposed by Government support contractors as indicated in Section 5.3 of the solicitation. The data subject to this restriction is contained on the pages of the proposal listed on the line below.</p>
+          <p class="breathing-room">Proprietary information (list page numbers): {{ data.dod_coversheet.proposal_information.proprietary_info_page_numbers }}</p>
+          <article class="question question-18">
+            <span class="question--number">18</span>
+            <span class="question--text">Has a proposal for essentially equivalent work been submitted to other US government agencies or DoD components?</span>
+            <span class="question--answer">{{ data.dod_coversheet.proposal_information.essentially_equivalent_work_yn |stringyesno }}</span>
+            {% if data.dod_coversheet.proposal_information.essentially_equivalent_work_yn == "true" %}
+              <p>If yes, list the name(s) of the agency or DoD component and if SBIR or STTR, list Topic Number in the space below.</p>
+              <dd class="equivalent-work breathing-room">{{ data.dod_coversheet.proposal_information.essentially_equivalent_work_info }}</dd>
+            {% endif %}
+          </article>
+          <article class="question question-19">
+            <span class="question--number">19</span>                        
+            <span class="question--text">Has a contract been awarded for any of the proposals listed above?</span>
+            <span class="question--answer">{{ data.dod_coversheet.proposal_information.essentially_equivalent_contract_awarded_yn |stringyesno }}</span>
+            {% if data.dod_coversheet.proposal_information.essentially_equivalent_contract_awarded_yn == "true" %}
+              <p>If yes, please provide the contract number:</p>
+              <dd class="equivalent-work breathing-room">{{ data.dod_coversheet.proposal_information.essentially_equivalent_contract_number }}</dd>
+            {% endif %}
+          </article>
+          <article class="question question-20">
+            <span class="question--number">20</span>
+            <span class="question--text">Are you submitting assertions in accordance with DFARS 252.227-7017 "Identification and assertions use, release, or disclosure restriction"? See Section 11.5 of the solicitation.</span>
+            <span class="question--answer">{{ data.dod_coversheet.proposal_information.dfars252 |stringyesno }}</span>
+          </article>
+          <article class="question question-21">
+            <span class="question--number">21</span>            
+            <span class="question--text">Are you proposing research that utilizes human/animal subjects or recombinant DNA as described in section 3.11, 3.12, and 3.13 of the solicitation?</span>
+            <span class="question--answer">{{ data.dod_coversheet.proposal_information.special_research_subjects |stringyesno }}</span>
+          </article>
+          <article class="technical-abstract">
+            <h1>Technical abstract <span class="limit">(Limit your abstract to 200 words with no classified or proprietary information)</span></h1>
+            <p>{{ data.dod_technicalvolume.technical_abstract }}</p>
+          </article>        
+          <article class="anticipated-benefits">
+            <h1>Anticipated Benefits/Potential Commercial Applications of the Research or Development. <span class="no-classified">(No classified or proprietary information)</span></h1>
+            <p>{{ data.dod_coversheet.proposal_information.anticipated_benefits }}</p>
+          </article>        
+          <article class="key-words">
+            <h1>List a maximum of 8 Key Words or phrases, separated by commas, that describe the Project.</h1>
+            <p>{{ data.dod_coversheet.proposal_information.keywords }}</p>
+          </article>
+        </section>
+        <section class="cover-sheet--project-team-information">
+          <h1>Project team information</h1>
+          <article class="question question-22">
+            <span class="question--number">22</span>
+            <span class="question--text">Are teaming partners or subcontractors proposed?</span>
+            <span class="question--answer">{{ data.dod_coversheet.project_team_information.teaming_partners_yn |stringyesno }}</span>
+            <ul>
+            {% if data.dod_coversheet.project_team_information.teaming_partners.University.is_teaming_with %}
+              <li class="teaming-partner-listitem">
+                <span class="teaming-partner">University:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.University.name }} 
+                <span class="teaming-partner-poc">POC:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.University.POC }}
+              </li>
+            {% endif %}
+            {% if data.dod_coversheet.project_team_information.teaming_partners.Historically_Black_Colleges_and_Universities_and_Minority_Institutions.is_teaming_with %}
+              <li class="teaming-partner-listitem">
+                <span class="teaming-partner">HBCU/MI:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.Historically_Black_Colleges_and_Universities_and_Minority_Institutions.name }} 
+                <span class="teaming-partner-poc">POC:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.Historically_Black_Colleges_and_Universities_and_Minority_Institutions.POC }}
+              </li>
+            {% endif %}
+            {% if data.dod_coversheet.project_team_information.teaming_partners.Federally_Funded_Research_and_Development_Center.is_teaming_with %}
+              <li class="teaming-partner-listitem">
+                <span class="teaming-partner">FFRDC:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.Federally_Funded_Research_and_Development_Center.name }} 
+                <span class="teaming-partner-poc">POC:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.Federally_Funded_Research_and_Development_Center.POC }}
+              </li>
+            {% endif %}
+            {% if data.dod_coversheet.project_team_information.teaming_partners.Nonprofit_Institution.is_teaming_with %}
+              <li class="teaming-partner-listitem">
+                <span class="teaming-partner">Nonprofit Institution:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.Nonprofit_Institution.name }} 
+                <span class="teaming-partner-poc">POC:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.Nonprofit_Institution.POC }}
+              </li>
+            {% endif %}
+            {% if data.dod_coversheet.project_team_information.teaming_partners.Federal_Laboratory.is_teaming_with %}
+              <li class="teaming-partner-listitem">
+                <span class="teaming-partner">Federal Laboratory:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.Federal_Laboratory.name }} 
+                <span class="teaming-partner-poc">POC:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.Federal_Laboratory.POC }}
+              </li>
+            {% endif %}
+            {% if data.dod_coversheet.project_team_information.teaming_partners.Other_Federal_Facility.is_teaming_with %}
+              <li class="teaming-partner-listitem">
+                <span class="teaming-partner">Other Federal Facility:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.Other_Federal_Facility.name }} 
+                <span class="teaming-partner-poc">POC:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.Other_Federal_Facility.POC }}
+              </li>
+            {% endif %}
+            {% if data.dod_coversheet.project_team_information.teaming_partners.Small_Business.is_teaming_with %}
+              <li class="teaming-partner-listitem">
+                <span class="teaming-partner">Small Business:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.Small_Business.name }} 
+                <span class="teaming-partner-poc">POC:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.Small_Business.POC }}
+              </li>
+            {% endif %}
+            {% if data.dod_coversheet.project_team_information.teaming_partners.Large_Business.is_teaming_with %}
+              <li class="teaming-partner-listitem">
+                <span class="teaming-partner">Large Business:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.Large_Business.name }} 
+                <span class="teaming-partner-poc">POC:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.Large_Business.POC }}
+              </li>
+            {% endif %}
+            {% if data.dod_coversheet.project_team_information.teaming_partners.Other.is_teaming_with %}
+              <li class="teaming-partner-listitem">
+                <span class="teaming-partner">Other:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.Other.name }} 
+                <span class="teaming-partner-poc">POC:</span>
+                {{ data.dod_coversheet.project_team_information.teaming_partners.Other.POC }}
+              </li>
+            {% endif %}
+            </ul>
+          </article>
+          <article class="question question-23">
+            <span class="question--number">23</span>
+            <span class="question--text">Are you proposing to use foreign nationals as defined in section 3.5 of the solicitation for work under the proposed effort?</span>
+            <span class="question--answer">{{ data.dod_coversheet.project_team_information.foreign_nationals |stringyesno }}</span>
+          </article>
+        </section>
+        <section class="cover-sheet--principal-investigator">
+          <h1>Principal Investigator (PI)/Corporate Official (CO) Information</h1>
+          <article class="question question-24">
+            <span class="question--number">24</span>            
+            <span class="question--text">What percentage of the principal investigator's total time will be on the project?</span>
+            <span class="question--answer">{{ data.dod_coversheet.pi_info.pi_contact_info.pi_time_percentage }}%</span>
+          </article>
+          <article class="question question-25">
+            <span class="question--number">25</span>
+            <span class="question--text">Is the principal investigator (identified below) a woman?</span>
+            <span class="question--answer">{{ data.dod_coversheet.pi_info.pi_contact_info.pi_is_woman |stringyesno }}</span>
+          </article>
+          <article class="question question-26">
+            <span class="question--number">26</span>
+            <span class="question--text">Is the principal investigator (identified below) socially/economically disadvantaged?</span>
+            <span class="question--answer">{{ data.dod_coversheet.pi_info.pi_contact_info.pi_is_disadvantaged |stringyesno }}</span>
+          </article>
+          <article class="question question-27">
+            <span class="question--number">27</span>            
+            <span class="question--text">Is your firm's PI, CO, or owner, a faculty member or student of an institution of higher education?</span>
+            <span class="question--answer">{{ data.dod_coversheet.pi_info.pi_contact_info.pi_is_university |stringyesno }}</span>
+          </article>
+        </section>
+        <section class="cover-sheet--affiliated-persons">
+          <h1>Affiliated persons</h1>
+          <article class="person">
+            <h1>Project Manager/Principal Investigator</h1>
+            <dl>
+              <dt>Name</dt>
+              <dd>{{ data.dod_coversheet.pi_info.pi_contact_info.pi_honorific }} {{ data.dod_coversheet.pi_info.pi_contact_info.pi_name }}</dd>
+              <dt>Title</dt>
+              <dd>{{ data.dod_coversheet.pi_info.pi_contact_info.pi_title }}</dd>
+              <dt>Phone</dt>
+              <dd>{{ data.dod_coversheet.pi_info.pi_contact_info.pi_phone }}</dd>
+              <dt>Fax</dt>
+              <dd>{{ data.dod_coversheet.pi_info.pi_contact_info.pi_fax }}</dd>
+              <dt>Email</dt>
+              <dd>{{ data.dod_coversheet.pi_info.pi_contact_info.pi_email }}</dd>
+            </dl>
+            <div class="signature">Signature</div>
+            <div class="date">Date</div>
+          </article>
+          <article class="person">
+            <h1>Corporate official</h1>
+            <dl>
+              <dt>Name</dt>
+              <dd>{{ data.dod_coversheet.pi_info.co_contact_info.co_honorific }} {{ data.dod_coversheet.pi_info.co_contact_info.co_name }}</dd>
+              <dt>Title</dt>
+              <dd>{{ data.dod_coversheet.pi_info.co_contact_info.co_title }}</dd>
+              <dt>Phone</dt>
+              <dd>{{ data.dod_coversheet.pi_info.co_contact_info.co_phone }}</dd>
+              <dt>Fax</dt>
+              <dd>{{ data.dod_coversheet.pi_info.co_contact_info.co_fax }}</dd>
+              <dt>Email</dt>
+              <dd>{{ data.dod_coversheet.pi_info.co_contact_info.co_email }}</dd>
+            </dl>
+            <div class="signature">Signature</div>
+            <div class="date">Date</div>
+          </article>
         </section>
       </div>
     </main>
+  </body>
+</html>

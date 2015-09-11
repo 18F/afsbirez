@@ -481,7 +481,7 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
              data[elementName] === null ||
              data[elementName] === undefined ||
              (typeof data[elementName] === 'string' && data[elementName].trim() === '') ||
-             (typeof data[elementName] === 'object' && data[elementName].length === undefined));
+             (typeof data[elementName] === 'object' && isEmpty(data[elementName])));
   };
 
   /*
@@ -514,7 +514,6 @@ angular.module('sbirezApp').factory('ProposalService', function($http, $window, 
    * completeness. Returns a boolean.
    */
   var checkCompleteness = function(element, data) {
-    //console.log('complete', element.name, element, data)
     var length = element.children.length;
     var index = 0;
     var complete = true;
