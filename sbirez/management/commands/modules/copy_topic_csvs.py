@@ -39,13 +39,21 @@ def _add_points_of_contact(raw_topic, topic):
         tpoc_name = raw_topic.get('TPoc%s' % tpoc_label, '').strip()
         if not tpoc_name:
             break    # no more TPOCs
-        tpoc = Person(name=tpoc_name,
-                      email=raw_topic.get('TPoc%sEmail' % tpoc_label),
-                      phone=raw_topic.get('TPoc%sPhone' % tpoc_label),
-                      fax=raw_topic.get('TPoc%sFax' % tpoc_label),
-                      office=raw_topic.get('Tpoc%sOffSym' % tpoc_label),
-                      )
-        tpoc.save()
+        try:
+            tpoc = Person.objects.get(name=tpoc_name,
+                          email=raw_topic.get('TPoc%sEmail' % tpoc_label),
+                          phone=raw_topic.get('TPoc%sPhone' % tpoc_label),
+                          fax=raw_topic.get('TPoc%sFax' % tpoc_label),
+                          office=raw_topic.get('Tpoc%sOffSym' % tpoc_label),
+                )
+        except Person.DoesNotExist:
+            tpoc = Person(name=tpoc_name,
+                          email=raw_topic.get('TPoc%sEmail' % tpoc_label),
+                          phone=raw_topic.get('TPoc%sPhone' % tpoc_label),
+                          fax=raw_topic.get('TPoc%sFax' % tpoc_label),
+                          office=raw_topic.get('Tpoc%sOffSym' % tpoc_label),
+                          )
+            tpoc.save()
         relat = PointOfContactRelationship(poc=tpoc,
             topic=topic, priority=tpoc_order)
         tpoc_order += 1
