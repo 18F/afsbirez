@@ -1,23 +1,22 @@
-from rest_framework.test import APIRequestFactory, APIClient, APITestCase
+from rest_framework.test import APIRequestFactory, APITestCase
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework_proxy.views import ProxyView
+from django.utils import timezone
+from .models import Topic
 from collections import OrderedDict
 from copy import deepcopy
 import collections
+import datetime
 import dbm
 import json
 import tempfile
 from unittest import mock
 
-from django.test import TestCase
 import django.core.mail
 from django.core.files import uploadedfile
 
 from sbirez.models import Firm, Naics, Proposal
-from sbirez import api
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
 from django.utils import timezone
 
 factory = APIRequestFactory()
@@ -815,6 +814,14 @@ class TopicTests(APITestCase):
         self.assertEqual(response.data["count"], 159)
 
     def test_pocs_displayed_in_order(self):
+        # Set solicitation to Open tomorrow
+        topic = Topic.objects.get(id=507)
+        topic.solicitation.proposals_begin_date = (timezone.now() +
+            datetime.timedelta(days=1))
+        topic.solicitation.proposals_end_date = (timezone.now() +
+            datetime.timedelta(days=2))
+        topic.solicitation.save()
+
         response = self.client.get('/api/v1/topics/507/')
         self.assertEqual(response.data['tech_points_of_contact'][0]['title'],
                          'POC 1')
@@ -822,6 +829,30 @@ class TopicTests(APITestCase):
                          'POC 2')
         self.assertEqual(response.data['tech_points_of_contact'][2]['title'],
                          'POC 3')
+
+    def test_tpoc_included_after_pre_release(self):
+        # Set solicitation to Open tomorrow
+        topic = Topic.objects.get(id=507)
+        topic.solicitation.proposals_begin_date = (timezone.now() +
+            datetime.timedelta(days=1))
+        topic.solicitation.proposals_end_date = (timezone.now() +
+            datetime.timedelta(days=2))
+        topic.solicitation.save()
+
+        response = self.client.get('/api/v1/topics/507/')
+        self.assertTrue('tech_points_of_contact' in response.data.keys())
+
+    def test_tpoc_not_included_after_pre_release(self):
+        # Set solicitation to Open yesterday
+        topic = Topic.objects.get(id=507)
+        topic.solicitation.proposals_begin_date = (timezone.now() -
+            datetime.timedelta(days=1))
+        topic.solicitation.proposals_end_date = (timezone.now() +
+            datetime.timedelta(days=1))
+        topic.solicitation.save()
+
+        response = self.client.get('/api/v1/topics/507/')
+        self.assertFalse('tech_points_of_contact' in response.data.keys())
 
     # Check that pagination is behaving itself
     # (this may qualify as 'testing the library instead of the code')
