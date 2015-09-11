@@ -220,11 +220,19 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
     references = ReferenceSerializer(many=True)
     phases = PhaseSerializer(many=True)
     keywords = KeywordSerializer(many=True)
-    tech_points_of_contact = PersonSerializer(many=True)
     areas = AreaSerializer(many=True)
     saved = serializers.SerializerMethodField()
     proposal = serializers.SerializerMethodField()
     solicitation = SolicitationSerializer()
+
+    def get_tech_points_of_contact(self, obj):
+        if obj.solicitation.status == 'Future':
+            return [PersonSerializer(tpoc).data for tpoc in
+                    obj.tech_points_of_contact.all()]
+        else:
+            return []
+
+    tech_points_of_contact = serializers.SerializerMethodField()
 
     def get_saved(self, obj):
         "``True`` if current has saved this topic for later reference.  ``None`` if no current user."

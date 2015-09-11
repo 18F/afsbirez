@@ -840,7 +840,7 @@ class TopicTests(APITestCase):
         topic.solicitation.save()
 
         response = self.client.get('/api/v1/topics/507/')
-        self.assertTrue('tech_points_of_contact' in response.data.keys())
+        self.assertEqual(len(response.data['tech_points_of_contact']), 3)
 
     def test_tpoc_not_included_after_pre_release(self):
         # Set solicitation to Open yesterday
@@ -852,7 +852,7 @@ class TopicTests(APITestCase):
         topic.solicitation.save()
 
         response = self.client.get('/api/v1/topics/507/')
-        self.assertFalse('tech_points_of_contact' in response.data.keys())
+        self.assertEqual(len(response.data['tech_points_of_contact']), 0)
 
     # Check that pagination is behaving itself
     # (this may qualify as 'testing the library instead of the code')
