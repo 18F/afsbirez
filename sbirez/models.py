@@ -34,6 +34,8 @@ class Person(models.Model):
     email = models.TextField(null=True, blank=True)
     phone = models.TextField(null=True, blank=True)
     fax = models.TextField(null=True, blank=True)
+    office = models.TextField(null=True, blank=True)
+
 
 
 class Firm(models.Model):
@@ -79,7 +81,8 @@ class Firm(models.Model):
 class Naics(models.Model):
     code = models.TextField(primary_key=True)
     description = models.TextField(null=False)
-    firms = models.ManyToManyField('Firm', blank=True, related_name='naics')
+    firms = models.ManyToManyField('Firm', blank=True,
+                                   related_name='naics')
 
     def __str__(self):
         return "%s (%s)" % (self.code, self.description)
@@ -634,10 +637,23 @@ class Topic(models.Model):
     saved_by = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                       blank=True,
                                       related_name='saved_topics')
+    tech_points_of_contact = models.ManyToManyField(Person,
+                                      through='PointOfContactRelationship',
+                                      blank=True,
+                                      related_name='topics')
 
     objects = SearchManager(fields=None,
                             search_field='fts',
                             auto_update_search_field=False)
+
+
+class PointOfContactRelationship(models.Model):
+    poc = models.ForeignKey(Person)
+    topic = models.ForeignKey(Topic)
+    priority = models.IntegerField(blank=False)
+
+    class Meta:
+        ordering = ['priority', ]
 
 
 class Proposal(models.Model):

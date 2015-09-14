@@ -1,23 +1,22 @@
-from rest_framework.test import APIRequestFactory, APIClient, APITestCase
+from rest_framework.test import APIRequestFactory, APITestCase
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework_proxy.views import ProxyView
+from django.utils import timezone
+from .models import Topic
 from collections import OrderedDict
 from copy import deepcopy
 import collections
+import datetime
 import dbm
 import json
 import tempfile
 from unittest import mock
 
-from django.test import TestCase
 import django.core.mail
 from django.core.files import uploadedfile
 
 from sbirez.models import Firm, Naics, Proposal
-from sbirez import api
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
 from django.utils import timezone
 
 factory = APIRequestFactory()
@@ -813,7 +812,48 @@ class TopicTests(APITestCase):
     # Check that we're getting all closed topics back when closed is True
     def test_topic_closed_count(self):
         response = self.client.get('/api/v1/topics/?closed=true')
-        self.assertEqual(response.data["count"], 188)
+        self.assertEqual(response.data["count"], 159)
+
+    def test_pocs_displayed_in_order(self):
+        # Set solicitation to Open tomorrow
+        topic = Topic.objects.get(id=507)
+        topic.solicitation.proposals_begin_date = (timezone.now() +
+            datetime.timedelta(days=1))
+        topic.solicitation.proposals_end_date = (timezone.now() +
+            datetime.timedelta(days=2))
+        topic.solicitation.save()
+
+        response = self.client.get('/api/v1/topics/507/')
+        self.assertEqual(response.data['tech_points_of_contact'][0]['title'],
+                         'POC 1')
+        self.assertEqual(response.data['tech_points_of_contact'][1]['title'],
+                         'POC 2')
+        self.assertEqual(response.data['tech_points_of_contact'][2]['title'],
+                         'POC 3')
+
+    def test_tpoc_included_after_pre_release(self):
+        # Set solicitation to Open tomorrow
+        topic = Topic.objects.get(id=507)
+        topic.solicitation.proposals_begin_date = (timezone.now() +
+            datetime.timedelta(days=1))
+        topic.solicitation.proposals_end_date = (timezone.now() +
+            datetime.timedelta(days=2))
+        topic.solicitation.save()
+
+        response = self.client.get('/api/v1/topics/507/')
+        self.assertEqual(len(response.data['tech_points_of_contact']), 3)
+
+    def test_tpoc_not_included_after_pre_release(self):
+        # Set solicitation to Open yesterday
+        topic = Topic.objects.get(id=507)
+        topic.solicitation.proposals_begin_date = (timezone.now() -
+            datetime.timedelta(days=1))
+        topic.solicitation.proposals_end_date = (timezone.now() +
+            datetime.timedelta(days=1))
+        topic.solicitation.save()
+
+        response = self.client.get('/api/v1/topics/507/')
+        self.assertEqual(len(response.data['tech_points_of_contact']), 0)
 
     # Check that pagination is behaving itself
     # (this may qualify as 'testing the library instead of the code')
@@ -821,66 +861,66 @@ class TopicTests(APITestCase):
         # 20 results on first page:
         response = self.client.get('/api/v1/topics/?closed=true')
         self.assertEqual(len(response.data["results"]), 20)
-        # Total of ten pages:
-        response = self.client.get('/api/v1/topics/?page=10&closed=true')
+        # Total of eight pages:
+        response = self.client.get('/api/v1/topics/?page=8&closed=true')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        # No more than ten pages:
-        response = self.client.get('/api/v1/topics/?page=11&closed=true')
+        # No more than eight pages:
+        response = self.client.get('/api/v1/topics/?page=10&closed=true')
         self.assertEqual(status.HTTP_404_NOT_FOUND, response.status_code)
 
     # Check that a topic detail loads
     def test_topic_detail(self):
-        response = self.client.get('/api/v1/topics/19/')
+        response = self.client.get('/api/v1/topics/507/')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     # Check that topics are deleting properly
     # TODO: Auth
     def test_topic_detail_delete(self):
-        response = self.client.delete('/api/v1/topics/9/')
+        response = self.client.delete('/api/v1/topics/507/')
         self.assertEqual(204, response.status_code)
-        response = self.client.delete('/api/v1/topics/9/')
+        response = self.client.delete('/api/v1/topics/507/')
         self.assertEqual(404, response.status_code)
 
     # Check that trying to save a topic when not authenticated fails
     def test_save_topic_must_be_authenticated(self):
-        response = self.client.post('/api/v1/topics/19/saved/', {})
+        response = self.client.post('/api/v1/topics/507/saved/', {})
         self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
 
     def test_save_topic_for_user(self):
         user = _fixture_user(self)
 
         # get a topic
-        response = self.client.get('/api/v1/topics/19/')
+        response = self.client.get('/api/v1/topics/507/')
         # verify that is not yet saved
         self.assertFalse(response.data['saved'])
 
         # save the topic
-        response = self.client.post('/api/v1/topics/19/saved/', {})
+        response = self.client.post('/api/v1/topics/507/saved/', {})
         self.assertEqual(status.HTTP_206_PARTIAL_CONTENT, response.status_code)
 
         # check that the topic now shows as saved
-        response = self.client.get('/api/v1/topics/19/')
+        response = self.client.get('/api/v1/topics/507/')
         self.assertTrue(response.data['saved'])
 
     def test_unsave_unsaved_topic_again(self):
         # should not error even if trying to "unsave" a topic the user had not saved
         user = _fixture_user(self)
-        response = self.client.delete('/api/v1/topics/19/saved/', {})
+        response = self.client.delete('/api/v1/topics/507/saved/', {})
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
     def test_unsave_topic(self):
         user = _fixture_user(self)
         # save a topic
 
-        response = self.client.post('/api/v1/topics/19/saved/', {})
+        response = self.client.post('/api/v1/topics/507/saved/', {})
         # check that the topic now shows as saved
-        response = self.client.get('/api/v1/topics/19/')
+        response = self.client.get('/api/v1/topics/507/')
         self.assertTrue(response.data['saved'])
 
         # now unsave
-        response = self.client.delete('/api/v1/topics/19/saved/', {})
+        response = self.client.delete('/api/v1/topics/507/saved/', {})
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
-        response = self.client.get('/api/v1/topics/19/')
+        response = self.client.get('/api/v1/topics/507/')
         self.assertFalse(response.data['saved'])
 
     # Permit saved topic to be "saved" again without error
@@ -888,11 +928,11 @@ class TopicTests(APITestCase):
         user = _fixture_user(self)
 
         # save a topic
-        response = self.client.post('/api/v1/topics/19/saved/', {})
+        response = self.client.post('/api/v1/topics/507/saved/', {})
         self.assertEqual(status.HTTP_206_PARTIAL_CONTENT, response.status_code)
 
         # re-save
-        response = self.client.post('/api/v1/topics/19/saved/', {})
+        response = self.client.post('/api/v1/topics/507/saved/', {})
         self.assertEqual(status.HTTP_206_PARTIAL_CONTENT, response.status_code)
 
     def test_filter_for_nonexistent_saved_topics(self):
@@ -906,7 +946,7 @@ class TopicTests(APITestCase):
         user = _fixture_user(self)
 
         # save the topic
-        response = self.client.post('/api/v1/topics/19/saved/', {})
+        response = self.client.post('/api/v1/topics/507/saved/', {})
 
         # with `saved`=False, all topics should be returned
         response = self.client.get('/api/v1/topics/?closed=True&saved=False')
