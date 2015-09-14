@@ -62,7 +62,7 @@ class AddressSerializer(serializers.ModelSerializer):
 class PersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
-        fields = ('name', 'title', 'email', 'phone', 'fax')
+        fields = ('name', 'title', 'email', 'phone', 'fax', 'office')
 
 
 class NaicsSerializer(serializers.ModelSerializer):
@@ -225,6 +225,15 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
     proposal = serializers.SerializerMethodField()
     solicitation = SolicitationSerializer()
 
+    def get_tech_points_of_contact(self, obj):
+        if obj.solicitation.status == 'Future':
+            return [PersonSerializer(tpoc).data for tpoc in
+                    obj.tech_points_of_contact.all()]
+        else:
+            return []
+
+    tech_points_of_contact = serializers.SerializerMethodField()
+
     def get_saved(self, obj):
         "``True`` if current has saved this topic for later reference.  ``None`` if no current user."
 
@@ -250,6 +259,7 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'topic_number', 'url', 'title', 'agency',
                     'program', 'description', 'objective',
                     'solicitation', 'references', 'phases',
+                    'tech_points_of_contact',
                     'keywords', 'areas', 'saved', 'proposal'
                     )
 
