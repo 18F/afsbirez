@@ -1502,6 +1502,8 @@ body.proposal.proposal-overview aside div.hcard{
   line-height: 1.3em;
   max-width: 10em;
   font-size: 14px;
+  border-bottom: 1px solid #f3f3f3;
+  padding-bottom: 0.5em;
 }
 
 
@@ -1790,7 +1792,16 @@ body.sign-up p#password-instructions{
 
 .topic-show main section p{ margin-bottom: 1em; }
 
+.topic-show .tpocs .tpoc {
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid #f3f3f3;
+}
 
+.topic-show .tpocs .tpoc:last-child{ border-bottom: 0;}
+
+.topic-show .tpocs .tpoc div {
+  margin-bottom: .4em;
+}
 
 @media screen and (min-width: 711.11px) {
   .topic-show .topic .topic-header{

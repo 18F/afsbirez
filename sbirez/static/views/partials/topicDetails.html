@@ -38,6 +38,16 @@
       <h1>Keywords</h1>
       <p>{{getKeywordList()}}</p>
     </section>
+    <section class="tpocs" ng-if="data.tech_points_of_contact.length > 0">
+      <h1>Technical Points of Contact</h1>
+      <div class="tpoc" ng-repeat="poc in data.tech_points_of_contact">
+        <div><a href="mailto:{{poc.email}}">{{poc.name}}</a></div>
+        <div>Office: {{poc.office}}</div>
+        <div>{{poc.email}}</div>
+        <div>{{poc.phone}}</div>
+        <div ng-if="poc.fax">Fax: {{poc.fax}}</div>
+      </div>
+    </section>
     <dl>
       <dt>Solicitation ID:</dt>        
       <dd>{{data.solicitation.name}}</dd>
