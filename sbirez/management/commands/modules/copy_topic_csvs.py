@@ -75,6 +75,7 @@ def load(solicitation_name, clear=False):
         matches = text_splitter.search(text)
         topic = Topic(topic_number=raw_topic['Topic'],
                       solicitation=solicitation,
+                      title=raw_topic['Title'],
                       url=None,
                       agency=agencies[raw_topic['Agency']],
                       program=raw_topic['Program'],

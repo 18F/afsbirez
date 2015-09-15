@@ -27,15 +27,15 @@ class Command(BaseCommand):
             raise OSError("MS Access database %s not found" % mdb_filename)
 
         # Confirm that solicitation_name is for solicitation in the database
-        proc = subprocess.Popen(#'ls',
-                                'psql -t -c "SELECT name FROM sbirez_solicitation" %s' %
-                                settings.DATABASES['default']['NAME'],
-                                stdout=subprocess.PIPE, shell=True)
-        solicitation_names = [s.decode("utf-8").strip()
-                              for s in proc.stdout.read().splitlines()
-                              if s.strip()]
-        if solicitation_name not in solicitation_names:
-            raise CommandError("Available solicitation_names are: " + ", ".join(solicitation_names))
+        #proc = subprocess.Popen(#'ls',
+        #                        'psql -t -c "SELECT name FROM sbirez_solicitation" %s' %
+        #                        settings.DATABASES['default']['NAME'],
+        #                        stdout=subprocess.PIPE, shell=True)
+        #solicitation_names = [s.decode("utf-8").strip()
+        #                      for s in proc.stdout.read().splitlines()
+        #                      if s.strip()]
+        #if solicitation_name not in solicitation_names:
+        #    raise CommandError("Available solicitation_names are: " + ", ".join(solicitation_names))
 
         # Use MDB tools to dump CSVs from MS Access .mdb file
         os.system("mdb-export %s commands > data/command.csv" % mdb_filename)
