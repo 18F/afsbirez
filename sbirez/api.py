@@ -180,19 +180,15 @@ class ProposalViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         return [HasObjectEditPermissions(),]
 
-    def _readonly_report(self, request, pk, template_name, report_filter):
-        """Web version of our PDF hardcopy report"""
-        prop = self.get_object()
-        template = loader.get_template(template_name)
-        context = Context({'prop': prop,
-                           'report': prop.report(report_filter)})
-        output = template.render(context)
-        return HttpResponse(output)
-
     @detail_route(methods=['get',])
     def coversheet(self, request, pk):
-        return self._readonly_report(request, pk,
-            'sbirez/coversheet.html', 'dod_workflow.dod_coversheet')
+        prop = self.get_object()
+        template = loader.get_template('sbirez/coversheet.html')
+        coversheet_data = prop.data['dod_workflow']
+        context = Context({'prop': prop,
+                           'data': coversheet_data})
+        output = template.render(context)
+        return HttpResponse(output)
 
     def _general_admin_targets(self, cost_volume_data):
         ga_target_abbreviations = collections.OrderedDict(
