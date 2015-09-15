@@ -1,2 +1,3 @@
 https://github.com/dscout/wkhtmltopdf-buildpack.git
+https://github.com/ddollar/heroku-buildpack-apt.git
 https://github.com/cloudfoundry/buildpack-python.git#v1.3.5
