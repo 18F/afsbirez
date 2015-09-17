@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='CommercializedProject',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('agency', models.TextField()),
                 ('year_of_award', models.IntegerField()),
                 ('topic_number', models.TextField()),
@@ -31,12 +31,13 @@ class Migration(migrations.Migration):
                 ('cost_saving_amount', models.IntegerField(null=True, blank=True)),
                 ('cost_savings_type', models.TextField(null=True, blank=True, choices=[('annual', 'Annual Savings'), ('lifecycle', 'Life-cycle Savings'), ('unit', 'Per Unit Savings')])),
                 ('narrative', models.TextField(null=True, blank=True)),
+                ('firm', models.ForeignKey(to='sbirez.Firm')),
             ],
         ),
         migrations.CreateModel(
             name='Income',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('amount', models.IntegerField()),
                 ('project', models.ForeignKey(to='sbirez.CommercializedProject')),
             ],
@@ -44,7 +45,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='IncomeSource',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('income_type', models.TextField(choices=[('sales', 'Sales to'), ('additional_investment', 'Additional Investment from')])),
                 ('order_key', models.TextField()),
                 ('name', models.TextField()),
@@ -62,7 +63,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='commercializedproject',
-            name='poc',
+            name='point_of_contact',
             field=models.ForeignKey(to='sbirez.Person'),
         ),
     ]
