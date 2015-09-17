@@ -22,7 +22,6 @@ router.register(r'documents', api.DocumentViewSet)
 router.register(r'documentversions', api.DocumentVersionViewSet)
 router.register(r'elements', api.ElementViewSet)
 router.register(r'jargons', api.JargonViewSet)
-router.register(r'commercializedprojects', api.CommercializedProjectViewSet)
 
 urlpatterns = patterns('',
     url(r'^api/v1/topics/(?P<pk>[0-9]+)/saved/$', api.SaveTopicView.as_view()),

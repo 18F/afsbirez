@@ -876,7 +876,6 @@ class CommercializedProject(models.Model):
                      ('lifecycle', 'Life-cycle Savings'),
                      ('unit', 'Per Unit Savings'),
                     )
-    firm = models.ForeignKey(Firm)
     agency = models.TextField()
     year_of_award = models.IntegerField()
     topic_number = models.TextField()
@@ -895,7 +894,7 @@ class CommercializedProject(models.Model):
     cost_saving_amount = models.IntegerField(null=True, blank=True)
     cost_savings_type = models.TextField(choices=SAVINGS_TYPES,
                                          null=True, blank=True)
-    point_of_contact = models.ForeignKey(Person)
+    poc = models.ForeignKey(Person)
     narrative = models.TextField(null=True, blank=True)
 
 

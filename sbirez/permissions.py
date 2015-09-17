@@ -31,9 +31,7 @@ class IsStaffOrFirmRelatedUser(permissions.BasePermission):
         # allow logged in user to view view/edit own firm
         # if user has no firm, and it is a post
         # if a user is authed and is associated with the firm
-        return (   request.user.is_staff
-                or obj == request.user.firm
-                or hasattr(obj, 'firm') and obj.firm == request.user.firm)
+        return request.user.is_staff or obj == request.user.firm
 
 
 class HasObjectEditPermissions(permissions.BasePermission):

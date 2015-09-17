@@ -475,8 +475,7 @@ def mock_sam_api_server(*arg, **kwarg):
 
 class FirmTests(APITestCase):
 
-    fixtures = ['naics.json', 'rebel_alliance.json',
-                'income_sources.json', 'commercialization.json']
+    fixtures = ['naics.json', ]
 
     firm_data = {'name':'TestCo', 'tax_id':'12345', 'sbc_id':'12345',
          'duns_id':'12345', 'cage_code':'12345', 'website':'www.testco.com',
@@ -491,13 +490,6 @@ class FirmTests(APITestCase):
              ('title', 'Engineer'), ('email', 'test@test.com'),
              ('phone', '555-5555'), ('fax', '554-5555')])
           }
-
-    def includes_commercialization(self):
-        user = _fixture_user(self)
-        response = self.client.get('/api/v1/firms/1/')
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertIn(1, response.data['commercializedproject_set'])
-        self.assertIn(2, response.data['commercializedproject_set'])
 
     def create_user_and_auth(self):
         response = self.client.post('/api/v1/users/',
@@ -1953,18 +1945,3 @@ class PasswordHandlingTests(APITestCase):
                                     {'email': '  this is not an email address  '})
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
         self.assertEqual('Enter a valid email address.', response.data['email'][0])
-
-
-class CommercializationTests(APITestCase):
-
-    fixtures = ['rebel_alliance.json', 'income_sources.json', 'commercialization.json']
-
-    # check that a commercialization report loads
-    def test_commercialization_view_set(self):
-        user = _fixture_user(self)
-        response = self.client.get('/api/v1/commercializedprojects/1/')
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-
-    def test_unauth_cant_see_commercialization(self):
-        response = self.client.get('/api/v1/commercializedprojects/1/')
-        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
