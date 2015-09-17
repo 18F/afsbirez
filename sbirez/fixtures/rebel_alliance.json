@@ -1,0 +1,78 @@
+[
+    {
+        "fields": {
+            "city": "Base",
+            "state": "Hoth",
+            "street": "123 Tauntaun Ln",
+            "street2": null,
+            "zip": "12345"
+        },
+        "model": "sbirez.address",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "city": "Farmsville",
+            "state": "Dantooine",
+            "street": "123 Tritotriticale Lane",
+            "street2": null,
+            "zip": "98765"
+        },
+        "model": "sbirez.address",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "email": "leia@alliance.org",
+            "fax": null,
+            "name": "Leia Organa",
+            "office": null,
+            "phone": "202-123-4556",
+            "title": "Princess"
+        },
+        "model": "sbirez.person",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "address": 1,
+            "cage_code": "abc",
+            "current_employees": 200000,
+            "duns_id": "789",
+            "founding_year": 1977,
+            "name": "Rebel Alliance",
+            "patent_count": 100,
+            "phase1_count": 3,
+            "phase1_year": 1977,
+            "phase2_count": 3,
+            "phase2_employees": 100000,
+            "phase2_year": 1980,
+            "point_of_contact": 1,
+            "revenue_percent": 50,
+            "sbc_id": "456",
+            "tax_id": "123",
+            "total_revenue_range": "1000000-2000000",
+            "website": "alliance.org"
+        },
+        "model": "sbirez.firm",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "date_joined": "2015-03-07T00:57:24.820Z",
+            "email": "r2d2@naboo.gov",
+            "firm": 1,
+            "groups": [],
+            "is_active": true,
+            "is_staff": false,
+            "is_superuser": false,
+            "last_login": "2015-03-07T00:57:24.820Z",
+            "name": "r2d2",
+            "password": "pbkdf2_sha256$15000$oflx16nPNOnI$4IJCuNpk/1K6PHAzoIl4A84sCfkwSuSXXX9SVYUCvBU=",
+            "password_expires": null,
+            "user_permissions": []
+        },
+        "model": "sbirez.sbirezuser",
+        "pk": 2
+    }
+]
