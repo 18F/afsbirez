@@ -38,14 +38,16 @@
           <p><strong>Note:</strong> You&rsquo;ll need to fill in <a ui-sref="app.organization">your company information</a> before you can submit a proposal.</p>
         </div>
       </section>
-      <!--<aside>
+      <aside ng-if="proposal.topic.tech_points_of_contact.length > 0">
         <h1><span class="technical-point">Technical point</span><span class="preposition">of</span> contact</h1>
-        <div class="hcard">
-          <span>Dr. Soandso McSmartpants</span>
-          <span>1-888-222-2222</span>
-          <span>test@email.com</span>
+        <div class="hcard" ng-repeat="poc in proposal.topic.tech_points_of_contact">
+          <div>{{poc.name}}</div>
+          <div ng-if="poc.office">Office: {{poc.office}}</div>
+          <div>{{poc.phone}}</div>
+          <div><a href="mailto:{{poc.email}}">{{poc.email}}</a></div>
+          <div ng-if="poc.fax">Fax: {{poc.fax}}</div>
         </div>
-      </aside>-->
+      </aside>
     </div>
   </main>
   <footer class="proposal-footer">

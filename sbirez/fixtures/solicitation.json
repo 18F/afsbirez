@@ -1,7 +1,7 @@
 [
     {
         "fields": {
-            "element": null,
+            "element": 1,
             "name": "DoD SBIR 2015.1",
             "pre_release_date": "2014-12-12T05:00:00Z",
             "proposals_begin_date": "2015-01-15T05:00:00Z",
