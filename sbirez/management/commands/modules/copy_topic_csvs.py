@@ -62,6 +62,11 @@ def _add_points_of_contact(raw_topic, topic):
 def load(solicitation_name, clear=False):
     solicitation = Solicitation.objects.filter(
         name=solicitation_name).first()
+    if not solicitation:
+        raise Solicitation.DoesNotExist("""Existing solicitations are: %s
+            (python manage.py loaddata sbirez/fixtures/solicitation.json
+            to load more)""" %
+            ', '.join(s.name for s in Solicitation.objects.all()))
     raw_agencies = csv.DictReader(open('data/agency.csv'))
     raw_commands = csv.DictReader(open('data/command.csv'))
     raw_topics = csv.DictReader(open('data/topic.csv'))

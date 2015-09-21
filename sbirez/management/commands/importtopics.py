@@ -1,4 +1,5 @@
 from .modules.copy_topic_csvs import load
+from sbirez.models import Solicitation
 from django.core.management.base import BaseCommand
 from django.core.management import call_command, CommandError
 from django.conf import settings
@@ -26,34 +27,11 @@ class Command(BaseCommand):
         if not os.path.isfile(mdb_filename):
             raise OSError("MS Access database %s not found" % mdb_filename)
 
-        not_found = False
-
-        # Confirm that solicitation_name is for solicitation in the database
-        proc = subprocess.Popen(#'ls',
-                                'psql -t -c "SELECT name FROM sbirez_solicitation" %s' %
-                                settings.DATABASES['default']['NAME'],
-                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
-                                shell=True)
-        error_status = proc.stderr.read().decode("utf-8").strip()
-        if "command not found" in error_status:
-            not_found = True
-            print("WARNING: Unable to find psql command.")
-
-        solicitation_names = [s.decode("utf-8").strip()
-                              for s in proc.stdout.read().splitlines()
-                              if s.strip()]
-        if not not_found and solicitation_name not in solicitation_names:
-            raise CommandError("Available solicitation_names are: " + ", ".join(solicitation_names))
-
         # Use MDB tools to dump CSVs from MS Access .mdb file
         os.system("mdb-export %s commands > data/command.csv" % mdb_filename)
         os.system("mdb-export %s agency > data/agency.csv" % mdb_filename)
         os.system("mdb-export %s topics > data/topic.csv" % mdb_filename)
 
         load(solicitation_name, clear=clear)
-        '''
-        os.system("""psql -v ON_ERROR_STOP=1 -v solicitation="'%s'" -f data/copy_topic_csvs.sql %s""" %
-                  (solicitation_name, settings.DATABASES['default']['NAME']))
-                  '''
 
         call_command('indextopics')
