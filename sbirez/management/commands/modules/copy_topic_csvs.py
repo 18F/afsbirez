@@ -62,6 +62,11 @@ def _add_points_of_contact(raw_topic, topic):
 def load(solicitation_name, clear=False):
     solicitation = Solicitation.objects.filter(
         name=solicitation_name).first()
+    if not solicitation:
+        raise Solicitation.DoesNotExist("""Existing solicitations are: %s
+            (python manage.py loaddata sbirez/fixtures/solicitation.json
+            to load more)""" %
+            ', '.join(s.name for s in Solicitation.objects.all()))
     raw_agencies = csv.DictReader(open('data/agency.csv'))
     raw_commands = csv.DictReader(open('data/command.csv'))
     raw_topics = csv.DictReader(open('data/topic.csv'))
@@ -75,6 +80,7 @@ def load(solicitation_name, clear=False):
         matches = text_splitter.search(text)
         topic = Topic(topic_number=raw_topic['Topic'],
                       solicitation=solicitation,
+                      title=raw_topic['Title'],
                       url=None,
                       agency=agencies[raw_topic['Agency']],
                       program=raw_topic['Program'],
