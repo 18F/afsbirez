@@ -898,6 +898,26 @@ class CommercializedProject(models.Model):
     point_of_contact = models.ForeignKey(Person)
     narrative = models.TextField(null=True, blank=True)
 
+    def income_sums(self):
+        """
+        All defined Income Sources with this project's totals.
+
+        Returns dict of lists:
+        {'income_type_1': [source1, source2, ...], }
+        `amount` is added as an in-memory property to each IncomeSource instance
+        """
+        income_types = [i.income_type for i in
+                        IncomeSource.objects.distinct('income_type')]
+        result = {}
+        for income_type in [i.income_type for i in
+                            IncomeSource.objects.distinct('income_type')]:
+            result[income_type] = []
+            for source in IncomeSource.objects.filter(income_type=income_type):
+                source.amount = sum(i.amount for i in
+                                source.income_set.filter(project=self).all())
+                result[income_type].append(source)
+        return result
+
 
 class Income(models.Model):
     project = models.ForeignKey(CommercializedProject)
