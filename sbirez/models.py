@@ -46,6 +46,7 @@ class Firm(models.Model):
     cage_code = models.TextField(blank=True, null=True)
     website = models.TextField(blank=True, null=True)
     address = models.ForeignKey(Address, null=True, blank=True)
+    phone = models.TextField(blank=True, null=True)
     point_of_contact = models.ForeignKey(Person, null=True, blank=True)
     founding_year = models.IntegerField(null=True, blank=True)
     phase1_count = models.IntegerField(null=True, blank=True)
@@ -55,8 +56,10 @@ class Firm(models.Model):
     phase2_employees = models.IntegerField(null=True, blank=True)
     current_employees = models.IntegerField(null=True, blank=True)
     patent_count = models.IntegerField(null=True, blank=True)
+    ipo_from_sbir_sttr = models.NullBooleanField(null=True, blank=True)
     total_revenue_range = models.TextField(null=True, blank=True)
     revenue_percent = models.IntegerField(null=True, blank=True)
+    commercialization_index = models.IntegerField(null=True, blank=True)
 
     @property
     def complete(self):
@@ -856,3 +859,72 @@ class RawTopic(models.Model):
     prior_topic_no = models.TextField(null=True)
     recommend2 = models.TextField(null=True)
     direct2phase2 = models.IntegerField(null=True)
+
+
+class IncomeSource(models.Model):
+    TYPES = (('sales', 'Sales to'),
+             ('additional_investment', 'Additional Investment from'))
+    income_type = models.TextField(choices=TYPES)
+    order_key = models.TextField()
+    name = models.TextField()
+
+
+class CommercializedProject(models.Model):
+    MANUFACTURING_TYPES = (('unit', 'Unit process level manufacturing'),
+                           ('machine', 'Machine level manufacturing'),
+                           ('systems', 'Systems level manufacturing'),
+                           ('env_soc', 'Environmental/societal level manufacturing'),
+                           )
+    SAVINGS_TYPES = (('annual', 'Annual Savings'),
+                     ('lifecycle', 'Life-cycle Savings'),
+                     ('unit', 'Per Unit Savings'),
+                    )
+    firm = models.ForeignKey(Firm, null=True, blank=True)
+    agency = models.TextField()
+    year_of_award = models.IntegerField()
+    topic_number = models.TextField()
+    contract_number = models.TextField()
+    last_updated = models.DateTimeField()
+    project_title = models.TextField()
+    incomes = models.ManyToManyField(IncomeSource, through='Income')
+    federal = models.BooleanField()
+    federal_agency = models.TextField(null=True, blank=True)
+    federal_program = models.TextField(null=True, blank=True)
+    federal_phase_iii_contract_number = models.TextField(null=True, blank=True)
+    manufacturing = models.TextField(choices=MANUFACTURING_TYPES,
+                                     null=True, blank=True)
+    cost_saving = models.BooleanField()
+    cost_saving_explanation = models.TextField(null=True, blank=True)
+    cost_saving_agency = models.TextField(null=True, blank=True)
+    cost_saving_program = models.TextField(null=True, blank=True)
+    cost_saving_amount = models.IntegerField(null=True, blank=True)
+    cost_savings_type = models.TextField(choices=SAVINGS_TYPES,
+                                         null=True, blank=True)
+    point_of_contact = models.ForeignKey(Person)
+    narrative = models.TextField(null=True, blank=True)
+
+    def income_sums(self):
+        """
+        All defined Income Sources with this project's totals.
+
+        Returns dict of lists:
+        {'income_type_1': [source1, source2, ...], }
+        `amount` is added as an in-memory property to each IncomeSource instance
+        """
+        income_types = [i.income_type for i in
+                        IncomeSource.objects.distinct('income_type')]
+        result = {}
+        for income_type in [i.income_type for i in
+                            IncomeSource.objects.distinct('income_type')]:
+            result[income_type] = []
+            for source in IncomeSource.objects.filter(income_type=income_type):
+                source.amount = sum(i.amount for i in
+                                source.income_set.filter(project=self).all())
+                result[income_type].append(source)
+        return result
+
+
+class Income(models.Model):
+    project = models.ForeignKey(CommercializedProject)
+    source = models.ForeignKey(IncomeSource)
+    amount = models.IntegerField()

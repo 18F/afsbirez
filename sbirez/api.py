@@ -11,11 +11,13 @@ from django.template import Context, loader
 from django.http import HttpResponse
 from sbirez.models import Topic, Firm, Proposal, Address, Person, Naics
 from sbirez.models import Element, Document, DocumentVersion, Jargon
+from sbirez.models import IncomeSource, CommercializedProject
 from rest_framework import viewsets, mixins, generics, status, permissions, exceptions
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from sbirez.serializers import UserSerializer, GroupSerializer, TopicSerializer
+from sbirez.serializers import CommercializedProjectSerializer
 from django_downloadview import ObjectDownloadView
 from djmail import template_mail
 
@@ -217,6 +219,14 @@ class ProposalViewSet(viewsets.ModelViewSet):
         output = template.render(context)
         return HttpResponse(output)
 
+    @detail_route(methods=['get',])
+    def commercialization(self, request, pk):
+        prop = self.get_object()
+        template = loader.get_template('sbirez/commercialization.html')
+        context = Context({'firm': prop.firm, })
+        output = template.render(context)
+        return HttpResponse(output)
+
     # For reasons I don't understand, `request.auth`
     # is not filled out when `.pdf` is called from the
     # test suite; instead, the jwt must be painstakingly
@@ -265,6 +275,9 @@ class ProposalViewSet(viewsets.ModelViewSet):
 
         cost_volume_file = self._pdf_of_html_report(request, pk, 'cost_volume')
         merger.append(cost_volume_file)
+
+        commercialization_file = self._pdf_of_html_report(request, pk, 'commercialization')
+        merger.append(commercialization_file)
 
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = \
@@ -378,3 +391,9 @@ class DocumentVersionViewSet(viewsets.ModelViewSet):
     queryset = DocumentVersion.objects.all()
     serializer_class = DocumentVersionSerializer
     permission_classes = (IsAuthenticated,)
+
+
+class CommercializedProjectViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsStaffOrFirmRelatedUser, )
+    queryset = CommercializedProject.objects.all()
+    serializer_class = CommercializedProjectSerializer

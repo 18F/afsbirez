@@ -7,6 +7,7 @@ from django.contrib.auth.models import User, Group
 from sbirez.models import Topic, Reference, Phase, Keyword, Area, Firm, Person
 from sbirez.models import Address, Proposal, Address, Naics, PasswordHistory
 from sbirez.models import Element, Document, DocumentVersion, Solicitation, Jargon
+from sbirez.models import IncomeSource, CommercializedProject
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_recursive.fields import RecursiveField
@@ -71,9 +72,36 @@ class NaicsSerializer(serializers.ModelSerializer):
         fields = ('code', 'description')
 
 
+class IncomeSourceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = IncomeSource
+
+
+class CommercializedProjectSerializer(serializers.ModelSerializer):
+
+    incomes = IncomeSourceSerializer(many=True)
+    point_of_contact = PersonSerializer()
+
+    class Meta:
+        model = CommercializedProject
+        fields = ('id', 'agency', 'year_of_award',
+                  'topic_number', 'contract_number',
+                  'last_updated', 'project_title',
+                  'incomes',
+                  'federal', 'federal_agency',
+                  'federal_phase_iii_contract_number',
+                  'manufacturing', 'cost_saving',
+                  'cost_saving_explanation',
+                  'cost_saving_agency', 'cost_saving_amount',
+                  'cost_savings_type',
+                  'point_of_contact', 'narrative')
+
+
 class FirmSerializer(serializers.ModelSerializer):
     address = AddressSerializer(required=False, many=False)
     point_of_contact = PersonSerializer(required=False, many=False)
+    commercialized_projects = CommercializedProjectSerializer(required=False, many=True)
 
     class Meta:
         model = Firm
@@ -82,7 +110,8 @@ class FirmSerializer(serializers.ModelSerializer):
                   'naics',
                   'phase1_count', 'phase1_year', 'phase2_count',
                   'phase2_year', 'phase2_employees', 'current_employees',
-                  'patent_count', 'total_revenue_range', 'revenue_percent')
+                  'patent_count', 'total_revenue_range', 'revenue_percent',
+                  'commercialized_projects')
 
     def update_user(self, firm_id):
         request = self.context.get('request', None)
