@@ -361,3 +361,16 @@ div.due-date, div.date-submitted {
 .teaming-partner-poc {
   margin-left: 1em;
 }
+
+dl.quantity-group dt {
+  margin-left: 2em;
+  width: 20em;
+  float: left;
+  display: block;
+}
+
+dl.quantity-group dd {
+  width: 8em;
+  float: left;
+  display: block;
+}
