@@ -219,6 +219,14 @@ class ProposalViewSet(viewsets.ModelViewSet):
         output = template.render(context)
         return HttpResponse(output)
 
+    @detail_route(methods=['get',])
+    def commercialization(self, request, pk):
+        prop = self.get_object()
+        template = loader.get_template('sbirez/commercialization.html')
+        context = Context({'firm': prop.firm, })
+        output = template.render(context)
+        return HttpResponse(output)
+
     # For reasons I don't understand, `request.auth`
     # is not filled out when `.pdf` is called from the
     # test suite; instead, the jwt must be painstakingly
@@ -267,6 +275,9 @@ class ProposalViewSet(viewsets.ModelViewSet):
 
         cost_volume_file = self._pdf_of_html_report(request, pk, 'cost_volume')
         merger.append(cost_volume_file)
+
+        commercialization_file = self._pdf_of_html_report(request, pk, 'commercialization')
+        merger.append(commercialization_file)
 
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = \

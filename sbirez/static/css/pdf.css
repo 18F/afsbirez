@@ -15,7 +15,7 @@ div.wrapper {
 }
 
 
-h1, h2
+h1, h2, h3
 {
     font-weight: bold;
     line-height: 1.2;
@@ -33,7 +33,7 @@ h2 {
   margin-top: 0.8em;
 }
 
-h3, h4, h5 {
+h4, h5 {
   margin-bottom: 0.5em;
   margin-top: 0.5em;
 }
@@ -260,10 +260,10 @@ div.due-date, div.date-submitted {
 
 .cover-sheet .cover-sheet--affiliated-persons .person{
   float: left;
-  width: 50%; 
+  width: 50%;
 }
 
-.cover-sheet .cover-sheet--affiliated-persons .person dl{ 
+.cover-sheet .cover-sheet--affiliated-persons .person dl{
   margin-bottom: 2em;
 }
 
@@ -272,8 +272,8 @@ div.due-date, div.date-submitted {
   display: inline-block;
   font-size: 14px;
   padding-top: 0.6em;
-  border-top: 1px solid;  
-} 
+  border-top: 1px solid;
+}
 
 .cover-sheet .cover-sheet--affiliated-persons .person .signature{
   width: 70%;
@@ -295,7 +295,7 @@ div.due-date, div.date-submitted {
   }
 
   .cover-sheet .question.question-15{ padding-right: 0; }
-  
+
     .cover-sheet .question .question--number,
     .cover-sheet .question .question--answer{
     position: absolute;
@@ -325,7 +325,7 @@ div.due-date, div.date-submitted {
 .cover-sheet .question.question-13,
 .cover-sheet .question.question-22,
 .cover-sheet .question.question-24 {
-  border-top: 0;  
+  border-top: 0;
 }
 
 .cover-sheet .question .question--number,

@@ -90,7 +90,7 @@ class CommercializedProjectSerializer(serializers.ModelSerializer):
                   'last_updated', 'project_title',
                   'incomes',
                   'federal', 'federal_agency',
-                  'federal_phase_ii_contract_number',
+                  'federal_phase_iii_contract_number',
                   'manufacturing', 'cost_saving',
                   'cost_saving_explanation',
                   'cost_saving_agency', 'cost_saving_amount',

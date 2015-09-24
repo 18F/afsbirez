@@ -74,5 +74,23 @@
         },
         "model": "sbirez.sbirezuser",
         "pk": 2
+    },
+    {
+        "fields": {
+            "date_joined": "2015-09-22T00:37:39.526Z",
+            "email": "c3p0@tatooine.com",
+            "firm": 1,
+            "groups": [],
+            "is_active": true,
+            "is_staff": false,
+            "is_superuser": false,
+            "last_login": null,
+            "name": "c3p0",
+            "password": "pbkdf2_sha256$20000$KIPYiJWmLzci$dN1y60BenjurWFhpNNfNOoL+Wwiff1WaluHui3Uri3Q=",
+            "password_expires": "2015-11-21T00:37:39.558Z",
+            "user_permissions": []
+        },
+        "model": "sbirez.sbirezuser",
+        "pk": 3
     }
 ]
