@@ -30,9 +30,8 @@ from .permissions import HasObjectEditPermissions, ReadOnlyUnlessStaff
 from .utils import nested_update
 
 from PyPDF2 import PdfFileMerger
-from wkhtmltopdfwrapper import WKHtmlToPdf
 
-to_pdf_generator = WKHtmlToPdf()
+from pywkher import generate_pdf
 
 mails = template_mail.MagicMailBuilder()
 # To send new types of emails from views, simply call
@@ -234,9 +233,9 @@ class ProposalViewSet(viewsets.ModelViewSet):
         proposal_filename = 'data/%s_%s.pdf' % (report_name, pk)
         url = request.build_absolute_uri('../%s/?jwt=%s'
             % (report_name, jwt))
-        to_pdf_generator.render(url, proposal_filename)
+        pdf_file = generate_pdf(url=url)
         # Read from the PDF just dumped
-        contentfile = open(proposal_filename, 'rb')
+        contentfile = open(pdf_file.name, 'rb')
         return contentfile
 
         merger.append(contentfile)

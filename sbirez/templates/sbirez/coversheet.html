@@ -376,7 +376,11 @@
               <dt>Phone</dt>
               <dd>{{ data.dod_coversheet.pi_info.pi_contact_info.pi_phone }}</dd>
               <dt>Fax</dt>
-              <dd>{{ data.dod_coversheet.pi_info.pi_contact_info.pi_fax }}</dd>
+              <dd>
+              {% if data.dod_coversheet.pi_info.pi_contact_info.pi_fax %}
+                {{ data.dod_coversheet.pi_info.pi_contact_info.pi_fax}}
+              {% endif %}
+              </dd>
               <dt>Email</dt>
               <dd>{{ data.dod_coversheet.pi_info.pi_contact_info.pi_email }}</dd>
             </dl>
@@ -393,7 +397,11 @@
               <dt>Phone</dt>
               <dd>{{ data.dod_coversheet.pi_info.co_contact_info.co_phone }}</dd>
               <dt>Fax</dt>
-              <dd>{{ data.dod_coversheet.pi_info.co_contact_info.co_fax }}</dd>
+              <dd>
+              {% if data.dod_coversheet.pi_info.co_contact_info.co_fax %}
+                {{ data.dod_coversheet.pi_info.co_contact_info.co_fax}}
+              {% endif %}
+              </dd>
               <dt>Email</dt>
               <dd>{{ data.dod_coversheet.pi_info.co_contact_info.co_email }}</dd>
             </dl>
