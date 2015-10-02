@@ -5,7 +5,7 @@
 name: SBIR-EZ
 
 # Full proper name of the project (required)
-full_name: SBIR-EX
+full_name: SBIR-EZ
 
 # The type of content in the repo
 # values: app, docs, policy
@@ -48,11 +48,10 @@ team:
 - github: catherinedevlin
   id: Catherine Devlin
   role: backend development
-- github: andrewmaier`
+- github: andrewmaier
   id: Andrew Maier
   role: design
 
-# Not listing Andrew Meier b/c I can't find his username
  
 # Partners for whom the project is developed
 partners:
