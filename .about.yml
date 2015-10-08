@@ -28,9 +28,8 @@ status: active
 
 # Description of the project
 description: >
-  The SBIR-EZ (sih-bur-easy) project provides a web service 
-  and user interface abstraction over the Small Business Innovation Research Program 
-  suite of tools used by SBIR.gov, DoDSBIR.com and various agency tools. 
+  SBIR-EZ (sih-bur-easy) attempts to simplify and streamline the submission process for
+  proposals to the Air Force's Small Business Innovation Research Program.
 
 # Should be 'true' if the project has a continuous build (required)
 # values: true, false
@@ -55,11 +54,11 @@ team:
  
 # Partners for whom the project is developed
 partners:
-- US Air Force
+- Air Force
 
 # Brief descriptions of significant project developments
-# milestones: TODO
-# -
+milestones:
+- May 2014: 18F began work on project
 
 # Technologies used to build the project
 stack:
@@ -70,7 +69,7 @@ stack:
 - angular
 
 # Brief description of the project's outcomes
-# impact: TODO
+impact: To encourage new small businesses to work with the Federal Government. 
 
 # Services used to supply project status information
 # Items:
@@ -93,7 +92,6 @@ licenses:
   sbir-ez:
     name: CC0
     url: https://github.com/18F/afsbirez/blob/master/LICENSE.md
-# List licenses of other things in stack?
 
 # Blogs or websites associated with project development
 # blog:
@@ -108,4 +106,5 @@ licenses:
 
 # Email addresses of points-of-contact
 contact:
-- david.best@gsa.gov
+- url: mailto:david.best@gsa.gov
+  text: David Best 
