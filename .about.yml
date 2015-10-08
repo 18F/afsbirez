@@ -1,0 +1,110 @@
+---
+# .about.yml project metadata
+#
+# Short name that acts as the project identifier (required)
+name: SBIR-EZ
+
+# Full proper name of the project (required)
+full_name: SBIR-EZ
+
+# The type of content in the repo
+# values: app, docs, policy
+type: app
+
+# Describes whether a project team, working group/guild, etc. owns the repo (required)
+# values: guild, working-group, project
+owner_type: project
+
+# Name of the main project repo if this is a sub-repo; name of the working group/guild repo if this is a working group/guild subproject
+# parent:
+
+# Maturity stage of the project (required)
+# values: discovery, alpha, beta, live
+stage: alpha
+
+# Whether or not the project is actively maintained (required)
+# values: active, deprecated
+status: active
+
+# Description of the project
+description: >
+  SBIR-EZ (sih-bur-easy) attempts to simplify and streamline the submission process for
+  proposals to the Air Force's Small Business Innovation Research Program.
+
+# Should be 'true' if the project has a continuous build (required)
+# values: true, false
+testable: true
+
+# Team members contributing to the project (required)
+# Items:
+# - github: GitHub user name
+#   id: Internal team identifier/user name
+#   role: Team member's role; leads should be designated as 'lead'
+team:
+- github: DavidEBest
+  id: David Best
+  role: lead
+- github: catherinedevlin
+  id: Catherine Devlin
+  role: backend development
+- github: andrewmaier
+  id: Andrew Maier
+  role: design
+
+ 
+# Partners for whom the project is developed
+partners:
+- Air Force
+
+# Brief descriptions of significant project developments
+milestones:
+- May 2014: 18F began work on project
+
+# Technologies used to build the project
+stack:
+- Python
+- Django
+- django-rest-framework
+- JavaScript
+- angular
+
+# Brief description of the project's outcomes
+impact: To encourage new small businesses to work with the Federal Government. 
+
+# Services used to supply project status information
+# Items:
+# - name: Name of the service
+#   category: Type of the service
+#   url: URL for detailed information
+#   badge: URL for the status badge
+services:
+- name: Travis
+  category: Continuous Integration 
+  url: https://travis-ci.org/18F/afsbirez
+  badge: https://travis-ci.org/18F/afsbirez.svg?branch=master
+
+# Licenses that apply to the project and/or its components (required)
+# Items by property name pattern:
+#   .*:
+#     name: Name of the license from the Software Package Data Exchange (SPDX): https://spdx.org/licenses/
+#     url: URL for the text of the license
+licenses:
+  sbir-ez:
+    name: CC0
+    url: https://github.com/18F/afsbirez/blob/master/LICENSE.md
+
+# Blogs or websites associated with project development
+# blog:
+# -
+
+# Links to project artifacts
+# Items:
+# - url: URL for the link
+#   text: Anchor text for the link
+# links: TODO
+# -
+
+# Email addresses of points-of-contact
+contact:
+- url: mailto:david.best@gsa.gov
+  text: David Best 
