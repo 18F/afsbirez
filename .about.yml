@@ -42,13 +42,13 @@ testable: true
 #   role: Team member's role; leads should be designated as 'lead'
 team:
 - github: DavidEBest
-  id: David Best
+  id: david 
   role: lead
-- github: catherinedevlin
+- github: catherine
   id: Catherine Devlin
   role: backend development
 - github: andrewmaier
-  id: Andrew Maier
+  id: andrewmaier 
   role: design
 
  
