@@ -44,8 +44,8 @@ team:
 - github: DavidEBest
   id: david 
   role: lead
-- github: catherine
-  id: Catherine Devlin
+- github: catherinedevlin
+  id: catherine
   role: backend development
 - github: andrewmaier
   id: andrewmaier 
