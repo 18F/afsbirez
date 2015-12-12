@@ -2,7 +2,8 @@
   "name": "sbirez",
   "version": "0.0.0",
   "dependencies": {
-    "bower": "^1.3.8"
+    "bower": "^1.3.8",
+    "snyk": "^1.6.1"
   },
   "devDependencies": {
     "karma": "~0.10.9",
@@ -10,5 +11,11 @@
     "karma-jasmine": "~0.1.5",
     "karma-ng-html2js-preprocessor": "*",
     "should": "~2.1.0"
-  }
+  },
+  "scripts": {
+    "test": "snyk test",
+    "snyk-protect": "snyk protect",
+    "postinstall": "npm run snyk-protect"
+  },
+  "snyk": true
 }
